@@ -6,4 +6,4 @@ Feature: Register company
   Scenario: Register a new company
     Given Patricia has permission to register companies
     When Patricia registers company "Cucumber Ltd"
-    Then the company "Cucumber Ltd" should be published
+    Then Patricia should see company "Cucumber Ltd"

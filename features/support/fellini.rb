@@ -26,6 +26,10 @@ module Fellini
       end
     end
 
+    def to_see(question)
+      question.answered_by(self)
+    end
+
     def to_s
       "#<#{self.class}:#{@name}>"
     end
@@ -49,6 +53,12 @@ module Fellini
   class Interaction < Performable
     def self.instrumented(klass, *arguments)
       klass.new(*arguments)
+    end
+  end
+
+  class Question
+    def answered_by(actor)
+      raise "Implement #answered_by in #{self.class}"
     end
   end
 end
