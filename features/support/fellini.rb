@@ -45,4 +45,10 @@ module Fellini
       klass.new(*arguments)
     end
   end
+
+  class Interaction < Performable
+    def self.instrumented(klass, *arguments)
+      klass.new(*arguments)
+    end
+  end
 end
