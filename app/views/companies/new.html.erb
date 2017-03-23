@@ -1,0 +1,13 @@
+<h1>Register company</h1>
+
+<%= form_for @company, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
+  <p>
+  <%= f.label :name, 'Company name' %>
+  <%= f.text_field :name %>
+  </p>
+  <p>
+  <%= f.label :url, 'Website' %>
+  <%= f.text_field :url %>
+  </p>
+  <%= f.submit "Register" %>
+<% end %>

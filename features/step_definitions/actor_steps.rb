@@ -12,8 +12,11 @@ class RegisterCompany < Fellini::Task
   include Capybara::DSL
 
   def perform_as(actor)
-    puts "#{actor} registers company #{@company_name}"
     visit '/companies/new'
+    fill_in 'Company name', with: @company_name
+    fill_in 'Website', with: @website
+
+    click_button 'Register'
   end
 
   def self.called(company_name)
@@ -22,6 +25,7 @@ class RegisterCompany < Fellini::Task
 
   def initialize(company_name)
     @company_name = company_name
+    @website = 'https://bigcorp.com'
   end
 end
 
