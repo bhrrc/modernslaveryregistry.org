@@ -17,29 +17,29 @@ class RegisterCompany < Fellini::Task
   end
 end
 
-class TheCompany < Fellini::Question
+class CurrentPage < Fellini::Question
   def answered_by(actor)
-    WebPage.find('h1').answered_by(actor)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+    browser.find('h1').text
   end
 
-  def self.company_name
+  def self.header
     new
   end
 end
 
-class WebPage < Fellini::Question
-  include Capybara::DSL
-
+class StatementUrls < Fellini::Question
   def answered_by(actor)
-    find(@selector).text
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+    browser.all('[data-content="statement-url"]').map {|url_element| url_element.text}
   end
 
-  def self.find(selector)
-    new(selector)
+  def initialize(company_name)
+    @company_name = company_name
   end
 
-  def initialize(selector)
-    @selector = selector
+  def self.of(company_name)
+    new(company_name)
   end
 end
 
@@ -54,7 +54,7 @@ Transform /^([A-Z]\w+)$/ do |actor_name|
 end
 
 Given(/^([A-Z]\w+) has permission to register companies$/) do |actor|
-  # Not sure how to set up that ability yet
+  # Not sure how to implement this rule yet
 end
 
 When(/^([A-Z]\w+) registers company "([^"]*)"$/) do |actor, company_name|
@@ -62,5 +62,9 @@ When(/^([A-Z]\w+) registers company "([^"]*)"$/) do |actor, company_name|
 end
 
 Then(/^([A-Z]\w+) should see company "([^"]*)"$/) do |actor, company_name|
-  expect(actor.to_see(TheCompany.company_name)).to eq(company_name)
+  expect(actor.to_see(CurrentPage.header)).to eq(company_name)
+end
+
+Then(/^([A-Z]\w+) should see (\d+) statements? on the "([^"]*)" company page$/) do |actor, statement_count, company_name|
+  expect(actor.to_see(StatementUrls.of(company_name)).length()).to eq(statement_count.to_i)
 end

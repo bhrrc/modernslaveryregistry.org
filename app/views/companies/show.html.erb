@@ -16,7 +16,7 @@
   <tbody>
     <% @company.statements.each do |statement| %>
       <tr>
-        <th><%= statement.url %></th>
+        <th data-content="statement-url"><%= statement.url %></th>
         <th><%= statement.signed_by_director %></th>
       </tr>
     <% end %>

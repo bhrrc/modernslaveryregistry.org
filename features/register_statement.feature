@@ -9,4 +9,4 @@ Feature: Register statement
       | signed_by_director | no                                         |
       | board_approval     | yes                                        |
       | link_on_homepage   | no                                         |
-    Then Patricia should see the new statement for "Cucumber Ltd"
+    Then Patricia should see 1 statement on the "Cucumber Ltd" company page
