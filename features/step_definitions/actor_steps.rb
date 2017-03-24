@@ -1,6 +1,10 @@
 class RegisterCompany < Fellini::Task
   def perform_as(actor)
-    actor.attempts_to(SubmitRegisterCompanyForm.new(@company_name, @website))
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+    browser.visit("/companies/new")
+    browser.fill_in('Company name', with: @company_name)
+    browser.fill_in('Website', with: @website)
+    browser.click_button 'Register'
   end
 
   def self.called(company_name)
@@ -10,23 +14,6 @@ class RegisterCompany < Fellini::Task
   def initialize(company_name)
     @company_name = company_name
     @website = 'https://bigcorp.com'
-  end
-end
-
-class SubmitRegisterCompanyForm < Fellini::Interaction
-  include Capybara::DSL
-
-  def perform_as(actor)
-    visit '/companies/new'
-    fill_in 'Company name', with: @company_name
-    fill_in 'Website', with: @website
-
-    click_button 'Register'
-  end
-
-  def initialize(company_name, website)
-    @company_name = company_name
-    @website = website
   end
 end
 
@@ -61,7 +48,9 @@ Before do
 end
 
 Transform /^([A-Z]\w+)$/ do |actor_name|
-  @actors[actor_name] ||= Fellini::Actor.named(actor_name)
+  @actors[actor_name] ||= Fellini::Actor
+    .named(actor_name)
+    .who_can(Fellini::Abilities::BrowseTheWeb.new)
 end
 
 Given(/^([A-Z]\w+) has permission to register companies$/) do |actor|

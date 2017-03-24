@@ -15,9 +15,17 @@ module Fellini
       @abilities = {}
     end
 
-    def can(do_something)
+    def who_can(do_something)
       @abilities[do_something.class] = do_something
       self
+    end
+
+    def ability_to(do_something_class)
+      do_something = @abilities[do_something_class]
+      if !do_something
+        raise Exception.new("I don't have the ability to #{do_something_class.name}, said #{self} sadly.")
+      end
+      do_something
     end
 
     def attempts_to(*performables)
