@@ -3,8 +3,8 @@ class RegisterStatement < Fellini::Task
     company = Company.find_by_name(@company_name)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
     browser.visit("/companies/#{company.id}")
-    browser.fill_in('URL', with: @url)
-    browser.fill_in('Signed by director', with: @signed_by_director)
+    browser.fill_in('Statement URL', with: @url)
+    browser.check('Signed by director') if @signed_by_director
     browser.click_button 'Register'
   end
 

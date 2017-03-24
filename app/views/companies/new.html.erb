@@ -1,6 +1,6 @@
 <h1>Register company</h1>
 
-<%= form_for @company, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
+<%= form_for @company do |f| %>
   <p>
   <%= f.label :name, 'Company name' %>
   <%= f.text_field :name %>

@@ -10,13 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170323204346) do
+ActiveRecord::Schema.define(version: 20170324211110) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "name"
     t.string   "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "statements", force: :cascade do |t|
+    t.integer  "company_id"
+    t.string   "url"
+    t.boolean  "signed_by_director"
+    t.boolean  "link_on_front_page"
+    t.boolean  "approved_by_board"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
 end

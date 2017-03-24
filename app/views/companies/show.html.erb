@@ -1,1 +1,24 @@
 <h1><%= @company.name %></h1>
+
+<%= form_for [@company, @statement] do |f| %>
+  <p>
+  <%= f.label :url, 'Statement URL' %>
+  <%= f.text_field :url %>
+  </p>
+  <p>
+  <%= f.label :signed_by_director, 'Signed by director' %>
+  <%= f.check_box :signed_by_director %>
+  </p>
+  <%= f.submit "Register" %>
+<% end %>
+
+<table>
+  <tbody>
+    <% @company.statements.each do |statement| %>
+      <tr>
+        <th><%= statement.url %></th>
+        <th><%= statement.signed_by_director %></th>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
