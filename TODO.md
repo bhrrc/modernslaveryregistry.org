@@ -10,6 +10,7 @@
 - [ ] Extract view logic to partials
 - [ ] Use service to get HQ name to
 - [ ] Company statements - most recent on top, and highlighted
+- [ ] Record who signed
 
 ## Styling
 

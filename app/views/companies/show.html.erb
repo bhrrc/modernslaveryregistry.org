@@ -4,20 +4,41 @@
   <div class="column">
     <%= form_for [@company, @statement] do |f| %>
       <div class="field">
-        <%= f.label :url, 'Statement URL', class: 'label' %>
         <p class="control">
-          <%= f.text_field :url, class: "input" %>
+          <%= f.label :url, class: 'label' do %>
+            Statement URL
+            <%= f.text_field :url, class: 'input' %>
+          <% end %>
         </p>
       </div>
 
       <div class="field">
         <p class="control">
-          <%= f.label :signed_by_director, class: 'label' do %>
+          <%= f.label :signed_by_director, class: 'checkbox' do %>
             <%= f.check_box :signed_by_director %>
             Signed by director
           <% end %>
         </p>
       </div>
+
+      <div class="field">
+        <p class="control">
+          <%= f.label :approved_by_board, class: 'checkbox' do %>
+            <%= f.check_box :approved_by_board %>
+            Approved by board
+          <% end %>
+        </p>
+      </div>
+
+      <div class="field">
+        <p class="control">
+          <%= f.label :link_on_front_page, class: 'checkbox' do %>
+            <%= f.check_box :link_on_front_page %>
+            Link on front page
+          <% end %>
+        </p>
+      </div>
+
       <div class="field">
         <p class="control">
           <%= f.button "Register", class: 'button is-primary' %>
@@ -25,17 +46,24 @@
       </div>
     <% end %>
   </div>
-  <div class="column">
-    Create a new company
-  </div>
 </div>
 
-<table>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Financial year</th>
+      <th>Signed by director</th>
+      <th>Approved by board</th>
+      <th>Link on front page</th>
+    </tr>
+  </thead>
   <tbody>
     <% @company.statements.each do |statement| %>
       <tr>
-        <th data-content="statement-url"><%= statement.url %></th>
-        <th><%= statement.signed_by_director %></th>
+        <td><%= link_to('2016', statement.url, 'data-content' => 'statement-url') %></td>
+        <td><%= yes_no(statement.signed_by_director) %></td>
+        <td><%= yes_no(statement.approved_by_board) %></td>
+        <td><%= yes_no(statement.link_on_front_page) %></td>
       </tr>
     <% end %>
   </tbody>
