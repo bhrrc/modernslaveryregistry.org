@@ -1,2 +1,13 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<h1>Modern Slavery Act Registry</h1>
+
+<table>
+  <tbody>
+    <% @statements.each do |statement| %>
+      <tr>
+        <th data-content="statement-company-name"><%= statement.company.name %></th>
+        <th data-content="statement-url"><%= statement.url %></th>
+        <th><%= statement.signed_by_director %></th>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

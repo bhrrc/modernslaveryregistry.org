@@ -28,21 +28,6 @@ class CurrentPage < Fellini::Question
   end
 end
 
-class StatementUrls < Fellini::Question
-  def answered_by(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.all('[data-content="statement-url"]').map {|url_element| url_element.text}
-  end
-
-  def initialize(company_name)
-    @company_name = company_name
-  end
-
-  def self.of(company_name)
-    new(company_name)
-  end
-end
-
 Before do
   @actors = {}
 end
@@ -63,8 +48,4 @@ end
 
 Then(/^([A-Z]\w+) should see company "([^"]*)"$/) do |actor, company_name|
   expect(actor.to_see(CurrentPage.header)).to eq(company_name)
-end
-
-Then(/^([A-Z]\w+) should see (\d+) statements? on the "([^"]*)" company page$/) do |actor, statement_count, company_name|
-  expect(actor.to_see(StatementUrls.of(company_name)).length()).to eq(statement_count.to_i)
 end
