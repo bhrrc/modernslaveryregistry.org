@@ -83,6 +83,7 @@ GEM
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.18)
+    geonames (0.3.3)
     gherkin (4.1.1)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
@@ -212,6 +213,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   cucumber-rails
   database_cleaner
+  geonames
   jbuilder (~> 2.5)
   jquery-rails
   json (~> 2.0.3)

@@ -1,0 +1,2 @@
+class Sector < ApplicationRecord
+end

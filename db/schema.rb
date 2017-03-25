@@ -10,21 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170324211110) do
+ActiveRecord::Schema.define(version: 20170325215806) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "name"
     t.string   "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "country_id"
+    t.integer  "sector_id"
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_countries_on_code", unique: true
+    t.index ["name"], name: "index_countries_on_name", unique: true
+  end
+
+  create_table "sectors", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_sectors_on_name", unique: true
   end
 
   create_table "statements", force: :cascade do |t|
     t.integer  "company_id"
     t.string   "url"
+    t.date     "date_seen"
+    t.string   "approved_by_board"
+    t.string   "approved_by"
     t.boolean  "signed_by_director"
+    t.string   "signed_by"
     t.boolean  "link_on_front_page"
-    t.boolean  "approved_by_board"
+    t.string   "linked_from"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end

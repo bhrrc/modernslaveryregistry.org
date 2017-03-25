@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+#
+# This script imports Countries from http://www.geonames.org/ into the database
+#
+# Usage: ./bin/rails runner script/import-countries
+#
+require 'json'
+require 'geonames'
+
+puts "There are #{Country.count} countries in the database. Importing..."
+res = Geonames::WebService.make_request('/countryInfoJSON?username=demo&a=a&')
+JSON.parse(res.body)['geonames'].each do |country_info|
+  country_params = {
+    code: country_info['countryCode'],
+    name: country_info['countryName']
+  }
+  Country.find_or_create_by!(country_params)
+end
+puts "There are #{Country.count} countries in the database."

@@ -38,6 +38,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'json', '~> 2.0.3'
 
 gem "bulma-rails", "~> 0.4.0"
+gem 'geonames'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
