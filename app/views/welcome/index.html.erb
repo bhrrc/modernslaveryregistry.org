@@ -4,7 +4,7 @@
   <tbody>
     <% @statements.each do |statement| %>
       <tr>
-        <th data-content="statement-company-name"><%= statement.company.name %></th>
+        <th><%= link_to statement.company.name, statement.company %></th>
         <th data-content="statement-url"><%= statement.url %></th>
         <th><%= statement.signed_by_director %></th>
       </tr>

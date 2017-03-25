@@ -10,3 +10,5 @@
   - [ ] Derive/suggest company website from statement URL
 - [ ] Only display hidden field when logged in
 - [ ] Hint that hidden fields are hidden from public
+- [ ] Extract view logic to partials
+- [ ] Use service to get HQ name to
