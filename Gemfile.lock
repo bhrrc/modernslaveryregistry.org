@@ -42,6 +42,8 @@ GEM
       public_suffix (~> 2.0, >= 2.0.2)
     arel (7.1.4)
     builder (3.2.3)
+    bulma-rails (0.4.0)
+      sass (~> 3.2)
     byebug (9.0.6)
     capybara (2.13.0)
       addressable
@@ -205,6 +207,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bulma-rails (~> 0.4.0)
   byebug
   coffee-rails (~> 4.2)
   cucumber-rails
