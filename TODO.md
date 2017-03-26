@@ -36,7 +36,12 @@
 ## Performance
 - [ ] Add DB indices
 
-## Data import
+## Data
+
+### Integrity
+- [ ] Enforce HQ country
+
+### Import
 - [x] Import countries from Geonames
 - [x] Import sectors
 - [x] Import companies

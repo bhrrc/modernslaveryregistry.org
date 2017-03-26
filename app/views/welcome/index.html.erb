@@ -17,11 +17,11 @@
         <p><%= link_to 'Submit Company', new_company_url, class: 'button is-small is-primary' %></p>
       </div>
       <div class="column is-2 following has-text-centered">
-        <p class="stat-val"><%= Sector.count %></p>
+        <p class="stat-val"><%= Country.with_companies.all.length  %></p>
         <p class="stat-key">sectors</p>
       </div>
       <div class="column is-2 likes has-text-centered">
-        <p class="stat-val">27</p>
+        <p class="stat-val"><%= Country.with_companies.all.length %></p>
         <p class="stat-key">countries</p>
       </div>
     </div>
