@@ -83,3 +83,7 @@ production:
   database: msaregistry_production
   username: msaregistry
   password: <%= ENV['msaregistry_DATABASE_PASSWORD'] %>
+  # host: XXX
+  # database: XXX
+  # username: XXX
+  # password: XXX

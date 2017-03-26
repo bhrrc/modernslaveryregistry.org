@@ -2,7 +2,9 @@
 #
 # This script imports Countries from http://www.geonames.org/ into the database
 #
-# Usage: ./bin/rails runner script/import-countries
+# Usage:
+#    ./bin/rails runner script/import-countries
+#    heroku run --app=msa-registry rails runner script/import-countries
 #
 require 'json'
 require 'geonames'

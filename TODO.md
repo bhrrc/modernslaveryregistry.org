@@ -23,6 +23,9 @@
 
 ## UX
 - [ ] Iframe statements - deal with "Refused to display '<statement URL>' in a frame because it set 'X-Frame-Options' to 'SAMEORIGIN'."
+  - SO: http://stackoverflow.com/questions/18327314/how-to-allow-http-content-within-an-iframe-on-a-https-site
+  - Could try to change all http URLs to https during import/save
+  - Use a proxy (ugh)
 - [ ] Company statements - most recent on top, and highlighted
 - [ ] Show validation errors in forms
 - [ ] Hint that hidden fields are hidden from public
@@ -34,7 +37,11 @@
 - [ ] Use Geonames to get HQ country geo location
 
 ## Performance
-- [ ] Add DB indices
+- [x] Add DB indices
+- [ ] Pay for more dynos
+- [ ] Speed up rendering
+  - Cache (CloudFlare)
+  - CSS: `table-layout: fixed;`
 
 ## Data
 

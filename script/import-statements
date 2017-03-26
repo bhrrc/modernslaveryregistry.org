@@ -3,7 +3,11 @@
 # This script imports statements from CSV into the database.
 # It should be run *AFTER* running ./import-countries
 #
-# Usage: ./bin/rails runner script/import_statements PATH_TO_CSV
+# Usage:
+#    ./bin/rails runner script/import-statements PATH_TO_CSV
+#
+# Local, against Heroku: (comment out and fill in secrets in config/database.yml)
+#    RAILS_ENV=production ./bin/rails runner script/import-statements ~/Downloads/Master\ MSA\ list\ with\ formulas.csv
 #
 require 'csv'
 
