@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170325215806) do
+ActiveRecord::Schema.define(version: 20170326071845) do
 
   create_table "companies", force: :cascade do |t|
     t.string   "name"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 20170325215806) do
     t.datetime "updated_at", null: false
     t.integer  "country_id"
     t.integer  "sector_id"
+    t.index ["country_id"], name: "index_companies_on_country_id"
+    t.index ["sector_id"], name: "index_companies_on_sector_id"
   end
 
   create_table "countries", force: :cascade do |t|
@@ -49,6 +51,7 @@ ActiveRecord::Schema.define(version: 20170325215806) do
     t.string   "linked_from"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.index ["company_id"], name: "index_statements_on_company_id"
   end
 
 end
