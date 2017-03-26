@@ -79,7 +79,7 @@ CSV.foreach(filename, :headers => true) do |row|
   company = Company.find_or_create_by!(company_params)
 
   statement_params = {
-    url: row['STATEMENT'].strip,
+    url: row[' STATEMENT'].strip,
     date_seen: date_seen(row['DATE SEEN']),
     approved_by_board: statement_approved_by_board(row['STATEMENT APPROVED BY BOARD/MEMBER/PARTNER 54(6)(a-d)']),
     approved_by: approved_by(row['WHO APPROVED']),
@@ -90,7 +90,7 @@ CSV.foreach(filename, :headers => true) do |row|
 
     company_id: company.id
   }
-  Statement.create!(statement_params)
+  Statement.find_or_create_by!(statement_params)
 end
 
 puts "There are #{Sector.count} sectors in the database."

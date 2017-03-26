@@ -1,57 +1,10 @@
 <h1 class="title is-1"><%= @company.name %></h1>
-
-<div class="columns">
-  <div class="column">
-    <%= form_for [@company, @statement] do |f| %>
-      <div class="field">
-        <p class="control">
-          <%= f.label :url, class: 'label' do %>
-            Statement URL
-            <%= f.text_field :url, class: 'input' %>
-          <% end %>
-        </p>
-      </div>
-
-      <div class="field">
-        <p class="control">
-          <%= f.label :signed_by_director, class: 'checkbox' do %>
-            <%= f.check_box :signed_by_director %>
-            Signed by director
-          <% end %>
-        </p>
-      </div>
-
-      <div class="field">
-        <p class="control">
-          <%= f.label :approved_by_board, class: 'checkbox' do %>
-            <%= f.check_box :approved_by_board %>
-            Approved by board
-          <% end %>
-        </p>
-      </div>
-
-      <div class="field">
-        <p class="control">
-          <%= f.label :link_on_front_page, class: 'checkbox' do %>
-            <%= f.check_box :link_on_front_page %>
-            Link on front page
-          <% end %>
-        </p>
-      </div>
-
-      <div class="field">
-        <p class="control">
-          <%= f.button "Register", class: 'button is-primary' %>
-        </p>
-      </div>
-    <% end %>
-  </div>
-</div>
+<h2 class="title is-2">Statements</h2>
 
 <table class="table">
   <thead>
     <tr>
-      <th>Financial year</th>
+      <th>Date seen</th>
       <th>Signed by director</th>
       <th>Approved by board</th>
       <th>Link on front page</th>
@@ -59,8 +12,8 @@
   </thead>
   <tbody>
     <% @company.statements.each do |statement| %>
-      <tr>
-        <td><%= link_to('2016', statement.url, 'data-content' => 'statement-url') %></td>
+      <tr data-content="statement">
+        <td><%= link_to(statement.date_seen, statement.url) %></td>
         <td><%= yes_no(statement.signed_by_director) %></td>
         <td><%= yes_no(statement.approved_by_board) %></td>
         <td><%= yes_no(statement.link_on_front_page) %></td>

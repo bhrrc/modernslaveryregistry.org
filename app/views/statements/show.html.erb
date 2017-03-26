@@ -1,0 +1,21 @@
+<h1 class="title is-1"><%= @statement.company.name %></h1>
+<h2 class="title is-2"><%= @statement.date_seen %></h2>
+
+<style>
+iframe {
+    width:100%;
+    height:500px;
+}
+
+fieldset, legend{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+}
+</style>
+
+<fieldset>
+    <legend><%= link_to 'View statement on site', @statement.url %></legend>
+    <iframe src="<%= @statement.url %>" frameborder="0"></iframe>
+</fieldset>

@@ -1,0 +1,11 @@
+<%= form_for company do |f| %>
+  <p>
+  <%= f.label :name, 'Company name' %>
+  <%= f.text_field :name %>
+  </p>
+  <p>
+  <%= f.label :url, 'Company Website' %>
+  <%= f.text_field :url %>
+  </p>
+  <%= f.submit "Register" %>
+<% end %>

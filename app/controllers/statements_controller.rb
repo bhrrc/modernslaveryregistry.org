@@ -1,9 +1,18 @@
 class StatementsController < ApplicationController
+  def new
+    @company = Company.find(params[:company_id])
+    @statement = Statement.new
+  end
+
+  def show
+    @statement = Statement.find(params[:id])
+  end
+
   def create
     @company = Company.find(params[:company_id])
     @statement = @company.statements.build(statement_params)
     if @statement.save
-      redirect_to @statement.company
+      redirect_to [@company, @statement]
     else
       render "companies/show"
     end

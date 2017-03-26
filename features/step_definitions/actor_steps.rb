@@ -1,22 +1,3 @@
-class RegisterCompany < Fellini::Task
-  def perform_as(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.visit("/companies/new")
-    browser.fill_in('Company name', with: @company_name)
-    browser.fill_in('Website', with: @website)
-    browser.click_button 'Register'
-  end
-
-  def self.called(company_name)
-    instrumented(self, company_name)
-  end
-
-  def initialize(company_name)
-    @company_name = company_name
-    @website = 'https://bigcorp.com'
-  end
-end
-
 class CurrentPage < Fellini::Question
   def answered_by(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
@@ -40,10 +21,6 @@ end
 
 Given(/^([A-Z]\w+) has permission to register companies$/) do |actor|
   # Not sure how to implement this rule yet
-end
-
-When(/^([A-Z]\w+) registers company "([^"]*)"$/) do |actor, company_name|
-  actor.attempts_to(RegisterCompany.called(company_name))
 end
 
 Then(/^([A-Z]\w+) should see company "([^"]*)"$/) do |actor, company_name|

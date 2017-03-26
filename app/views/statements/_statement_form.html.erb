@@ -1,0 +1,53 @@
+<!-- TODO: If there is no company, different url in form_for,
+and additional fields.
+
+If there *is* a company, display same company header partial as in CompaniesController#show
+-->
+
+<div class="columns">
+  <div class="column">
+    <%= form_for [@company, @statement] do |f| %>
+      <div class="field">
+        <p class="control">
+          <%= f.label :url, class: 'label' do %>
+            Statement URL
+            <%= f.text_field :url, class: 'input' %>
+          <% end %>
+        </p>
+      </div>
+
+      <div class="field">
+        <p class="control">
+          <%= f.label :signed_by_director, class: 'checkbox' do %>
+            <%= f.check_box :signed_by_director %>
+            Signed by director
+          <% end %>
+        </p>
+      </div>
+
+      <div class="field">
+        <p class="control">
+          <%= f.label :approved_by_board, class: 'checkbox' do %>
+            <%= f.check_box :approved_by_board %>
+            Approved by board
+          <% end %>
+        </p>
+      </div>
+
+      <div class="field">
+        <p class="control">
+          <%= f.label :link_on_front_page, class: 'checkbox' do %>
+            <%= f.check_box :link_on_front_page %>
+            Link on front page
+          <% end %>
+        </p>
+      </div>
+
+      <div class="field">
+        <p class="control">
+          <%= f.button "Register", class: 'button is-primary' %>
+        </p>
+      </div>
+    <% end %>
+  </div>
+</div>

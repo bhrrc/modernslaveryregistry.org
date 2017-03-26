@@ -1,7 +1,5 @@
 class WelcomeController < ApplicationController
   def index
-    puts "Loading"
-    @statements = Statement.includes(:company)
-    puts "Done"
+    @companies = Company.includes(:newest_statement).all
   end
 end

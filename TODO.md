@@ -3,10 +3,12 @@
 ## Features
 
 - [x] Show statements on front page
+  - [ ] Only show company's most recently seen statement
+  - [x] Call to action to register if company has no statement
 - [x] Form for registering companies
-- [x] Form for registering statements
-- [ ] Form for registering company and statement at the same time
-  - [ ] Derive/suggest company website from statement URL
+- [ ] Form for registering statements
+  - [x] For existing company
+  - [ ] For non existent company (register company in same form)
 
 ### Stats
 - [ ] Percentages
@@ -20,9 +22,13 @@
 - [ ] Only display hidden field when logged in
 
 ## UX
+- [ ] Iframe statements - deal with "Refused to display '<statement URL>' in a frame because it set 'X-Frame-Options' to 'SAMEORIGIN'."
 - [ ] Company statements - most recent on top, and highlighted
 - [ ] Show validation errors in forms
 - [ ] Hint that hidden fields are hidden from public
+- [ ] Display company HQ
+  - [ ] Country
+  - [ ] Flag
 
 # Map
 - [ ] Use Geonames to get HQ country geo location
@@ -31,7 +37,7 @@
 - [ ] Add DB indices
 
 ## Data import
-- [x] Import countries
+- [x] Import countries from Geonames
 - [x] Import sectors
 - [x] Import companies
 - [x] Import statements
@@ -41,9 +47,9 @@
 ## Styling
 
 ## Deployment
-- [ ] Deploy on Heroku
+- [ ] Deploy to Heroku
 - [ ] Map domain name
 - [ ] https / let's encrypt
 
 ## Tech debt
-- [ ] Extract view logic to partials
+- [x] Extract view logic to partials

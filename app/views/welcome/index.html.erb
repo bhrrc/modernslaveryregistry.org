@@ -4,21 +4,27 @@
   <thead>
     <tr>
       <th>Company</th>
-      <th>Financial year</th>
       <th>Signed by director</th>
       <th>Approved by board</th>
       <th>Link on front page</th>
     </tr>
   </thead>
   <tbody>
-    <% @statements.each do |statement| %>
-      <tr>
-        <th><%= link_to(statement.company.name, statement.company) %></th>
-        <td><%= link_to('2016', statement.url, 'data-content' => 'statement-url') %></td>
-        <td><%= yes_no(statement.signed_by_director) %></td>
-        <td><%= yes_no(statement.approved_by_board) %></td>
-        <td><%= yes_no(statement.link_on_front_page) %></td>
-      </tr>
+    <% @companies.each do |company| %>
+      <% if company.newest_statement %>
+        <tr data-content="statement">
+          <th><%= link_to(company.name, [company, company.newest_statement]) %></th>
+          <td><%= yes_no(company.newest_statement.signed_by_director) %></td>
+          <td><%= yes_no(company.newest_statement.approved_by_board) %></td>
+          <td><%= yes_no(company.newest_statement.link_on_front_page) %></td>
+        </tr>
+      <% else %>
+        <tr data-content="company-without-statement">
+          <th><%= link_to(company.name, new_company_statement_path(company)) %></th>
+          <!-- TODO: Make a button for submitting new statement -->
+          <td colspan="3"><%= link_to('Submit statement', new_company_statement_path(company)) %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

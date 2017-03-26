@@ -3,10 +3,9 @@ Feature: Register statement
 
   Scenario: Register a new statement
     Given company "Cucumber Ltd" has been registered
-    When Patricia registers the following statement:
-      | company_name       | Cucumber Ltd                               |
+    When Patricia registers the following statement for "Cucumber Ltd":
       | url                | https://cucumber.io/anti-slavery-statement |
       | signed_by_director | no                                         |
       | board_approval     | yes                                        |
       | link_on_homepage   | no                                         |
-    Then Patricia should see 1 statement on the "Cucumber Ltd" company page
+    Then Patricia should see 1 statement for "Cucumber Ltd"
