@@ -6,7 +6,7 @@ class CompaniesController < ApplicationController
   def create
     @company = Company.new(company_params)
     if @company.save
-      redirect_to @company
+      redirect_to new_company_statement_url(@company)
     else
       render "new"
     end

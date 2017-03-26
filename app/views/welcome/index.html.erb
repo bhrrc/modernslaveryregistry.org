@@ -1,30 +1,33 @@
-<h1 class="title is-1">Modern Slavery Act Registry</h1>
+<div class="container profile">
+  <div class="section profile-heading">
+    <div class="columns">
+      <div class="column is-4 name">
+        <p class="tagline">
+          Explore company statements under the UK Modern Slavery Act
+        </p>
+      </div>
+      <div class="column is-2 followers has-text-centered">
+        <p class="stat-val"><%= Statement.count %></p>
+        <p class="stat-key">statements</p>
+        <p><%= link_to 'Submit Statement', '#', class: 'button is-small is-primary' %></p>
+      </div>
+      <div class="column is-2 followers has-text-centered">
+        <p class="stat-val"><%= Company.count %></p>
+        <p class="stat-key">companies</p>
+        <p><%= link_to 'Submit Company', new_company_url, class: 'button is-small is-primary' %></p>
+      </div>
+      <div class="column is-2 following has-text-centered">
+        <p class="stat-val"><%= Sector.count %></p>
+        <p class="stat-key">sectors</p>
+      </div>
+      <div class="column is-2 likes has-text-centered">
+        <p class="stat-val">27</p>
+        <p class="stat-key">countries</p>
+      </div>
+    </div>
+  </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Company</th>
-      <th>Signed by director</th>
-      <th>Approved by board</th>
-      <th>Link on front page</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @companies.each do |company| %>
-      <% if company.newest_statement %>
-        <tr data-content="statement">
-          <th><%= link_to(company.name, [company, company.newest_statement]) %></th>
-          <td><%= yes_no(company.newest_statement.signed_by_director) %></td>
-          <td><%= yes_no(company.newest_statement.approved_by_board) %></td>
-          <td><%= yes_no(company.newest_statement.link_on_front_page) %></td>
-        </tr>
-      <% else %>
-        <tr data-content="company-without-statement">
-          <th><%= link_to(company.name, new_company_statement_path(company)) %></th>
-          <!-- TODO: Make a button for submitting new statement -->
-          <td colspan="3"><%= link_to('Submit statement', new_company_statement_path(company)) %></td>
-        </tr>
-      <% end %>
-    <% end %>
-  </tbody>
-</table>
+  <div class="section">
+    <%= render partial: 'companies/statement_table', locals: { companies: @companies } %>
+  </div>
+</div>

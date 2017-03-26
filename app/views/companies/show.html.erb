@@ -1,23 +1,27 @@
-<h1 class="title is-1"><%= @company.name %></h1>
-<h2 class="title is-2">Statements</h2>
+<div class="container">
+  <div class="section">
+    <h2 class="title is-2" data-content="company-name"><%= @company.name %></h2>
+    <h3 class="title is-3">Statements</h3>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Date seen</th>
-      <th>Signed by director</th>
-      <th>Approved by board</th>
-      <th>Link on front page</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @company.statements.each do |statement| %>
-      <tr data-content="statement">
-        <td><%= link_to(statement.date_seen, statement.url) %></td>
-        <td><%= yes_no(statement.signed_by_director) %></td>
-        <td><%= yes_no(statement.approved_by_board) %></td>
-        <td><%= yes_no(statement.link_on_front_page) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date seen</th>
+          <th>Signed by director</th>
+          <th>Approved by board</th>
+          <th>Link on front page</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @company.statements.each do |statement| %>
+          <tr data-content="statement">
+            <td><%= link_to(statement.date_seen, statement.url) %></td>
+            <td><%= yes_no(statement.signed_by_director) %></td>
+            <td><%= yes_no(statement.approved_by_board) %></td>
+            <td><%= yes_no(statement.link_on_front_page) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

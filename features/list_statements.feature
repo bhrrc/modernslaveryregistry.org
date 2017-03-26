@@ -3,7 +3,7 @@ Feature: List statements
   as on individual company pages.
 
   Background:
-    Given the following statement have been registered:
+    Given the following statements have been submitted:
       | company_name | statement_url                                   |
       | Cucumber Ltd | https://cucumber.io/anti-slavery-statement-2015 |
       | Banana Ltd   | https://banana.io/anti-slavery-statement        |

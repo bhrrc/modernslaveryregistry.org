@@ -53,3 +53,7 @@
 
 ## Tech debt
 - [x] Extract view logic to partials
+
+## References
+- Layout: https://dansup.github.io/bulma-templates/templates/profile.html
+- Fake browser: http://codepen.io/endlesszero/pen/MYeWPQ

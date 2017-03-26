@@ -1,11 +1,16 @@
 <%= form_for company do |f| %>
-  <p>
-  <%= f.label :name, 'Company name' %>
-  <%= f.text_field :name %>
-  </p>
-  <p>
-  <%= f.label :url, 'Company Website' %>
-  <%= f.text_field :url %>
-  </p>
-  <%= f.submit "Register" %>
+  <div class="field">
+    <p class="control">
+      <%= f.label :name, class: 'label' do %>
+        Company Name
+        <%= f.text_field :name, class: 'input' %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="field">
+    <p class="control">
+      <%= f.button "Submit", class: 'button is-primary' %>
+    </p>
+  </div>
 <% end %>

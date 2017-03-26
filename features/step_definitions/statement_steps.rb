@@ -1,14 +1,14 @@
-Given(/^the following statement have been registered:$/) do |table|
+Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
     company = Company.find_or_create_by(name: props['company_name'])
     company.statements.create!({url: props['statement_url']})
   end
 end
 
-When(/^([A-Z]\w+) registers the following statement for "([^"]*)":$/) do |actor, company_name, table|
+When(/^([A-Z]\w+) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
   props = table.rows_hash
   actor.attempts_to(
-    RegisterStatement
+    SubmitStatement
       .for_company(company_name)
       .with_statement_url(props['url'])
       .signed_by_director(props['signed_by_director'] == 'yes')
@@ -25,7 +25,7 @@ Then(/^([A-Z]\w+) should see (\d+) statements total$/) do |actor, statement_coun
   expect(actor.to_see(Statements.for_all_companies).length()).to eq(statement_count.to_i)
 end
 
-class RegisterStatement < Fellini::Task
+class SubmitStatement < Fellini::Task
   include Rails.application.routes.url_helpers
 
   def perform_as(actor)
@@ -36,7 +36,7 @@ class RegisterStatement < Fellini::Task
     browser.check('Signed by director') if @signed_by_director
     browser.check('Link on front page') if @link_on_front_page
     browser.check('Approved by board') if @approved_by_board
-    browser.click_button 'Register'
+    browser.click_button 'Submit'
   end
 
   def self.for_company(company_name)
