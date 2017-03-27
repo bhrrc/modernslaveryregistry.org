@@ -2,6 +2,33 @@
   <div class="section">
     <h2 class="title is-2">Submit Company</h2>
 
-    <%= render partial: 'company_form', locals: { company: @company } %>
+    <%= form_for @company do |f| %>
+
+
+      <% if @company.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@company.errors.count, "error") %> prohibited this company from being saved:</h2>
+
+          <ul>
+          <% @article.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <%= render partial: 'company_fields', locals: { f: f } %>
+
+      <%= f.fields_for :statements do |b| %>
+        <%= render partial: 'statements/statement_fields', locals: { f: b } %>
+      <% end %>
+
+      <div class="field">
+        <p class="control">
+          <%= f.button "Submit", class: 'button is-primary' %>
+          <%= link_to('Cancel', root_path, class: 'button') %>
+        </p>
+      </div>
+    <% end %>
   </div>
 </div>

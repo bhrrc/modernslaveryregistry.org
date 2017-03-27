@@ -9,12 +9,12 @@
       <div class="column is-2 followers has-text-centered">
         <p class="stat-val"><%= Statement.count %></p>
         <p class="stat-key">statements</p>
-        <p><%= link_to 'Submit Statement', '#', class: 'button is-small is-primary' %></p>
+        <p><%= link_to 'Submit Statement', new_company_statement_companies_path, class: 'button is-small is-primary' %></p>
       </div>
       <div class="column is-2 followers has-text-centered">
         <p class="stat-val"><%= Company.count %></p>
         <p class="stat-key">companies</p>
-        <p><%= link_to 'Submit Company', new_company_url, class: 'button is-small is-primary' %></p>
+        <p><%= link_to 'Submit Company', new_company_path, class: 'button is-small is-primary' %></p>
       </div>
       <div class="column is-2 following has-text-centered">
         <p class="stat-val"><%= Country.with_companies.all.length  %></p>

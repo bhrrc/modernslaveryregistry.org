@@ -1,0 +1,35 @@
+<div class="field">
+  <p class="control">
+    <%= f.label :url, class: 'label' do %>
+      Statement URL
+      <%= f.text_field :url, class: 'input' %>
+    <% end %>
+  </p>
+</div>
+
+<div class="field">
+  <p class="control">
+    <%= f.label :signed_by_director, class: 'checkbox' do %>
+      <%= f.check_box :signed_by_director %>
+      Signed by director
+    <% end %>
+  </p>
+</div>
+
+<div class="field">
+  <p class="control">
+    <%= f.label :approved_by_board, class: 'checkbox' do %>
+      <%= f.check_box :approved_by_board %>
+      Approved by board
+    <% end %>
+  </p>
+</div>
+
+<div class="field">
+  <p class="control">
+    <%= f.label :link_on_front_page, class: 'checkbox' do %>
+      <%= f.check_box :link_on_front_page %>
+      Link on front page
+    <% end %>
+  </p>
+</div>

@@ -9,11 +9,23 @@ When(/^([A-Z]\w+) submits the following statement for "([^"]*)":$/) do |actor, c
   props = table.rows_hash
   actor.attempts_to(
     SubmitStatement
-      .for_company(company_name)
+      .for_existing_company(company_name)
       .with_statement_url(props['url'])
-      .signed_by_director(props['signed_by_director'] == 'yes')
-      .approved_by_board(props['approved_by_board'] == 'yes')
-      .link_on_front_page(props['link_on_front_page'] == 'yes')
+      .signed_by_director(props['signed_by_director'].match(/yes/i))
+      .approved_by_board(props['approved_by_board'].match(/yes/i))
+      .link_on_front_page(props['link_on_front_page'].match(/yes/i))
+  )
+end
+
+When(/^([A-Z]\w+) submits the following statement:$/) do |actor, table|
+  props = table.rows_hash
+  actor.attempts_to(
+    SubmitStatement
+      .for_new_company(props['company_name'])
+      .with_statement_url(props['url'])
+      .signed_by_director(props['signed_by_director'].match(/yes/i))
+      .approved_by_board(props['approved_by_board'].match(/yes/i))
+      .link_on_front_page(props['link_on_front_page'].match(/yes/i))
   )
 end
 
@@ -29,22 +41,33 @@ class SubmitStatement < Fellini::Task
   include Rails.application.routes.url_helpers
 
   def perform_as(actor)
-    company = Company.find_by_name(@company_name)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.visit(new_company_statement_path(company))
+
+    if(@new_company)
+      browser.visit(new_company_statement_companies_path)
+      browser.fill_in('Company Name', with: @company_name)
+    else
+      company = Company.find_by_name(@company_name)
+      browser.visit(new_company_statement_path(company))
+    end
     browser.fill_in('Statement URL', with: @url)
     browser.check('Signed by director') if @signed_by_director
-    browser.check('Link on front page') if @link_on_front_page
     browser.check('Approved by board') if @approved_by_board
+    browser.check('Link on front page') if @link_on_front_page
     browser.click_button 'Submit'
   end
 
-  def self.for_company(company_name)
-    instrumented(self, company_name)
+  def self.for_new_company(company_name)
+    instrumented(self, company_name, true)
   end
 
-  def initialize(company_name)
+  def self.for_existing_company(company_name)
+    instrumented(self, company_name, false)
+  end
+
+  def initialize(company_name, new_company)
     @company_name = company_name
+    @new_company = new_company
   end
 
   def with_statement_url(url)
@@ -86,7 +109,7 @@ class Statements < Fellini::Question
   end
 
   def self.for(company_name)
-    new(Company.find_by_name(company_name))
+    new(Company.find_by_name!(company_name))
   end
 
   def self.for_all_companies()

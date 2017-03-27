@@ -1,0 +1,10 @@
+<%= form_for [statement.company, statement] do |f| %>
+  <%= render partial: 'statements/statement_fields', locals: { f: f } %>
+
+  <div class="field">
+    <p class="control">
+      <%= f.button "Submit", class: 'button is-primary' %>
+      <%= link_to('Cancel', root_path, class: 'button') %>
+    </p>
+  </div>
+<% end %>

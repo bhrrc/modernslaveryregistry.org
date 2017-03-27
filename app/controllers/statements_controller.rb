@@ -1,7 +1,7 @@
 class StatementsController < ApplicationController
   def new
     @company = Company.find(params[:company_id])
-    @statement = Statement.new
+    @statement = @company.statements.build
   end
 
   def show
@@ -9,7 +9,11 @@ class StatementsController < ApplicationController
   end
 
   def create
-    @company = Company.find(params[:company_id])
+    if params[:company_id]
+      @company = Company.find(params[:company_id])
+    else
+      @company = Company.new(params[:company])
+    end
     @statement = @company.statements.build(statement_params)
     if @statement.save
       redirect_to [@company, @statement]

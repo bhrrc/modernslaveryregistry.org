@@ -1,11 +1,9 @@
 <div class="container">
   <div class="section">
+    <h2 class="title is-2"><%= @statement.company.name %></h2>
+    <h3 class="title is-3">Submit Statement</h3>
 
-    <!-- TODO: If there is no company, different -->
-    <h1 class="title is-1" data-content="company-name"><%= @company.name %></h1>
-    <h2 class="title is-2">Submit statement</h2>
-
-    <%= render partial: 'statement_form', locals: { company: @company, statement: @statement } %>
+    <%= render partial: 'statements/new_statement_form', locals: { statement: @statement } %>
 
   </div>
 </div>

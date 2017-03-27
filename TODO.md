@@ -47,6 +47,7 @@
 
 ### Integrity
 - [ ] Enforce HQ country
+- [ ] Validate statement URL is URL, and exists, possibly store with https
 
 ### Import
 - [x] Import countries from Geonames
