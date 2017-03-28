@@ -1,10 +1,8 @@
 <div class="container">
   <div class="section">
-    <h2 class="title is-2">Submit Company</h2>
+    <h2 class="title is-5"><%= @company.statements.any? ? 'Submit Statement' : 'Submit Company' %></h2>
 
     <%= form_for @company do |f| %>
-
-
       <% if @company.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@company.errors.count, "error") %> prohibited this company from being saved:</h2>

@@ -1,7 +1,37 @@
 <div class="container">
   <div class="section">
-    <h2 class="title is-2"><%= link_to @statement.company.name, @statement.company, 'data-content' => "company-name" %></h2>
-    <h3 class="title is-3"><%= @statement.display_date %></h3>
+    <div class="columns">
+      <div class="column">
+        <h2 class="title is-3"><%= link_to @statement.company.name, @statement.company, 'data-content' => "company-name" %></h2>
+        <h3 class="title is-5"><%= @statement.display_date %></h3>
+      </div>
+      <div class="column">
+        <div class="columns">
+          <div class="column">
+            <span class="label">Signed by Director</span>
+          </div>
+          <div class="column">
+            <%= yes_no(@statement.signed_by_director) %>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <span class="label">Approved by Board</span>
+          </div>
+          <div class="column">
+            <%= yes_no_not_explicit(@statement.approved_by_board) %>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <span class="label">Link on Front page</span>
+          </div>
+          <div class="column">
+            <%= yes_no(@statement.link_on_front_page) %>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="browser-wrapper">
       <div class="browser-navigation-bar">

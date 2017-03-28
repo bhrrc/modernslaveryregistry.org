@@ -13,4 +13,8 @@ module ApplicationHelper
     css_class = css_classes_by_text[text]
     content_tag :span, text, class: "tag #{css_class}"
   end
+
+  def back_or_root
+    request.referer.present? ? request.referer : root_path
+  end
 end
