@@ -9,7 +9,7 @@ class Search < Fellini::Task
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
 
     browser.visit(root_path)
-    browser.fill_in('Search', with: @query)
+    browser.fill_in('search', with: @query)
     browser.click_button 'Search'
   end
 

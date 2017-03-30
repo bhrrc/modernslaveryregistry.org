@@ -8,5 +8,5 @@ Feature: Search companies
       | Cucumber Inc | https://cucumber.inc/anti-slavery-statement |
 
   Scenario: Find by fuzzy search
-    When Joe searches for "Cucumber"
-    Then Joe should see 2 statements total
+    When Joe searches for "cucumber"
+    Then Joe should see 2 statements in the search results

@@ -45,6 +45,10 @@ Then(/^([A-Z]\w+) should see (\d+) statements total$/) do |actor, statement_coun
   expect(actor.to_see(Statements.for_all_companies).length()).to eq(statement_count.to_i)
 end
 
+Then(/^([A-Z]\w+) should see (\d+) statements in the search results$/) do |actor, statement_count|
+  expect(actor.to_see(Statements.in_search_results).length()).to eq(statement_count.to_i)
+end
+
 class SubmitStatement < Fellini::Task
   include Rails.application.routes.url_helpers
 
@@ -112,10 +116,13 @@ end
 
 class Statements < Fellini::Question
   include Rails.application.routes.url_helpers
+  class << self
+    include Rails.application.routes.url_helpers
+  end
 
   def answered_by(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.visit(@page_url)
+    browser.visit(@url) unless @url.nil?
     browser.all('[data-content="statement"]').map do |statement_element|
       # TODO: Return an actual statement. For now we're just counting,
       # so not necessary
@@ -123,15 +130,19 @@ class Statements < Fellini::Question
     end
   end
 
-  def initialize(company)
-    @page_url = company ? company_path(company) : root_path
+  def initialize(url)
+    @url = url
   end
 
   def self.for(company_name)
-    new(Company.find_by_name!(company_name))
+    new(company_path(Company.find_by_name!(company_name)))
   end
 
   def self.for_all_companies()
+    new(root_path)
+  end
+
+  def self.in_search_results
     new(nil)
   end
 end
