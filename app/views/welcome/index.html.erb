@@ -23,6 +23,10 @@
   </div>
 
   <div class="section">
+    <%= render partial: 'companies/search_form' %>
+  </div>
+
+  <div class="section">
     <%= render partial: 'companies/statement_table', locals: { companies: @companies } %>
   </div>
 </div>

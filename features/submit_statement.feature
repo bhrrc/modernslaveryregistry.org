@@ -10,7 +10,6 @@ Feature: Register statement
       | link_on_front_page | Yes                                        |
     Then Patricia should see 1 statement for "Cucumber Ltd"
 
-  @javascripx
   Scenario: Submit statement for new company
     When Patricia submits the following statement:
       | company_name       | Cucumber Ltd                               |

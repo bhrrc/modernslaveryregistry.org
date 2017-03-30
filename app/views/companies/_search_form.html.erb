@@ -1,0 +1,14 @@
+<%= form_tag root_path, method: :get do %>
+
+  <div class="field has-addons">
+    <p class="control is-expanded">
+      <%= text_field_tag :search, params[:search], class: 'input is-medium',
+          placeholder: 'What company are you looking for?' %>
+    </p>
+    <p class="control">
+      <a class="button is-info is-medium">
+        Search
+      </a>
+    </p>
+  </div>
+<% end %>

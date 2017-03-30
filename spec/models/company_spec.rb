@@ -39,4 +39,9 @@ RSpec.describe Statement, :type => :model do
     end
     expect(statements).to eq([p2016, c2017])
   end
+
+  it 'is searchable by name' do
+    companies = Company.search('cucumber')
+    expect(companies).to eq([@company_cucumber])
+  end
 end

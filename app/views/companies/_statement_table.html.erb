@@ -1,9 +1,11 @@
+<% if companies.any? %>
 <table class="table">
   <thead>
     <tr>
       <th>Company</th>
       <th>Company HQ</th>
       <th>Sector</th>
+      <th>Submitted</th>
       <th>Signed by director</th>
       <th>Approved by board</th>
       <th>Link on front page</th>
@@ -16,6 +18,7 @@
           <th><%= link_to(company.name, [company, company.newest_statement]) %></th>
           <td><%= company.country.name %></td>
           <td><%= company.sector.nil? ? '' : company.sector.name %></td>
+          <td><%= company.newest_statement.date_seen %></td>
           <td><%= yes_no(company.newest_statement.signed_by_director) %></td>
           <td><%= yes_no_not_explicit(company.newest_statement.approved_by_board) %></td>
           <td><%= yes_no(company.newest_statement.link_on_front_page) %></td>
@@ -30,3 +33,4 @@
     <% end %>
   </tbody>
 </table>
+<% end %>
