@@ -1,35 +1,103 @@
-<div class="field">
-  <p class="control">
-    <%= f.label :url, class: 'label' do %>
-      Statement URL
-      <%= f.text_field :url, class: 'input' %>
-    <% end %>
-  </p>
+<div class="field is-horizontal" data-content="link_on_front_page">
+  <div class="field-label">
+    <label class="label">Link on front page?</label>
+  </div>
+  <div class="field-body">
+    <div class="field is-narrow">
+      <div class="control">
+        <label class="radio">
+          <%= f.radio_button(:link_on_front_page, true) %>
+          Yes
+        </label>
+        <label class="radio">
+          <%= f.radio_button(:link_on_front_page, false) %>
+          No
+        </label>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="field">
-  <p class="control">
-    <%= f.label :signed_by_director, class: 'checkbox' do %>
-      <%= f.check_box :signed_by_director %>
-      Signed by director
-    <% end %>
-  </p>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <%= f.label :url, 'Statement URL', class: 'label' %>
+  </div>
+  <div class="field-body">
+    <div class="field is-grouped">
+      <p class="control is-expanded">
+        <%= f.url_field :url, class: "input#{f.object.errors[:url].any? ? ' is-danger' : ''}",
+          placeholder: 'https://...'%>
+      </p>
+    </div>
+  </div>
 </div>
 
-<div class="field">
-  <p class="control">
-    <%= f.label :approved_by_board, class: 'checkbox' do %>
-      <%= f.check_box :approved_by_board %>
-      Approved by board
-    <% end %>
-  </p>
+<div class="field is-horizontal" data-content="approved_by_board">
+  <div class="field-label">
+    <label class="label">Approved by board?</label>
+  </div>
+  <div class="field-body">
+    <div class="field is-narrow">
+      <div class="control">
+        <label class="radio">
+          <%= f.radio_button(:approved_by_board, 'Yes') %>
+          Yes
+        </label>
+        <label class="radio">
+          <%= f.radio_button(:approved_by_board, 'No') %>
+          No
+        </label>
+        <label class="radio">
+          <%= f.radio_button(:approved_by_board, 'Not explicit') %>
+          Not explicit
+        </label>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="field">
-  <p class="control">
-    <%= f.label :link_on_front_page, class: 'checkbox' do %>
-      <%= f.check_box :link_on_front_page %>
-      Link on front page
-    <% end %>
-  </p>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <%= f.label :approved_by, 'Approved by', class: 'label' %>
+  </div>
+  <div class="field-body">
+    <div class="field is-grouped">
+      <p class="control is-expanded">
+        <%= f.text_field :approved_by, class: 'input' %>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal" data-content="signed_by_director">
+  <div class="field-label">
+    <label class="label">Signed by director?</label>
+  </div>
+  <div class="field-body">
+    <div class="field is-narrow">
+      <div class="control">
+        <label class="radio">
+          <%= f.radio_button(:signed_by_director, true) %>
+          Yes
+        </label>
+        <label class="radio">
+          <%= f.radio_button(:signed_by_director, false) %>
+          No
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <%= f.label :signed_by, 'Signed by', class: 'label' %>
+  </div>
+  <div class="field-body">
+    <div class="field is-grouped">
+      <p class="control is-expanded">
+        <%= f.text_field :signed_by, class: 'input' %>
+      </p>
+    </div>
+  </div>
 </div>

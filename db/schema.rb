@@ -10,25 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170327124043) do
+ActiveRecord::Schema.define(version: 20170329215441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "companies", force: :cascade do |t|
-    t.string   "name"
-    t.string   "url"
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "country_id"
+    t.integer  "country_id", null: false
     t.integer  "sector_id"
     t.index ["country_id"], name: "index_companies_on_country_id", using: :btree
     t.index ["sector_id"], name: "index_companies_on_sector_id", using: :btree
   end
 
   create_table "countries", force: :cascade do |t|
-    t.string   "code"
-    t.string   "name"
+    t.string   "code",       null: false
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_countries_on_code", unique: true, using: :btree
@@ -36,22 +35,21 @@ ActiveRecord::Schema.define(version: 20170327124043) do
   end
 
   create_table "sectors", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_sectors_on_name", unique: true, using: :btree
   end
 
   create_table "statements", force: :cascade do |t|
-    t.integer  "company_id"
-    t.string   "url"
-    t.date     "date_seen"
-    t.string   "approved_by_board"
+    t.integer  "company_id",         null: false
+    t.string   "url",                null: false
+    t.date     "date_seen",          null: false
+    t.string   "approved_by_board",  null: false
     t.string   "approved_by"
-    t.boolean  "signed_by_director"
+    t.boolean  "signed_by_director", null: false
     t.string   "signed_by"
-    t.boolean  "link_on_front_page"
-    t.string   "linked_from"
+    t.boolean  "link_on_front_page", null: false
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree

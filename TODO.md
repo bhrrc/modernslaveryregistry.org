@@ -32,6 +32,11 @@
 - [ ] Display company HQ
   - [ ] Country
   - [ ] Flag
+- [ ] Consolidate some of these pages:
+  - https://msa-registry.herokuapp.com/companies/2/statements/2
+  - https://msa-registry.herokuapp.com/companies/2
+  - https://msa-registry.herokuapp.com/companies/2/statements/newß
+- [ ] Remove new company button/form
 
 # Map
 - [ ] Use Geonames to get HQ country geo location
@@ -44,6 +49,7 @@
   - CSS: `table-layout: fixed;`
 
 ## Data
+- [ ] Remove Linked From
 
 ### Integrity
 - [ ] Enforce HQ country

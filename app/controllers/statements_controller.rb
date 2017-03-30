@@ -27,9 +27,12 @@ class StatementsController < ApplicationController
   def statement_params
     params.require(:statement).permit(
       :url,
-      :signed_by_director,
+      :linked_from,
       :link_on_front_page,
-      :approved_by_board
+      :approved_by,
+      :approved_by_board,
+      :signed_by,
+      :signed_by_director
     )
   end
 end

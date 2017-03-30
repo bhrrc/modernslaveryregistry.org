@@ -1,7 +1,9 @@
 class Company < ApplicationRecord
   has_many :statements, dependent: :destroy
-  has_one :country
-  has_one :sector
+  belongs_to :country
+  belongs_to :sector, optional: true
+
+  validates :name, presence: true
 
   # http://www.toasterlovin.com/greatest-per-group-rails-scoped-has-one/
   has_one :newest_statement, -> {

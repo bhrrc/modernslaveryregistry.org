@@ -5,9 +5,9 @@ Feature: Register statement
     Given company "Cucumber Ltd" has been submitted
     When Patricia submits the following statement for "Cucumber Ltd":
       | url                | https://cucumber.io/anti-slavery-statement |
-      | signed_by_director | no                                         |
-      | approved_by_board  | yes                                        |
-      | link_on_front_page | no                                         |
+      | signed_by_director | No                                         |
+      | approved_by_board  | Not explicit                               |
+      | link_on_front_page | Yes                                        |
     Then Patricia should see 1 statement for "Cucumber Ltd"
 
   @javascripx
@@ -15,7 +15,7 @@ Feature: Register statement
     When Patricia submits the following statement:
       | company_name       | Cucumber Ltd                               |
       | url                | https://cucumber.io/anti-slavery-statement |
-      | signed_by_director | no                                         |
-      | approved_by_board  | yes                                        |
-      | link_on_front_page | no                                         |
+      | signed_by_director | Yes                                         |
+      | approved_by_board  | No                               |
+      | link_on_front_page | No                                        |
     Then Patricia should see 1 statement for "Cucumber Ltd"

@@ -1,5 +1,6 @@
 Given(/^company "([^"]*)" has been submitted$/) do |company_name|
-  Company.create!(name: company_name)
+  gb = Country.find_by_code!('GB')
+  Company.create!(name: company_name, country: gb)
 end
 
 When(/^([A-Z]\w+) submits company "([^"]*)"$/) do |actor, company_name|
@@ -16,7 +17,9 @@ class SubmitCompany < Fellini::Task
   def perform_as(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
     browser.visit(new_company_path)
-    browser.fill_in('Company Name', with: @company_name)
+    browser.fill_in('Company name', with: @company_name)
+    browser.select(@country_name, from: 'Company HQ')
+    browser.select(@sector_name, from: 'Sector')
     browser.click_button 'Submit'
   end
 
@@ -26,5 +29,7 @@ class SubmitCompany < Fellini::Task
 
   def initialize(company_name)
     @company_name = company_name
+    @sector_name = "Software"
+    @country_name = "United Kingdom"
   end
 end

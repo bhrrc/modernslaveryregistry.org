@@ -3,15 +3,24 @@
 # This script imports Countries from http://www.geonames.org/ into the database
 #
 # Usage:
-#    ./bin/rails runner script/import-countries
-#    heroku run --app=msa-registry rails runner script/import-countries
+#    GEONAMES_USERNAME=XXX ./bin/rails runner script/import-countries
+#    GEONAMES_USERNAME=XXX heroku run --app=msa-registry rails runner script/import-countries
 #
 require 'json'
 require 'geonames'
 
+geonames_username = ENV['GEONAMES_USERNAME']
+if geonames_username.nil?
+  puts "You need to define GEONAMES_USERNAME"
+  puts "sign up for an account and activate the web service"
+  puts
+  exit 1
+end
+
 puts "There are #{Country.count} countries in the database. Importing..."
-res = Geonames::WebService.make_request('/countryInfoJSON?username=demo&a=a&')
-JSON.parse(res.body)['geonames'].each do |country_info|
+res = Geonames::WebService.make_request("/countryInfoJSON?username=#{geonames_username}&a=a&")
+body = JSON.parse(res.body)
+body['geonames'].each do |country_info|
   country_params = {
     code: country_info['countryCode'],
     name: country_info['countryName']

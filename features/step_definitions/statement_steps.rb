@@ -1,7 +1,15 @@
 Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
-    company = Company.find_or_create_by(name: props['company_name'])
-    company.statements.create!({url: props['statement_url']})
+    company = Company.find_or_create_by!(
+      name: props['company_name'],
+      country_id: Country.find_by_code!('GB').id
+    )
+    company.statements.create!(
+      url: props['statement_url'],
+      signed_by_director: 'No',
+      approved_by_board: 'Not explicit',
+      link_on_front_page: 'No'
+    )
   end
 end
 
@@ -11,9 +19,9 @@ When(/^([A-Z]\w+) submits the following statement for "([^"]*)":$/) do |actor, c
     SubmitStatement
       .for_existing_company(company_name)
       .with_statement_url(props['url'])
-      .signed_by_director(props['signed_by_director'].match(/yes/i))
-      .approved_by_board(props['approved_by_board'].match(/yes/i))
-      .link_on_front_page(props['link_on_front_page'].match(/yes/i))
+      .signed_by_director(props['signed_by_director'])
+      .approved_by_board(props['approved_by_board'])
+      .link_on_front_page(props['link_on_front_page'])
   )
 end
 
@@ -23,9 +31,9 @@ When(/^([A-Z]\w+) submits the following statement:$/) do |actor, table|
     SubmitStatement
       .for_new_company(props['company_name'])
       .with_statement_url(props['url'])
-      .signed_by_director(props['signed_by_director'].match(/yes/i))
-      .approved_by_board(props['approved_by_board'].match(/yes/i))
-      .link_on_front_page(props['link_on_front_page'].match(/yes/i))
+      .signed_by_director(props['signed_by_director'])
+      .approved_by_board(props['approved_by_board'])
+      .link_on_front_page(props['link_on_front_page'])
   )
 end
 
@@ -45,15 +53,23 @@ class SubmitStatement < Fellini::Task
 
     if(@new_company)
       browser.visit(new_company_statement_companies_path)
-      browser.fill_in('Company Name', with: @company_name)
+      browser.fill_in('Company name', with: @company_name)
     else
       company = Company.find_by_name(@company_name)
       browser.visit(new_company_statement_path(company))
     end
     browser.fill_in('Statement URL', with: @url)
-    browser.check('Signed by director') if @signed_by_director
-    browser.check('Approved by board') if @approved_by_board
-    browser.check('Link on front page') if @link_on_front_page
+
+    browser.within('[data-content="link_on_front_page"]') do
+      browser.choose(@link_on_front_page)
+    end
+    browser.within('[data-content="signed_by_director"]') do
+      browser.choose(@signed_by_director)
+    end
+    browser.within('[data-content="approved_by_board"]') do
+      browser.choose(@approved_by_board)
+    end
+
     browser.click_button 'Submit'
   end
 
@@ -68,6 +84,9 @@ class SubmitStatement < Fellini::Task
   def initialize(company_name, new_company)
     @company_name = company_name
     @new_company = new_company
+    @signed_by_director = "No"
+    @approved_by_board = "No"
+    @link_on_front_page = "No"
   end
 
   def with_statement_url(url)
@@ -75,18 +94,18 @@ class SubmitStatement < Fellini::Task
     self
   end
 
-  def signed_by_director(bool)
-    @signed_by_director = bool
+  def signed_by_director(value)
+    @signed_by_director = value
     self
   end
 
-  def approved_by_board(bool)
-    @approved_by_board = bool
+  def approved_by_board(value)
+    @approved_by_board = value
     self
   end
 
-  def link_on_front_page(bool)
-    @link_on_front_page = bool
+  def link_on_front_page(value)
+    @link_on_front_page = value
     self
   end
 end

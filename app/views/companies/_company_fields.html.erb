@@ -1,8 +1,42 @@
-<div class="field">
-  <p class="control">
-    <%= f.label :name, class: 'label' do %>
-      Company Name
-      <%= f.text_field :name, class: 'input' %>
-    <% end %>
-  </p>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <%= f.label :name, 'Company name', class: 'label' %>
+  </div>
+  <div class="field-body">
+    <div class="field is-grouped">
+      <p class="control is-expanded">
+        <%= f.text_field :name, class: "input" %>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <%= f.label :country_id, 'Company HQ', class: 'label' %>
+  </div>
+  <div class="field-body">
+    <div class="field is-narrow">
+      <div class="control">
+        <div class="select is-fullwidth">
+          <%= f.collection_select(:country_id, Country.order(:name).all, :id, :name) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <%= f.label :sector_id, 'Sector', class: 'label' %>
+  </div>
+  <div class="field-body">
+    <div class="field is-narrow">
+      <div class="control">
+        <div class="select is-fullwidth">
+          <%= f.collection_select(:sector_id, Sector.order(:name).all, :id, :name) %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
