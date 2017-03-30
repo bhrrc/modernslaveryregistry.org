@@ -62,68 +62,47 @@ puts "There are #{Company.count} companies in the database."
 puts "There are #{Statement.count} statements in the database."
 puts "Importing..."
 stms = []
-CSV.foreach(filename, :headers => true) do |row|
-  country_name = row['COUNTRY OF HQ OF CO. PROVIDING STATEMENT'].strip
-  country_name = "United Kingdom" if country_name == "UK"
-  country_name = "United Kingdom" if country_name == "Uk"
-  country_name = "United States" if country_name == "USA"
-  country_name = "United Arab Emirates" if country_name == "UAE"
-  country_name = "United Arab Emirates" if country_name == "Dubai"
-  country_name = "South Africa" if country_name == "S. Africa"
-  country = Country.find_by_name!(country_name)
+ActiveRecord::Base.transaction do
+  CSV.foreach(filename, :headers => true) do |row|
+    country_name = row['COUNTRY OF HQ OF CO. PROVIDING STATEMENT'].strip
+    country_name = "United Kingdom" if country_name == "UK"
+    country_name = "United Kingdom" if country_name == "Uk"
+    country_name = "United States" if country_name == "USA"
+    country_name = "United Arab Emirates" if country_name == "UAE"
+    country_name = "United Arab Emirates" if country_name == "Dubai"
+    country_name = "South Africa" if country_name == "S. Africa"
+    country = Country.find_by_name!(country_name)
 
-  sector_params = {name: row['SECTOR'].strip}
-  sector = sector_params[:name] ? Sector.find_or_create_by!(sector_params) : nil
+    sector_params = {name: row['SECTOR'].strip}
+    sector = sector_params[:name] ? Sector.find_or_create_by!(sector_params) : nil
 
-  company_params = {
-    name: row['COMPANY'],
-    country_id: country.id,
-    sector: sector
-  }
-  company = Company.find_or_create_by!(company_params)
+    company_params = {
+      name: row['COMPANY'],
+      country_id: country.id,
+      sector: sector
+    }
+    company = Company.find_or_create_by!(company_params)
 
-  statement_params = {
-    url: row[' STATEMENT'].strip,
-    date_seen: date_seen(row['DATE SEEN']),
-    approved_by_board: approved_by_board(row['STATEMENT APPROVED BY BOARD/MEMBER/PARTNER 54(6)(a-d)']),
-    approved_by: approved_by(row['WHO APPROVED']),
-    signed_by_director: yes_no_bool(row['STATEMENT SIGNED BY DIRECTOR/MEMBER/PARTNER 54(6)(a-d)']),
-    signed_by: signed_by(row['Title of person who signed']),
-    link_on_front_page: yes_no_bool(row['LINK TO STATEMENT ON HOMEPAGE OF WEBSITE 54(7)(b)']),
+    statement_params = {
+      url: row[' STATEMENT'].strip,
+      date_seen: date_seen(row['DATE SEEN']),
+      approved_by_board: approved_by_board(row['STATEMENT APPROVED BY BOARD/MEMBER/PARTNER 54(6)(a-d)']),
+      approved_by: approved_by(row['WHO APPROVED']),
+      signed_by_director: yes_no_bool(row['STATEMENT SIGNED BY DIRECTOR/MEMBER/PARTNER 54(6)(a-d)']),
+      signed_by: signed_by(row['Title of person who signed']),
+      link_on_front_page: yes_no_bool(row['LINK TO STATEMENT ON HOMEPAGE OF WEBSITE 54(7)(b)']),
 
-    company_id: company.id
-  }
-  begin
-    Statement.find_or_create_by!(statement_params)
-  rescue => e
-    puts "PARAMS"
-    p statement_params
-    raise e
+      company_id: company.id
+    }
+    begin
+      Statement.find_or_create_by!(statement_params)
+    rescue => e
+      puts "PARAMS"
+      p statement_params
+      raise e
+    end
   end
 end
-
 puts "There are #{Sector.count} sectors in the database."
 puts "There are #{Company.count} companies in the database."
 puts "There are #{Statement.count} statements in the database."
-
-# puts '--'
-# puts stms.map{|s| s[:statement_approved_by_board]}.uniq
-# puts '--'
-# puts stms.map{|s| s[:approved_by]}.uniq
-# puts '--'
-
-# Look for inconsistencies
-
-# weird_approvers = []
-# puts "----- Weird approvers -----"
-# stms.each do |s|
-#   if(s[:statement_approved_by_board].nil? || s[:statement_approved_by_board] == 'No')
-# #    p s[:approved_by]
-#   end
-#
-#   if(s[:statement_approved_by_board] == 'Yes' && !(s[:approved_by] =~ /Board/i))
-#     weird_approvers << s[:approved_by]
-#   end
-# end
-#
-# puts weird_approvers.compact.uniq.sort

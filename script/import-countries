@@ -4,7 +4,9 @@
 #
 # Usage:
 #    GEONAMES_USERNAME=XXX ./bin/rails runner script/import-countries
-#    GEONAMES_USERNAME=XXX heroku run --app=msa-registry rails runner script/import-countries
+# Heroku:
+#    heroku config:set GEONAMES_USERNAME=XXX --app=msa-registry
+#    heroku run --app=msa-registry rails runner script/import-countries
 #
 require 'json'
 require 'geonames'
