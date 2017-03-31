@@ -2,11 +2,11 @@ Feature: Search companies
 
   Background:
     Given the following statements have been submitted:
-      | company_name | statement_url                               |
-      | Cucumber Ltd | https://cucumber.ltd/anti-slavery-statement |
-      | Banana Ltd   | https://banana.io/anti-slavery-statement    |
-      | Cucumber Inc | https://cucumber.inc/anti-slavery-statement |
+      | company_name | statement_url          | country        | sector      |
+      | Cucumber Ltd | https://cucumber.ltd/s | United Kingdom | Software    |
+      | Banana Ltd   | https://banana.io/s    | France         | Agriculture |
+      | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      |
 
-  Scenario: Find by fuzzy search
+  Scenario: Find by search
     When Joe searches for "cucumber"
-    Then Joe should see 2 statements in the search results
+    Then Joe should only see "Cucumber Ltd, Cucumber Inc" in the search results

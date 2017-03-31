@@ -9,7 +9,7 @@ class CurrentPage < Fellini::Question
   end
 
   def self.company_name
-    new('[data-content="company-name"]')
+    new('[data-content="company_name"]')
   end
 end
 

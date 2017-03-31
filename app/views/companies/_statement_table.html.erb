@@ -15,7 +15,7 @@
     <% companies.each do |company| %>
       <% if company.newest_statement %>
         <tr data-content="statement">
-          <th><%= link_to(company.name, [company, company.newest_statement]) %></th>
+          <th><%= link_to(company.name, [company, company.newest_statement], 'data-content' => 'company_name') %></th>
           <td><%= company.country.name %></td>
           <td><%= company.sector.nil? ? '' : company.sector.name %></td>
           <td><%= company.newest_statement.date_seen %></td>

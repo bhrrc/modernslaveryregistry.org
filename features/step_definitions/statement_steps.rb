@@ -38,15 +38,12 @@ When(/^([A-Z]\w+) submits the following statement:$/) do |actor, table|
 end
 
 Then(/^([A-Z]\w+) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
-  expect(actor.to_see(Statements.for(company_name)).length()).to eq(statement_count.to_i)
+  expect(actor.to_see(TheListedStatements.for_company(company_name)).length()).to eq(statement_count.to_i)
 end
 
-Then(/^([A-Z]\w+) should see (\d+) statements total$/) do |actor, statement_count|
-  expect(actor.to_see(Statements.for_all_companies).length()).to eq(statement_count.to_i)
-end
-
-Then(/^([A-Z]\w+) should see (\d+) statements in the search results$/) do |actor, statement_count|
-  expect(actor.to_see(Statements.in_search_results).length()).to eq(statement_count.to_i)
+Then(/([A-Z]\w+) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
+  company_names = company_names_string.split(",").map(&:strip)
+  expect(actor.to_see(TheListedStatements.from_search).map(&:company_name)).to eq(company_names)
 end
 
 class SubmitStatement < Fellini::Task
@@ -114,35 +111,30 @@ class SubmitStatement < Fellini::Task
   end
 end
 
-class Statements < Fellini::Question
-  include Rails.application.routes.url_helpers
+class TheListedStatements < Fellini::Question
+  include Fellini::Capybara::DomStruct
   class << self
     include Rails.application.routes.url_helpers
   end
 
   def answered_by(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.visit(@url) unless @url.nil?
-    browser.all('[data-content="statement"]').map do |statement_element|
-      # TODO: Return an actual statement. For now we're just counting,
-      # so not necessary
-      "X"
+    @proc.call(browser) if @proc
+    structs(browser, @name, :company_name)
+  end
+
+  def initialize(name, &proc)
+    @name = name
+    @proc = proc
+  end
+
+  def self.from_search
+    new(:statement)
+  end
+
+  def self.for_company(company_name)
+    new(:company) do |browser|
+      browser.visit(company_path(Company.find_by_name!(company_name)))
     end
-  end
-
-  def initialize(url)
-    @url = url
-  end
-
-  def self.for(company_name)
-    new(company_path(Company.find_by_name!(company_name)))
-  end
-
-  def self.for_all_companies()
-    new(root_path)
-  end
-
-  def self.in_search_results
-    new(nil)
   end
 end

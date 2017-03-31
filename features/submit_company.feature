@@ -10,6 +10,6 @@ Feature: Submit company
   without statements. Those companies may be imported
   from a list of company names obtained elsewhere.
 
-  Scenario: Register a new company
+  Scenario: Submit a new company
     When Patricia submits company "Cucumber Ltd"
     Then Patricia should see company "Cucumber Ltd"
