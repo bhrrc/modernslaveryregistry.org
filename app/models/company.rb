@@ -14,11 +14,17 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
   def self.search(query)
-    if (query)
-      where("LOWER(name) LIKE LOWER(?)", "%#{query}%")
-    else
-      []
-      #Company.includes(:newest_statement, :country, :sector).last(10)
+    result = self
+    if (query[:company_name])
+      result = result.where("LOWER(name) LIKE LOWER(?)", "%#{query[:company_name]}%")
     end
+    if (query[:sectors])
+      result = result.where(sector_id: query[:sectors])
+    end
+    if (query[:countries])
+      result = result.where(country_id: query[:countries])
+    end
+
+    (result == self) ? [] : result.includes(:newest_statement, :country, :sector)
   end
 end

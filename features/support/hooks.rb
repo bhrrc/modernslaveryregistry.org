@@ -1,6 +1,10 @@
 Before do
-  Country.create!(name: 'United Kingdom', code: 'GB')
-  Sector.create!(name: 'Software')
+  Country.find_or_create_by!(code: 'GB', name: 'United Kingdom')
+  Country.find_or_create_by!(code: 'US', name: 'United States')
+  Country.find_or_create_by!(code: 'FR', name: 'France')
+  Sector.find_or_create_by!(name: 'Software')
+  Sector.find_or_create_by!(name: 'Agriculture')
+  Sector.find_or_create_by!(name: 'Retail')
 end
 
 After do |scenario|

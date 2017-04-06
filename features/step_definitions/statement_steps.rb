@@ -1,8 +1,11 @@
 Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
+    sector = Sector.find_by_name!(props['sector'])
+    country = Country.find_by_name!(props['country'])
     company = Company.find_or_create_by!(
       name: props['company_name'],
-      country_id: Country.find_by_code!('GB').id
+      sector_id: sector.id,
+      country_id: country.id
     )
     company.statements.create!(
       url: props['statement_url'],
@@ -13,7 +16,7 @@ Given(/^the following statements have been submitted:$/) do |table|
   end
 end
 
-When(/^([A-Z]\w+) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
+When(/^(Joe|Patricia) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
   props = table.rows_hash
   actor.attempts_to(
     SubmitStatement
@@ -25,11 +28,12 @@ When(/^([A-Z]\w+) submits the following statement for "([^"]*)":$/) do |actor, c
   )
 end
 
-When(/^([A-Z]\w+) submits the following statement:$/) do |actor, table|
+When(/^(Joe|Patricia) submits the following statement:$/) do |actor, table|
   props = table.rows_hash
   actor.attempts_to(
     SubmitStatement
       .for_new_company(props['company_name'])
+      .in_country(props['country'])
       .with_statement_url(props['url'])
       .signed_by_director(props['signed_by_director'])
       .approved_by_board(props['approved_by_board'])
@@ -37,11 +41,11 @@ When(/^([A-Z]\w+) submits the following statement:$/) do |actor, table|
   )
 end
 
-Then(/^([A-Z]\w+) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
+Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
   expect(actor.to_see(TheListedStatements.for_company(company_name)).length()).to eq(statement_count.to_i)
 end
 
-Then(/([A-Z]\w+) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
+Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
   company_names = company_names_string.split(",").map(&:strip)
   expect(actor.to_see(TheListedStatements.from_search).map(&:company_name)).to eq(company_names)
 end
@@ -55,6 +59,7 @@ class SubmitStatement < Fellini::Task
     if(@new_company)
       browser.visit(new_company_statement_companies_path)
       browser.fill_in('Company name', with: @company_name)
+      browser.select(@country, from: 'Company HQ')
     else
       company = Company.find_by_name(@company_name)
       browser.visit(new_company_statement_path(company))
@@ -84,10 +89,16 @@ class SubmitStatement < Fellini::Task
 
   def initialize(company_name, new_company)
     @company_name = company_name
+    @country = "United Kingdom"
     @new_company = new_company
     @signed_by_director = "No"
     @approved_by_board = "No"
     @link_on_front_page = "No"
+  end
+
+  def in_country(country)
+    @country = country
+    self
   end
 
   def with_statement_url(url)

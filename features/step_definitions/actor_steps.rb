@@ -17,7 +17,7 @@ Before do
   @actors = {}
 end
 
-Transform /^([A-Z]\w+)$/ do |actor_name|
+Transform /^(Joe|Patricia)$/ do |actor_name|
   @actors[actor_name] ||= Fellini::Actor
     .named(actor_name)
     .who_can(Fellini::Abilities::BrowseTheWeb.new)

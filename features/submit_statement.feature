@@ -13,8 +13,9 @@ Feature: Register statement
   Scenario: Submit statement for new company
     When Patricia submits the following statement:
       | company_name       | Cucumber Ltd                               |
+      | country            | United Kingdom                             |
       | url                | https://cucumber.io/anti-slavery-statement |
-      | signed_by_director | Yes                                         |
-      | approved_by_board  | No                               |
-      | link_on_front_page | No                                        |
+      | signed_by_director | Yes                                        |
+      | approved_by_board  | No                                         |
+      | link_on_front_page | No                                         |
     Then Patricia should see 1 statement for "Cucumber Ltd"

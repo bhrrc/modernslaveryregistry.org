@@ -13,4 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require chosen-jquery
+//= require chosen-enable
+//= require selectize
+//= require selectize-enable
 //= require_tree .

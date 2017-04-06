@@ -18,6 +18,9 @@ class CompaniesController < ApplicationController
         redirect_to company_path(@company)
       end
     else
+      @company.errors.each do |e|
+        puts e
+      end
       # TODO: Fix rendering when there are errors
       render "new"
     end
@@ -31,7 +34,7 @@ class CompaniesController < ApplicationController
   private
 
   def company_params
-    params.require(:company).permit(:name, :url, :country_id, statements_attributes: [
+    params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: [
       :url,
       :linked_from,
       :link_on_front_page,

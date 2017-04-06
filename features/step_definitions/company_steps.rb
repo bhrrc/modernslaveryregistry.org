@@ -1,13 +1,13 @@
 Given(/^company "([^"]*)" has been submitted$/) do |company_name|
-  gb = Country.find_by_code!('GB')
+  gb = Country.find_or_create_by!(code: 'GB', name: 'United Kingdom')
   Company.create!(name: company_name, country: gb)
 end
 
-When(/^([A-Z]\w+) submits company "([^"]*)"$/) do |actor, company_name|
+When(/^(Joe|Patricia) submits company "([^"]*)"$/) do |actor, company_name|
   actor.attempts_to(SubmitCompany.called(company_name))
 end
 
-Then(/^([A-Z]\w+) should see company "([^"]*)"$/) do |actor, company_name|
+Then(/^(Joe|Patricia) should see company "([^"]*)"$/) do |actor, company_name|
   expect(actor.to_see(CurrentPage.company_name)).to eq(company_name)
 end
 
