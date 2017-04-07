@@ -9,6 +9,7 @@
   </head>
 
   <body>
+    <%= render "layouts/nav" unless @skip_nav %>
     <%= yield %>
   </body>
 </html>
