@@ -2,12 +2,12 @@
   <% if company.newest_statement %>
     <div class="columns" data-content="statement">
       <div class="column">
-        <%= link_to(company.name, [company, company.newest_statement], 'data-content' => 'company_name') %>
+        <%= link_to(company.name, [company, company.newest_statement], {'data-content': 'company_name'}) %>
       </div>
-      <div class="column">
+      <div class="column" data-content="country">
         <%= company.country.name %>
       </div>
-      <div class="column">
+      <div class="column" data-content="sector">
         <%= company.sector.nil? ? '' : company.sector.name %>
       </div>
     </div>

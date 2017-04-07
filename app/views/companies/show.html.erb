@@ -19,7 +19,7 @@
       <tbody>
         <% @company.statements.each do |statement| %>
           <tr data-content="statement">
-            <td><%= link_to(statement.date_seen, [@company, statement]) %></td>
+            <td><%= link_to(statement.date_seen, [@company, statement], {'data-content': 'date_seen'}) %></td>
             <td><%= yes_no(statement.signed_by_director) %></td>
             <td><%= yes_no_not_explicit(statement.approved_by_board) %></td>
             <td><%= yes_no(statement.link_on_front_page) %></td>

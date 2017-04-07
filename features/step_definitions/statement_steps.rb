@@ -28,6 +28,20 @@ When(/^(Joe|Patricia) submits the following statement for "([^"]*)":$/) do |acto
   )
 end
 
+Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, table|
+  # TODO: remove duplication
+  props = table.rows_hash
+  actor.attempts_to(
+    SubmitStatement
+      .for_new_company(props['company_name'])
+      .in_country(props['country'])
+      .with_statement_url(props['url'])
+      .signed_by_director(props['signed_by_director'])
+      .approved_by_board(props['approved_by_board'])
+      .link_on_front_page(props['link_on_front_page'])
+  )
+end
+
 When(/^(Joe|Patricia) submits the following statement:$/) do |actor, table|
   props = table.rows_hash
   actor.attempts_to(
@@ -39,6 +53,12 @@ When(/^(Joe|Patricia) submits the following statement:$/) do |actor, table|
       .approved_by_board(props['approved_by_board'])
       .link_on_front_page(props['link_on_front_page'])
   )
+end
+
+When(/^(Joe|Patricia) updates the statement for "([^"]*)" to:$/) do |actor, company_name, table|
+  actor.attempts_to(UpdateStatement
+    .for_company(company_name)
+    .with_new_values(table))
 end
 
 Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
@@ -122,6 +142,34 @@ class SubmitStatement < Fellini::Task
   end
 end
 
+class UpdateStatement < Fellini::Task
+  include Rails.application.routes.url_helpers
+
+  def perform_as(actor)
+    company = Company.find_by_name(@company_name)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+    browser.visit(company_statement_path(company, company.newest_statement))
+    browser.click_link('Edit')
+
+    values = @values_table.rows_hash
+    browser.fill_in('Company name', with: values['company_name'])
+    browser.click_button 'Submit'
+  end
+
+  def self.for_company(company_name)
+    instrumented(self, company_name)
+  end
+
+  def initialize(company_name)
+    @company_name = company_name
+  end
+
+  def with_new_values(values_table)
+    @values_table = values_table
+    self
+  end
+end
+
 class TheListedStatements < Fellini::Question
   include Fellini::Capybara::DomStruct
   class << self
@@ -131,20 +179,20 @@ class TheListedStatements < Fellini::Question
   def answered_by(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
     @proc.call(browser) if @proc
-    structs(browser, @name, :company_name)
+    structs(browser, :statement, *@struct_fields)
   end
 
-  def initialize(name, &proc)
-    @name = name
+  def initialize(struct_fields, &proc)
+    @struct_fields = struct_fields
     @proc = proc
   end
 
   def self.from_search
-    new(:statement)
+    new([:company_name, :sector, :country])
   end
 
   def self.for_company(company_name)
-    new(:company) do |browser|
+    new([:date_seen]) do |browser|
       browser.visit(company_path(Company.find_by_name!(company_name)))
     end
   end

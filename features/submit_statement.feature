@@ -19,3 +19,15 @@ Feature: Register statement
       | approved_by_board  | No                                         |
       | link_on_front_page | No                                         |
     Then Patricia should see 1 statement for "Cucumber Ltd"
+
+  Scenario: Edit existing statement
+    Given Patricia has submitted the following statement:
+      | company_name       | Cucumber Ltd                               |
+      | country            | United Kingdom                             |
+      | url                | https://cucumber.io/anti-slavery-statement |
+      | signed_by_director | Yes                                        |
+      | approved_by_board  | No                                         |
+      | link_on_front_page | No                                         |
+    When Patricia updates the statement for "Cucumber Ltd" to:
+      | company_name       | Cucumber Limited                           |
+    Then Patricia should see 1 statement for "Cucumber Limited"
