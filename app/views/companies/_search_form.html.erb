@@ -16,7 +16,7 @@
           select_tag(
             'countries[]',
             options_from_collection_for_select(
-              Country.order(:name),
+              Country.with_companies.order(:name),
               :id,
               :name,
               params[:countries]
@@ -39,7 +39,7 @@
           select_tag(
             'sectors[]',
             options_from_collection_for_select(
-              Sector.order(:name),
+              Sector.with_companies.order(:name),
               :id,
               :name,
               params[:sectors]
