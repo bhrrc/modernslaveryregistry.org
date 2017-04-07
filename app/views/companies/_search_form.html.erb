@@ -2,6 +2,17 @@
 
   <div class="columns">
     <div class="column">
+      <figure class="image is-2by1">
+        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Sector%20Chart&w=350&h=150">
+      </figure>
+    </div>
+    <div class="column">
+      <div id="country-map"></div>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column">
       <div class="field">
         <p class="control is-expanded">
           <%=
@@ -26,8 +37,6 @@
     </div>
     <div class="column">
       <div class="field">
-        <div id="country-map">MAP</div>
-
         <p class="control is-expanded">
           <%=
           select_tag(
