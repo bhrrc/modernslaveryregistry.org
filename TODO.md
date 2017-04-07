@@ -39,10 +39,17 @@
 - [ ] Remove new company button/form
 
 # Map
-- [ ] Use Geonames to get HQ country geo location
+- [x] Use Geonames to get HQ country geo location
+- [ ] Get better geo location for countries
+  - Currently we're interpolating north/south and west/east, which
+    works OK for most countries, but not all. Norway is one example,
+    its "centre" ends up in Sweden.
+  - Maybe use geo loc for capital
 
 ## Performance
-- [x] Add DB indices
+- Database
+  - Query for map (country + companies) makes a query per country. Optimize
+  - [x] Add DB indices
 - [ ] Pay for more dynos
 - [ ] Speed up rendering
   - Cache (CloudFlare)
@@ -72,6 +79,11 @@
 
 ## Tech debt
 - [x] Extract view logic to partials
+
+## Accounts
+- [ ] GitHub
+- [ ] Google Maps API AIzaSyDZ-X1KvfDP7M8OXTi1BqeRmeLl6URzaLw
+
 
 ## References
 - Layout: https://dansup.github.io/bulma-templates/templates/profile.html

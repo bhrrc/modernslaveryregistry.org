@@ -4,13 +4,30 @@
     <div class="column">
       <div class="field">
         <p class="control is-expanded">
-          <%= text_field_tag :company_name, params[:company_name], class: 'input is-medium',
-              placeholder: 'Company' %>
+          <%=
+          select_tag(
+            'sectors[]',
+            options_from_collection_for_select(
+              Sector.with_companies.order(:name),
+              :id,
+              :name,
+              params[:sectors]
+            ),
+            {
+              include_blank: true,
+              multiple: true,
+              class: 'selectize-select',
+              placeholder: 'All sectors'
+            }
+          )
+          %>
         </p>
       </div>
     </div>
     <div class="column">
       <div class="field">
+        <div id="country-map">MAP</div>
+
         <p class="control is-expanded">
           <%=
           select_tag(
@@ -32,32 +49,20 @@
         </p>
       </div>
     </div>
+  </div>
+  <div class="columns">
     <div class="column">
       <div class="field has-addons">
         <p class="control is-expanded">
-          <%=
-          select_tag(
-            'sectors[]',
-            options_from_collection_for_select(
-              Sector.with_companies.order(:name),
-              :id,
-              :name,
-              params[:sectors]
-            ),
-            {
-              include_blank: true,
-              multiple: true,
-              class: 'selectize-select',
-              placeholder: 'All sectors'
-            }
-          )
-          %>
+          <%= text_field_tag :company_name, params[:company_name], class: 'input is-medium',
+              placeholder: 'Company' %>
         </p>
         <p class="control">
           <%= submit_tag 'Search', class: "button is-info is-medium" %>
         </p>
       </div>
     </div>
+
   </div>
 
 <% end %>

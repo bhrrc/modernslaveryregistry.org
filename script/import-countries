@@ -23,10 +23,24 @@ puts "There are #{Country.count} countries in the database. Importing..."
 res = Geonames::WebService.make_request("/countryInfoJSON?username=#{geonames_username}&a=a&")
 body = JSON.parse(res.body)
 body['geonames'].each do |country_info|
-  country_params = {
-    code: country_info['countryCode'],
-    name: country_info['countryName']
-  }
-  Country.find_or_create_by!(country_params)
+  lat = (country_info['north'].to_f + country_info['south'].to_f)/2
+  lng = (country_info['west'].to_f + country_info['east'].to_f)/2
+
+  begin
+    Country.find_or_create_by!({
+      code: country_info['countryCode'],
+      name: country_info['countryName'],
+      lat: lat,
+      lng: lng
+    })
+  rescue ActiveRecord::RecordNotUnique
+    Country.where({
+      code: country_info['countryCode'],
+      name: country_info['countryName']
+    }).update_all({
+      lat: lat,
+      lng: lng
+    })
+  end
 end
 puts "There are #{Country.count} countries in the database."

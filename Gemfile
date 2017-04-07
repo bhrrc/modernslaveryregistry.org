@@ -58,6 +58,7 @@ group :development do
 end
 
 group :test do
+  gem 'rails-controller-testing'
   gem 'cucumber-rails', :require => false
   gem 'rspec-rails'
   gem 'database_cleaner'
