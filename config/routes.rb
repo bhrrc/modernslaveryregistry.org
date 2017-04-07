@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   get 'welcome/index'
   root 'welcome#index'
 
+  get 'explore', to: 'explore#index'
+
   resources :countries
   resources :companies do
     get :new_statement, on: :collection, as: 'new_company_statement'

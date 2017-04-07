@@ -1,32 +1,64 @@
-<div class="container profile">
+<section class="hero">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <a href="/">
+            <%= image_tag 'msr.png' %>
+          </a>
+        </div>
+        <div class="column"></div>
+        <div class="column">
+          <a href="https://business-humanrights.org/">
+            <%= image_tag 'bhrrc.png' %>
+          </a>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-one-quarter"></div>
+        <div class="column is-half has-text-centered">
+          <h1 class="title">
+            Our purpose
+          </h1>
+          <h2 class="subtitle">
+            To maximise the impact of the UK
+            Modern Slavery Act in driving company
+            action to eliminate slavery from their
+            operations and supply chains.
+          </h2>
+        </div>
+        <div class="column is-one-quarter"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
   <div class="section profile-heading">
     <div class="columns">
       <div class="column is-6 name">
-        <p class="tagline">
-          Explore company statements under the UK Modern Slavery Act
-        </p>
-        <p><%= link_to 'Submit Statement', new_company_statement_companies_path, class: 'button is-medium' %></p>
+        <div class="columns">
+          <div class="column">
+            <%= link_to 'Submit Statement', new_company_statement_companies_path, class: 'button is-medium' %>
+          </div>
+          <div class="column">
+            <%= link_to 'Explore Statements', explore_path, class: 'button is-medium' %>
+          </div>
+        </div>
       </div>
-      <div class="column is-2 followers has-text-centered">
+      <div class="column is-2 statements has-text-centered">
         <p class="stat-val"><%= Statement.count %></p>
         <p class="stat-key">statements</p>
       </div>
-      <div class="column is-2 following has-text-centered">
+      <div class="column is-2 sectors has-text-centered">
         <p class="stat-val"><%= Sector.with_companies.all.length  %></p>
         <p class="stat-key">sectors</p>
       </div>
-      <div class="column is-2 likes has-text-centered">
+      <div class="column is-2 countries has-text-centered">
         <p class="stat-val"><%= Country.with_companies.all.length %></p>
         <p class="stat-key">countries</p>
       </div>
     </div>
-  </div>
-
-  <div class="section">
-    <%= render partial: 'companies/search_form' %>
-  </div>
-
-  <div class="section">
-    <%= render partial: 'statements/list', locals: { companies: @companies } %>
   </div>
 </div>

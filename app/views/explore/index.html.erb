@@ -1,0 +1,9 @@
+<div class="section">
+  <%= render partial: 'companies/search_form' %>
+</div>
+
+<div class="section">
+  <%= render partial: 'statements/list', locals: { companies: @companies } %>
+</div>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZ-X1KvfDP7M8OXTi1BqeRmeLl6URzaLw&callback=initMap"></script>

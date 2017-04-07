@@ -30,7 +30,6 @@ function initMap() {
   });
 
   $.get("/countries", function(countries) {
-    console.log(countries)
     for(var n in countries) {
       var country = countries[n]
       var radius = Math.sqrt(country.companies.length) * 10000

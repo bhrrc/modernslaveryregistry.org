@@ -10,14 +10,12 @@
   margin:-30px 0;
   padding: 40px 30px 0 30px;
 }
-.profile-heading .followers, .profile-heading .following {
+.profile-heading .statements, .profile-heading .sectors {
   border-right: 1px solid #f1f1f1;
   margin:-30px 0;
-  padding: 70px 30px;
 }
-.profile-heading .likes {
+.profile-heading .countries {
   margin:-30px 0;
-  padding: 70px 30px;
 }
 .profile-heading .stat-key {
   font-size: 20px;
@@ -59,4 +57,7 @@ p.title.is-bold {
 .card .timestamp {
   float:right;
   color:#bbb;
+}
+.hero {
+  background-color: whitesmoke;
 }

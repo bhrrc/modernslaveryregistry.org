@@ -12,7 +12,7 @@ class Search < Fellini::Task
   def perform_as(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
 
-    browser.visit(root_path)
+    browser.visit(explore_path)
     browser.fill_in('company_name', with: @query)
     browser.click_button 'Search'
   end
@@ -32,7 +32,7 @@ class Filter < Fellini::Task
   def perform_as(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
 
-    browser.visit(root_path)
+    browser.visit(explore_path)
     browser.select(@value, from: @select_field)
     browser.click_button 'Search'
   end
