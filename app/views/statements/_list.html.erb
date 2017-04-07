@@ -1,0 +1,15 @@
+<% companies.each do |company| %>
+  <% if company.newest_statement %>
+    <div class="columns" data-content="statement">
+      <div class="column">
+        <%= link_to(company.name, [company, company.newest_statement], 'data-content' => 'company_name') %>
+      </div>
+      <div class="column">
+        <%= company.country.name %>
+      </div>
+      <div class="column">
+        <%= company.sector.nil? ? '' : company.sector.name %>
+      </div>
+    </div>
+  <% end %>
+<% end %>

@@ -15,6 +15,7 @@ class Company < ApplicationRecord
 
   def self.search(query)
     result = self
+
     if (query[:company_name])
       result = result.where("LOWER(name) LIKE LOWER(?)", "%#{query[:company_name]}%")
     end
@@ -25,6 +26,10 @@ class Company < ApplicationRecord
       result = result.where(country_id: query[:countries])
     end
 
-    (result == self) ? [] : result.includes(:newest_statement, :country, :sector)
+    if (result == self)
+      result = all
+    end
+
+    result.includes(:newest_statement, :country, :sector)
   end
 end
