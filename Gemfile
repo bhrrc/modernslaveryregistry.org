@@ -41,6 +41,7 @@ gem "bulma-rails", "~> 0.4.0"
 gem 'geonames'
 gem 'selectize-rails'
 gem 'chosen-rails'
+gem 'chartjs-ror'
 # Others: select2
 
 group :development, :test do

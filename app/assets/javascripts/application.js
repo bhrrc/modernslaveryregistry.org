@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require Chart.min
 //= require chosen-jquery
 //= require chosen-enable
 //= require selectize

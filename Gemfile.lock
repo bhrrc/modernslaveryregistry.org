@@ -53,6 +53,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    chartjs-ror (3.3.1)
+      rails (>= 3.1)
     childprocess (0.6.3)
       ffi (~> 1.0, >= 1.0.11)
     chosen-rails (1.5.2)
@@ -229,6 +231,7 @@ PLATFORMS
 DEPENDENCIES
   bulma-rails (~> 0.4.0)
   byebug
+  chartjs-ror
   chosen-rails
   coffee-rails (~> 4.2)
   cucumber-rails

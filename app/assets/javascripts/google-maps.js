@@ -9,7 +9,7 @@ function initMap() {
   $.get("/countries", function(countries) {
     for(var n in countries) {
       var country = countries[n]
-      var radius = Math.log10(country.companies.length + 1) * 100000
+      var radius = Math.log10(country.company_count + 1) * 100000
       new google.maps.Circle({
         strokeColor: '#FF0000',
         strokeOpacity: 0.8,

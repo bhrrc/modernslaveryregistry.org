@@ -2,9 +2,11 @@
 
   <div class="columns">
     <div class="column">
-      <figure class="image is-2by1">
-        <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Sector%20Chart&w=350&h=150">
-      </figure>
+      <%= horizontal_bar_chart @section_chart_data, {
+        width: 500,
+        height: 400,
+        responsive: false
+      } %>
     </div>
     <div class="column">
       <div id="country-map"></div>
