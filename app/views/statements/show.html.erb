@@ -5,7 +5,7 @@
         <h2 class="title is-3"><%= link_to @statement.company.name, @statement.company, {'data-content': "company-name"} %></h2>
         <h3 class="title is-5">
           <% if @statement.broken_url %>
-            <%= image_tag('broken-link', size: '24') %>
+            <%= image_tag('broken-link.png', size: '24') %>
           <% end %>
           <%= @statement.date_seen %>
         </h3>
