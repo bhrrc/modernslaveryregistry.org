@@ -17,7 +17,11 @@ class Statement < ApplicationRecord
 
   if ENV['verify_statement_urls']
     before_save do |statement|
-      uri = URI(statement.url)
+      uri = URI(statement.url) rescue nil
+      if uri.nil?
+        statement.broken_url = true
+        break
+      end
       begin
         uri.scheme = 'https'
         open(uri, read_timeout: 10)
