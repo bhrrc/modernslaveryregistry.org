@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 # This script imports statements from CSV into the database.
-# It should be run *AFTER* running ./import-countries
+# It should be run *AFTER* running rails db:seed
 #
 # Usage:
 #    ./bin/rails runner script/import-statements PATH_TO_CSV
@@ -95,7 +95,12 @@ ActiveRecord::Base.transaction do
       company_id: company.id
     }
     begin
-      Statement.find_or_create_by!(statement_params)
+      statement = Statement.find_or_create_by!(statement_params)
+      if statement.broken_url
+        STDERR.write 'X'
+      else
+        STDERR.write URI(statement.url).scheme == 'https' ? '.' : '!'
+      end
     rescue => e
       puts "PARAMS"
       p statement_params

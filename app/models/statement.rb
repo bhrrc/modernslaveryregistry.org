@@ -1,3 +1,6 @@
+require 'uri'
+require 'open-uri'
+
 class Statement < ApplicationRecord
   belongs_to :company, optional: true
   # Why optional: true
@@ -11,6 +14,25 @@ class Statement < ApplicationRecord
   before_create :set_date_seen
 
   private
+
+  if ENV['verify_statement_urls']
+    before_save do |statement|
+      uri = URI(statement.url)
+      begin
+        uri.scheme = 'https'
+        open(uri, read_timeout: 10)
+        statement.url = uri.to_s
+      rescue
+        begin
+          uri.scheme = 'http'
+          open(uri, read_timeout: 10)
+          statement.url = uri.to_s
+        rescue
+          statement.broken_url = true
+        end
+      end
+    end
+  end
 
   def set_date_seen
     self.date_seen ||= Date.today
