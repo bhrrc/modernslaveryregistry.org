@@ -2,6 +2,9 @@
   <% if company.newest_statement %>
     <div class="columns" data-content="statement">
       <div class="column">
+        <% if company.newest_statement.broken_url %>
+          <%= image_tag('broken-link', size: '24') %>
+        <% end %>
         <%= link_to(company.name, [company, company.newest_statement], {'data-content': 'company_name'}) %>
       </div>
       <div class="column" data-content="country">
