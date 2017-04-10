@@ -18,4 +18,5 @@
 //= require chosen-enable
 //= require selectize
 //= require selectize-enable
+//= require leaflet
 //= require_tree .

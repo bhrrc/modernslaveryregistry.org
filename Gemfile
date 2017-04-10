@@ -39,10 +39,10 @@ gem 'json', '~> 2.0.3'
 
 gem "bulma-rails", "~> 0.4.0"
 gem 'geonames'
+gem 'leaflet-rails'
 gem 'selectize-rails'
 gem 'chosen-rails'
 gem 'chartjs-ror'
-# Others: select2
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

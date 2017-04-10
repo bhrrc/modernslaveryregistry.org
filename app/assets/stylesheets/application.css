@@ -12,6 +12,7 @@
  *
  *= require chosen
  *= require selectize
+ *= require leaflet
  *= require_tree .
  *= require_self
  */
