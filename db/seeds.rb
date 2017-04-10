@@ -99,9 +99,9 @@ ActiveRecord::Base.transaction do
     }
     statement = Statement.find_or_create_by!(statement_params)
     if statement.broken_url
-      STDOUT.write 'X'
+      STDERR.write 'X'
     else
-      STDOUT.write URI(statement.url).scheme == 'https' ? '.' : '!'
+      STDERR.write URI(statement.url).scheme == 'https' ? '.' : '!'
     end
   end
 end
