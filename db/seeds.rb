@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require 'csv'
+
+ActiveRecord::Base.transaction do
+  CSV.foreach(File.dirname(__FILE__) + '/countries.csv', :headers => true) do |row|
+    Country.create!(row.to_hash)
+  end
+end
