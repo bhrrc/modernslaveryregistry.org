@@ -15,7 +15,7 @@ class Statement < ApplicationRecord
 
   private
 
-  if ENV['verify_statement_urls']
+  unless ENV['no_verify_statement_urls']
     before_save do |statement|
       uri = URI(statement.url) rescue nil
       if uri.nil?
@@ -26,11 +26,13 @@ class Statement < ApplicationRecord
         uri.scheme = 'https'
         open(uri, read_timeout: 10)
         statement.url = uri.to_s
+        statement.broken_url = false
       rescue
         begin
           uri.scheme = 'http'
           open(uri, read_timeout: 10)
           statement.url = uri.to_s
+          statement.broken_url = false
         rescue
           statement.broken_url = true
         end
