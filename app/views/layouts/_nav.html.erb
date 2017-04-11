@@ -1,13 +1,38 @@
-<nav class="nav">
+<nav class="nav is-dark-navy">
   <div class="nav-left">
     <a class="nav-item" href="/">
-      <%= image_tag 'msr.png' %>
+      <%= image_tag 'msr_logo_rgb_w.png', alt: "Modern Slavery Registry" %>
     </a>
   </div>
 
-  <div class="nav-right">
-    <a class="nav-item" href="https://business-humanrights.org/">
-      <%= image_tag 'bhrrc.png' %>
+  <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+  <!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+  <span class="nav-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+
+  <!-- This "nav-menu" is hidden on mobile -->
+  <!-- Add the modifier "is-active" to display it on mobile -->
+  <div class="nav-right nav-menu">
+    <a class="nav-item">
+      Reporting guidance
     </a>
+    <a class="nav-item">
+      Contact us
+    </a>
+    <a class="nav-item">
+      About us
+    </a>
+
+    <span class="nav-item">
+      <a class="button is-white">
+        <span class="icon">
+          <i class="fa fa-download"></i>
+        </span>
+        <span>Download</span>
+      </a>
+    </span>
   </div>
 </nav>

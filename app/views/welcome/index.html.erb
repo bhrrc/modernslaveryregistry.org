@@ -1,32 +1,32 @@
-<section class="hero">
+<section class="is-dark-navy">
   <div class="hero-body">
     <div class="container">
       <div class="columns">
-        <div class="column">
-          <a href="/">
-            <%= image_tag 'msr.png' %>
-          </a>
-        </div>
-        <div class="column"></div>
-        <div class="column">
-          <a href="https://business-humanrights.org/">
-            <%= image_tag 'bhrrc.png' %>
-          </a>
-        </div>
-      </div>
-
-      <div class="columns">
         <div class="column is-one-quarter"></div>
-        <div class="column is-half has-text-centered">
-          <h1 class="title">
-            Our purpose
-          </h1>
-          <h2 class="subtitle">
-            To maximise the impact of the UK
-            Modern Slavery Act in driving company
-            action to eliminate slavery from their
-            operations and supply chains.
+        <div class="column is-half">
+          <h2 class="subtitle has-text-centered">
+            Find out what companies
+            are doing to eradicate modern slavey from their
+            operations and supply chains. Explore company
+            reports made under the UK Modern Slavery Act.
           </h2>
+
+          <%= form_tag explore_path, method: :get do %>
+            <div class="field has-addons">
+              <p class="control is-expanded">
+                <%= text_field_tag :company_name, params[:company_name],
+                    class: 'input is-medium is-hero',
+                    placeholder: 'Company' %>
+              </p>
+              <p class="control">
+                <%= submit_tag 'Search', class: "button is-primary is-medium" %>
+              </p>
+            </div>
+          <% end %>
+          <p class="has-text-right">
+            <%= link_to "Browse all statements", explore_path %>
+          </p>
+
         </div>
         <div class="column is-one-quarter"></div>
       </div>
@@ -35,29 +35,24 @@
 </section>
 
 <div class="container">
-  <div class="section profile-heading">
-    <div class="columns">
-      <div class="column is-6 name">
-        <div class="columns">
-          <div class="column">
-            <%= link_to 'Submit Statement', new_company_statement_companies_path, class: 'button is-medium' %>
-          </div>
-          <div class="column">
-            <%= link_to 'Explore Statements', explore_path, class: 'button is-medium' %>
-          </div>
-        </div>
+  <div class="section">
+    <div class="columns has-text-centered">
+      <div class="column">
+        <p class="title is-1"><%= Statement.count %></p>
+        <p class="subtitle is-3">statements</p>
       </div>
-      <div class="column is-2 statements has-text-centered">
-        <p class="stat-val"><%= Statement.count %></p>
-        <p class="stat-key">statements</p>
+      <div class="column">
+        <p class="title is-1"><%= Sector.with_companies.all.length %></p>
+        <p class="subtitle is-3">sectors</p>
       </div>
-      <div class="column is-2 sectors has-text-centered">
-        <p class="stat-val"><%= Sector.with_companies.all.length  %></p>
-        <p class="stat-key">sectors</p>
+      <div class="column">
+        <p class="title is-1"><%= Country.with_companies.all.length %></p>
+        <p class="subtitle is-3">countries</p>
       </div>
-      <div class="column is-2 countries has-text-centered">
-        <p class="stat-val"><%= Country.with_companies.all.length %></p>
-        <p class="stat-key">countries</p>
+    </div>
+    <div class="columns has-text-centered">
+      <div class="column">
+        <%= link_to 'Submit a statement', new_company_statement_companies_path, class: 'button is-medium is-warning' %>
       </div>
     </div>
   </div>

@@ -1,0 +1,175 @@
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+// 1. Initial variables
+
+// Primary Colors
+$dark-navy:    rgb(19, 30, 41) !default
+
+// Colors
+$black:        rgb(38,  38,  42) !default
+$black-bis:    hsl(0, 0%, 7%) !default
+$black-ter:    hsl(0, 0%, 14%) !default
+
+$grey-darker:  rgb( 64,  64,  68) !default
+$grey-dark:    rgb( 95,  98, 103) !default
+$grey:         rgb(193, 198, 200) !default
+$grey-light:   rgb(244, 244, 243) !default
+$grey-lighter: rgb(244, 244, 243) !default
+
+$white-ter:    hsl(0, 0%, 96%) !default
+$white-bis:    hsl(0, 0%, 98%) !default
+$white:        hsl(0, 0%, 100%) !default
+
+$orange:       rgb(234, 118,   0) !default
+$yellow:       rgb(255, 205,   0) !default
+$green:        rgb(132, 189,   0) !default
+$turquoise:    rgb( 18, 178, 166) !default
+$blue:         rgb(  0, 125, 186) !default
+$purple:       rgb(176,   0, 142) !default
+$red:          rgb(219,   0,  32) !default
+
+// Typography
+$family-sans-serif: "Effra", "Arial", sans-serif !default
+$family-monospace: monospace !default
+$render-mode: optimizeLegibility !default
+
+$size-1: 3rem !default
+$size-2: 2.5rem !default
+$size-3: 2rem !default
+$size-4: 1.5rem !default
+$size-5: 1.25rem !default
+$size-6: 1rem !default
+$size-7: 0.75rem !default
+
+$weight-light: 300 !default
+$weight-normal: 400 !default
+$weight-semibold: 500 !default
+$weight-bold: 700 !default
+
+// Body
+$body-background: $white !default
+$body-size: 16px !default
+
+// Responsiveness
+// 960, 1152, and 1344 have been chosen because
+// they are divisible by both 12 and 16
+$tablet: 769px !default
+// 960px container + 40px
+$desktop: 1000px !default
+// 1152px container + 40
+$widescreen: 1192px !default
+// 1344px container + 40
+$fullhd: 1384px !default
+
+// Miscellaneous
+$easing: ease-out !default
+$radius-small: 2px !default
+$radius: 3px !default
+$radius-large: 5px !default
+$speed: 86ms !default
+
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+// 2. Primary colors
+
+$primary: $turquoise !default
+
+$info: $blue !default
+$success: $green !default
+$warning: $yellow !default
+$danger: $red !default
+
+$light: $white-ter !default
+$dark: $grey-darker !default
+
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+// 3. Applied variables
+
+// Invert colors
+// $orange-invert: findColorInvert($orange) !default
+// $yellow-invert: findColorInvert($yellow) !default
+// $green-invert: findColorInvert($green) !default
+// $turquoise-invert: findColorInvert($turquoise) !default
+// $blue-invert: findColorInvert($blue) !default
+// $purple-invert: findColorInvert($purple) !default
+// $red-invert: findColorInvert($red) !default
+
+// $primary-invert: $turquoise-invert !default
+// $info-invert: $blue-invert !default
+// $success-invert: $green-invert !default
+// $warning-invert: $yellow-invert !default
+// $danger-invert: $red-invert !default
+// $light-invert: $dark !default
+// $dark-invert: $light !default
+
+// General colors
+$background: $white-ter !default
+
+$border: $grey-lighter !default
+$border-hover: $grey-light !default
+
+// Text colors
+$text: $dark-navy !default
+$text-invert: findColorInvert($text) !default
+$text-light: $grey !default
+$text-strong: $grey-darker !default
+
+// Code colors
+$code: $red !default
+$code-background: $background !default
+
+$pre: $text !default
+$pre-background: $background !default
+
+// Link colors
+$link: $primary !default
+// $link-invert: $primary-invert !default
+$link-visited: $purple !default
+
+$link-hover: $yellow !default
+$link-hover-border: $yellow !default
+
+$link-focus: $yellow !default
+$link-focus-border: $primary !default
+
+$link-active: $yellow !default
+$link-active-border: $yellow !default
+
+// Typography
+$family-primary: $family-sans-serif !default
+$family-code: $family-monospace !default
+
+$size-small: $size-7 !default
+$size-normal: $size-6 !default
+$size-medium: $size-5 !default
+$size-large: $size-4 !default
+
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+// 4. Lists and maps
+
+// $colors: (white: ($white, $black), black: ($black, $white), light: ($light, $light-invert), dark: ($dark, $dark-invert), primary: ($primary, $primary-invert), info: ($info, $info-invert), success: ($success, $success-invert), warning: ($warning, $warning-invert), danger: ($danger, $danger-invert)) !default
+
+$sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 !default
+
+$nav-height: 6.25rem !default
+
+.nav-item
+  img
+    max-height: 3.75rem !important
+
+@import "bulma"
+
+.is-dark-navy
+  color: $white !important
+  background-color: $dark-navy
+
+  .subtitle
+    color: $white !important
+
+  =input
+    +control
+    &:hover,
+    &.is-hovered
+      border-color: red
