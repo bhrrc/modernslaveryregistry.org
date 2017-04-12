@@ -12,7 +12,6 @@ $(document).on('turbolinks:load', function() {
 
     var circleByCountryId = {}
 
-    var selectedCircles = []
     function updateCircles() {
       for(var c in circleByCountryId) {
         circleByCountryId[c].setStyle({
@@ -29,11 +28,6 @@ $(document).on('turbolinks:load', function() {
         })
         selectedCircles.push(circle)
       })
-
-      if(selectedCircles.length > 0) {
-        var group = new L.featureGroup(selectedCircles)
-        map.fitBounds(group.getBounds())
-      }
     }
 
     $.get("/countries", function(countries) {
