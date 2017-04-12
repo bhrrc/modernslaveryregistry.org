@@ -1,6 +1,6 @@
 $(document).on('turbolinks:load', function() {
   if ($('#world-map').length) {
-    var map = L.map('world-map').setView([40, 0], 2)
+    var map = L.map('world-map').setView([40, 0], 1)
 
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
