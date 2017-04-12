@@ -1,0 +1,95 @@
+<%= form_tag explore_path, method: :get do %>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">NN Sectors</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <div class="control">
+        <%=
+        select_tag(
+          'sectors[]',
+          options_from_collection_for_select(
+            Sector.with_companies.order(:name),
+            :id,
+            :name,
+            params[:sectors]
+          ),
+          {
+            include_blank: true,
+            multiple: true,
+            class: 'chosen-select',
+            'data-placeholder': 'All sectors'
+          }
+        )
+        %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">NN Countries</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <div class="control">
+        <%=
+        select_tag(
+          'countries[]',
+          options_from_collection_for_select(
+            Country.with_companies.order(:name),
+            :id,
+            :name,
+            params[:countries]
+          ),
+          {
+            include_blank: true,
+            multiple: true,
+            class: 'chosen-select',
+            'data-placeholder': 'All countries'
+          }
+        )
+        %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">NN Statements</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <div class="control">
+        <%= text_field_tag :company_name, params[:company_name], class: 'input',
+            placeholder: 'Company' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="field is-horizontal">
+  <div class="field-label">
+    <!-- Left empty for spacing -->
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <div class="control">
+        <%= submit_tag 'Search', class: "button is-primary" %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<script>
+$('.chosen-select').chosen({
+  allow_single_deselect: true,
+  inherit_select_classes: true,
+  no_results_text: 'No results matched',
+  width: '100%'
+})
+</script>

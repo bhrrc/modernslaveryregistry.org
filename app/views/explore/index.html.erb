@@ -1,9 +1,25 @@
-<div class="section">
-  <%= render partial: 'companies/search_form' %>
-</div>
+<section class="section">
+  <div class="container">
+    <div class="tile is-ancestor">
+      <div class="tile is-vertical is-parent">
+        <div class="tile is-child">
+          <div id="world-map"></div>
+        </div>
+        <div class="tile is-child">
+          <%= render partial: 'search_form' %>
+        </div>
+      </div>
+      <div class="tile is-parent">
+        <div class="tile is-child">
+          <%= image_tag "https://placeholdit.imgix.net/~text?txtsize=33&txt=Sector%20Chart&w=350&h=150" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="section">
-  <%= render partial: 'statements/list', locals: { companies: @companies } %>
-</div>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZ-X1KvfDP7M8OXTi1BqeRmeLl6URzaLw&callback=initMap"></script>
+<section class="section">
+  <div class="container">
+    <%= render partial: 'list', locals: {companies: @companies} %>
+  </div>
+</section>
