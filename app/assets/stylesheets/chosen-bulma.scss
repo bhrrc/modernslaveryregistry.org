@@ -1,12 +1,24 @@
-//chosen-container chosen-container-multi chosen-with-drop chosen-container-active
+.chosen-container-multi {
+  ul.chosen-choices {
+    font-size: 16px;
 
-.XXchosen-container-multi {
-  .chosen-choices li {
-    &.search-field {
+    background-image: none;
+    border-radius: 3px;
+    border: 1px solid #f4f4f3;
+    color: #404044;
+    box-shadow: inset 0 1px 2px rgba(38, 38, 42, 0.1);
+
+    li.search-field {
       input[type="text"] {
-        height: 2.25em;
-        border: 1px solid #dbdbdb;
-        font-size: 1.25rem;
+        height: 32px;
+      }
+    }
+    li.search-choice {
+      margin: 4px 5px 4px 0;
+      padding: 6px 20px 6px 5px;
+
+      .search-choice-close {
+        top: 7px;
       }
     }
   }

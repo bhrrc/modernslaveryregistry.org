@@ -26,7 +26,6 @@ $(document).on('turbolinks:load', function() {
           color: selectedColour,
           fillColor: selectedColour
         })
-        selectedCircles.push(circle)
       })
     }
 

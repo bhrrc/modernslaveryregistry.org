@@ -15,6 +15,5 @@
 //= require turbolinks
 //= require Chart.min
 //= require chosen-jquery
-//= require selectize
 //= require leaflet
 //= require_tree .

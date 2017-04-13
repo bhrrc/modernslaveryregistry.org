@@ -39,9 +39,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'json', '~> 2.0.3'
 
 gem "bulma-rails", "~> 0.4.0"
-gem 'geonames'
 gem 'leaflet-rails'
-gem 'selectize-rails'
 gem 'chosen-rails'
 gem 'chartjs-ror'
 
