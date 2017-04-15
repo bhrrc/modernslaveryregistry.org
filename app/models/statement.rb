@@ -2,16 +2,22 @@ require 'uri'
 require 'open-uri'
 
 class Statement < ApplicationRecord
-  belongs_to :company, optional: true
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
+  belongs_to :company, optional: true
+
+  belongs_to :verified_by, class_name: 'User', optional: true
 
   validates :url, presence: true
-  validates :link_on_front_page, :inclusion => { :in => [true, false] }
-  validates :approved_by_board, :inclusion => { :in => ['Yes', 'No', 'Not explicit'] }
-  validates :signed_by_director, :inclusion => { :in => [true, false] }
+  validates :link_on_front_page, inclusion: { in: [true, false] }, if: :verified?
+  validates :approved_by_board,  inclusion: { in: ['Yes', 'No', 'Not explicit'] }, if: :verified?
+  validates :signed_by_director, inclusion: { in: [true, false] }, if: :verified?
 
   before_create :set_date_seen
+
+  def verified?
+    !verified_by.nil?
+  end
 
   private
 

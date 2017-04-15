@@ -11,18 +11,22 @@
       <thead>
         <tr>
           <th>Date seen</th>
-          <th>Signed by director</th>
-          <th>Approved by board</th>
-          <th>Link on front page</th>
+          <% if admin? %>
+            <th>Signed by director</th>
+            <th>Approved by board</th>
+            <th>Link on front page</th>
+          <% end %>
         </tr>
       </thead>
       <tbody>
         <% @company.statements.each do |statement| %>
           <tr data-content="statement">
             <td><%= link_to(statement.date_seen, [@company, statement], {'data-content': 'date_seen'}) %></td>
-            <td><%= yes_no(statement.signed_by_director) %></td>
-            <td><%= yes_no_not_explicit(statement.approved_by_board) %></td>
-            <td><%= yes_no(statement.link_on_front_page) %></td>
+            <% if admin? %>
+              <td><%= yes_no(statement.signed_by_director) %></td>
+              <td><%= yes_no_not_explicit(statement.approved_by_board) %></td>
+              <td><%= yes_no(statement.link_on_front_page) %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

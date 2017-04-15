@@ -3,6 +3,7 @@ Feature: Register statement
 
   Scenario: Submit statement for existing company
     Given company "Cucumber Ltd" has been submitted
+    And Patricia is logged in
     When Patricia submits the following statement for "Cucumber Ltd":
       | url                | https://cucumber.io/anti-slavery-statement |
       | signed_by_director | No                                         |
@@ -11,6 +12,7 @@ Feature: Register statement
     Then Patricia should see 1 statement for "Cucumber Ltd"
 
   Scenario: Submit statement for new company
+    Given Patricia is logged in
     When Patricia submits the following statement:
       | company_name       | Cucumber Ltd                               |
       | country            | United Kingdom                             |

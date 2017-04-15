@@ -8,15 +8,48 @@ RSpec.describe Statement, :type => :model do
   end
 
   it "converts url to https if it exists" do
-    statement = @company.statements.create!({
-      url: 'http://cucumber.io/',
-      approved_by: 'Aslak',
-      approved_by_board: 'Yes',
-      signed_by_director: false,
-      link_on_front_page: true,
-      date_seen: Date.parse('21 May 2016')
-    })
+    VCR.use_cassette("cucumber.io") do
+      statement = @company.statements.create!({
+        url: 'http://cucumber.io/',
+        approved_by: 'Big Boss',
+        approved_by_board: 'Yes',
+        signed_by_director: false,
+        link_on_front_page: true,
+        date_seen: Date.parse('21 May 2016')
+      })
 
-    expect(statement.url).to eq('https://cucumber.io/')
+      expect(statement.url).to eq('https://cucumber.io/')
+    end
+  end
+
+  it "does not validate admin-only visible fields for non-admins" do
+    VCR.use_cassette("cucumber.io") do
+      statement = @company.statements.create({
+        url: 'http://cucumber.io/',
+        verified_by: nil
+      })
+
+      expect(statement.errors.messages).to eq({})
+    end
+  end
+
+  it "validates admin-only visible fields for admins" do
+    VCR.use_cassette("cucumber.io") do
+      user = User.create!({
+        email: 'someone@somewhere.com',
+        password: 'whatevs'
+      })
+
+      statement = @company.statements.create({
+        url: 'http://cucumber.io/',
+        verified_by: user
+      })
+
+      expect(statement.errors.messages).to eq({
+        approved_by_board: ["is not included in the list"],
+        link_on_front_page: ["is not included in the list"],
+        signed_by_director: ["is not included in the list"]
+      })
+    end
   end
 end

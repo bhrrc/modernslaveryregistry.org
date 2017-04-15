@@ -9,34 +9,38 @@
           <% end %>
           <%= @statement.date_seen %>
         </h3>
-        <%= link_to('Edit', edit_company_path(@statement.company)) %>
+        <% if admin? %>
+          <%= link_to('Edit', edit_company_path(@statement.company)) %>
+        <% end %>
       </div>
-      <div class="column">
-        <div class="columns">
-          <div class="column">
-            <span class="label">Signed by Director</span>
+      <% if admin? %>
+        <div class="column">
+          <div class="columns">
+            <div class="column">
+              <span class="label">Signed by Director</span>
+            </div>
+            <div class="column">
+              <%= yes_no(@statement.signed_by_director) %>
+            </div>
           </div>
-          <div class="column">
-            <%= yes_no(@statement.signed_by_director) %>
+          <div class="columns">
+            <div class="column">
+              <span class="label">Approved by Board</span>
+            </div>
+            <div class="column">
+              <%= yes_no_not_explicit(@statement.approved_by_board) %>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <span class="label">Link on Front page</span>
+            </div>
+            <div class="column">
+              <%= yes_no(@statement.link_on_front_page) %>
+            </div>
           </div>
         </div>
-        <div class="columns">
-          <div class="column">
-            <span class="label">Approved by Board</span>
-          </div>
-          <div class="column">
-            <%= yes_no_not_explicit(@statement.approved_by_board) %>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column">
-            <span class="label">Link on Front page</span>
-          </div>
-          <div class="column">
-            <%= yes_no(@statement.link_on_front_page) %>
-          </div>
-        </div>
-      </div>
+      <% end %>
     </div>
 
     <div class="browser-wrapper">

@@ -1,3 +1,4 @@
+<% if admin? %>
 <div class="field is-horizontal" data-content="link_on_front_page">
   <div class="field-label">
     <label class="label">Link on front page?</label>
@@ -17,6 +18,7 @@
     </div>
   </div>
 </div>
+<% end %>
 
 <div class="field is-horizontal">
   <div class="field-label is-normal">
@@ -32,6 +34,7 @@
   </div>
 </div>
 
+<% if admin? %>
 <div class="field is-horizontal" data-content="approved_by_board">
   <div class="field-label">
     <label class="label">Approved by board?</label>
@@ -55,7 +58,9 @@
     </div>
   </div>
 </div>
+<% end %>
 
+<% if admin? %>
 <div class="field is-horizontal">
   <div class="field-label is-normal">
     <%= f.label :approved_by, 'Approved by', class: 'label' %>
@@ -68,7 +73,9 @@
     </div>
   </div>
 </div>
+<% end %>
 
+<% if admin? %>
 <div class="field is-horizontal" data-content="signed_by_director">
   <div class="field-label">
     <label class="label">Signed by director?</label>
@@ -88,7 +95,9 @@
     </div>
   </div>
 </div>
+<% end %>
 
+<% if admin? %>
 <div class="field is-horizontal">
   <div class="field-label is-normal">
     <%= f.label :signed_by, 'Signed by', class: 'label' %>
@@ -101,3 +110,4 @@
     </div>
   </div>
 </div>
+<% end %>

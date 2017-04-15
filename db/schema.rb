@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170415191533) do
+ActiveRecord::Schema.define(version: 20170415223753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,15 +47,17 @@ ActiveRecord::Schema.define(version: 20170415191533) do
     t.integer  "company_id",         null: false
     t.string   "url",                null: false
     t.date     "date_seen",          null: false
-    t.string   "approved_by_board",  null: false
+    t.string   "approved_by_board"
     t.string   "approved_by"
-    t.boolean  "signed_by_director", null: false
+    t.boolean  "signed_by_director"
     t.string   "signed_by"
-    t.boolean  "link_on_front_page", null: false
+    t.boolean  "link_on_front_page"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.boolean  "broken_url"
+    t.integer  "verified_by_id"
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree
+    t.index ["verified_by_id"], name: "index_statements_on_verified_by_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -83,4 +85,5 @@ ActiveRecord::Schema.define(version: 20170415191533) do
 
   add_foreign_key "companies", "countries"
   add_foreign_key "statements", "companies"
+  add_foreign_key "statements", "users", column: "verified_by_id"
 end
