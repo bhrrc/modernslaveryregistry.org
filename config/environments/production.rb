@@ -56,7 +56,7 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "msa-registry_#{Rails.env}"
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.default_url_options = { host: 'msa-registry.herokuapp.com', protocol: 'https' }
 
   config.action_mailer.smtp_settings = {
     port:           ENV['MAILGUN_SMTP_PORT'],
