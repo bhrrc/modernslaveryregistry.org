@@ -33,3 +33,18 @@ class SubmitCompany < Fellini::Task
     @country_name = "United Kingdom"
   end
 end
+
+class CurrentPage < Fellini::Question
+  def answered_by(actor)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+    browser.find(@selector).text
+  end
+
+  def initialize(selector)
+    @selector = selector
+  end
+
+  def self.company_name
+    new('[data-content="company_name"]')
+  end
+end

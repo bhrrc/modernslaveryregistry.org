@@ -1,4 +1,6 @@
 class CompaniesController < ApplicationController
+  before_action :authenticate_user!, :only => [:update, :edit]
+
   def new
     @company = Company.new
   end
@@ -25,6 +27,7 @@ class CompaniesController < ApplicationController
 
   def update
     @company = Company.find(params[:id])
+    authorize @company
     if @company.update_attributes(company_params)
       if @company.statements.any?
         redirect_to company_statement_path(@company, @company.newest_statement)
@@ -43,6 +46,7 @@ class CompaniesController < ApplicationController
 
   def edit
     @company = Company.find(params[:id])
+    authorize @company, :update?
   end
 
   private

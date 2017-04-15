@@ -28,6 +28,12 @@
           About us
         </a>
 
+        <% if user_signed_in? %>
+          <%= link_to('Logout', destroy_user_session_path, {class: 'nav-item', method: 'delete'}) %>
+        <% else %>
+          <%= link_to('Login', new_user_session_path, {class: 'nav-item'})  %>
+        <% end %>
+
         <span class="nav-item">
           <a class="button is-white">
             <span class="icon">
@@ -38,5 +44,13 @@
         </span>
       </div>
     </nav>
+    <div class="container has-text-centered">
+      <% if notice %>
+        <div class="notification is-primary"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="notification is-danger"><%= alert %></div>
+      <% end %>
+    </div>
   </div>
 </div>

@@ -21,6 +21,7 @@ Feature: Register statement
     Then Patricia should see 1 statement for "Cucumber Ltd"
 
   Scenario: Edit existing statement
+    Given Patricia is logged in
     Given Patricia has submitted the following statement:
       | company_name       | Cucumber Ltd                               |
       | country            | United Kingdom                             |

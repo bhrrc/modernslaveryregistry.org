@@ -6,6 +6,8 @@
 #
 module Fellini
   class Actor
+    attr_reader :name
+
     def self.named(name)
       new(name)
     end
