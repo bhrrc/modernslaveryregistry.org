@@ -13,6 +13,7 @@ class CompaniesController < ApplicationController
 
   def create
     @company = Company.new(company_params)
+    @company.statements.each { |s| set_verified_by(s) }
     if @company.save
       if @company.statements.any?
         redirect_to company_statement_path(@company, @company.newest_statement)
@@ -28,7 +29,11 @@ class CompaniesController < ApplicationController
   def update
     @company = Company.find(params[:id])
     authorize @company
-    if @company.update_attributes(company_params)
+
+    @company.assign_attributes(company_params)
+    @company.statements.each { |s| set_verified_by(s) }
+
+    if @company.save
       if @company.statements.any?
         redirect_to company_statement_path(@company, @company.newest_statement)
       else
@@ -51,6 +56,10 @@ class CompaniesController < ApplicationController
 
   private
 
+  def set_verified_by(statement)
+    statement.verified_by = statement.published? ? current_user : nil
+  end
+
   def company_params
     params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: [
       :id,
@@ -60,7 +69,8 @@ class CompaniesController < ApplicationController
       :approved_by,
       :approved_by_board,
       :signed_by,
-      :signed_by_director
+      :signed_by_director,
+      :published
     ])
   end
 end

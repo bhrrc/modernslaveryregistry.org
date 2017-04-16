@@ -39,6 +39,7 @@ Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, tabl
       .signed_by_director(props['signed_by_director'])
       .approved_by_board(props['approved_by_board'])
       .link_on_front_page(props['link_on_front_page'])
+      .published(props['published'])
   )
 end
 
@@ -52,6 +53,7 @@ When(/^(Joe|Patricia) submits the following statement:$/) do |actor, table|
       .signed_by_director(props['signed_by_director'])
       .approved_by_board(props['approved_by_board'])
       .link_on_front_page(props['link_on_front_page'])
+      .published(props['published'])
   )
 end
 
@@ -62,12 +64,24 @@ When(/^(Joe|Patricia) updates the statement for "([^"]*)" to:$/) do |actor, comp
 end
 
 Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
-  expect(actor.to_see(TheListedStatements.for_company(company_name)).length()).to eq(statement_count.to_i)
+  expect(actor.to_see(TheListedStatements.for_company(company_name)).length).to eq(statement_count.to_i)
 end
 
 Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
   company_names = company_names_string.split(",").map(&:strip)
   expect(actor.to_see(TheListedStatements.from_search).map(&:company_name)).to eq(company_names)
+end
+
+Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was verified by herself$/) do |actor, company_name|
+  expect(actor.to_see(TheNewestStatement.for_company(company_name)).verified_by).to eq(actor.name)
+end
+
+Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" is not published$/) do |actor, company_name|
+  expect(actor.to_see(TheNewestStatement.for_company(company_name)).published).to eq("Draft")
+end
+
+Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was not verified$/) do |actor, company_name|
+  expect(actor.to_see(TheNewestStatement.for_company(company_name)).verified_by).to eq(nil)
 end
 
 class SubmitStatement < Fellini::Task
@@ -96,6 +110,8 @@ class SubmitStatement < Fellini::Task
       browser.choose(@approved_by_board)
     end
 
+    @published =~ /yes|true/i ? browser.check('Published?') : browser.uncheck('Published?')
+
     browser.click_button 'Submit'
   end
 
@@ -114,6 +130,7 @@ class SubmitStatement < Fellini::Task
     @signed_by_director = "No"
     @approved_by_board = "No"
     @link_on_front_page = "No"
+    @published = "No"
   end
 
   def in_country(country)
@@ -138,6 +155,11 @@ class SubmitStatement < Fellini::Task
 
   def link_on_front_page(value)
     @link_on_front_page = value
+    self
+  end
+
+  def published(value)
+    @published = value
     self
   end
 end
@@ -167,6 +189,28 @@ class UpdateStatement < Fellini::Task
   def with_new_values(values_table)
     @values_table = values_table
     self
+  end
+end
+
+class TheNewestStatement < Fellini::Question
+  include Fellini::Capybara::DomStruct
+  include Rails.application.routes.url_helpers
+
+  def answered_by(actor)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+
+    company = Company.find_by_name(@company_name)
+    browser.visit(company_statement_path(company, company.newest_statement))
+
+    struct(browser, :statement, :verified_by, :published)
+  end
+
+  def self.for_company(company_name)
+    new(company_name)
+  end
+
+  def initialize(company_name)
+    @company_name = company_name
   end
 end
 

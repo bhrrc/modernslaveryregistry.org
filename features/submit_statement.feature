@@ -1,4 +1,4 @@
-Feature: Register statement
+Feature: Submit statement
   Statements are registered from a company page
 
   Scenario: Submit statement for existing company

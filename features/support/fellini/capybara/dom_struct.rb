@@ -31,10 +31,17 @@ module Fellini
         struct = Struct.new(*field_names)
         browser.all(%{[data-content="#{struct_name}"]}).map do |element|
           fields = field_names.map do |field_name|
-            element.find(%{[data-content="#{field_name}"]}).text
+            element.find(%{[data-content="#{field_name}"]}).text rescue nil
           end
           struct.new(*fields)
         end
+      end
+
+      def struct(browser, struct_name, *field_names)
+        structs = structs(browser, struct_name, *field_names)
+        raise "No structs found" if structs.empty?
+        raise "Expected a single struct, found #{structs.length}" if structs.length > 1
+        structs[0]
       end
     end
   end

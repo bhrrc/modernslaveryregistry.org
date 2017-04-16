@@ -36,6 +36,8 @@ RSpec.describe Statement, :type => :model do
   it "validates admin-only visible fields for admins" do
     VCR.use_cassette("cucumber.io") do
       user = User.create!({
+        first_name: 'Someone',
+        last_name: 'Smith',
         email: 'someone@somewhere.com',
         password: 'whatevs'
       })

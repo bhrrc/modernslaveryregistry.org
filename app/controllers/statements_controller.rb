@@ -1,4 +1,5 @@
 class StatementsController < ApplicationController
+  # TODO: Get rid of this action - use nested form in CompaniesController
   def new
     @company = Company.find(params[:company_id])
     @statement = @company.statements.build
@@ -8,6 +9,7 @@ class StatementsController < ApplicationController
     @statement = Statement.find(params[:id])
   end
 
+  # TODO: Get rid of this action - use nested form in CompaniesController
   def create
     if params[:company_id]
       @company = Company.find(params[:company_id])
@@ -32,7 +34,8 @@ class StatementsController < ApplicationController
       :approved_by,
       :approved_by_board,
       :signed_by,
-      :signed_by_director
+      :signed_by_director,
+      :published
     )
   end
 end
