@@ -15,6 +15,37 @@ class Statement < ApplicationRecord
 
   before_create :set_date_seen
 
+  scope :newest, -> {
+    select("DISTINCT ON (statements.company_id) *")
+    .order(:company_id, date_seen: :desc)
+  }
+
+  scope :published, -> {
+    where(published: true)
+  }
+
+  def self.search(query)
+    statements = Statement.newest
+    # TODO: Unless we're admin: statements = statements.published
+    statements = statements.includes(company: [:sector, :country])
+
+    company_join = statements.joins(:company)
+    if (query[:company_name] && !query[:company_name].empty?)
+      company_join = company_join.where("LOWER(name) LIKE LOWER(?)", "%#{query[:company_name]}%")
+      statements = company_join
+    end
+    if (query[:sectors])
+      company_join = company_join.where(companies: {sector_id: query[:sectors]})
+      statements = company_join
+    end
+    if (query[:countries])
+      company_join = company_join.where(companies: {country_id: query[:countries]})
+      statements = company_join
+    end
+
+    statements
+  end
+
   def verified?
     !verified_by.nil?
   end
