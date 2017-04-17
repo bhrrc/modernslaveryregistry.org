@@ -2,12 +2,16 @@
   <div class="section">
     <div class="columns">
       <div class="column">
-        <h2 class="title is-3"><%= link_to @statement.company.name, @statement.company, {'data-content': "company-name"} %></h2>
+        <h1 class="title is-3 is-marginless"><%= link_to @statement.company.name, @statement.company, {'data-content': "company-name"} %></h2>
+        <h3 class="title is-3 is-marginless">
+          <span class="tag is-dark-navy"><%= @statement.country_name %></span>
+          <span class="tag is-dark-navy"><%= @statement.sector_name %></span>
+        </h3>
         <h3 class="title is-5">
           <% if @statement.broken_url && admin? %>
             <%= image_tag('broken-link.png', size: '24') %>
           <% end %>
-          <%= @statement.date_seen %>
+          Date added: <%= @statement.date_seen %>
         </h3>
         <% if admin? %>
           <%= link_to('Edit', edit_company_path(@statement.company)) %>
@@ -50,10 +54,10 @@
 
     <div class="browser-wrapper">
       <div class="browser-navigation-bar">
-        <i></i>
-        <i></i>
-        <i></i>
-        <%= link_to(@statement.url, @statement.url) %>
+        <i class="top-bar"></i>
+        <i class="top-bar"></i>
+        <i class="top-bar"></i>
+        <%= link_to('Open statement in new window', @statement.url, class: 'url') %>
       </div>
 
       <div class="browser-container">

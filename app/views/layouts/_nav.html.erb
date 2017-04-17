@@ -17,31 +17,23 @@
 
       <!-- This "nav-menu" is hidden on mobile -->
       <!-- Add the modifier "is-active" to display it on mobile -->
-      <div class="nav-right nav-menu">
+      <div class="nav-center nav-menu">
+        <a class="nav-item">
+          About us
+        </a>
         <a class="nav-item">
           Reporting guidance
         </a>
         <a class="nav-item">
           Contact us
         </a>
-        <a class="nav-item">
-          About us
+      </div>
+
+      <div class="nav-right nav-menu">
+        <a class="nav-item" href="/">
+          <%= image_tag 'msr_logo_rgb_w.png', alt: "Modern Slavery Registry" %>
         </a>
 
-        <% if user_signed_in? %>
-          <%= link_to('Logout', destroy_user_session_path, {class: 'nav-item', method: 'delete'}) %>
-        <% else %>
-          <%= link_to('Login', new_user_session_path, {class: 'nav-item'})  %>
-        <% end %>
-
-        <span class="nav-item">
-          <a class="button is-white">
-            <span class="icon">
-              <i class="fa fa-download"></i>
-            </span>
-            <span>Download</span>
-          </a>
-        </span>
       </div>
     </nav>
     <div class="container has-text-centered">

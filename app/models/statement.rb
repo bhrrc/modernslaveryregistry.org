@@ -51,6 +51,14 @@ class Statement < ApplicationRecord
     !verified_by.nil?
   end
 
+  def country_name
+    company.country.name rescue "Country unknown"
+  end
+
+  def sector_name
+    company.sector.name rescue "Sector unknown"
+  end
+
   private
 
   unless ENV['no_verify_statement_urls']
