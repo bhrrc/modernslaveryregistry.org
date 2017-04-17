@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users, :controllers => { registrations: 'registrations' }
-  get 'welcome/index'
   root 'welcome#index'
+  get 'welcome/index'
 
   get 'explore', to: 'explore#index'
   get 'thanks', to: 'cms#thanks'
+  get 'about_us', to: 'cms#about_us'
+  get 'reporting_guidance', to: 'cms#reporting_guidance'
+  get 'contact_us', to: 'cms#contact_us'
 
   resources :countries
   resources :companies do

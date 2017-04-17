@@ -18,15 +18,9 @@
       <!-- This "nav-menu" is hidden on mobile -->
       <!-- Add the modifier "is-active" to display it on mobile -->
       <div class="nav-center nav-menu">
-        <a class="nav-item">
-          About us
-        </a>
-        <a class="nav-item">
-          Reporting guidance
-        </a>
-        <a class="nav-item">
-          Contact us
-        </a>
+        <%= link_to "About us", about_us_path, class: 'nav-item' %>
+        <%= link_to "Reporting guidance", reporting_guidance_path, class: 'nav-item' %>
+        <%= link_to "Contact us", contact_us_path, class: 'nav-item' %>
       </div>
 
       <div class="nav-right nav-menu">
