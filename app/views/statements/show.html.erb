@@ -11,7 +11,7 @@
           <% if @statement.broken_url && admin? %>
             <%= image_tag('broken-link.png', size: '24') %>
           <% end %>
-          Date added: <%= @statement.date_seen %>
+          Date added: <%= @statement.date_seen.strftime('%d %B %Y') %>
         </h3>
         <% if admin? %>
           <%= link_to('Edit', edit_company_path(@statement.company)) %>

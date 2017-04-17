@@ -20,7 +20,7 @@
     <div class="field is-narrow">
       <div class="control">
         <div class="select is-fullwidth">
-          <%= f.collection_select(:country_id, Country.order(:name).all, :id, :name) %>
+          <%= f.collection_select(:country_id, Country.order(:name).all, :id, :name, include_blank: true) %>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@
     <div class="field is-narrow">
       <div class="control">
         <div class="select is-fullwidth">
-          <%= f.collection_select(:sector_id, Sector.order(:name).all, :id, :name) %>
+          <%= f.collection_select(:sector_id, Sector.order(:name).all, :id, :name, include_blank: true) %>
         </div>
       </div>
     </div>

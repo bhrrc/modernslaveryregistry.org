@@ -10,7 +10,7 @@ require 'csv'
 # Import countries
 ActiveRecord::Base.transaction do
   CSV.foreach(File.dirname(__FILE__) + '/countries.csv', :headers => true) do |row|
-    Country.create!(row.to_hash)
+    Country.find_or_create_by!(row.to_hash)
   end
 end
 
@@ -62,6 +62,7 @@ def approved_by(s)
   s
 end
 
+admin = User.find_by_email!(ENV['SEED_ADMIN_EMAIL'])
 filename = ARGV[0]
 puts "Importing statements..."
 stms = []
@@ -94,8 +95,10 @@ ActiveRecord::Base.transaction do
       signed_by_director: yes_no_bool(row['STATEMENT SIGNED BY DIRECTOR/MEMBER/PARTNER 54(6)(a-d)']),
       signed_by: signed_by(row['Title of person who signed']),
       link_on_front_page: yes_no_bool(row['LINK TO STATEMENT ON HOMEPAGE OF WEBSITE 54(7)(b)']),
-
-      company_id: company.id
+      company: company,
+      verified_by: admin,
+      contributed_by: admin,
+      published: true
     }
     statement = Statement.find_or_create_by!(statement_params)
     if statement.broken_url

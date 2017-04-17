@@ -1,5 +1,5 @@
 <% statements.each do |statement| %>
-  <div class="columns" data-content="statement">
+  <div class="columns <%= statement.published? ? 'published' : 'draft'%>" data-content="statement">
     <div class="column">
       <% if statement.broken_url && admin? %>
         <%= image_tag('broken-link.png', size: '24') %>
@@ -7,10 +7,10 @@
       <%= link_to(statement.company.name, company_statement_path(statement.company, statement), {'data-content': 'company_name'}) %>
     </div>
     <div class="column" data-content="country">
-      <%= statement.company.country.name %>
+      <%= statement.country_name %>
     </div>
     <div class="column" data-content="sector">
-      <%= statement.company.sector.nil? ? '' : statement.company.sector.name %>
+      <%= statement.sector_name %>
     </div>
   </div>
 <% end %>
