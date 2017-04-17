@@ -1,4 +1,6 @@
 class StatementsController < ApplicationController
+  include ApplicationHelper
+
   # TODO: Get rid of this action - use nested form in CompaniesController
   def new
     @company = Company.find(params[:company_id])
@@ -6,7 +8,8 @@ class StatementsController < ApplicationController
   end
 
   def show
-    @statement = Statement.find(params[:id])
+    statements = admin? ? Statement : Statement.published
+    @statement = statements.find(params[:id])
   end
 
   # TODO: Get rid of this action - use nested form in CompaniesController

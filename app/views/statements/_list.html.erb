@@ -1,7 +1,7 @@
 <% statements.each do |statement| %>
   <div class="columns" data-content="statement">
     <div class="column">
-      <% if statement.broken_url %>
+      <% if statement.broken_url && admin? %>
         <%= image_tag('broken-link.png', size: '24') %>
       <% end %>
       <%= link_to(statement.company.name, [statement.company, statement], {'data-content': 'company_name'}) %>

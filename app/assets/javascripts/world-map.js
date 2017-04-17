@@ -29,6 +29,8 @@ $(document).on('turbolinks:load', function() {
       })
     }
 
+    // TODO: Use same search params as form so we can render consistently
+    // with statement list?
     $.get("/countries", function(countries) {
       countries.forEach(function (country) {
         var radius = Math.log10(10*country.company_count + 10) * 100000
