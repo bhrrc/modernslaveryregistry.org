@@ -2,10 +2,10 @@ Feature: Search companies
 
   Background:
     Given the following statements have been submitted:
-      | company_name | statement_url          | country        | sector      | verified_by |
-      | Cucumber Ltd | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    |
-      | Banana Ltd   | https://banana.io/s    | France         | Agriculture | Patricia    |
-      | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      |             |
+      | company_name | statement_url          | country        | sector      | verified_by | contributed_by |
+      | Cucumber Ltd | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    |                |
+      | Banana Ltd   | https://banana.io/s    | France         | Agriculture | Patricia    |                |
+      | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      |             | bob@host.com   |
 
   Scenario: Search by name
     Given Joe is logged in

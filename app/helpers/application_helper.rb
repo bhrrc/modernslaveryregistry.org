@@ -29,4 +29,12 @@ module ApplicationHelper
   def back_or_root
     request.referer.present? ? request.referer : root_path
   end
+
+  def set_user_associations(statement)
+    statement.verified_by = statement.published? ? current_user : nil
+    if statement.new_record? && statement.contributed_by.nil?
+      statement.contributed_by = current_user
+    end
+  end
+
 end

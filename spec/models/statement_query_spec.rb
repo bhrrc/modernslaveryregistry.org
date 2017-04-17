@@ -15,7 +15,8 @@ RSpec.describe Statement, :type => :model do
       signed_by_director: false,
       link_on_front_page: true,
       date_seen: Date.parse('21 May 2016'),
-      published: true
+      published: true,
+      contributor_email: 'someone@somewhere.com'
     })
     @p2016 = @company_potato.statements.create!({
       url: 'http://potato.io/2016',
@@ -24,7 +25,8 @@ RSpec.describe Statement, :type => :model do
       signed_by_director: 'No',
       link_on_front_page: true,
       date_seen: Date.parse('20 May 2016'),
-      published: false
+      published: false,
+      contributor_email: 'someone@somewhere.com'
     })
     @c2017 = @company_cucumber.statements.create!({
       url: 'http://cucumber.io/2017',
@@ -33,7 +35,8 @@ RSpec.describe Statement, :type => :model do
       signed_by_director: false,
       link_on_front_page: true,
       date_seen: Date.parse('22 June 2017'),
-      published: false
+      published: false,
+      contributor_email: 'someone@somewhere.com'
     })
   end
 

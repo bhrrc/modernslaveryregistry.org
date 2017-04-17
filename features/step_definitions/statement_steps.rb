@@ -17,11 +17,23 @@ Given(/^the following statements have been submitted:$/) do |table|
       })
     end
 
+    contributed_by_user = nil
+    unless props['contributed_by'].empty?
+      contributed_by_user = User.find_by_email(props['contributed_by']) || User.create!({
+        first_name: props['contributed_by'],
+        email: props['contributed_by'],
+        password: 'whatevs'
+      })
+    else
+      contributed_by_user = verified_by_user
+    end
+
     company.statements.create!(
       url: props['statement_url'],
       signed_by_director: 'No',
       approved_by_board: 'Not explicit',
       link_on_front_page: 'No',
+      contributed_by: contributed_by_user,
       verified_by: verified_by_user,
       published: !verified_by_user.nil?
     )
@@ -55,7 +67,7 @@ Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, tabl
   )
 end
 
-When(/^(Joe|Patricia) submits the following statement:$/) do |actor, table|
+When(/^(Joe|Patricia|Vicky) submits the following statement:$/) do |actor, table|
   props = table.rows_hash
   actor.attempts_to(
     SubmitStatement
@@ -66,6 +78,7 @@ When(/^(Joe|Patricia) submits the following statement:$/) do |actor, table|
       .approved_by_board(props['approved_by_board'])
       .link_on_front_page(props['link_on_front_page'])
       .published(props['published'])
+      .contributor_email(props['contributor_email'])
   )
 end
 
@@ -88,6 +101,11 @@ Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was ver
   expect(actor.to_see(TheNewestStatement.for_company(company_name)).verified_by).to eq(actor.name)
 end
 
+Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was contributed by (.*)$/) do |actor, company_name, contributor_name|
+  contributor_name = actor.name if contributor_name == 'herself'
+  expect(actor.to_see(TheNewestStatement.for_company(company_name)).contributed_by).to eq(contributor_name)
+end
+
 Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" is not published$/) do |actor, company_name|
   expect(actor.to_see(TheNewestStatement.for_company(company_name)).published).to eq("Draft")
 end
@@ -105,24 +123,36 @@ class SubmitStatement < Fellini::Task
     if(@new_company)
       browser.visit(new_company_statement_companies_path)
       browser.fill_in('Company name', with: @company_name)
-      browser.select(@country, from: 'Company HQ')
+      browser.select(@country, from: 'Company HQ') if @country
     else
       company = Company.find_by_name(@company_name)
       browser.visit(new_company_statement_path(company))
     end
     browser.fill_in('Statement URL', with: @url)
 
-    browser.within('[data-content="link_on_front_page"]') do
-      browser.choose(@link_on_front_page)
-    end
-    browser.within('[data-content="signed_by_director"]') do
-      browser.choose(@signed_by_director)
-    end
-    browser.within('[data-content="approved_by_board"]') do
-      browser.choose(@approved_by_board)
+    unless @link_on_front_page.nil?
+      browser.within('[data-content="link_on_front_page"]') do
+        browser.choose(@link_on_front_page)
+      end
     end
 
-    @published =~ /yes|true/i ? browser.check('Published?') : browser.uncheck('Published?')
+    unless @signed_by_director.nil?
+      browser.within('[data-content="signed_by_director"]') do
+        browser.choose(@signed_by_director)
+      end
+    end
+
+    unless @approved_by_board.nil?
+      browser.within('[data-content="approved_by_board"]') do
+        browser.choose(@approved_by_board)
+      end
+    end
+
+    unless @published.nil?
+      @published =~ /yes|true/i ? browser.check('Published?') : browser.uncheck('Published?')
+    end
+
+    browser.fill_in('Your email', with: @contributor_email) unless @contributor_email.nil?
 
     browser.click_button 'Submit'
   end
@@ -174,6 +204,11 @@ class SubmitStatement < Fellini::Task
     @published = value
     self
   end
+
+  def contributor_email(value)
+    @contributor_email = value
+    self
+  end
 end
 
 class UpdateStatement < Fellini::Task
@@ -214,7 +249,7 @@ class TheNewestStatement < Fellini::Question
     company = Company.find_by_name(@company_name)
     browser.visit(company_statement_path(company, company.newest_statement))
 
-    struct(browser, :statement, :verified_by, :published)
+    struct(browser, :statement, :verified_by, :contributed_by, :published)
   end
 
   def self.for_company(company_name)

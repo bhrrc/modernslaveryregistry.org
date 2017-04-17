@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   get 'explore', to: 'explore#index'
+  get 'thanks', to: 'cms#thanks'
 
   resources :countries
   resources :companies do

@@ -1,4 +1,6 @@
 class CompaniesController < ApplicationController
+  include ApplicationHelper
+
   before_action :authenticate_user!, :only => [:update, :edit]
 
   def new
@@ -13,10 +15,14 @@ class CompaniesController < ApplicationController
 
   def create
     @company = Company.new(company_params)
-    @company.statements.each { |s| set_verified_by(s) }
+    @company.statements.each { |s| set_user_associations(s) }
     if @company.save
       if @company.statements.any?
-        redirect_to company_statement_path(@company, @company.newest_statement)
+        if admin?
+          redirect_to company_statement_path(@company, @company.newest_statement)
+        else
+          redirect_to thanks_path
+        end
       else
         redirect_to company_path(@company)
       end
@@ -31,7 +37,7 @@ class CompaniesController < ApplicationController
     authorize @company
 
     @company.assign_attributes(company_params)
-    @company.statements.each { |s| set_verified_by(s) }
+    @company.statements.each { |s| set_user_associations(s) }
 
     if @company.save
       if @company.statements.any?
@@ -56,10 +62,6 @@ class CompaniesController < ApplicationController
 
   private
 
-  def set_verified_by(statement)
-    statement.verified_by = statement.published? ? current_user : nil
-  end
-
   def company_params
     params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: [
       :id,
@@ -70,7 +72,8 @@ class CompaniesController < ApplicationController
       :approved_by_board,
       :signed_by,
       :signed_by_director,
-      :published
+      :published,
+      :contributor_email
     ])
   end
 end

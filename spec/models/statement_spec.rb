@@ -15,7 +15,8 @@ RSpec.describe Statement, :type => :model do
         approved_by_board: 'Yes',
         signed_by_director: false,
         link_on_front_page: true,
-        date_seen: Date.parse('21 May 2016')
+        date_seen: Date.parse('21 May 2016'),
+        contributor_email: 'anon@host.com'
       })
 
       expect(statement.url).to eq('https://cucumber.io/')
@@ -26,7 +27,8 @@ RSpec.describe Statement, :type => :model do
     VCR.use_cassette("cucumber.io") do
       statement = @company.statements.create({
         url: 'http://cucumber.io/',
-        verified_by: nil
+        verified_by: nil,
+        contributor_email: 'anon@host.com'
       })
 
       expect(statement.errors.messages).to eq({})
@@ -44,7 +46,8 @@ RSpec.describe Statement, :type => :model do
 
       statement = @company.statements.create({
         url: 'http://cucumber.io/',
-        verified_by: user
+        verified_by: user,
+        contributed_by: user
       })
 
       expect(statement.errors.messages).to eq({

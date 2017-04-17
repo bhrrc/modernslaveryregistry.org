@@ -1,7 +1,6 @@
 class StatementsController < ApplicationController
   include ApplicationHelper
 
-  # TODO: Get rid of this action - use nested form in CompaniesController
   def new
     @company = Company.find(params[:company_id])
     @statement = @company.statements.build
@@ -12,7 +11,6 @@ class StatementsController < ApplicationController
     @statement = statements.find(params[:id])
   end
 
-  # TODO: Get rid of this action - use nested form in CompaniesController
   def create
     if params[:company_id]
       @company = Company.find(params[:company_id])
@@ -20,6 +18,7 @@ class StatementsController < ApplicationController
       @company = Company.new(params[:company])
     end
     @statement = @company.statements.build(statement_params)
+    set_user_associations(@statement)
     if @statement.save
       redirect_to [@company, @statement]
     else

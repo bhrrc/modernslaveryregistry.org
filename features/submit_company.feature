@@ -11,5 +11,6 @@ Feature: Submit company
   from a list of company names obtained elsewhere.
 
   Scenario: Submit a new company
+    Given Patricia is logged in
     When Patricia submits company "Cucumber Ltd"
     Then Patricia should see company "Cucumber Ltd"

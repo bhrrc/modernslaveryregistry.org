@@ -129,3 +129,18 @@
   </div>
 </div>
 <% end %>
+
+<% unless admin? %>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <%= f.label :contributor_email, 'Your email', class: 'label' %>
+  </div>
+  <div class="field-body">
+    <div class="field is-grouped">
+      <p class="control is-expanded">
+        <%= f.email_field :contributor_email, class: "input" %>
+      </p>
+    </div>
+  </div>
+</div>
+<% end %>

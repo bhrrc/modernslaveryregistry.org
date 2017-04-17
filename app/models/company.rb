@@ -1,6 +1,6 @@
 class Company < ApplicationRecord
   has_many :statements, dependent: :destroy
-  belongs_to :country
+  belongs_to :country, optional: true
   belongs_to :sector, optional: true
 
   validates :name, presence: true
