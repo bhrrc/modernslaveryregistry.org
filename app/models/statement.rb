@@ -24,9 +24,10 @@ class Statement < ApplicationRecord
     where(published: true)
   }
 
-  def self.search(query)
+  def self.search(current_user, query)
     statements = Statement.newest
-    # TODO: Unless we're admin: statements = statements.published
+    # Only display published statements - unless we're admin!
+    statements = statements.published unless current_user && current_user.admin?
     statements = statements.includes(company: [:sector, :country])
 
     company_join = statements.joins(:company)

@@ -12,7 +12,7 @@
         <% if admin? %>
           <%= link_to('Edit', edit_company_path(@statement.company)) %>
         <% end %>
-        <% if @statement.published? %>
+        <% if @statement.verified_by %>
           <p>Verified by <span data-content="verified_by"><%= @statement.verified_by.name %></span></p>
         <% else %>
           <p><span data-content="published">Draft</span></p>

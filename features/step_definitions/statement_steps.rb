@@ -7,11 +7,23 @@ Given(/^the following statements have been submitted:$/) do |table|
       sector_id: sector.id,
       country_id: country.id
     )
+
+    verified_by_user = nil
+    unless props['verified_by'].empty?
+      verified_by_user = User.find_by_first_name(props['verified_by']) || User.create!({
+        first_name: props['verified_by'],
+        email: "#{props['verified_by']}@host.com",
+        password: 'whatevs'
+      })
+    end
+
     company.statements.create!(
       url: props['statement_url'],
       signed_by_director: 'No',
       approved_by_board: 'Not explicit',
-      link_on_front_page: 'No'
+      link_on_front_page: 'No',
+      verified_by: verified_by_user,
+      published: !verified_by_user.nil?
     )
   end
 end

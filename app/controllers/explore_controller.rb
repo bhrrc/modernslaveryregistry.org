@@ -1,6 +1,6 @@
 class ExploreController < ApplicationController
   def index
-    @statements = Statement.search(params)
+    @statements = Statement.search(current_user, params)
 
     # sectors = Sector.with_companies.with_company_counts.order('company_count DESC')
     # @section_chart_data = {
