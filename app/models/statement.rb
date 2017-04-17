@@ -16,7 +16,7 @@ class Statement < ApplicationRecord
   before_create :set_date_seen
 
   scope :newest, -> {
-    select("DISTINCT ON (statements.company_id) *")
+    select("DISTINCT ON (statements.company_id) statements.*")
     .order(:company_id, date_seen: :desc)
   }
 
