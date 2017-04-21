@@ -1,6 +1,7 @@
 // http://codepen.io/peduarte/pen/bVbZLK
 $(document).on('turbolinks:load', function() {
   var wallopEl = document.querySelector('.Wallop');
+  if (!wallopEl) return
   var wallop = new Wallop(wallopEl);
 
   var paginationDots = Array.prototype.slice.call(document.querySelectorAll('.Wallop-dot'));
