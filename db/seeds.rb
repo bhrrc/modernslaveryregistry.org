@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
 #
@@ -9,7 +11,7 @@ require 'csv'
 
 # Import countries
 ActiveRecord::Base.transaction do
-  CSV.foreach(File.dirname(__FILE__) + '/countries.csv', :headers => true) do |row|
+  CSV.foreach(File.dirname(__FILE__) + '/countries.csv', headers: true) do |row|
     Country.find_or_create_by!(row.to_hash)
   end
 end
@@ -28,18 +30,16 @@ def date_seen(ds)
   ds = '12/20/16' if ds == '12/202/16'
   if ds.strip
     begin
-      Date.strptime(ds, "%d/%m/%y")
+      Date.strptime(ds, '%d/%m/%y')
     rescue
-      Date.strptime(ds, "%m/%d/%y")
+      Date.strptime(ds, '%m/%d/%y')
     end
-  else
-    nil
   end
 end
 
 def yes_no_bool(s)
   return false if s.nil?
-  !!(s =~ /yes/i)
+  !s !~ /yes/i
 end
 
 def signed_by(s)
@@ -48,7 +48,7 @@ def signed_by(s)
 end
 
 def approved_by_board(s)
-  return 'Not explicit' if s.nil?
+  return 'Not explicit' if s.nil? || s.strip == 'Industrials'
   s = s.strip
   s = 'Yes' if s == 'yes'
   s
@@ -64,31 +64,31 @@ end
 
 admin = User.find_by_email!(ENV['SEED_ADMIN_EMAIL'])
 filename = ARGV[0]
-puts "Importing statements..."
+puts 'Importing statements...'
 stms = []
 ActiveRecord::Base.transaction do
-  CSV.foreach(File.dirname(__FILE__) + '/statements.csv', :headers => true) do |row|
+  CSV.foreach(File.dirname(__FILE__) + '/statements.csv', headers: true) do |row|
     country_name = row['COUNTRY OF HQ OF CO. PROVIDING STATEMENT'].strip
-    country_name = "United Kingdom" if country_name == "UK"
-    country_name = "United Kingdom" if country_name == "Uk"
-    country_name = "United States" if country_name == "USA"
-    country_name = "United Arab Emirates" if country_name == "UAE"
-    country_name = "United Arab Emirates" if country_name == "Dubai"
-    country_name = "South Africa" if country_name == "S. Africa"
-    country = Country.find_by_name!(country_name)
+    country_name = 'United Kingdom' if country_name == 'UK'
+    country_name = 'United Kingdom' if country_name == 'Uk'
+    country_name = 'United States' if country_name == 'USA'
+    country_name = 'United Arab Emirates' if country_name == 'UAE'
+    country_name = 'United Arab Emirates' if country_name == 'Dubai'
+    country_name = 'South Africa' if country_name == 'S. Africa'
+    country = Country.find_by_name(country_name)
 
-    sector_params = {name: row['SECTOR'].strip}
+    sector_params = { name: row['New SECTOR'].strip }
     sector = sector_params[:name] ? Sector.find_or_create_by!(sector_params) : nil
 
     company_params = {
       name: row['COMPANY'],
-      country_id: country.id,
+      country: country,
       sector: sector
     }
     company = Company.find_or_create_by!(company_params)
 
     statement_params = {
-      url: row[' STATEMENT'].strip,
+      url: row[' STATEMENT'].strip.delete("^\u{0000}-\u{007F}"),
       date_seen: date_seen(row['DATE SEEN']),
       approved_by_board: approved_by_board(row['STATEMENT APPROVED BY BOARD/MEMBER/PARTNER 54(6)(a-d)']),
       approved_by: approved_by(row['WHO APPROVED']),
@@ -100,11 +100,16 @@ ActiveRecord::Base.transaction do
       contributed_by: admin,
       published: true
     }
-    statement = Statement.find_or_create_by!(statement_params)
-    if statement.broken_url
-      STDERR.write 'X'
-    else
-      STDERR.write URI(statement.url).scheme == 'https' ? '.' : '!'
+    begin
+      statement = Statement.find_or_create_by!(statement_params)
+      if statement.broken_url
+        STDERR.write 'X'
+      else
+        STDERR.write URI(statement.url).scheme == 'https' ? '.' : '!'
+      end
+    rescue => e
+      puts statement_params.inspect
+      raise e
     end
   end
 end
