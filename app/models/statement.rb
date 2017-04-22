@@ -116,13 +116,17 @@ class Statement < ApplicationRecord
         Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => CHROME}) }
         statement.url = uri.to_s
         statement.broken_url = false
-      rescue
+      rescue => e
         begin
           uri.scheme = 'http'
           Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => CHROME}) }
           statement.url = uri.to_s
           statement.broken_url = false
-        rescue
+        rescue => e
+          # Set the statement URL to http, even though we haven't been able to
+          # establish whether or not the url should be http or https.
+          # It's more likely that http works than https.
+          statement.url = uri.to_s
           statement.broken_url = true
         end
       end
