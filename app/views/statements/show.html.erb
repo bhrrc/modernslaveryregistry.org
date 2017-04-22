@@ -60,17 +60,21 @@
       <% end %>
     </div>
 
-    <div class="browser-wrapper">
-      <div class="browser-navigation-bar">
-        <i class="top-bar"></i>
-        <i class="top-bar"></i>
-        <i class="top-bar"></i>
-        <%= link_to(@statement.url, @statement.url, class: 'url') %>
-      </div>
+    <% if URI(@statement.url).scheme == 'https' %>
+      <div class="browser-wrapper">
+        <div class="browser-navigation-bar">
+          <i class="top-bar"></i>
+          <i class="top-bar"></i>
+          <i class="top-bar"></i>
+          <%= link_to(@statement.url, @statement.url, class: 'url') %>
+        </div>
 
-      <div class="browser-container">
-        <iframe src="<%= @statement.url %>" frameborder="0"></iframe>
+        <div class="browser-container">
+          <iframe src="<%= @statement.url %>" frameborder="0"></iframe>
+        </div>
       </div>
-    </div>
+    <% else %>
+      <%= link_to('Read statement', @statement.url, class: 'button is-primary') %>
+    <% end %>
   </div>
 </div>
