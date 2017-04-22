@@ -112,7 +112,9 @@ class Statement < ApplicationRecord
         statement.url = uri.to_s
         statement.broken_url = false
         puts "OK  #{uri}"
-      rescue
+      rescue => e
+        puts e.message
+        puts e.backtrace
         begin
           uri.scheme = 'http'
           puts "GET #{uri}"
@@ -120,7 +122,9 @@ class Statement < ApplicationRecord
           statement.url = uri.to_s
           statement.broken_url = false
           puts "OK  #{uri}"
-        rescue
+        rescue => e
+          puts e.message
+          puts e.backtrace
           statement.broken_url = true
         end
       end
