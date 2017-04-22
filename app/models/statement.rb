@@ -76,6 +76,41 @@ class Statement < ApplicationRecord
     company.sector.name rescue "Sector unknown"
   end
 
+  # Tries to set the URL to https if possible - even if it was entered as http.
+  # This is not only more secure, but it allows the site to display the statement
+  # inside an iframe. Most browsers will block non-https iframes on an https site.
+  def auto_update_url!
+    # Some sites don't like non-browser user agents - pretend to be Chrome
+    chrome = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
+
+    uri = URI(self.url) rescue nil
+    if uri.nil?
+      self.broken_url = true
+      return
+    end
+    begin
+      uri.scheme = 'https'
+      # The :read_timeout option for open-uri's open doesn't work with https,
+      # only http.
+      Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => chrome}) }
+      self.url = uri.to_s
+      self.broken_url = false
+    rescue => e
+      begin
+        uri.scheme = 'http'
+        Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => chrome}) }
+        self.url = uri.to_s
+        self.broken_url = false
+      rescue => e
+        # Set the statement URL to http, even though we haven't been able to
+        # establish whether or not the url should be http or https.
+        # It's more likely that http works than https.
+        self.url = uri.to_s
+        self.broken_url = true
+      end
+    end
+  end
+
   def self.to_csv(statements)
     CSV.generate do |csv|
       csv << [
@@ -99,39 +134,7 @@ class Statement < ApplicationRecord
 
   private
 
-  unless ENV['no_verify_statement_urls']
-    # Some sites don't like non-browser user agents - pretend to be Chrome
-    CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
-
-    before_save do |statement|
-      uri = URI(statement.url) rescue nil
-      if uri.nil?
-        statement.broken_url = true
-        break
-      end
-      begin
-        uri.scheme = 'https'
-        # The :read_timeout option for open-uri's open doesn't work with https,
-        # only http.
-        Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => CHROME}) }
-        statement.url = uri.to_s
-        statement.broken_url = false
-      rescue => e
-        begin
-          uri.scheme = 'http'
-          Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => CHROME}) }
-          statement.url = uri.to_s
-          statement.broken_url = false
-        rescue => e
-          # Set the statement URL to http, even though we haven't been able to
-          # establish whether or not the url should be http or https.
-          # It's more likely that http works than https.
-          statement.url = uri.to_s
-          statement.broken_url = true
-        end
-      end
-    end
-  end
+  before_save :auto_update_url! unless ENV['no_verify_statement_urls']
 
   def set_date_seen
     self.date_seen ||= Date.today
