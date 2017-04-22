@@ -1,6 +1,7 @@
 require 'securerandom'
 require 'uri'
 require 'open-uri'
+require 'timeout'
 require 'csv'
 
 class Statement < ApplicationRecord
@@ -110,13 +111,15 @@ class Statement < ApplicationRecord
       end
       begin
         uri.scheme = 'https'
-        open(uri.to_s, {:read_timeout => 5, 'User-Agent' => CHROME})
+        # The :read_timeout option for open-uri's open doesn't work with https,
+        # only http.
+        Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => CHROME}) }
         statement.url = uri.to_s
         statement.broken_url = false
       rescue
         begin
           uri.scheme = 'http'
-          open(uri.to_s, {:read_timeout => 5, 'User-Agent' => CHROME})
+          Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => CHROME}) }
           statement.url = uri.to_s
           statement.broken_url = false
         rescue
