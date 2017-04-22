@@ -107,15 +107,19 @@ class Statement < ApplicationRecord
       end
       begin
         uri.scheme = 'https'
+        puts "GET #{uri}"
         open(uri, read_timeout: 10)
         statement.url = uri.to_s
         statement.broken_url = false
+        puts "OK  #{uri}"
       rescue
         begin
           uri.scheme = 'http'
+          puts "GET #{uri}"
           open(uri, read_timeout: 10)
           statement.url = uri.to_s
           statement.broken_url = false
+          puts "OK  #{uri}"
         rescue
           statement.broken_url = true
         end
