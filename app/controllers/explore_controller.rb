@@ -1,19 +1,12 @@
 class ExploreController < ApplicationController
   def index
     @statements = Statement.search(current_user, params)
-
-    # sectors = Sector.with_companies.with_company_counts.order('company_count DESC')
-    # @section_chart_data = {
-    #   labels: sectors.map(&:name),
-    #   datasets: [
-    #     {
-    #       label: "Companies",
-    #       # TODO: Use colors from design palette
-    #       background_color: "rgba(66,244,226,0.2)",
-    #       border_color: "rgba(220,220,220,1)",
-    #       data: sectors.map(&:company_count)
-    #     }
-    #   ]
-    # }
+    respond_to do |format|
+      format.html
+      format.csv do
+        send_data Statement.to_csv(@statements),
+          filename: "modernslaveryregistry-#{Date.today}.csv"
+      end
+    end
   end
 end

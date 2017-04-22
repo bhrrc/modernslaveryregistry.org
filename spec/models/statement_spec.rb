@@ -57,4 +57,36 @@ RSpec.describe Statement, :type => :model do
       })
     end
   end
+
+  it "turns rows into CSV" do
+    VCR.use_cassette("cucumber.io") do
+      user = User.create!({
+        first_name: 'Someone',
+        last_name: 'Smith',
+        email: 'someone@somewhere.com',
+        password: 'whatevs'
+      })
+
+      statement = @company.statements.create!({
+        url: 'http://cucumber.io/',
+        approved_by: 'Big Boss',
+        approved_by_board: 'Yes',
+        signed_by_director: false,
+        link_on_front_page: true,
+        verified_by: user,
+        contributed_by: user,
+        date_seen: Date.parse('2017-03-22'),
+        published: true
+      })
+
+      statements = Statement.newest.published.includes(company: [:sector, :country])
+      csv = Statement.to_csv(statements)
+
+      expect(csv).to eq(<<-CSV
+Company,URL,Sector,HQ,Date Added
+Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22
+CSV
+      )
+    end
+  end
 end

@@ -1,6 +1,7 @@
 require 'securerandom'
 require 'uri'
 require 'open-uri'
+require 'csv'
 
 class Statement < ApplicationRecord
   attr_accessor :contributor_email
@@ -72,6 +73,27 @@ class Statement < ApplicationRecord
 
   def sector_name
     company.sector.name rescue "Sector unknown"
+  end
+
+  def self.to_csv(statements)
+    CSV.generate do |csv|
+      csv << [
+        'Company',
+        'URL',
+        'Sector',
+        'HQ',
+        'Date Added'
+      ]
+      statements.each do |statement|
+        csv << [
+          statement.company.name,
+          statement.url,
+          statement.sector_name,
+          statement.country_name,
+          statement.date_seen.iso8601
+        ]
+      end
+    end
   end
 
   private

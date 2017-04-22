@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   get 'welcome/index'
 
   get 'explore', to: 'explore#index'
+  # Route just for modernslaveryregistry.csv
+  get 'modernslaveryregistry', to: 'explore#index'
   get 'thanks', to: 'cms#thanks'
   get 'about_us', to: 'cms#about_us'
   get 'reporting_guidance', to: 'cms#reporting_guidance'
