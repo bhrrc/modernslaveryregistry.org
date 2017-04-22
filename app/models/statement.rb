@@ -99,6 +99,9 @@ class Statement < ApplicationRecord
   private
 
   unless ENV['no_verify_statement_urls']
+    # Some sites don't like non-browser user agents - pretend to be Chrome
+    CHROME = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
+
     before_save do |statement|
       uri = URI(statement.url) rescue nil
       if uri.nil?
@@ -107,24 +110,16 @@ class Statement < ApplicationRecord
       end
       begin
         uri.scheme = 'https'
-        puts "GET #{uri}"
-        open(uri.to_s, read_timeout: 10)
+        open(uri.to_s, {:read_timeout => 5, 'User-Agent' => CHROME})
         statement.url = uri.to_s
         statement.broken_url = false
-        puts "OK  #{uri}"
-      rescue => e
-        puts e.message
-        puts e.backtrace
+      rescue
         begin
           uri.scheme = 'http'
-          puts "GET #{uri}"
-          open(uri.to_s, read_timeout: 10)
+          open(uri.to_s, {:read_timeout => 5, 'User-Agent' => CHROME})
           statement.url = uri.to_s
           statement.broken_url = false
-          puts "OK  #{uri}"
-        rescue => e
-          puts e.message
-          puts e.backtrace
+        rescue
           statement.broken_url = true
         end
       end
