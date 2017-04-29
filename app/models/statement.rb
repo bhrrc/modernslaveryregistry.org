@@ -45,7 +45,7 @@ class Statement < ApplicationRecord
     statements = Statement.newest
     # Only display published statements - unless we're admin!
     statements = statements.published unless current_user && current_user.admin?
-    statements = statements.includes(company: [:sector, :country])
+    statements = statements.includes(:verified_by, :contributed_by, company: [:sector, :country])
 
     company_join = statements.joins(:company)
     if (query[:company_name] && !query[:company_name].empty?)
@@ -74,6 +74,14 @@ class Statement < ApplicationRecord
 
   def sector_name
     company.sector.name rescue "Sector unknown"
+  end
+
+  def verified_by_email
+    verified_by.email rescue nil
+  end
+
+  def contributed_by_email
+    contributed_by.email rescue nil
   end
 
   # Tries to set the URL to https if possible - even if it was entered as http.
@@ -144,8 +152,8 @@ class Statement < ApplicationRecord
           statement.signed_by,
           statement.link_on_front_page,
           statement.published,
-          statement.verified_by.email,
-          statement.contributed_by.email,
+          statement.verified_by_email,
+          statement.contributed_by_email,
           statement.broken_url,
         ] : [])
       end
