@@ -111,7 +111,7 @@ class Statement < ApplicationRecord
     end
   end
 
-  def self.to_csv(statements)
+  def self.to_csv(statements, extra)
     CSV.generate do |csv|
       csv << [
         'Company',
@@ -119,7 +119,17 @@ class Statement < ApplicationRecord
         'Sector',
         'HQ',
         'Date Added'
-      ]
+      ].concat(extra ? [
+        'Approved by Board',
+        'Approved by',
+        'Signed by Director',
+        'Signed by',
+        'Link on Front Page',
+        'Published',
+        'Verified by',
+        'Contributed by',
+        'Broken URL',
+      ] : [])
       statements.each do |statement|
         csv << [
           statement.company.name,
@@ -127,7 +137,17 @@ class Statement < ApplicationRecord
           statement.sector_name,
           statement.country_name,
           statement.date_seen.iso8601
-        ]
+        ].concat(extra ? [
+          statement.approved_by_board,
+          statement.approved_by,
+          statement.signed_by_director,
+          statement.signed_by,
+          statement.link_on_front_page,
+          statement.published,
+          statement.verified_by.email,
+          statement.contributed_by.email,
+          statement.broken_url,
+        ] : [])
       end
     end
   end

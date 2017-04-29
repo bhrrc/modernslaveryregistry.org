@@ -4,7 +4,7 @@ class ExploreController < ApplicationController
     respond_to do |format|
       format.html
       format.csv do
-        send_data Statement.to_csv(@statements),
+        send_data Statement.to_csv(@statements, current_user.admin?),
           filename: "modernslaveryregistry-#{Date.today}.csv"
       end
     end

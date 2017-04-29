@@ -80,11 +80,44 @@ RSpec.describe Statement, :type => :model do
       })
 
       statements = Statement.newest.published.includes(company: [:sector, :country])
-      csv = Statement.to_csv(statements)
+      csv = Statement.to_csv(statements, false)
 
       expect(csv).to eq(<<-CSV
 Company,URL,Sector,HQ,Date Added
 Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22
+CSV
+      )
+    end
+  end
+
+  it "turns rows into CSV with more rows for admins" do
+    VCR.use_cassette("cucumber.io") do
+      user = User.create!({
+        first_name: 'Someone',
+        last_name: 'Smith',
+        email: 'someone@somewhere.com',
+        password: 'whatevs'
+      })
+
+      statement = @company.statements.create!({
+        url: 'http://cucumber.io/',
+        approved_by: 'Big Boss',
+        approved_by_board: 'Yes',
+        signed_by_director: false,
+        signed_by: 'Little Boss',
+        link_on_front_page: true,
+        verified_by: user,
+        contributed_by: user,
+        date_seen: Date.parse('2017-03-22'),
+        published: true
+      })
+
+      statements = Statement.newest.published.includes(company: [:sector, :country])
+      csv = Statement.to_csv(statements, true)
+
+      expect(csv).to eq(<<-CSV
+Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL
+Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,someone@somewhere.com,someone@somewhere.com,false
 CSV
       )
     end
