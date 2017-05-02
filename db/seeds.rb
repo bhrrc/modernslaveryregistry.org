@@ -16,85 +16,34 @@ ActiveRecord::Base.transaction do
   end
 end
 
-# Import statements. This is a bit hacky, it's working around various
-# idiosyncracies in the spreadsheet maintained by BHRRC.
-
-class NilClass
-  def strip
-    nil
-  end
-end
-
-def date_seen(ds)
-  return nil if ds.nil? # TODO: use prev date
-  ds = '12/20/16' if ds == '12/202/16'
-  if ds.strip
-    begin
-      Date.strptime(ds, '%d/%m/%y')
-    rescue
-      Date.strptime(ds, '%m/%d/%y')
-    end
-  end
-end
-
-def yes_no_bool(s)
-  return false if s.nil?
-  !s !~ /yes/i
-end
-
-def signed_by(s)
-  return nil if s.nil?
-  s.strip
-end
-
-def approved_by_board(s)
-  return 'Not explicit' if s.nil? || s.strip == 'Industrials'
-  s = s.strip
-  s = 'Yes' if s == 'yes'
-  s
-end
-
-def approved_by(s)
-  return nil if s.nil?
-  s = s.strip
-  s = 'Group CEO on behalf of Board' if s == 'Group CEO o nbehalf of Board'
-  s = 'Board of Trustees' if s == 'Boad of Trustees'
-  s
-end
-
 admin = User.find_by_email!(ENV['SEED_ADMIN_EMAIL'])
 filename = ARGV[0]
 puts 'Importing statements...'
 stms = []
 ActiveRecord::Base.transaction do
   CSV.foreach(File.dirname(__FILE__) + '/statements.csv', headers: true) do |row|
-    country_name = row['COUNTRY OF HQ OF CO. PROVIDING STATEMENT'].strip
-    country_name = 'United Kingdom' if country_name == 'UK'
-    country_name = 'United Kingdom' if country_name == 'Uk'
-    country_name = 'United States' if country_name == 'USA'
-    country_name = 'United Arab Emirates' if country_name == 'UAE'
-    country_name = 'United Arab Emirates' if country_name == 'Dubai'
-    country_name = 'South Africa' if country_name == 'S. Africa'
-    country = Country.find_by_name(country_name)
+    p row
+    country_name = row['country_name'].strip
+    country = Country.find_by_name!(country_name)
 
-    sector_params = { name: row['New SECTOR'].strip }
+    sector_params = { name: row['new_sector_name'].strip }
     sector = sector_params[:name] ? Sector.find_or_create_by!(sector_params) : nil
 
     company_params = {
-      name: row['COMPANY'],
+      name: row['company_name'].strip,
       country: country,
       sector: sector
     }
     company = Company.find_or_create_by!(company_params)
 
     statement_params = {
-      url: row[' STATEMENT'].strip.delete("^\u{0000}-\u{007F}"),
-      date_seen: date_seen(row['DATE SEEN']),
-      approved_by_board: approved_by_board(row['STATEMENT APPROVED BY BOARD/MEMBER/PARTNER 54(6)(a-d)']),
-      approved_by: approved_by(row['WHO APPROVED']),
-      signed_by_director: yes_no_bool(row['STATEMENT SIGNED BY DIRECTOR/MEMBER/PARTNER 54(6)(a-d)']),
-      signed_by: signed_by(row['Title of person who signed']),
-      link_on_front_page: yes_no_bool(row['LINK TO STATEMENT ON HOMEPAGE OF WEBSITE 54(7)(b)']),
+      url: row['statement_url'].strip.delete("^\u{0000}-\u{007F}"),
+      date_seen: row['date_seen'],
+      approved_by_board: row['approved_by_board'],
+      approved_by: row['approved_by'],
+      signed_by_director: !!(row['signed_by_director'] =~ /yes/i),
+      signed_by: row['signed_by'],
+      link_on_front_page: !!(row['link_on_front_page'] =~ /yes/i),
       company: company,
       verified_by: admin,
       contributed_by: admin,
