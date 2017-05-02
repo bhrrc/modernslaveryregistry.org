@@ -48,4 +48,4 @@ set `no_verify_statement_urls=true`:
 
 For production you should use:
 
-    heroku rails db:seed # the env vars are already set
+    heroku run rails db:seed # the env vars are already set
