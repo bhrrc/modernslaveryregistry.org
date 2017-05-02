@@ -34,7 +34,7 @@
           </div>
           <div class="columns">
             <div class="column">
-              <span class="label">Signed by Director</span>
+              <span class="label">Signed by director or equivalent</span>
             </div>
             <div class="column">
               <%= yes_no(@statement.signed_by_director) %>
@@ -42,10 +42,26 @@
           </div>
           <div class="columns">
             <div class="column">
-              <span class="label">Approved by Board</span>
+              <span class="label">Signed by</span>
+            </div>
+            <div class="column">
+              <%= @statement.signed_by %>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <span class="label">Approved by board or equivalent</span>
             </div>
             <div class="column">
               <%= yes_no_not_explicit(@statement.approved_by_board) %>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <span class="label">Approved by</span>
+            </div>
+            <div class="column">
+              <%= @statement.approved_by %>
             </div>
           </div>
           <div class="columns">
