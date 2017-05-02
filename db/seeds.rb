@@ -22,7 +22,6 @@ puts 'Importing statements...'
 stms = []
 ActiveRecord::Base.transaction do
   CSV.foreach(File.dirname(__FILE__) + '/statements.csv', headers: true) do |row|
-    p row
     country_name = row['country_name'].strip
     country = Country.find_by_name!(country_name)
 
