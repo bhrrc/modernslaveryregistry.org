@@ -30,10 +30,10 @@ Things you may want to cover:
     rails db:migrate
     rails server
 
-## Importing data
+## Seeding the database
 
-Before you can import data, there must be an admin user in the database.
-Sign up using the sign-up form. Then use the console to make the user
+Before you can seed the database, there must be an admin user in the database.
+Sign up using the sign-up form (`/signup`). Then use the console to make the user
 an admin:
 
     rails console
@@ -41,7 +41,8 @@ an admin:
     user.admin = true
     user.save
 
-Then seed the database:
+Then seed the database. To disable (slow) verification of statement URLs,
+set `no_verify_statement_urls=true`:
 
     SEED_ADMIN_EMAIL=someone@somewhere.com no_verify_statement_urls=true rails db:seed
 
