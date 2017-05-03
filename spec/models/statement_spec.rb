@@ -38,16 +38,17 @@ RSpec.describe Statement, :type => :model do
   it "validates admin-only visible fields for admins" do
     VCR.use_cassette("cucumber.io") do
       user = User.create!({
-        first_name: 'Someone',
-        last_name: 'Smith',
-        email: 'someone@somewhere.com',
-        password: 'whatevs'
+        first_name: 'Super',
+        last_name: 'Admin',
+        email: 'admin@somewhere.com',
+        password: 'whatevs',
+        admin: true
       })
 
       statement = @company.statements.create({
         url: 'http://cucumber.io/',
         verified_by: user,
-        contributed_by: user
+        contributor_email: 'somebody@host.com'
       })
 
       expect(statement.errors.messages).to eq({
@@ -74,7 +75,6 @@ RSpec.describe Statement, :type => :model do
         signed_by_director: false,
         link_on_front_page: true,
         verified_by: user,
-        contributed_by: user,
         date_seen: Date.parse('2017-03-22'),
         published: true
       })
@@ -93,10 +93,11 @@ CSV
   it "turns rows into CSV with more rows for admins" do
     VCR.use_cassette("cucumber.io") do
       user = User.create!({
-        first_name: 'Someone',
-        last_name: 'Smith',
-        email: 'someone@somewhere.com',
-        password: 'whatevs'
+        first_name: 'Super',
+        last_name: 'Admin',
+        email: 'admin@somewhere.com',
+        password: 'whatevs',
+        admin: true
       })
 
       statement = @company.statements.create!({
@@ -107,7 +108,7 @@ CSV
         signed_by: 'Little Boss',
         link_on_front_page: true,
         verified_by: user,
-        contributed_by: user,
+        contributor_email: 'contributor@somewhere.com',
         date_seen: Date.parse('2017-03-22'),
         published: true
       })
@@ -117,7 +118,7 @@ CSV
 
       expect(csv).to eq(<<-CSV
 Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL
-Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,someone@somewhere.com,someone@somewhere.com,false
+Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false
 CSV
       )
     end

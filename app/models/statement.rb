@@ -5,32 +5,18 @@ require 'timeout'
 require 'csv'
 
 class Statement < ApplicationRecord
-  attr_accessor :contributor_email
-
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
   belongs_to :company, optional: true
 
   belongs_to :verified_by, class_name: 'User', optional: true
-  belongs_to :contributed_by, class_name: 'User'
 
   validates :url, presence: true
-  validates :contributor_email, presence: true, unless: :contributed_by
   validates :link_on_front_page, inclusion: { in: [true, false] }, if: :verified?
   validates :approved_by_board,  inclusion: { in: ['Yes', 'No', 'Not explicit'] }, if: :verified?
   validates :signed_by_director, inclusion: { in: [true, false] }, if: :verified?
 
   before_create :set_date_seen
-  before_validation(on: :create) do
-    if self.contributed_by.nil?
-      self.contributed_by = User.find_by_email(self.contributor_email) ||
-        User.create!({
-          email: self.contributor_email,
-          first_name: self.contributor_email,
-          password: SecureRandom.hex # Nobody will log in with this
-        })
-    end
-  end
 
   scope :newest, -> {
     select("DISTINCT ON (statements.company_id) statements.*")
@@ -45,7 +31,7 @@ class Statement < ApplicationRecord
     statements = Statement.newest
     # Only display published statements - unless we're admin!
     statements = statements.published unless current_user && current_user.admin?
-    statements = statements.includes(:verified_by, :contributed_by, company: [:sector, :country])
+    statements = statements.includes(:verified_by, company: [:sector, :country])
 
     company_join = statements.joins(:company)
     if (query[:company_name] && !query[:company_name].empty?)
@@ -78,10 +64,6 @@ class Statement < ApplicationRecord
 
   def verified_by_email
     verified_by.email rescue nil
-  end
-
-  def contributed_by_email
-    contributed_by.email rescue nil
   end
 
   # Tries to set the URL to https if possible - even if it was entered as http.
@@ -153,7 +135,7 @@ class Statement < ApplicationRecord
           statement.link_on_front_page,
           statement.published,
           statement.verified_by_email,
-          statement.contributed_by_email,
+          statement.contributor_email,
           statement.broken_url,
         ] : [])
       end
@@ -166,9 +148,5 @@ class Statement < ApplicationRecord
 
   def set_date_seen
     self.date_seen ||= Date.today
-  end
-
-  def set_contributor
-    puts "Setting contributor: #{self.attributes}"
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170417172011) do
+ActiveRecord::Schema.define(version: 20170503200854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,9 +57,8 @@ ActiveRecord::Schema.define(version: 20170417172011) do
     t.boolean  "broken_url"
     t.integer  "verified_by_id"
     t.boolean  "published"
-    t.integer  "contributed_by_id"
+    t.string   "contributor_email"
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree
-    t.index ["contributed_by_id"], name: "index_statements_on_contributed_by_id", using: :btree
     t.index ["published"], name: "index_statements_on_published", using: :btree
     t.index ["verified_by_id"], name: "index_statements_on_verified_by_id", using: :btree
   end
@@ -91,6 +90,5 @@ ActiveRecord::Schema.define(version: 20170417172011) do
 
   add_foreign_key "companies", "countries"
   add_foreign_key "statements", "companies"
-  add_foreign_key "statements", "users", column: "contributed_by_id"
   add_foreign_key "statements", "users", column: "verified_by_id"
 end

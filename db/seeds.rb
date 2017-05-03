@@ -45,7 +45,7 @@ ActiveRecord::Base.transaction do
       link_on_front_page: !!(row['link_on_front_page'] =~ /yes/i),
       company: company,
       verified_by: admin,
-      contributed_by: admin,
+      contributor_email: admin.email,
       published: true
     }
     begin

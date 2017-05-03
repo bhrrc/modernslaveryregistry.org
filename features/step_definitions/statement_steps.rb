@@ -17,23 +17,12 @@ Given(/^the following statements have been submitted:$/) do |table|
       })
     end
 
-    contributed_by_user = nil
-    unless props['contributed_by'].empty?
-      contributed_by_user = User.find_by_email(props['contributed_by']) || User.create!({
-        first_name: props['contributed_by'],
-        email: props['contributed_by'],
-        password: 'whatevs'
-      })
-    else
-      contributed_by_user = verified_by_user
-    end
-
     company.statements.create!(
       url: props['statement_url'],
       signed_by_director: 'No',
       approved_by_board: 'Not explicit',
       link_on_front_page: 'No',
-      contributed_by: contributed_by_user,
+      contributor_email: props['contributor_email'],
       verified_by: verified_by_user,
       published: !verified_by_user.nil?
     )
@@ -101,9 +90,9 @@ Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was ver
   expect(actor.to_see(TheNewestStatement.for_company(company_name)).verified_by).to eq(actor.name)
 end
 
-Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was contributed by (.*)$/) do |actor, company_name, contributor_name|
-  contributor_name = actor.name if contributor_name == 'herself'
-  expect(actor.to_see(TheNewestStatement.for_company(company_name)).contributed_by).to eq(contributor_name)
+Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was contributed by (.*)$/) do |actor, company_name, contributor_email|
+  contributor_email = User.find_by_first_name!(actor.name).email if contributor_email == 'herself'
+  expect(actor.to_see(TheNewestStatement.for_company(company_name)).contributor_email).to eq(contributor_email)
 end
 
 Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" is not published$/) do |actor, company_name|
@@ -249,7 +238,7 @@ class TheNewestStatement < Fellini::Question
     company = Company.find_by_name(@company_name)
     browser.visit(company_statement_path(company, company.newest_statement))
 
-    struct(browser, :statement, :verified_by, :contributed_by, :published)
+    struct(browser, :statement, :verified_by, :contributor_email, :published)
   end
 
   def self.for_company(company_name)
