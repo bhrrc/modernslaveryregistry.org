@@ -15,6 +15,11 @@
         </h3>
         <% if admin? %>
           <%= link_to('Edit', edit_company_path(@statement.company)) %>
+          <br>
+          <%= link_to 'Delete',
+                company_statement_path(@statement.company, @statement),
+                method: :delete,
+                data: { confirm: 'Are you sure?' } %>
         <% end %>
         <% if @statement.verified_by %>
           <p>Authenticated by <span data-content="verified_by"><%= @statement.verified_by.name %></span></p>

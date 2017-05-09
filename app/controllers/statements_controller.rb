@@ -11,6 +11,17 @@ class StatementsController < ApplicationController
     @statement = statements.find(params[:id])
   end
 
+  def destroy
+    if !admin?
+      render :status => :forbidden, :text => "Sorry, can't do that"
+      return
+    end
+    statements = admin? ? Statement : Statement.published
+    statement = statements.destroy(params[:id])
+    flash[:notice] = "Deleted statement for #{statement.company.name}"
+    redirect_to root_path
+  end
+
   def create
     if params[:company_id]
       @company = Company.find(params[:company_id])
