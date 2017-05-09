@@ -2,33 +2,26 @@
   <div class="container">
     <nav class="nav is-dark-navy">
       <div class="nav-left">
-        <a class="nav-item" href="/">
-          <%= image_tag 'msr_logo_rgb_w.png', alt: "Modern Slavery Registry" %>
-        </a>
+        <div class="nav-item">
+          <a href="/">
+            <%= image_tag 'msr_logo_rgb_w.png', alt: "Modern Slavery Registry" %>
+          </a>
+        </div>
       </div>
 
-      <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
-      <!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
       <span class="nav-toggle">
         <span></span>
         <span></span>
         <span></span>
       </span>
 
-      <!-- This "nav-menu" is hidden on mobile -->
-      <!-- Add the modifier "is-active" to display it on mobile -->
-      <div class="nav-center nav-menu">
+      <div class="nav-right nav-menu">
         <%= link_to "About us", about_us_path, class: 'nav-item' %>
         <%= link_to "Reporting guidance", reporting_guidance_path, class: 'nav-item' %>
         <%= link_to "Contact us", contact_us_path, class: 'nav-item' %>
       </div>
-
-      <div class="nav-right nav-menu">
-        <a class="nav-item" href="https://business-humanrights.org/">
-          <%= image_tag 'bhrrc.png', alt: "Business & Human Rights Resource Centre" %>
-        </a>
-      </div>
     </nav>
+
     <div class="container has-text-centered">
       <% if notice %>
         <div class="notification is-primary"><%= notice %></div>

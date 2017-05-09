@@ -44,7 +44,7 @@ GEM
     bcrypt (3.1.11)
     bindex (0.5.0)
     builder (3.2.3)
-    bulma-rails (0.4.0)
+    bulma-rails (0.4.1.pre)
       sass (~> 3.2)
     byebug (9.0.6)
     capybara (2.14.0)
@@ -89,7 +89,7 @@ GEM
       nokogiri (~> 1.5)
       railties (>= 3, < 5.1)
     cucumber-wire (0.0.1)
-    database_cleaner (1.6.0)
+    database_cleaner (1.6.1)
     devise (4.2.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -250,7 +250,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bulma-rails (~> 0.4.0)
+  bulma-rails (= 0.4.1.pre)
   byebug
   chartjs-ror
   chosen-rails

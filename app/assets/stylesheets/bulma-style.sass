@@ -157,7 +157,27 @@ $nav-height: 6.25rem !default
 
 .nav-item
   img
-    max-height: 3.75rem !important
+    max-height: 4.75rem !important
+
+.nav-toggle
+  span
+    background-color: $yellow !important
+  &:hover
+    background-color: $dark-navy !important
+    span
+      background-color: $turquoise !important
+
+.nav-menu.is-active
+  .nav-item
+    background: $dark-navy !important
+
+.hero-body
+  padding: 0 1.5rem 3rem 1.5rem !important
+
+.powered-by
+  color: $yellow
+  &:hover
+    color: $yellow
 
 .button.is-primary
   color: $dark-navy !important
