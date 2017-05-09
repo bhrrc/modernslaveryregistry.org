@@ -1,5 +1,5 @@
 // http://codepen.io/peduarte/pen/bVbZLK
-$(document).on('turbolinks:load', function() {
+$(document).ready(function() {
   var wallopEl = document.querySelector('.Wallop');
   if (!wallopEl) return
   var wallop = new Wallop(wallopEl);

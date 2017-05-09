@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', function() {
+$(document).ready(function() {
   if ($('#world-map').length) {
     var map = L.map('world-map').setView([40, 0], 1)
 
