@@ -2,6 +2,15 @@
   <div class="container">
     <div class="content has-text-centered">
       <p>
+        <div class="nav-menu nav-center">
+          <%= link_to 'Home', root_path, class: 'nav-item' %>
+          <%= link_to 'Browse statements', explore_path, class: 'nav-item' %>
+          <%= link_to 'About us', about_us_path, class: 'nav-item' %>
+          <%= link_to 'Reporting guidance', reporting_guidance_path, class: 'nav-item' %>
+          <%= link_to 'Contact us', contact_us_path, class: 'nav-item' %>
+        </div>
+      </p>
+      <p>
         <strong>Modern Slavery Registry</strong> by <a href="https://business-humanrights.org/">Business &amp; Human Rights Resource Centre</a>
       </p>
       <p>
