@@ -13,7 +13,7 @@ class ExploreController < ApplicationController
       end
       format.csv do
         send_data Statement.to_csv(@statements, admin?),
-          filename: "modernslaveryregistry-#{Date.today}.csv"
+                  filename: "modernslaveryregistry-#{Date.today}.csv"
       end
     end
   end

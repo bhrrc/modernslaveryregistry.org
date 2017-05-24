@@ -1,0 +1,28 @@
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'db/**/*'
+    - 'vendor/**/*'
+  TargetRubyVersion: 2.3
+
+Documentation:
+  Enabled: false
+
+Lint/HandleExceptions:
+  Exclude:
+    - Rakefile
+
+Metrics/LineLength:
+  Max: 120
+
+Rails:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'config/routes.rb'
+    - 'config/sitemap.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

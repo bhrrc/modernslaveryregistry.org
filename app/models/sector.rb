@@ -4,7 +4,7 @@ class Sector < ApplicationRecord
 
   scope :with_companies, -> {
     joins(:companies).group('sectors.id')
-    #left_outer_joins(:companies).group(:id).order('COUNT(companies.id) DESC')
+    # left_outer_joins(:companies).group(:id).order('COUNT(companies.id) DESC')
   }
 
   scope :with_company_counts, -> {

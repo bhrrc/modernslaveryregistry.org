@@ -1,7 +1,7 @@
 class CompaniesController < ApplicationController
   include ApplicationHelper
 
-  before_action :authenticate_user!, :only => [:update, :edit]
+  before_action :authenticate_user!, only: %i[update edit]
 
   def new
     @company = Company.new
@@ -28,7 +28,7 @@ class CompaniesController < ApplicationController
       end
     else
       # TODO: Fix rendering when there are errors
-      render "new"
+      render 'new'
     end
   end
 
@@ -46,7 +46,7 @@ class CompaniesController < ApplicationController
         redirect_to company_path(@company)
       end
     else
-      render "edit"
+      render 'edit'
     end
   end
 
@@ -63,17 +63,17 @@ class CompaniesController < ApplicationController
   private
 
   def company_params
-    params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: [
-      :id,
-      :url,
-      :linked_from,
-      :link_on_front_page,
-      :approved_by,
-      :approved_by_board,
-      :signed_by,
-      :signed_by_director,
-      :published,
-      :contributor_email
-    ])
+    params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: %i[
+                                      id
+                                      url
+                                      linked_from
+                                      link_on_front_page
+                                      approved_by
+                                      approved_by_board
+                                      signed_by
+                                      signed_by_director
+                                      published
+                                      contributor_email
+                                    ])
   end
 end

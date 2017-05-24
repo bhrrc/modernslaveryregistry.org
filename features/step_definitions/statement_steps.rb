@@ -1,7 +1,7 @@
 Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
-    sector = Sector.find_by_name!(props['sector'])
-    country = Country.find_by_name!(props['country'])
+    sector = Sector.find_by!(name: props['sector'])
+    country = Country.find_by!(name: props['country'])
     company = Company.find_or_create_by!(
       name: props['company_name'],
       sector_id: sector.id,
@@ -10,11 +10,9 @@ Given(/^the following statements have been submitted:$/) do |table|
 
     verified_by_user = nil
     unless props['verified_by'].empty?
-      verified_by_user = User.find_by_first_name(props['verified_by']) || User.create!({
-        first_name: props['verified_by'],
-        email: "#{props['verified_by']}@host.com",
-        password: 'whatevs'
-      })
+      verified_by_user = User.find_by(first_name: props['verified_by']) || User.create!(first_name: props['verified_by'],
+                                                                                        email: "#{props['verified_by']}@host.com",
+                                                                                        password: 'whatevs')
     end
 
     company.statements.create!(
@@ -82,7 +80,7 @@ Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, s
 end
 
 Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
-  company_names = company_names_string.split(",").map(&:strip)
+  company_names = company_names_string.split(',').map(&:strip)
   expect(actor.to_see(TheListedStatements.from_search).map(&:company_name)).to eq(company_names)
 end
 
@@ -91,12 +89,12 @@ Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was ver
 end
 
 Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was contributed by (.*)$/) do |actor, company_name, contributor_email|
-  contributor_email = User.find_by_first_name!(actor.name).email if contributor_email == 'herself'
+  contributor_email = User.find_by!(first_name: actor.name).email if contributor_email == 'herself'
   expect(actor.to_see(TheNewestStatement.for_company(company_name)).contributor_email).to eq(contributor_email)
 end
 
 Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" is not published$/) do |actor, company_name|
-  expect(actor.to_see(TheNewestStatement.for_company(company_name)).published).to eq("Draft")
+  expect(actor.to_see(TheNewestStatement.for_company(company_name)).published).to eq('Draft')
 end
 
 Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was not verified$/) do |actor, company_name|
@@ -109,12 +107,12 @@ class SubmitStatement < Fellini::Task
   def perform_as(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
 
-    if(@new_company)
+    if @new_company
       browser.visit(new_company_statement_companies_path)
       browser.fill_in('Company name', with: @company_name)
       browser.select(@country, from: 'Company HQ') if @country
     else
-      company = Company.find_by_name(@company_name)
+      company = Company.find_by(name: @company_name)
       browser.visit(new_company_statement_path(company))
     end
     browser.fill_in('Statement URL', with: @url)
@@ -156,12 +154,12 @@ class SubmitStatement < Fellini::Task
 
   def initialize(company_name, new_company)
     @company_name = company_name
-    @country = "United Kingdom"
+    @country = 'United Kingdom'
     @new_company = new_company
-    @signed_by_director = "No"
-    @approved_by_board = "No"
-    @link_on_front_page = "No"
-    @published = "No"
+    @signed_by_director = 'No'
+    @approved_by_board = 'No'
+    @link_on_front_page = 'No'
+    @published = 'No'
   end
 
   def in_country(country)
@@ -204,7 +202,7 @@ class UpdateStatement < Fellini::Task
   include Rails.application.routes.url_helpers
 
   def perform_as(actor)
-    company = Company.find_by_name(@company_name)
+    company = Company.find_by(name: @company_name)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
     browser.visit(company_statement_path(company, company.newest_statement))
     browser.click_link('Edit')
@@ -235,7 +233,7 @@ class TheNewestStatement < Fellini::Question
   def answered_by(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
 
-    company = Company.find_by_name(@company_name)
+    company = Company.find_by(name: @company_name)
     browser.visit(company_statement_path(company, company.newest_statement))
 
     struct(browser, :statement, :verified_by, :contributor_email, :published)
@@ -258,7 +256,7 @@ class TheListedStatements < Fellini::Question
 
   def answered_by(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    @proc.call(browser) if @proc
+    @proc&.call(browser)
     structs(browser, :statement, *@struct_fields)
   end
 
@@ -268,12 +266,12 @@ class TheListedStatements < Fellini::Question
   end
 
   def self.from_search
-    new([:company_name, :sector, :country])
+    new(%i[company_name sector country])
   end
 
   def self.for_company(company_name)
     new([:date_seen]) do |browser|
-      browser.visit(company_path(Company.find_by_name!(company_name)))
+      browser.visit(company_path(Company.find_by!(name: company_name)))
     end
   end
 end

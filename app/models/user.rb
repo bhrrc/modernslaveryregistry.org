@@ -8,9 +8,9 @@ class User < ApplicationRecord
   validates :first_name, presence: true
 
   def after_confirmation
-    if self.admin.nil?
-      admin = self.email =~ /business-humanrights\.org$/
-      self.update_attribute(:admin, admin)
+    if admin.nil?
+      admin = email =~ /business-humanrights\.org$/
+      update_attribute(:admin, admin)
     end
   end
 

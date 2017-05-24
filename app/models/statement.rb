@@ -19,8 +19,8 @@ class Statement < ApplicationRecord
   before_create :set_date_seen
 
   scope :newest, -> {
-    select("DISTINCT ON (statements.company_id) statements.*")
-    .order(:company_id, date_seen: :desc)
+    select('DISTINCT ON (statements.company_id) statements.*')
+      .order(:company_id, date_seen: :desc)
   }
 
   scope :published, -> {
@@ -31,19 +31,19 @@ class Statement < ApplicationRecord
     statements = Statement.newest
     # Only display published statements - unless we're admin!
     statements = statements.published unless current_user && current_user.admin?
-    statements = statements.includes(:verified_by, company: [:sector, :country])
+    statements = statements.includes(:verified_by, company: %i[sector country])
 
     company_join = statements.joins(:company)
-    if (query[:company_name] && !query[:company_name].empty?)
-      company_join = company_join.where("LOWER(name) LIKE LOWER(?)", "%#{query[:company_name]}%")
+    if query[:company_name].present?
+      company_join = company_join.where('LOWER(name) LIKE LOWER(?)', "%#{query[:company_name]}%")
       statements = company_join
     end
-    if (query[:sectors])
-      company_join = company_join.where(companies: {sector_id: query[:sectors]})
+    if query[:sectors]
+      company_join = company_join.where(companies: { sector_id: query[:sectors] })
       statements = company_join
     end
-    if (query[:countries])
-      company_join = company_join.where(companies: {country_id: query[:countries]})
+    if query[:countries]
+      company_join = company_join.where(companies: { country_id: query[:countries] })
       statements = company_join
     end
 
@@ -55,15 +55,21 @@ class Statement < ApplicationRecord
   end
 
   def country_name
-    company.country.name rescue "Country unknown"
+    company.country.name
+  rescue
+    'Country unknown'
   end
 
   def sector_name
-    company.sector.name rescue "Sector unknown"
+    company.sector.name
+  rescue
+    'Sector unknown'
   end
 
   def verified_by_email
-    verified_by.email rescue nil
+    verified_by.email
+  rescue
+    nil
   end
 
   # Tries to set the URL to https if possible - even if it was entered as http.
@@ -73,7 +79,11 @@ class Statement < ApplicationRecord
     # Some sites don't like non-browser user agents - pretend to be Chrome
     chrome = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
 
-    uri = URI(self.url) rescue nil
+    uri = begin
+            URI(url)
+          rescue
+            nil
+          end
     if uri.nil?
       self.broken_url = true
       return
@@ -82,13 +92,13 @@ class Statement < ApplicationRecord
       uri.scheme = 'https'
       # The :read_timeout option for open-uri's open doesn't work with https,
       # only http.
-      Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => chrome}) }
+      Timeout.timeout(3) { open(uri.to_s, 'User-Agent' => chrome) }
       self.url = uri.to_s
       self.broken_url = false
     rescue => e
       begin
         uri.scheme = 'http'
-        Timeout.timeout(3) { open(uri.to_s, {'User-Agent' => chrome}) }
+        Timeout.timeout(3) { open(uri.to_s, 'User-Agent' => chrome) }
         self.url = uri.to_s
         self.broken_url = false
       rescue => e
@@ -110,16 +120,16 @@ class Statement < ApplicationRecord
         'HQ',
         'Date Added'
       ].concat(extra ? [
-        'Approved by Board',
-        'Approved by',
-        'Signed by Director',
-        'Signed by',
-        'Link on Front Page',
-        'Published',
-        'Verified by',
-        'Contributed by',
-        'Broken URL',
-      ] : [])
+                 'Approved by Board',
+                 'Approved by',
+                 'Signed by Director',
+                 'Signed by',
+                 'Link on Front Page',
+                 'Published',
+                 'Verified by',
+                 'Contributed by',
+                 'Broken URL'
+               ] : [])
       statements.each do |statement|
         csv << [
           statement.company.name,
@@ -128,16 +138,16 @@ class Statement < ApplicationRecord
           statement.country_name,
           statement.date_seen.iso8601
         ].concat(extra ? [
-          statement.approved_by_board,
-          statement.approved_by,
-          statement.signed_by_director,
-          statement.signed_by,
-          statement.link_on_front_page,
-          statement.published,
-          statement.verified_by_email,
-          statement.contributor_email,
-          statement.broken_url,
-        ] : [])
+                   statement.approved_by_board,
+                   statement.approved_by,
+                   statement.signed_by_director,
+                   statement.signed_by,
+                   statement.link_on_front_page,
+                   statement.published,
+                   statement.verified_by_email,
+                   statement.contributor_email,
+                   statement.broken_url
+                 ] : [])
       end
     end
   end
