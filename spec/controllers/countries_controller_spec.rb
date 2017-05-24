@@ -9,7 +9,7 @@ RSpec.describe CountriesController, type: :controller do
 
     it 'loads all of the countries with companies' do
       gb = Country.create!(code: 'GB', name: 'United Kingdom')
-      us = Country.create!(code: 'US', name: 'United States')
+      Country.create!(code: 'US', name: 'United States')
       Company.create!(country: gb, name: 'BigCorp')
 
       get :index

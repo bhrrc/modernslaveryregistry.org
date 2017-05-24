@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe Country, type: :model do
   before do
     sector = Sector.create! name: 'Software'
-    no = Country.create! code: 'NO', name: 'Norway'
+    Country.create! code: 'NO', name: 'Norway'
     gb = Country.create! code: 'GB', name: 'United Kingdom'
-    fr = Country.create! code: 'FR', name: 'France'
+    Country.create! code: 'FR', name: 'France'
     Company.create!(name: 'Cucumber Ltd',
                     country_id: gb.id,
                     sector_id: sector.id)

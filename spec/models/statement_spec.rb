@@ -56,7 +56,7 @@ RSpec.describe Statement, type: :model do
                           email: 'someone@somewhere.com',
                           password: 'whatevs')
 
-      statement = @company.statements.create!(url: 'http://cucumber.io/',
+      @company.statements.create!(url: 'http://cucumber.io/',
                                               approved_by: 'Big Boss',
                                               approved_by_board: 'Yes',
                                               signed_by_director: false,

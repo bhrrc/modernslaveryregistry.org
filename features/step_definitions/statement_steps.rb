@@ -10,9 +10,10 @@ Given(/^the following statements have been submitted:$/) do |table|
 
     verified_by_user = nil
     unless props['verified_by'].empty?
-      verified_by_user = User.find_by(first_name: props['verified_by']) || User.create!(first_name: props['verified_by'],
-                                                                                        email: "#{props['verified_by']}@host.com",
-                                                                                        password: 'whatevs')
+      verified_by_user = User.where(
+        first_name: props['verified_by'],
+        email: "#{props['verified_by']}@host.com"
+      ).first_or_create(password: 'whatevs')
     end
 
     company.statements.create!(
