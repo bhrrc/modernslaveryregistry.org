@@ -1,0 +1,35 @@
+<h1 class="title">Log in</h1>
+
+<div class="box">
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+
+    <div class="field">
+      <%= f.label :email, class: 'label' %>
+      <p class="control">
+        <%= f.email_field :email, autofocus: true, class: 'input' %>
+      </p>
+    </div>
+
+    <div class="field">
+      <%= f.label :password, class: 'label' %>
+      <p class="control">
+        <%= f.password_field :password, autocomplete: "off", class: 'input' %>
+      </p>
+    </div>
+
+    <div class="field">
+      <%= f.label :remember_me, class: 'checkbox label not-bold' do %>
+        <%= f.check_box :remember_me %> Remember me?
+      <% end %>
+    </div>
+
+    <div class="field">
+      <p class="control">
+        <%= f.submit "Log in", class: 'button is-primary' %>
+      </p>
+    </div>
+  <% end %>
+
+</div>
+
+<%= render "devise/shared/links" %>
