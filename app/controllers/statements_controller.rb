@@ -23,13 +23,9 @@ class StatementsController < ApplicationController
   end
 
   def create
-    @company = if params[:company_id]
-                 Company.find(params[:company_id])
-               else
-                 Company.new(params[:company])
-               end
+    @company = company_from_params
     @statement = @company.statements.build(statement_params)
-    set_user_associations(@statement)
+    @statement.associate_with_user current_user
     if @statement.save
       redirect_to [@company, @statement]
     else
@@ -38,6 +34,10 @@ class StatementsController < ApplicationController
   end
 
   private
+
+  def company_from_params
+    params[:company_id] ? Company.find(params[:company_id]) : Company.new(params[:company])
+  end
 
   def statement_params
     params.require(:statement).permit(

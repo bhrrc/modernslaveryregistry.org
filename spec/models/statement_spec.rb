@@ -84,16 +84,16 @@ CSV
                           password: 'whatevs',
                           admin: true)
 
-      statement = @company.statements.create!(url: 'http://cucumber.io/',
-                                              approved_by: 'Big Boss',
-                                              approved_by_board: 'Yes',
-                                              signed_by_director: false,
-                                              signed_by: 'Little Boss',
-                                              link_on_front_page: true,
-                                              verified_by: user,
-                                              contributor_email: 'contributor@somewhere.com',
-                                              date_seen: Date.parse('2017-03-22'),
-                                              published: true)
+      @company.statements.create!(url: 'http://cucumber.io/',
+                                  approved_by: 'Big Boss',
+                                  approved_by_board: 'Yes',
+                                  signed_by_director: false,
+                                  signed_by: 'Little Boss',
+                                  link_on_front_page: true,
+                                  verified_by: user,
+                                  contributor_email: 'contributor@somewhere.com',
+                                  date_seen: Date.parse('2017-03-22'),
+                                  published: true)
 
       statements = Statement.newest.published.includes(company: %i[sector country])
       csv = Statement.to_csv(statements, true)

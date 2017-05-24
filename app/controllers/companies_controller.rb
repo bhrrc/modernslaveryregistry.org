@@ -15,7 +15,7 @@ class CompaniesController < ApplicationController
 
   def create
     @company = Company.new(company_params)
-    @company.statements.each { |s| set_user_associations(s) }
+    @company.statements.each { |s| s.associate_with_user current_user }
     if @company.save
       redirect_to after_save_path_for_company(@company)
     else
@@ -29,7 +29,7 @@ class CompaniesController < ApplicationController
     authorize @company
 
     @company.assign_attributes(company_params)
-    @company.statements.each { |s| set_user_associations(s) }
+    @company.statements.each { |s| s.associate_with_user current_user }
 
     if @company.save
       redirect_to after_save_path_for_company(@company)

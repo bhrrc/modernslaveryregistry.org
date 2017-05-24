@@ -3,4 +3,18 @@
 
 require_relative 'config/application'
 
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+  task default: :spec
+rescue LoadError
+end
+
 Rails.application.load_tasks
+
+begin
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new
+  task default: :rubocop
+rescue LoadError
+end

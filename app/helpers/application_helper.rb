@@ -27,9 +27,4 @@ module ApplicationHelper
   def back_or_root
     request.referer.present? ? request.referer : root_path
   end
-
-  def set_user_associations(statement)
-    statement.verified_by = statement.published? ? current_user : nil
-    statement.contributor_email ||= current_user && current_user.email
-  end
 end

@@ -25,31 +25,17 @@ class Statement < ApplicationRecord
 
   scope(:published, -> { where(published: true) })
 
-  def self.search(current_user, query)
-    statements = Statement.newest
-    # Only display published statements - unless we're admin!
-    statements = statements.published unless current_user && current_user.admin?
-    statements = statements.includes(:verified_by, company: %i[sector country])
+  def self.search(admin:, query:)
+    StatementSearch.new(admin, query).statements
+  end
 
-    company_join = statements.joins(:company)
-    if query[:company_name].present?
-      company_join = company_join.where('LOWER(name) LIKE LOWER(?)', "%#{query[:company_name]}%")
-      statements = company_join
-    end
-    if query[:sectors]
-      company_join = company_join.where(companies: { sector_id: query[:sectors] })
-      statements = company_join
-    end
-    if query[:countries]
-      company_join = company_join.where(companies: { country_id: query[:countries] })
-      statements = company_join
-    end
-
-    statements
+  def associate_with_user(user)
+    self.verified_by = published? ? user : nil
+    self.contributor_email ||= user && user.email
   end
 
   def verified?
-    !!verified_by
+    verified_by.present?
   end
 
   def country_name
@@ -70,91 +56,58 @@ class Statement < ApplicationRecord
     nil
   end
 
-  # Tries to set the URL to https if possible - even if it was entered as http.
-  # This is not only more secure, but it allows the site to display the statement
-  # inside an iframe. Most browsers will block non-https iframes on an https site.
-  def auto_update_url!
-    # Some sites don't like non-browser user agents - pretend to be Chrome
-    chrome = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
-
-    uri = begin
-            URI(url)
-          rescue
-            nil
-          end
-    if uri.nil?
-      self.broken_url = true
-      return
-    end
-    begin
-      uri.scheme = 'https'
-      # The :read_timeout option for open-uri's open doesn't work with https,
-      # only http.
-      Timeout.timeout(3) { open(uri.to_s, 'User-Agent' => chrome) }
-      self.url = uri.to_s
-      self.broken_url = false
-    rescue => e
-      begin
-        uri.scheme = 'http'
-        Timeout.timeout(3) { open(uri.to_s, 'User-Agent' => chrome) }
-        self.url = uri.to_s
-        self.broken_url = false
-      rescue => e
-        # Set the statement URL to http, even though we haven't been able to
-        # establish whether or not the url should be http or https.
-        # It's more likely that http works than https.
-        self.url = uri.to_s
-        self.broken_url = true
+  def self.to_csv(statements, extra)
+    fields = BASIC_EXPORT_FIELDS.merge(extra ? EXTRA_EXPORT_FIELDS : {})
+    CSV.generate do |csv|
+      csv << fields.map { |_, heading| heading }
+      statements.each do |statement|
+        csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
       end
     end
   end
 
-  def self.to_csv(statements, extra)
-    CSV.generate do |csv|
-      csv << [
-        'Company',
-        'URL',
-        'Sector',
-        'HQ',
-        'Date Added'
-      ].concat(extra ? [
-                 'Approved by Board',
-                 'Approved by',
-                 'Signed by Director',
-                 'Signed by',
-                 'Link on Front Page',
-                 'Published',
-                 'Verified by',
-                 'Contributed by',
-                 'Broken URL'
-               ] : [])
-      statements.each do |statement|
-        csv << [
-          statement.company.name,
-          statement.url,
-          statement.sector_name,
-          statement.country_name,
-          statement.date_seen.iso8601
-        ].concat(extra ? [
-                   statement.approved_by_board,
-                   statement.approved_by,
-                   statement.signed_by_director,
-                   statement.signed_by,
-                   statement.link_on_front_page,
-                   statement.published,
-                   statement.verified_by_email,
-                   statement.contributor_email,
-                   statement.broken_url
-                 ] : [])
-      end
-    end
+  def self.format_for_csv(value)
+    value.respond_to?(:iso8601) ? value.iso8601 : value
   end
 
   private
+
+  BASIC_EXPORT_FIELDS = {
+    company_name: 'Company',
+    url: 'URL',
+    sector_name: 'Sector',
+    country_name: 'HQ',
+    date_seen: 'Date Added'
+  }.freeze
+
+  EXTRA_EXPORT_FIELDS = {
+    approved_by_board: 'Approved by Board',
+    approved_by: 'Approved by',
+    signed_by_director: 'Signed by Director',
+    signed_by: 'Signed by',
+    link_on_front_page: 'Link on Front Page',
+    published: 'Published',
+    verified_by_email: 'Verified by',
+    contributor_email: 'Contributed by',
+    broken_url: 'Broken URL'
+  }.freeze
+
+  def company_name
+    company.name
+  end
 
   before_save :auto_update_url! unless ENV['no_verify_statement_urls']
 
   def set_date_seen
     self.date_seen ||= Time.zone.today
+  end
+
+  # Tries to set the URL to https if possible - even if it was entered as http.
+  # This is not only more secure, but it allows the site to display the statement
+  # inside an iframe. Most browsers will block non-https iframes on an https site.
+  def auto_update_url!
+    check = StatementUrlCheck.new(url)
+    self.url = check.url
+    self.broken_url = check.broken?
   end
 end

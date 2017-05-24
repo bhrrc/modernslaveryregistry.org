@@ -35,7 +35,7 @@ RSpec.describe Statement, type: :model do
   end
 
   it 'can be searched by company name' do
-    statements = Statement.search(nil, company_name: 'cucumber')
+    statements = Statement.search(admin: false, query: { company_name: 'cucumber' })
     expect(statements).to eq([@c2016])
   end
 
