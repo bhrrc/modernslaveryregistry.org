@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170503200854) do
+ActiveRecord::Schema.define(version: 20170524120753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,15 @@ ActiveRecord::Schema.define(version: 20170503200854) do
     t.float    "lng"
     t.index ["code"], name: "index_countries_on_code", unique: true, using: :btree
     t.index ["name"], name: "index_countries_on_name", unique: true, using: :btree
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string  "title",       null: false
+    t.string  "short_title", null: false
+    t.string  "slug",        null: false
+    t.text    "body_html",   null: false
+    t.integer "position",    null: false
+    t.index ["slug"], name: "index_pages_on_slug", unique: true, using: :btree
   end
 
   create_table "sectors", force: :cascade do |t|
