@@ -31,11 +31,7 @@ module Fellini
         struct = Struct.new(*field_names)
         browser.all(%([data-content="#{struct_name}"])).map do |element|
           fields = field_names.map do |field_name|
-            begin
-              element.find(%([data-content="#{field_name}"])).text
-            rescue
-              nil
-            end
+            field_value_from_element(field_name, element)
           end
           struct.new(*fields)
         end
@@ -46,6 +42,14 @@ module Fellini
         raise 'No structs found' if structs.empty?
         raise "Expected a single struct, found #{structs.length}" if structs.length > 1
         structs[0]
+      end
+
+      private
+
+      def field_value_from_element(field_name, element)
+        element.find(%([data-content="#{field_name}"])).text
+      rescue ::Capybara::ElementNotFound
+        nil
       end
     end
   end

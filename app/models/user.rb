@@ -8,10 +8,9 @@ class User < ApplicationRecord
   validates :first_name, presence: true
 
   def after_confirmation
-    if admin.nil?
-      admin = email =~ /business-humanrights\.org$/
-      update_attribute(:admin, admin)
-    end
+    return unless admin.nil?
+    admin = email =~ /business-humanrights\.org$/
+    update_attribute(:admin, admin) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def name

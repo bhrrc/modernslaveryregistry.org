@@ -57,13 +57,13 @@ RSpec.describe Statement, type: :model do
                           password: 'whatevs')
 
       @company.statements.create!(url: 'http://cucumber.io/',
-                                              approved_by: 'Big Boss',
-                                              approved_by_board: 'Yes',
-                                              signed_by_director: false,
-                                              link_on_front_page: true,
-                                              verified_by: user,
-                                              date_seen: Date.parse('2017-03-22'),
-                                              published: true)
+                                  approved_by: 'Big Boss',
+                                  approved_by_board: 'Yes',
+                                  signed_by_director: false,
+                                  link_on_front_page: true,
+                                  verified_by: user,
+                                  date_seen: Date.parse('2017-03-22'),
+                                  published: true)
 
       statements = Statement.newest.published.includes(company: %i[sector country])
       csv = Statement.to_csv(statements, false)

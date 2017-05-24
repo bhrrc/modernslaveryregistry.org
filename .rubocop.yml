@@ -3,6 +3,7 @@ AllCops:
     - 'bin/*'
     - 'db/**/*'
     - 'vendor/**/*'
+    - 'lib/tasks/cucumber.rake'
   TargetRubyVersion: 2.3
 
 Documentation:
@@ -23,6 +24,10 @@ Metrics/BlockLength:
     - 'spec/**/*.rb'
     - 'config/routes.rb'
     - 'config/sitemap.rb'
+    - 'config/environments/*.rb'
 
 Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/AsciiComments:
   Enabled: false

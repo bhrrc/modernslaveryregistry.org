@@ -18,14 +18,12 @@ class Statement < ApplicationRecord
 
   before_create :set_date_seen
 
-  scope :newest, -> {
+  scope(:newest, lambda {
     select('DISTINCT ON (statements.company_id) statements.*')
       .order(:company_id, date_seen: :desc)
-  }
+  })
 
-  scope :published, -> {
-    where(published: true)
-  }
+  scope(:published, -> { where(published: true) })
 
   def self.search(current_user, query)
     statements = Statement.newest
@@ -157,6 +155,6 @@ class Statement < ApplicationRecord
   before_save :auto_update_url! unless ENV['no_verify_statement_urls']
 
   def set_date_seen
-    self.date_seen ||= Date.today
+    self.date_seen ||= Time.zone.today
   end
 end

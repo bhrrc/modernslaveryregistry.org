@@ -107,41 +107,7 @@ class SubmitStatement < Fellini::Task
 
   def perform_as(actor)
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-
-    if @new_company
-      browser.visit(new_company_statement_companies_path)
-      browser.fill_in('Company name', with: @company_name)
-      browser.select(@country, from: 'Company HQ') if @country
-    else
-      company = Company.find_by(name: @company_name)
-      browser.visit(new_company_statement_path(company))
-    end
-    browser.fill_in('Statement URL', with: @url)
-
-    unless @link_on_front_page.nil?
-      browser.within('[data-content="link_on_front_page"]') do
-        browser.choose(@link_on_front_page)
-      end
-    end
-
-    unless @signed_by_director.nil?
-      browser.within('[data-content="signed_by_director"]') do
-        browser.choose(@signed_by_director)
-      end
-    end
-
-    unless @approved_by_board.nil?
-      browser.within('[data-content="approved_by_board"]') do
-        browser.choose(@approved_by_board)
-      end
-    end
-
-    unless @published.nil?
-      @published =~ /yes|true/i ? browser.check('Published?') : browser.uncheck('Published?')
-    end
-
-    browser.fill_in('Your email', with: @contributor_email) unless @contributor_email.nil?
-
+    fill_in_statement_form(browser)
     browser.click_button 'Submit'
   end
 
@@ -196,6 +162,41 @@ class SubmitStatement < Fellini::Task
   def contributor_email(value)
     @contributor_email = value
     self
+  end
+
+  private
+
+  def fill_in_statement_form(browser)
+    visit_form(browser)
+    browser.fill_in('Statement URL', with: @url)
+
+    choose_option(browser, 'link_on_front_page', @link_on_front_page)
+    choose_option(browser, 'signed_by_director', @signed_by_director)
+    choose_option(browser, 'approved_by_board', @approved_by_board)
+
+    unless @published.nil?
+      @published =~ /yes|true/i ? browser.check('Published?') : browser.uncheck('Published?')
+    end
+
+    browser.fill_in('Your email', with: @contributor_email) unless @contributor_email.nil?
+  end
+
+  def visit_form(browser)
+    if @new_company
+      browser.visit(new_company_statement_companies_path)
+      browser.fill_in('Company name', with: @company_name)
+      browser.select(@country, from: 'Company HQ') if @country
+    else
+      company = Company.find_by(name: @company_name)
+      browser.visit(new_company_statement_path(company))
+    end
+  end
+
+  def choose_option(browser, option_name, option_value)
+    return if option_value.nil?
+    browser.within %([data-content="#{option_name}"]) do
+      browser.choose(option_value)
+    end
   end
 end
 
