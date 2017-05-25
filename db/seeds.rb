@@ -16,7 +16,9 @@ ActiveRecord::Base.transaction do
   end
 end
 
-admin = User.find_by_email!(ENV['SEED_ADMIN_EMAIL'])
+admin = ENV['SEED_ADMIN_EMAIL'] ? User.find_by_email!(ENV['SEED_ADMIN_EMAIL']) :
+  User.where(email: 'admin@test.com').first_or_create(password: 'password', confirmed_at: Time.zone.now, admin: true)
+
 filename = ARGV[0]
 puts 'Importing statements...'
 stms = []

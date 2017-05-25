@@ -1,7 +1,7 @@
 class CompaniesController < ApplicationController
   include ApplicationHelper
 
-  before_action :authenticate_user!, :only => [:update, :edit]
+  before_action :authenticate_user!, only: %i[update edit]
 
   def new
     @company = Company.new
@@ -15,20 +15,12 @@ class CompaniesController < ApplicationController
 
   def create
     @company = Company.new(company_params)
-    @company.statements.each { |s| set_user_associations(s) }
+    @company.statements.each { |s| s.associate_with_user current_user }
     if @company.save
-      if @company.statements.any?
-        if admin?
-          redirect_to company_statement_path(@company, @company.newest_statement)
-        else
-          redirect_to thanks_path
-        end
-      else
-        redirect_to company_path(@company)
-      end
+      redirect_to after_save_path_for_company(@company)
     else
       # TODO: Fix rendering when there are errors
-      render "new"
+      render 'new'
     end
   end
 
@@ -37,16 +29,12 @@ class CompaniesController < ApplicationController
     authorize @company
 
     @company.assign_attributes(company_params)
-    @company.statements.each { |s| set_user_associations(s) }
+    @company.statements.each { |s| s.associate_with_user current_user }
 
     if @company.save
-      if @company.statements.any?
-        redirect_to company_statement_path(@company, @company.newest_statement)
-      else
-        redirect_to company_path(@company)
-      end
+      redirect_to after_save_path_for_company(@company)
     else
-      render "edit"
+      render 'edit'
     end
   end
 
@@ -62,18 +50,32 @@ class CompaniesController < ApplicationController
 
   private
 
-  def company_params
-    params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: [
-      :id,
-      :url,
-      :linked_from,
-      :link_on_front_page,
-      :approved_by,
-      :approved_by_board,
-      :signed_by,
-      :signed_by_director,
-      :published,
-      :contributor_email
-    ])
+  def after_save_path_for_company(company)
+    if company.statements.any?
+      if admin?
+        company_statement_path(company, company.newest_statement)
+      else
+        thanks_path
+      end
+    else
+      company_path(company)
+    end
   end
+
+  def company_params
+    params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: STATEMENTS_ATTRIBUTES)
+  end
+
+  STATEMENTS_ATTRIBUTES = %i[
+    id
+    url
+    linked_from
+    link_on_front_page
+    approved_by
+    approved_by_board
+    signed_by
+    signed_by_director
+    published
+    contributor_email
+  ].freeze
 end

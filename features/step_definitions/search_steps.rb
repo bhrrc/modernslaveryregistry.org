@@ -42,6 +42,7 @@ class Filter < Fellini::Task
   end
 
   def initialize(select_field, value)
-    @select_field, @value = select_field, value
+    @select_field = select_field
+    @value = value
   end
 end

@@ -24,8 +24,8 @@ module Fellini
 
     def ability_to(do_something_class)
       do_something = @abilities[do_something_class]
-      if !do_something
-        raise Exception.new("I don't have the ability to #{do_something_class.name}, said #{self} sadly.")
+      unless do_something
+        raise Exception, "I don't have the ability to #{do_something_class.name}, said #{self} sadly."
       end
       do_something
     end
@@ -49,7 +49,7 @@ module Fellini
   end
 
   class Performable
-    def perform_as(actor)
+    def perform_as(_actor)
       raise "Implement #perform_as in #{self.class}"
     end
 
@@ -66,7 +66,7 @@ module Fellini
   end
 
   class Question
-    def answered_by(actor)
+    def answered_by(_actor)
       raise "Implement #answered_by in #{self.class}"
     end
   end

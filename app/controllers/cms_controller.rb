@@ -1,4 +1,3 @@
 class CmsController < ApplicationController
-  def thanks
-  end
+  def thanks; end
 end

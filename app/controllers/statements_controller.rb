@@ -12,8 +12,8 @@ class StatementsController < ApplicationController
   end
 
   def destroy
-    if !admin?
-      render :status => :forbidden, :text => "Sorry, can't do that"
+    unless admin?
+      render status: :forbidden, text: "Sorry, can't do that"
       return
     end
     statements = admin? ? Statement : Statement.published
@@ -23,21 +23,21 @@ class StatementsController < ApplicationController
   end
 
   def create
-    if params[:company_id]
-      @company = Company.find(params[:company_id])
-    else
-      @company = Company.new(params[:company])
-    end
+    @company = company_from_params
     @statement = @company.statements.build(statement_params)
-    set_user_associations(@statement)
+    @statement.associate_with_user current_user
     if @statement.save
       redirect_to [@company, @statement]
     else
-      render "companies/show"
+      render 'companies/show'
     end
   end
 
   private
+
+  def company_from_params
+    params[:company_id] ? Company.find(params[:company_id]) : Company.new(params[:company])
+  end
 
   def statement_params
     params.require(:statement).permit(

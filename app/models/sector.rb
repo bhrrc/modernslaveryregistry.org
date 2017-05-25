@@ -2,12 +2,12 @@ class Sector < ApplicationRecord
   has_many :companies
   has_many :countries, -> { distinct }, through: :companies
 
-  scope :with_companies, -> {
+  scope(:with_companies, lambda {
     joins(:companies).group('sectors.id')
-    #left_outer_joins(:companies).group(:id).order('COUNT(companies.id) DESC')
-  }
+    # left_outer_joins(:companies).group(:id).order('COUNT(companies.id) DESC')
+  })
 
-  scope :with_company_counts, -> {
+  scope(:with_company_counts, lambda {
     select <<~SQL
       sectors.*,
       (
@@ -15,5 +15,5 @@ class Sector < ApplicationRecord
         WHERE sector_id = sectors.id
       ) AS company_count
     SQL
-  }
+  })
 end

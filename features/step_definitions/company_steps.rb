@@ -29,8 +29,8 @@ class SubmitCompany < Fellini::Task
 
   def initialize(company_name)
     @company_name = company_name
-    @sector_name = "Software"
-    @country_name = "United Kingdom"
+    @sector_name = 'Software'
+    @country_name = 'United Kingdom'
   end
 end
 

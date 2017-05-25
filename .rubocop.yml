@@ -1,0 +1,35 @@
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'db/**/*'
+    - 'vendor/**/*'
+    - 'lib/tasks/cucumber.rake'
+  TargetRubyVersion: 2.3
+
+Documentation:
+  Enabled: false
+
+Lint/HandleExceptions:
+  Exclude:
+    - Rakefile
+
+Metrics/LineLength:
+  Max: 120
+  Exclude:
+    - 'features/step_definitions/*.rb'
+
+Rails:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'config/routes.rb'
+    - 'config/sitemap.rb'
+    - 'config/environments/*.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
