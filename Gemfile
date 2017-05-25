@@ -37,6 +37,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'json', '~> 2.0.3'
 
+gem 'acts_as_list'
 gem 'bulma-rails', '0.4.1.pre'
 gem 'chartjs-ror'
 gem 'chosen-rails'
@@ -44,6 +45,7 @@ gem 'leaflet-rails'
 
 gem 'devise'
 gem 'pundit'
+gem 'values'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

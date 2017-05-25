@@ -7,9 +7,6 @@ Rails.application.routes.draw do
   # Route just for modernslaveryregistry.csv
   get 'modernslaveryregistry', to: 'explore#index'
   get 'thanks', to: 'cms#thanks'
-  get 'about_us', to: 'cms#about_us'
-  get 'reporting_guidance', to: 'cms#reporting_guidance'
-  get 'contact_us', to: 'cms#contact_us'
 
   resources :countries
   resources :companies do
@@ -17,5 +14,10 @@ Rails.application.routes.draw do
     resources :statements
   end
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :admin do
+    root 'dashboard#show'
+    resources :pages
+  end
+
+  get ':id', to: 'pages#show', as: :page
 end
