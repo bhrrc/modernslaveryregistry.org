@@ -2,17 +2,23 @@ class ExploreController < ApplicationController
   include ApplicationHelper
 
   def index
-    @search = Statement.search(admin: admin?, criteria: criteria_params)
+    @awaiting_criteria = !params.include?(:company_name)
     respond_to do |format|
-      format.html
+      format.html do
+        @search = @awaiting_criteria ? [] : search
+      end
       format.csv do
-        send_data Statement.to_csv(@search, admin?),
+        send_data Statement.to_csv(search.statements, admin?),
                   filename: "modernslaveryregistry-#{Time.zone.today}.csv"
       end
     end
   end
 
   private
+
+  def search
+    Statement.search(admin: admin?, criteria: criteria_params)
+  end
 
   def criteria_params
     {

@@ -5,7 +5,6 @@ class StatementSearch
   end
 
   def statements
-    return [] if blank_criteria?
     @statements = Statement.newest.includes(:verified_by, company: %i[sector country])
     filter_by_published
     filter_by_company

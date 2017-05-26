@@ -1,7 +1,7 @@
 Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
-    sector = Sector.find_by!(name: props['sector'])
-    country = Country.find_by!(name: props['country'])
+    sector = Sector.find_by!(name: props['sector'] || 'Software')
+    country = Country.find_by!(name: props['country'] || 'United Kingdom')
     company = Company.find_or_create_by!(
       name: props['company_name'],
       sector_id: sector.id,
@@ -9,7 +9,7 @@ Given(/^the following statements have been submitted:$/) do |table|
     )
 
     verified_by_user = nil
-    unless props['verified_by'].empty?
+    if props['verified_by'].present?
       verified_by_user = User.where(
         first_name: props['verified_by'],
         email: "#{props['verified_by']}@host.com"

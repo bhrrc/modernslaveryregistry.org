@@ -1,4 +1,4 @@
-Feature: Search companies
+Feature: Search statements
 
   Background:
     Given the following statements have been submitted:
@@ -7,7 +7,7 @@ Feature: Search companies
       | Banana Ltd   | https://banana.io/s    | France         | Agriculture | Patricia    |                   |
       | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      |             | bob@host.com      |
 
-  Scenario: Search by name
+  Scenario: Search by company name
     Given Joe is logged in
     When Joe searches for "cucumber"
     Then Joe should only see "Cucumber Ltd, Cucumber Inc" in the search results
@@ -19,3 +19,7 @@ Feature: Search companies
   Scenario: Only admins can see draft statements
     When Joe searches for "cucumber"
     Then Joe should only see "Cucumber Ltd" in the search results
+
+  Scenario: Download statements when not signed in as admin
+    When Patricia downloads all statements
+    Then Patricia should see all the published statements
