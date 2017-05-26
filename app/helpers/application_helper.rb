@@ -1,4 +1,8 @@
 module ApplicationHelper
+  def title(text)
+    content_for :title, text
+  end
+
   def yes_no(bool)
     if bool.nil?
       content_tag :span, 'Unspecified', class: 'tag is-light'
