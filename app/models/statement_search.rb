@@ -11,10 +11,6 @@ class StatementSearch
     @statements
   end
 
-  def blank_criteria?
-    @criteria.values.all?(&:blank?)
-  end
-
   private
 
   def filter_by_published

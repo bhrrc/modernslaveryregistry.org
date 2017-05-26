@@ -6,9 +6,7 @@
           <%= render partial: 'search_form' %>
         </div>
         <div class="box" data-content="statements-search-results">
-          <% if @awaiting_criteria %>
-            Enter some details into the boxes above to search for statements.
-          <% elsif @search.statements.any? %>
+          <% if @search.statements.any? %>
             <%= render partial: 'statements/list', locals: { statements: @search.statements } %>
           <% else %>
             <h2 class="title">No statements found</h2>

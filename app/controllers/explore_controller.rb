@@ -2,10 +2,9 @@ class ExploreController < ApplicationController
   include ApplicationHelper
 
   def index
-    @awaiting_criteria = !params.include?(:company_name)
     respond_to do |format|
       format.html do
-        @search = @awaiting_criteria ? [] : search
+        @search = search
       end
       format.csv do
         send_data Statement.to_csv(search.statements, admin?),
