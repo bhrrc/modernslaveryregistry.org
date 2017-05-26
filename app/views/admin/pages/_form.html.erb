@@ -24,12 +24,59 @@
 
     <div class="field">
       <%= f.label :body_html, class: 'label' %>
-      <p class="control">
-        <%= f.text_area :body_html, class: 'textarea' %>
+      <div class="tabs is-right">
+        <ul>
+          <li class="is-active">
+            <a href="#editor" class="editor-button">
+              Editor
+            </a>
+          </li>
+          <li>
+            <a href="#html" class="html-button">
+              HTML
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <p class="control content">
+        <%= f.text_area :body_html, class: 'textarea', style: 'height: 500px; font-family: monospace' %>
+        <%= f.trix_editor :body_html %>
+
+        <script>
+          var textarea = $('textarea[name="page[body_html]"]')[0]
+          var hiddenInput = $('input:hidden[name="page[body_html]"]')[0]
+          $('.html-button').click(function(e) {
+            e.preventDefault()
+            $('.editor-button, .html-button').parent('li').toggleClass('is-active')
+            $('trix-editor, trix-toolbar').hide()
+            $(hiddenInput).attr('name', '')
+            $(textarea).val($(hiddenInput).val()).attr('name', 'page[body_html]').show()
+          })
+          $('.editor-button').click(function(e) {
+            e.preventDefault()
+            $('.editor-button, .html-button').parent('li').toggleClass('is-active')
+            $('trix-editor, trix-toolbar').show()
+            $(textarea).attr('name', '').hide()
+            $(hiddenInput).attr('name', 'page[body_html]')
+            $('trix-editor')[0].editor.setSelectedRange([0, 999999999999])
+            $('trix-editor')[0].editor.insertHTML($(textarea).val())
+          })
+          $(textarea).attr('name', '').hide()
+          $('label[for="page_body_html"]').hide()
+        </script>
+
+        <style>
+          trix-toolbar .button_group button.code {
+            display: none
+          }
+        </style>
       </p>
     </div>
+
   </div>
 
   <%= f.submit class: 'button is-primary' %>
+  <%= link_to 'Cancel', [:admin, :pages], class: 'button' %>
 
 <% end %>

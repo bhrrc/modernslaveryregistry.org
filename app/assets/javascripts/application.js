@@ -15,4 +15,5 @@
 //= require Chart.min
 //= require chosen-jquery
 //= require leaflet
+//= require trix
 //= require_tree .
