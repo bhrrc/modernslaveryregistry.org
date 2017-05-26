@@ -2,6 +2,7 @@ class ExploreController < ApplicationController
   include ApplicationHelper
 
   def index
+    @download_url = explore_path(criteria_params.merge(format: 'csv'))
     respond_to do |format|
       format.html do
         @search = search

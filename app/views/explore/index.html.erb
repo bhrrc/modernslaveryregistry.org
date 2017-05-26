@@ -9,6 +9,9 @@
         </div>
         <div class="box" data-content="statements-search-results">
           <% if @search.statements.any? %>
+            <div class="level">
+              <%= pluralize @search.statements.size, 'statement' %> <%= link_to 'Download', @download_url %>
+            </div>
             <%= render partial: 'statements/list', locals: { statements: @search.statements } %>
           <% else %>
             <h2 class="title">No statements found</h2>
