@@ -71,7 +71,7 @@ class CreatePage < Fellini::Task
     browser.fill_in('Title', with: @title)
     browser.fill_in('Short title', with: @short_title)
     browser.fill_in('Slug', with: @slug)
-    browser.fill_in('Body html', with: @body_html)
+    browser.find('input[name="page[body_html]"]', visible: false).set(@body_html)
     browser.click_on 'Create Page'
   end
 
@@ -98,7 +98,7 @@ class EditPage < Fellini::Task
     browser.fill_in('Title', with: @new_title) if @new_title.present?
     browser.fill_in('Short title', with: @new_short_title) if @new_short_title.present?
     browser.fill_in('Slug', with: @new_slug) if @new_slug.present?
-    browser.fill_in('Body html', with: @new_body_html) if @new_body_html.present?
+    browser.find('input[name="page[body_html]"]', visible: false).set(@new_body_html) if @new_body_html.present?
     browser.click_on 'Update Page'
   end
 
