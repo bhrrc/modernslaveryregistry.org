@@ -1,14 +1,19 @@
 class StatementSearch
-  def initialize(admin, query)
+  def initialize(admin, criteria)
     @admin = admin
-    @query = query
+    @criteria = criteria
   end
 
   def statements
+    return [] if blank_criteria?
     @statements = Statement.newest.includes(:verified_by, company: %i[sector country])
     filter_by_published
     filter_by_company
     @statements
+  end
+
+  def blank_criteria?
+    @criteria.values.all?(&:blank?)
   end
 
   private
@@ -25,20 +30,20 @@ class StatementSearch
   end
 
   def filter_by_company_name
-    return if @query[:company_name].blank?
-    @company_join = @company_join.where('LOWER(name) LIKE LOWER(?)', "%#{@query[:company_name]}%")
+    return if @criteria[:company_name].blank?
+    @company_join = @company_join.where('LOWER(name) LIKE LOWER(?)', "%#{@criteria[:company_name]}%")
     @statements = @company_join
   end
 
   def filter_by_company_sector
-    return if @query[:sectors].blank?
-    @company_join = @company_join.where(companies: { sector_id: @query[:sectors] })
+    return if @criteria[:sectors].blank?
+    @company_join = @company_join.where(companies: { sector_id: @criteria[:sectors] })
     @statements = @company_join
   end
 
   def filter_by_company_country
-    return if @query[:countries].blank?
-    @company_join = @company_join.where(companies: { country_id: @query[:countries] })
+    return if @criteria[:countries].blank?
+    @company_join = @company_join.where(companies: { country_id: @criteria[:countries] })
     @statements = @company_join
   end
 end

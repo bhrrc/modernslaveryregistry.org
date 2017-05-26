@@ -35,8 +35,8 @@ RSpec.describe Statement, type: :model do
   end
 
   it 'can be searched by company name' do
-    statements = Statement.search(admin: false, query: { company_name: 'cucumber' })
-    expect(statements).to eq([@c2016])
+    search = Statement.search(admin: false, criteria: { company_name: 'cucumber' })
+    expect(search.statements).to eq([@c2016])
   end
 
   it 'lists most recent statements' do

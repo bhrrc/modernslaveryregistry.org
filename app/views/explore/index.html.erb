@@ -5,8 +5,24 @@
         <div class="box">
           <%= render partial: 'search_form' %>
         </div>
-        <div class="box">
-          <%= render partial: 'statements/list', locals: {statements: @statements} %>
+        <div class="box" data-content="statements-search-results">
+          <% if @search.blank_criteria? %>
+            Enter some details into the boxes above to search for statements.
+          <% elsif @search.statements.any? %>
+            <%= render partial: 'statements/list', locals: { statements: @search.statements } %>
+          <% else %>
+            <h2 class="title">No statements found</h2>
+            <p>
+              We couldn't find a company or statement matching your search.
+              If you think the registry is missing a statement for a company,
+              you can help by submitting a link to the statement.
+            </p>
+            <br>
+            <p>
+              <%= link_to 'Submit a statement', new_company_statement_companies_path,
+                class: 'button is-medium is-primary' %>
+            </p>
+          <% end %>
         </div>
       </div>
       <div class="column">

@@ -11,7 +11,7 @@
             reports made under the UK Modern Slavery Act.
           </h2>
 
-          <%= form_tag explore_path, method: :get do %>
+          <%= form_tag explore_path, method: :get, enforce_utf8: false do %>
             <div class="field has-addons">
               <p class="control is-expanded">
                 <%= text_field_tag :company_name, params[:company_name],
@@ -20,7 +20,7 @@
                     placeholder: 'Company' %>
               </p>
               <p class="control">
-                <%= submit_tag 'Search', class: "button is-primary is-medium" %>
+                <%= submit_tag 'Search', name: '', class: "button is-primary is-medium" %>
               </p>
             </div>
           <% end %>
