@@ -25,8 +25,8 @@ class Statement < ApplicationRecord
 
   scope(:published, -> { where(published: true) })
 
-  def self.search(admin:, query:)
-    StatementSearch.new(admin, query).statements
+  def self.search(admin:, criteria:)
+    StatementSearch.new(admin, criteria)
   end
 
   def associate_with_user(user)

@@ -1,87 +1,87 @@
 <%= form_tag explore_path, method: :get do %>
-<div class="field is-horizontal">
-  <div class="field-label is-normal">
-    <label class="label">Sectors</label>
-  </div>
-  <div class="field-body">
-    <div class="field">
-      <div class="control">
-        <%=
-        select_tag(
-          'sectors[]',
-          options_from_collection_for_select(
-            Sector.with_companies.order(:name),
-            :id,
-            :name,
-            params[:sectors]
-          ),
-          {
-            include_blank: true,
-            multiple: true,
-            class: 'chosen-select',
-            'data-placeholder': ' '
-          }
-        )
-        %>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label">Sectors</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <%=
+          select_tag(
+            'sectors[]',
+            options_from_collection_for_select(
+              Sector.with_companies.order(:name),
+              :id,
+              :name,
+              params[:sectors]
+            ),
+            {
+              include_blank: true,
+              multiple: true,
+              class: 'chosen-select js-auto-submit',
+              'data-placeholder': ' '
+            }
+          )
+          %>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="field is-horizontal">
-  <div class="field-label is-normal">
-    <label class="label">Countries</label>
-  </div>
-  <div class="field-body">
-    <div class="field">
-      <div class="control">
-        <%=
-        select_tag(
-          'countries[]',
-          options_from_collection_for_select(
-            Country.with_companies.order(:name),
-            :id,
-            :name,
-            params[:countries]
-          ),
-          {
-            include_blank: true,
-            multiple: true,
-            class: 'chosen-select',
-            'data-placeholder': ' '
-          }
-        )
-        %>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label">Countries</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <%=
+          select_tag(
+            'countries[]',
+            options_from_collection_for_select(
+              Country.with_companies.order(:name),
+              :id,
+              :name,
+              params[:countries]
+            ),
+            {
+              include_blank: true,
+              multiple: true,
+              class: 'chosen-select js-auto-submit',
+              'data-placeholder': ' '
+            }
+          )
+          %>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="field is-horizontal">
-  <div class="field-label is-normal">
-    <label class="label">Company</label>
-  </div>
-  <div class="field-body">
-    <div class="field">
-      <div class="control">
-        <%= text_field_tag :company_name, params[:company_name], class: 'input' %>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label">Company</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <%= text_field_tag :company_name, params[:company_name], class: 'input js-auto-submit' %>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="field is-horizontal">
-  <div class="field-label">
-    <!-- Left empty for spacing -->
-  </div>
-  <div class="field-body">
-    <div class="field">
-      <div class="control">
-        <%= submit_tag 'Search', class: "button is-primary" %>
+  <div class="field is-horizontal">
+    <div class="field-label">
+      <!-- Left empty for spacing -->
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <%= submit_tag 'Search', name: '', enforce_utf8: false, class: "button is-primary search-button" %>
+        </div>
       </div>
     </div>
   </div>
-</div>
 <% end %>
 
 <script>
@@ -90,5 +90,37 @@ $('.chosen-select').chosen({
   inherit_select_classes: true,
   no_results_text: 'No results matched',
   width: '100%'
+})
+
+function debounce(fn, ctx) {
+  var pending = null;
+  function clear() { pending = null; }
+  return function() {
+    if (pending) return pending;
+    pending = fn.apply(ctx, arguments);
+    pending.then(clear, clear);
+    return pending;
+  }
+}
+
+function performSearch (element) {
+  var searchResultsSelector = '[data-content="statements-search-results"]'
+  $(searchResultsSelector).html('')
+  return $.get('/explore', $(element).closest('form').serialize())
+    .then(function (html) {
+      $(searchResultsSelector).html(
+        $(html).find(searchResultsSelector).html() || 'No statements found'
+      )
+    })
+}
+
+var queueSearch = debounce(performSearch)
+
+$(document).on('change', 'select.js-auto-submit', function() {
+  queueSearch(this)
+})
+
+$(document).on('keyup', 'input.js-auto-submit', function() {
+  queueSearch(this)
 })
 </script>
