@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524120753) do
+ActiveRecord::Schema.define(version: 20170527153854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,9 @@ ActiveRecord::Schema.define(version: 20170524120753) do
     t.integer  "verified_by_id"
     t.boolean  "published"
     t.string   "contributor_email"
+    t.string   "content_type"
+    t.binary   "content_data"
+    t.integer  "content_length"
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree
     t.index ["published"], name: "index_statements_on_published", using: :btree
     t.index ["verified_by_id"], name: "index_statements_on_verified_by_id", using: :btree

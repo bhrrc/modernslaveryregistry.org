@@ -49,11 +49,6 @@ RSpec.describe Statement, type: :model do
     expect(statements).to eq([@c2016])
   end
 
-  it 'is searchable by company name' do
-    statements = Statement.joins(:company).where('LOWER(name) LIKE LOWER(?)', '%ucumber%')
-    expect(statements).to eq([@c2016, @c2017])
-  end
-
   it 'is searchable by company name and published status' do
     statements = Statement.published.includes(:company)
                           .joins(:company).where('LOWER(name) LIKE LOWER(?)', '%ucumber%')

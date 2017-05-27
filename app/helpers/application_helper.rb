@@ -24,6 +24,18 @@ module ApplicationHelper
     content_tag :span, text, class: "tag #{css_class}"
   end
 
+  def content_type_tag(content_type)
+    if content_type.nil?
+      content_tag :span, 'Unknown', class: 'tag is-light'
+    elsif content_type =~ /html/
+      content_tag :span, 'HTML', class: 'tag is-success'
+    elsif content_type =~ /pdf/
+      content_tag :span, 'PDF', class: 'tag is-warning'
+    else
+      content_tag :span, content_type, class: 'tag is-danger'
+    end
+  end
+
   def admin?
     current_user && current_user.admin?
   end

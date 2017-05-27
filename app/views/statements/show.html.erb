@@ -4,17 +4,19 @@
   <div class="section">
     <div class="columns">
       <div class="column">
-        <h1 class="title is-3 is-marginless"><%= link_to @statement.company.name, @statement.company, {'data-content': "company-name"} %></h2>
-        <h3 class="title is-3 is-marginless">
-          <span class="tag is-dark-navy"><%= @statement.country_name %></span>
-          <span class="tag is-dark-navy"><%= @statement.sector_name %></span>
-        </h3>
-        <h3 class="title is-5">
+        <h1 class="title is-marginless">
+          <%= link_to @statement.company.name, @statement.company, {'data-content': "company-name"} %>
+        </h1>
+        <ul class="tags">
+          <li class="tag is-dark-navy"><%= @statement.country_name %></li>
+          <li class="tag is-dark-navy"><%= @statement.sector_name %></li>
+        </ul>
+        <p class="date-added">
           <% if @statement.broken_url && admin? %>
             <%= image_tag('broken-link.png', size: '24') %>
           <% end %>
           Date added: <%= @statement.date_seen.strftime('%d %B %Y') %>
-        </h3>
+        </p>
         <% if admin? %>
           <%= link_to('Edit', edit_company_path(@statement.company)) %>
           <br>
@@ -77,6 +79,22 @@
             </div>
             <div class="column">
               <%= yes_no(@statement.link_on_front_page) %>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <span class="label">Content Type</span>
+            </div>
+            <div class="column">
+              <%= content_type_tag @statement.content_type %>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <span class="label">Latest snapshot</span>
+            </div>
+            <div class="column">
+              <%= link_to 'Download', company_statement_snapshot_path(@statement.company, @statement) %>
             </div>
           </div>
         </div>

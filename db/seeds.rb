@@ -17,52 +17,57 @@ ActiveRecord::Base.transaction do
 end
 
 admin = ENV['SEED_ADMIN_EMAIL'] ? User.find_by_email!(ENV['SEED_ADMIN_EMAIL']) :
-  User.where(email: 'admin@test.com').first_or_create(password: 'password', confirmed_at: Time.zone.now, admin: true)
+  User.where(email: 'admin@test.com').first_or_create!(
+    password: 'password',
+    confirmed_at: Time.zone.now,
+    admin: true,
+    first_name: 'Adam'
+  )
 
 filename = ARGV[0]
 puts 'Importing statements...'
 stms = []
-ActiveRecord::Base.transaction do
-  CSV.foreach(File.dirname(__FILE__) + '/statements.csv', headers: true) do |row|
-    country_name = row['country_name'].strip
-    country = Country.find_by_name!(country_name)
 
-    sector_params = { name: row['new_sector_name'].strip }
-    sector = sector_params[:name] ? Sector.find_or_create_by!(sector_params) : nil
+CSV.foreach(File.dirname(__FILE__) + '/statements.csv', headers: true) do |row|
+  country_name = row['country_name'].strip
+  country = Country.find_by_name!(country_name)
 
-    company_params = {
-      name: row['company_name'].strip,
-      country: country,
-      sector: sector
-    }
-    company = Company.find_or_create_by!(company_params)
+  sector_params = { name: row['new_sector_name'].strip }
+  sector = sector_params[:name] ? Sector.find_or_create_by!(sector_params) : nil
 
-    statement_params = {
-      url: row['statement_url'].strip.delete("^\u{0000}-\u{007F}"),
-      date_seen: row['date_seen'],
-      approved_by_board: row['approved_by_board'],
-      approved_by: row['approved_by'],
-      signed_by_director: !!(row['signed_by_director'] =~ /yes/i),
-      signed_by: row['signed_by'],
-      link_on_front_page: !!(row['link_on_front_page'] =~ /yes/i),
-      company: company,
-      verified_by: admin,
-      contributor_email: admin.email,
-      published: true
-    }
-    begin
-      statement = Statement.find_or_create_by!(statement_params)
-      if statement.broken_url
-        STDERR.write 'X'
-      else
-        STDERR.write URI(statement.url).scheme == 'https' ? '.' : '!'
-      end
-    rescue => e
-      puts statement_params.inspect
-      raise e
+  company_params = {
+    name: row['company_name'].strip,
+    country: country,
+    sector: sector
+  }
+  company = Company.find_or_create_by!(company_params)
+
+  statement_params = {
+    url: row['statement_url'].strip.delete("^\u{0000}-\u{007F}"),
+    date_seen: row['date_seen'],
+    approved_by_board: row['approved_by_board'],
+    approved_by: row['approved_by'],
+    signed_by_director: !!(row['signed_by_director'] =~ /yes/i),
+    signed_by: row['signed_by'],
+    link_on_front_page: !!(row['link_on_front_page'] =~ /yes/i),
+    company: company,
+    verified_by: admin,
+    contributor_email: admin.email,
+    published: true
+  }
+  begin
+    statement = Statement.find_or_create_by!(statement_params)
+    if statement.broken_url
+      STDERR.write 'X'
+    else
+      STDERR.write URI(statement.url).scheme == 'https' ? '.' : '!'
     end
+  rescue => e
+    puts statement_params.inspect
+    raise e
   end
 end
+
 
 Page.where(
   slug: 'about_us',

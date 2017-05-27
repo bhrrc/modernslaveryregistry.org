@@ -96,18 +96,13 @@ class Statement < ApplicationRecord
     company.name
   end
 
-  before_save :auto_update_url! unless ENV['no_verify_statement_urls']
+  before_save :fetch_statement_from_url! unless ENV['no_fetch']
 
   def set_date_seen
     self.date_seen ||= Time.zone.today
   end
 
-  # Tries to set the URL to https if possible - even if it was entered as http.
-  # This is not only more secure, but it allows the site to display the statement
-  # inside an iframe. Most browsers will block non-https iframes on an https site.
-  def auto_update_url!
-    check = StatementUrlCheck.new(url)
-    self.url = check.url
-    self.broken_url = check.broken?
+  def fetch_statement_from_url!
+    assign_attributes StatementUrl.fetch(url).to_h
   end
 end
