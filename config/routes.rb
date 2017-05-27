@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   resources :countries
   resources :companies do
     get :new_statement, on: :collection, as: 'new_company_statement'
-    resources :statements
+    resources :statements do
+      resource :snapshot, only: :show
+    end
   end
 
   namespace :admin do

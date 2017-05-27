@@ -189,7 +189,7 @@ $nav-height: 6.25rem !default
 @import "bulma"
 
 .is-dark-navy
-  color: $white !important
+  color: $white
   background-color: $dark-navy
 
   .title
@@ -197,6 +197,9 @@ $nav-height: 6.25rem !default
 
   .subtitle
     color: $white !important
+
+  .box
+    color: $dark-navy
 
   =input
     +control
@@ -258,3 +261,14 @@ $nav-height: 6.25rem !default
 
 trix-toolbar .button_group button.icon, trix-toolbar .button_group input[type=button].icon
   display: initial
+
+.tags
+  margin-top: 10px
+  .tag
+    margin-right: 10px
+    margin-bottom: 10px
+
+#error_explanation
+  margin-bottom: 20px
+  h2
+    color: $red

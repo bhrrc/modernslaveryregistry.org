@@ -1,21 +1,37 @@
-class StatementUrlCheck
+# Tries to set the URL to https if possible - even if it was entered as http.
+# This is not only more secure, but it allows the site to display the statement
+# inside an iframe. Most browsers will block non-https iframes on an https site.
+
+class StatementUrl
   def initialize(url)
     @url = url
+  end
+
+  def self.fetch(url)
+    new(url).fetch
+  end
+
+  def fetch
+    visit_unless_broken
+    FetchResult.with(
+      url: @url,
+      broken_url: @broken_url,
+      content_type: @content_type,
+      content_length: @content_length,
+      content_data: @content_data
+    )
+  end
+
+  private
+
+  def visit_unless_broken
     uri = try_to_parse(@url)
     if uri.nil?
-      @broken = true
+      @broken_url = true
       return
     end
     visit_uri uri
   end
-
-  def broken?
-    @broken
-  end
-
-  attr_reader :url
-
-  private
 
   def try_to_parse(url)
     URI(url)
@@ -33,15 +49,18 @@ class StatementUrlCheck
       # establish whether or not the url should be http or https.
       # It's more likely that http works than https.
       @url = uri.to_s
-      @broken = true
+      @broken_url = true
     end
   end
 
   def try_to_open_with_scheme(uri, scheme)
     uri.scheme = scheme
-    try_to_open uri
+    response = try_to_open uri
     @url = uri.to_s
-    @broken = false
+    @broken_url = false
+    @content_data = response.read
+    @content_type = response.meta['content-type']
+    @content_length = response.meta['content-length']
   end
 
   def try_to_open(uri)

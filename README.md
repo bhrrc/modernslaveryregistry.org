@@ -44,7 +44,7 @@ an admin:
 Then seed the database. To disable (slow) verification of statement URLs,
 set `no_verify_statement_urls=true`:
 
-    SEED_ADMIN_EMAIL=someone@somewhere.com no_verify_statement_urls=true rails db:seed
+    SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
 
 For production you should use:
 
