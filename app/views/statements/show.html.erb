@@ -86,7 +86,7 @@
               <span class="label">Content Type</span>
             </div>
             <div class="column">
-              <%= content_type_tag @statement.content_type %>
+              <%= content_type_tag(@statement.snapshot && @statement.snapshot.content_type) %>
             </div>
           </div>
           <div class="columns">

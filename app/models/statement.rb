@@ -10,6 +10,7 @@ class Statement < ApplicationRecord
   belongs_to :company, optional: true
 
   belongs_to :verified_by, class_name: 'User', optional: true
+  has_one :snapshot
 
   validates :url, presence: true
   validates :link_on_front_page, inclusion: { in: [true, false] }, if: :verified?
@@ -103,6 +104,17 @@ class Statement < ApplicationRecord
   end
 
   def fetch_statement_from_url!
-    assign_attributes StatementUrl.fetch(url).to_h
+    fetch_result = StatementUrl.fetch(url)
+    self.url = fetch_result.url
+    self.broken_url = fetch_result.broken_url
+    build_snapshot_from_result(fetch_result) unless broken_url
+  end
+
+  def build_snapshot_from_result(fetch_result)
+    self.snapshot = Snapshot.new(
+      content_type: fetch_result.content_type,
+      content_length: fetch_result.content_length,
+      content_data: fetch_result.content_data
+    )
   end
 end
