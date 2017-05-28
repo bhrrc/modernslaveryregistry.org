@@ -47,9 +47,9 @@ gem 'devise'
 gem 'imgkit'
 gem 'pundit'
 gem 'trix'
+gem 'values'
 gem 'webshot'
 gem 'wkhtmltoimage-binary'
-gem 'values'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
