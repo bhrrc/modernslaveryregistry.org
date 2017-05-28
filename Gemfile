@@ -46,6 +46,7 @@ gem 'leaflet-rails'
 gem 'devise'
 gem 'pundit'
 gem 'trix'
+gem 'webshot'
 gem 'values'
 
 group :development, :test do
