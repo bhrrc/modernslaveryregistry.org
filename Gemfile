@@ -77,8 +77,8 @@ group :test do
 end
 
 group :production do
+  gem 'wkhtmltoimage-binary'
   gem 'imgkit'
-  gem 'wkhtmltopdf-heroku'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
