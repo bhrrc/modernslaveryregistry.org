@@ -44,9 +44,11 @@ gem 'chosen-rails'
 gem 'leaflet-rails'
 
 gem 'devise'
+gem 'imgkit'
 gem 'pundit'
 gem 'trix'
 gem 'webshot'
+gem 'wkhtmltoimage-binary'
 gem 'values'
 
 group :development, :test do
@@ -74,11 +76,6 @@ group :test do
   gem 'selenium-webdriver' # brew install geckodriver
   gem 'vcr'
   gem 'webmock'
-end
-
-group :production do
-  gem 'wkhtmltoimage-binary'
-  gem 'imgkit'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
