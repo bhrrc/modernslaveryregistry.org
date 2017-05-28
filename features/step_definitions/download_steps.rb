@@ -17,6 +17,19 @@ Then(/^(Joe|Patricia) should see all the published statements$/) do |actor|
   expect(actor.to_see(DownloadedStatements.all)).to match_array(expected_downloads)
 end
 
+Then(/^(Joe|Patricia) should see all the statements including drafts$/) do |actor|
+  expected_downloads = Statement.all.map do |statement|
+    DownloadedStatement.with(
+      company_name: statement.company.name,
+      company_url: statement.url,
+      sector_name: statement.company.sector.name,
+      country_name: statement.company.country.name,
+      date_seen: statement.date_seen.iso8601
+    )
+  end
+  expect(actor.to_see(DownloadedStatements.all)).to match_array(expected_downloads)
+end
+
 class DownloadStatements < Fellini::Task
   include Rails.application.routes.url_helpers
 

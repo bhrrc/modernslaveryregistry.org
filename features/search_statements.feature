@@ -20,6 +20,11 @@ Feature: Search statements
     When Joe searches for "cucumber"
     Then Joe should only see "Cucumber Ltd" in the search results
 
-  Scenario: Download statements when not signed in as admin
+  Scenario: Download statements when not logged in as admin
     When Patricia downloads all statements
     Then Patricia should see all the published statements
+
+  Scenario: Download statements when logged in as admin
+    Given Patricia is logged in
+    When Patricia downloads all statements
+    Then Patricia should see all the statements including drafts
