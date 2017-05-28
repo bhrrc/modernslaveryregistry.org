@@ -40,6 +40,7 @@ class CompaniesController < ApplicationController
 
   def show
     @company = Company.find(params[:id])
+    @statements = @company.statements.order('date_seen DESC')
     @new_statement = Statement.new(company: @company)
   end
 

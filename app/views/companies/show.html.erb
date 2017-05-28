@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @company.statements.each do |statement| %>
+        <% @statements.each do |statement| %>
           <tr data-content="statement">
             <td><%= link_to(statement.date_seen, [@company, statement], {'data-content': 'date_seen'}) %></td>
             <% if admin? %>

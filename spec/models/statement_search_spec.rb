@@ -58,7 +58,7 @@ RSpec.describe Statement, type: :model do
   it 'is filterable by company sector' do
     statements = Statement.includes(:company)
                           .joins(:company).where(companies: { sector_id: @sw.id })
-    expect(statements).to eq([@c2016, @c2017])
+    expect(statements).to match_array([@c2016, @c2017])
   end
 
   it 'is filterable by company sector and published status' do

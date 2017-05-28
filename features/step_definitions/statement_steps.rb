@@ -1,4 +1,4 @@
-Given(/^the following statements have been submitted:$/) do |table|
+Given(/^the following statements have been submitted:$/) do |table| # rubocop:disable Metrics/BlockLength
   table.hashes.each do |props|
     sector = Sector.find_by!(name: props['sector'] || 'Software')
     country = Country.find_by!(name: props['country'] || 'United Kingdom')
@@ -23,6 +23,7 @@ Given(/^the following statements have been submitted:$/) do |table|
       link_on_front_page: 'No',
       contributor_email: props['contributor_email'],
       verified_by: verified_by_user,
+      date_seen: props['date_seen'] || '2017-01-01',
       published: !verified_by_user.nil?
     )
   end
@@ -76,8 +77,16 @@ When(/^(Joe|Patricia) updates the statement for "([^"]*)" to:$/) do |actor, comp
     .with_new_values(table))
 end
 
+When(/^(Joe|Patricia) finds all statements by "([^"]*)"$/) do |actor, company_name|
+  actor.attempts_to(FindAllStatementsByCompany.for_company(company_name))
+end
+
 Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
   expect(actor.to_see(TheListedStatements.for_company(company_name)).length).to eq(statement_count.to_i)
+end
+
+Then(/^(Joe|Patricia) should see the following statements:$/) do |actor, table|
+  expect(actor.to_see(TheStatementsByCompany.all).map(&:date_seen)).to eq(table.hashes.map { |row| row['date_seen'] })
 end
 
 Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
@@ -228,6 +237,25 @@ class UpdateStatement < Fellini::Task
   end
 end
 
+class FindAllStatementsByCompany < Fellini::Task
+  include Rails.application.routes.url_helpers
+
+  def perform_as(actor)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+
+    company = Company.find_by(name: @company_name)
+    browser.visit(company_path(company))
+  end
+
+  def self.for_company(company_name)
+    new(company_name)
+  end
+
+  def initialize(company_name)
+    @company_name = company_name
+  end
+end
+
 class TheNewestStatement < Fellini::Question
   include Fellini::Capybara::DomStruct
   include Rails.application.routes.url_helpers
@@ -275,5 +303,18 @@ class TheListedStatements < Fellini::Question
     new([:date_seen]) do |browser|
       browser.visit(company_path(Company.find_by!(name: company_name)))
     end
+  end
+end
+
+class TheStatementsByCompany < Fellini::Question
+  include Fellini::Capybara::DomStruct
+
+  def answered_by(actor)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+    structs(browser, :statement, :date_seen)
+  end
+
+  def self.all
+    new
   end
 end
