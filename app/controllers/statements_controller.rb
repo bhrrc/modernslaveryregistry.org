@@ -25,10 +25,11 @@ class StatementsController < ApplicationController
     @company = company_from_params
     @statement = @company.statements.build(statement_params)
     @statement.associate_with_user current_user
+
     if @statement.save
       redirect_to [@company, @statement]
     else
-      render 'companies/show'
+      render 'new'
     end
   end
 

@@ -117,6 +117,10 @@ Then(/^(Joe|Patricia) should see that no statement for "([^"]*)" exists$/) do |a
   expect(actor.to_see(TheNewestStatement.for_company(company_name))).to be_nil
 end
 
+Then(/^(Joe|Patricia) should see that the statement was invalid and not saved$/) do |actor|
+  expect(actor.to_see(ValidationErrors.bullet_points)).to eq(["Statements url can't be blank"])
+end
+
 class SubmitStatement < Fellini::Task
   include Rails.application.routes.url_helpers
 
@@ -342,6 +346,19 @@ class TheStatementsByCompany < Fellini::Question
   end
 
   def self.all
+    new
+  end
+end
+
+class ValidationErrors < Fellini::Question
+  include Fellini::Capybara::DomStruct
+
+  def answered_by(actor)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+    structs(browser, :validation_errors, :validation_error).map(&:validation_error)
+  end
+
+  def self.bullet_points
     new
   end
 end
