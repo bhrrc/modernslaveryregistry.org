@@ -101,3 +101,9 @@ VCR.configure do |config|
   config.cassette_library_dir = 'fixtures/vcr_cassettes'
   config.hook_into :webmock
 end
+
+class ScreenGrab
+  def self.fetch(_url)
+    raise 'ScreenGrab disabled in specs!'
+  end
+end

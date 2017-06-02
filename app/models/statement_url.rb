@@ -17,7 +17,6 @@ class StatementUrl
       url: @url,
       broken_url: @broken_url,
       content_type: @content_type,
-      content_length: @content_length,
       content_data: @content_data
     )
   end
@@ -60,7 +59,6 @@ class StatementUrl
     @broken_url = false
     @content_data = response.read
     @content_type = response.meta['content-type']
-    @content_length = response.meta['content-length']
   end
 
   def try_to_open(uri)

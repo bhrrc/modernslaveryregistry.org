@@ -1,31 +1,6 @@
-Given(/^the following statements have been submitted:$/) do |table| # rubocop:disable Metrics/BlockLength
+Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
-    sector = Sector.find_by!(name: props['sector'] || 'Software')
-    country = Country.find_by!(name: props['country'] || 'United Kingdom')
-    company = Company.find_or_create_by!(
-      name: props['company_name'],
-      sector_id: sector.id,
-      country_id: country.id
-    )
-
-    verified_by_user = nil
-    if props['verified_by'].present?
-      verified_by_user = User.where(
-        first_name: props['verified_by'],
-        email: "#{props['verified_by']}@host.com"
-      ).first_or_create(password: 'whatevs')
-    end
-
-    company.statements.create!(
-      url: props['statement_url'],
-      signed_by_director: 'No',
-      approved_by_board: 'Not explicit',
-      link_on_front_page: 'No',
-      contributor_email: props['contributor_email'],
-      verified_by: verified_by_user,
-      date_seen: props['date_seen'] || '2017-01-01',
-      published: !verified_by_user.nil?
-    )
+    submit_statement props
   end
 end
 

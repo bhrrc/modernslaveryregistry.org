@@ -2,6 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Statement, type: :model do
   before do
+    allow(ScreenGrab).to receive(:fetch) do |url|
+      FetchResult.with(
+        url: url,
+        broken_url: false,
+        content_type: 'image/png',
+        content_data: 'image data!'
+      )
+    end
     @sw = Sector.create! name: 'Software'
     @gb = Country.create! code: 'GB', name: 'United Kingdom'
     @company = Company.create! name: 'Cucumber Ltd', country_id: @gb.id, sector_id: @sw.id
