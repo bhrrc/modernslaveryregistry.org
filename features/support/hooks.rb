@@ -13,8 +13,16 @@ Before do
       url: url,
       broken_url: false,
       content_type: 'text/html',
-      content_length: 8,
       content_data: '<html />'
+    )
+  end
+
+  allow(ScreenGrab).to receive(:fetch) do |url|
+    FetchResult.with(
+      url: url,
+      broken_url: false,
+      content_type: 'image/png',
+      content_data: 'image data!'
     )
   end
 end

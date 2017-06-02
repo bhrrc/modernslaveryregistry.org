@@ -49,7 +49,6 @@ gem 'pundit'
 gem 'rollbar'
 gem 'trix'
 gem 'values'
-gem 'webshot'
 gem 'wkhtmltoimage-binary'
 
 group :development, :test do

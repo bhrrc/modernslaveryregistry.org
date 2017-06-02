@@ -111,10 +111,12 @@ class Statement < ApplicationRecord
   end
 
   def build_snapshot_from_result(fetch_result)
+    image_fetch_result = fetch_result.content_type =~ /pdf/ ? nil : ScreenGrab.fetch(url)
     self.snapshot = Snapshot.new(
       content_type: fetch_result.content_type,
-      content_length: fetch_result.content_length,
-      content_data: fetch_result.content_data
+      content_data: fetch_result.content_data,
+      image_content_type: image_fetch_result && image_fetch_result.content_type,
+      image_content_data: image_fetch_result && image_fetch_result.content_data
     )
   end
 end
