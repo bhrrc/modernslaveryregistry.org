@@ -6,7 +6,7 @@ RSpec.describe Statement, type: :model do
       FetchResult.with(
         url: url,
         broken_url: false,
-        content_type: 'image/png',
+        content_type: 'image/jpeg',
         content_data: 'image data!'
       )
     end

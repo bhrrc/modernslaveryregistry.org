@@ -14,8 +14,8 @@ Given(/^a statement was submitted for "([^"]*)" that responds with a (PDF|HTML)$
       FetchResult.with(
         url: statement_url,
         broken_url: false,
-        content_type: 'image/png',
-        content_data: "image/png snapshot for statement by '#{company_name}'"
+        content_type: 'image/jpeg',
+        content_data: "image/jpeg snapshot for statement by '#{company_name}'"
       )
     )
   end
