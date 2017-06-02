@@ -39,6 +39,10 @@ class Statement < ApplicationRecord
     verified_by.present?
   end
 
+  def fully_compliant?
+    approved_by_board == 'Yes' && link_on_front_page? && signed_by_director?
+  end
+
   def country_name
     company.country.name
   rescue
