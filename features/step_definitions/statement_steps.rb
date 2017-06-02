@@ -72,9 +72,11 @@ When(/^(Joe|Patricia|Vicky) submits the following statement:$/) do |actor, table
 end
 
 When(/^(Joe|Patricia) updates the statement for "([^"]*)" to:$/) do |actor, company_name, table|
-  actor.attempts_to(UpdateStatement
-    .for_company(company_name)
-    .with_new_values(table))
+  actor.attempts_to(UpdateStatement.for_company(company_name).with_new_values(table))
+end
+
+When(/^(Joe|Patricia) deletes the statement for "([^"]*)"$/) do |actor, company_name|
+  actor.attempts_to(DeleteStatement.for_company(company_name))
 end
 
 When(/^(Joe|Patricia) finds all statements by "([^"]*)"$/) do |actor, company_name|
@@ -109,6 +111,10 @@ end
 
 Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was not verified$/) do |actor, company_name|
   expect(actor.to_see(TheNewestStatement.for_company(company_name)).verified_by).to eq(nil)
+end
+
+Then(/^(Joe|Patricia) should see that no statement for "([^"]*)" exists$/) do |actor, company_name|
+  expect(actor.to_see(TheNewestStatement.for_company(company_name))).to be_nil
 end
 
 class SubmitStatement < Fellini::Task
@@ -256,6 +262,26 @@ class FindAllStatementsByCompany < Fellini::Task
   end
 end
 
+class DeleteStatement < Fellini::Task
+  include Rails.application.routes.url_helpers
+
+  def perform_as(actor)
+    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+
+    company = Company.find_by(name: @company_name)
+    browser.visit(company_statement_path(company, company.newest_statement))
+    browser.click_on 'Delete'
+  end
+
+  def self.for_company(company_name)
+    new(company_name)
+  end
+
+  def initialize(company_name)
+    @company_name = company_name
+  end
+end
+
 class TheNewestStatement < Fellini::Question
   include Fellini::Capybara::DomStruct
   include Rails.application.routes.url_helpers
@@ -264,6 +290,7 @@ class TheNewestStatement < Fellini::Question
     browser = Fellini::Abilities::BrowseTheWeb.as(actor)
 
     company = Company.find_by(name: @company_name)
+    return nil if company.newest_statement.nil?
     browser.visit(company_statement_path(company, company.newest_statement))
 
     struct(browser, :statement, :verified_by, :contributor_email, :published)

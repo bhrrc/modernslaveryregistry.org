@@ -39,3 +39,12 @@ Feature: Publish statement
     Then Patricia should see that the newest statement for "Cucumber Ltd" is not published
     And Patricia should see that the newest statement for "Cucumber Ltd" was not verified
     And Patricia should see that the newest statement for "Cucumber Ltd" was contributed by vicky@host.com
+
+  Scenario: Admin deletes a statement
+    When Vicky submits the following statement:
+      | company_name       | Cucumber Ltd                               |
+      | url                | https://cucumber.io/anti-slavery-statement |
+      | contributor_email  | vicky@host.com                             |
+    Given Patricia is logged in
+    When Patricia deletes the statement for "Cucumber Ltd"
+    Then Patricia should see that no statement for "Cucumber Ltd" exists

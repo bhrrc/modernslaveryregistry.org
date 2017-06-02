@@ -16,8 +16,7 @@ class StatementsController < ApplicationController
       render status: :forbidden, text: "Sorry, can't do that"
       return
     end
-    statements = admin? ? Statement : Statement.published
-    statement = statements.destroy(params[:id])
+    statement = Statement.destroy(params[:id])
     flash[:notice] = "Deleted statement for #{statement.company.name}"
     redirect_to root_path
   end
