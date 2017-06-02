@@ -3,9 +3,9 @@
     <div class="notification is-danger">
       <h2><%= pluralize(company.errors.count, "error") %> prohibited this statement from being saved:</h2>
 
-      <ul>
+      <ul data-content="validation_errors">
       <% company.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+        <li data-content="validation_error"><%= msg %></li>
       <% end %>
       </ul>
     </div>

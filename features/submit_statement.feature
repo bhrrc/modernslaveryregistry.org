@@ -34,3 +34,9 @@ Feature: Submit statement
     When Patricia updates the statement for "Cucumber Ltd" to:
       | company_name       | Cucumber Limited                           |
     Then Patricia should see 1 statement for "Cucumber Limited"
+
+  Scenario: Submit statement with missing details
+    Given Patricia is logged in
+    When Patricia submits the following statement:
+      | company_name       | Cucumber Ltd                               |
+    Then Patricia should see that the statement was invalid and not saved
