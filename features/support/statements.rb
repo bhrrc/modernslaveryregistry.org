@@ -25,9 +25,9 @@ module Statements
   def create_statement(company, verifier, props)
     company.statements.create!(
       url: props.fetch('statement_url'),
-      signed_by_director: 'No',
-      approved_by_board: 'Not explicit',
-      link_on_front_page: 'No',
+      signed_by_director: props['signed_by_director'] == 'Yes',
+      approved_by_board: props['approved_by_board'] || 'Not explicit',
+      link_on_front_page: props['link_on_front_page'] == 'Yes',
       contributor_email: props['contributor_email'],
       verified_by: verifier,
       date_seen: props['date_seen'] || '2017-01-01',

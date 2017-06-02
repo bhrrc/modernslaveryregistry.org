@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    root 'dashboard#show'
+    root 'dashboard#show', as: :dashboard
     resources :pages
   end
 

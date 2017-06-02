@@ -4,8 +4,50 @@
   <div class="section">
     <h1 class="title">Admin</h1>
 
-    <p>
+    <div>
       <%= link_to 'Pages', [:admin, :pages] %>
-    </p>
+    </div>
+  </div>
+
+  <div class="section content box">
+
+    <h2 class="title">Compliance Stats</h2>
+
+    <table data-content="minimum_compliance_requirements_stats">
+      <tbody>
+        <tr>
+          <td>
+            Link on front page
+          </td>
+          <td data-content="percent_link_on_front_page">
+            <%= ((@stats[:link_on_front_page].to_f / @total.to_f) * 100).to_i %>%
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Signed by director
+          </td>
+          <td data-content="percent_signed_by_director">
+            <%= ((@stats[:signed_by_director].to_f / @total.to_f) * 100).to_i %>%
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Approved by board
+          </td>
+          <td data-content="percent_approved_by_board">
+            <%= ((@stats[:approved_by_board].to_f / @total.to_f) * 100).to_i %>%
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Yes to all minimum compliance questions
+          </td>
+          <td data-content="percent_fully_compliant">
+            <%= ((@stats[:fully_compliant].to_f / @total.to_f) * 100).to_i %>%
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
