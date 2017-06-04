@@ -1,31 +1,23 @@
 When(/^(Joe|Patricia) views the compliance stats$/) do |actor|
-  actor.attempts_to(ViewStats.minimum_compliance_requirements)
+  actor.attempts_to_view_minimum_compliance_requirements_stats
 end
 
 Then(/^(Joe|Patricia) should see the following stats:$/) do |actor, table|
-  expect(actor.to_see(TheVisibleStats.minimum_compliance_requirements).to_h).to eq(table.rows_hash.symbolize_keys)
+  expect(actor.visible_minimum_compliance_requirements_stats.to_h).to eq(table.rows_hash.symbolize_keys)
 end
 
-class ViewStats < Fellini::Task
-  include Rails.application.routes.url_helpers
-
-  def perform_as(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.visit(admin_dashboard_path)
-  end
-
-  def self.minimum_compliance_requirements
-    instrumented(self)
+module AttemptsToViewStats
+  def attempts_to_view_minimum_compliance_requirements_stats
+    visit(admin_dashboard_path)
   end
 end
 
-class TheVisibleStats < Fellini::Question
+module SeesStats
   include Fellini::Capybara::DomStruct
 
-  def answered_by(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
+  def visible_minimum_compliance_requirements_stats
     struct(
-      browser,
+      self,
       :minimum_compliance_requirements_stats,
       :percent_link_on_front_page,
       :percent_signed_by_director,
@@ -33,8 +25,9 @@ class TheVisibleStats < Fellini::Question
       :percent_fully_compliant
     )
   end
+end
 
-  def self.minimum_compliance_requirements
-    new
-  end
+class Administrator
+  include AttemptsToViewStats
+  include SeesStats
 end

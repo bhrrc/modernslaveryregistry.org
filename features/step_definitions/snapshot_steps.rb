@@ -24,42 +24,30 @@ Given(/^a statement was submitted for "([^"]*)" that responds with a (PDF|HTML)$
 end
 
 When(/^(Joe|Patricia) views the latest snapshot of the statement for "([^"]*)"$/) do |actor, company_name|
-  actor.attempts_to(ViewLatestSnapshot.for_company(company_name))
+  actor.attempts_to_view_the_latest_snapshot(company_name: company_name)
 end
 
 Then(/^(Joe|Patricia) should see a (PDF|PNG) snapshot of the statement for "([^"]*)"$/) do |actor, format, company_name|
-  expect(actor.to_see(TheVisibleSnapshot.snapshot)).to eq("#{format.content_type} snapshot for statement by '#{company_name}'")
+  expect(actor.visible_snapshot).to eq("#{format.content_type} snapshot for statement by '#{company_name}'")
 end
 
-class ViewLatestSnapshot < Fellini::Task
-  include Rails.application.routes.url_helpers
-
-  def perform_as(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-
-    company = Company.find_by(name: @company_name)
-    browser.visit(company_statement_path(company, company.newest_statement))
-    browser.within '[data-content="latest_shapshot"]' do
-      browser.click_on 'Download'
+module AttemptsToViewTheLatestSnapshot
+  def attempts_to_view_the_latest_snapshot(company_name:)
+    company = Company.find_by(name: company_name)
+    visit(company_statement_path(company, company.newest_statement))
+    within '[data-content="latest_shapshot"]' do
+      click_on 'Download'
     end
   end
+end
 
-  def self.for_company(company_name)
-    new(company_name)
-  end
-
-  def initialize(company_name)
-    @company_name = company_name
+module SeesTheSnapshot
+  def visible_snapshot
+    text
   end
 end
 
-class TheVisibleSnapshot < Fellini::Question
-  def answered_by(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.text
-  end
-
-  def self.snapshot
-    new
-  end
+class Administrator
+  include AttemptsToViewTheLatestSnapshot
+  include SeesTheSnapshot
 end

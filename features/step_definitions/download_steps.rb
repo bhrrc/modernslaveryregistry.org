@@ -1,7 +1,5 @@
 When(/^(Joe|Patricia) downloads all statements$/) do |actor|
-  actor.attempts_to(
-    DownloadStatements.all
-  )
+  actor.attempts_to_download_all_statements
 end
 
 Then(/^(Joe|Patricia) should see all the published statements$/) do |actor|
@@ -14,7 +12,7 @@ Then(/^(Joe|Patricia) should see all the published statements$/) do |actor|
       date_seen: statement.date_seen.iso8601
     )
   end
-  expect(actor.to_see(DownloadedStatements.all)).to match_array(expected_downloads)
+  expect(actor.visible_downloaded_statements).to match_array(expected_downloads)
 end
 
 Then(/^(Joe|Patricia) should see all the statements including drafts$/) do |actor|
@@ -27,29 +25,19 @@ Then(/^(Joe|Patricia) should see all the statements including drafts$/) do |acto
       date_seen: statement.date_seen.iso8601
     )
   end
-  expect(actor.to_see(DownloadedStatements.all)).to match_array(expected_downloads)
+  expect(actor.visible_downloaded_statements).to match_array(expected_downloads)
 end
 
-class DownloadStatements < Fellini::Task
-  include Rails.application.routes.url_helpers
-
-  def perform_as(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.visit(root_path)
-    browser.click_link('Download statements')
-  end
-
-  def self.all
-    instrumented(self)
+module AttemptsToDownloadAllStatements
+  def attempts_to_download_all_statements
+    visit root_path
+    click_link 'Download statements'
   end
 end
 
-class DownloadedStatements < Fellini::Question
-  include Rails.application.routes.url_helpers
-
-  def answered_by(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    CSV.parse(browser.html, headers: true).map(&:to_h).map do |row|
+module SeesDownloadedStatements
+  def visible_downloaded_statements
+    CSV.parse(html, headers: true).map(&:to_h).map do |row|
       DownloadedStatement.with(
         company_name: row['Company'],
         company_url: row['URL'],
@@ -59,10 +47,11 @@ class DownloadedStatements < Fellini::Question
       )
     end
   end
+end
 
-  def self.all
-    new
-  end
+class Visitor
+  include AttemptsToDownloadAllStatements
+  include SeesDownloadedStatements
 end
 
 class DownloadedStatement < Value.new(
