@@ -165,20 +165,16 @@ module AttemptsToDeleteLatestStatementByCompany
 end
 
 module SeesTheNewestStatement
-  include Fellini::Capybara::DomStruct
-
   def visible_newest_statement_by_company(company_name:)
     company = Company.find_by(name: company_name)
     return nil if company.newest_statement.nil?
     visit company_statement_path(company, company.newest_statement)
 
-    struct(self, :statement, :verified_by, :contributor_email, :published)
+    dom_struct(:statement, :verified_by, :contributor_email, :published)
   end
 end
 
 module SeesTheListedStatements
-  include Fellini::Capybara::DomStruct
-
   def visible_listed_statements_from_search
     visible_listed_statements_structs %i[company_name sector country]
   end
@@ -195,15 +191,13 @@ module SeesTheListedStatements
   private
 
   def visible_listed_statements_structs(struct_fields)
-    structs(self, :statement, *struct_fields)
+    dom_structs(:statement, *struct_fields)
   end
 end
 
 module SeesValidationErrors
-  include Fellini::Capybara::DomStruct
-
   def visible_validation_error_summary
-    structs(self, :validation_errors, :validation_error).map(&:validation_error)
+    dom_structs(:validation_errors, :validation_error).map(&:validation_error)
   end
 end
 

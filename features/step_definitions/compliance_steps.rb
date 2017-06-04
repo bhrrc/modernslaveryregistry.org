@@ -13,11 +13,8 @@ module AttemptsToViewStats
 end
 
 module SeesStats
-  include Fellini::Capybara::DomStruct
-
   def visible_minimum_compliance_requirements_stats
-    struct(
-      self,
+    dom_struct(
       :minimum_compliance_requirements_stats,
       :percent_link_on_front_page,
       :percent_signed_by_director,

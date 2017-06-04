@@ -1,4 +1,10 @@
-require_relative './fellini'
+require_relative './dom_struct'
+
+# Implementation of the Screenplay pattern, inspired by:
+#
+# * https://www.infoq.com/articles/Beyond-Page-Objects-Test-Automation-Serenity-Screenplay
+# * http://serenity-js.org/
+# * https://github.com/serenity-bdd/serenity-core/tree/master/serenity-screenplay
 
 Before do
   @actors = {
@@ -11,6 +17,7 @@ end
 class Actor
   include Rails.application.routes.url_helpers
   include Capybara::DSL
+  include DomStruct
 
   def default_url_options
     Rails.application.routes.default_url_options
