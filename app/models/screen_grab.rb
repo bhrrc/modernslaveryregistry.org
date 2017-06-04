@@ -1,5 +1,6 @@
 class ScreenGrab
   def self.fetch(url)
+    Rails.logger.info "ScreenGrab: #{url}"
     kit = IMGKit.new(url)
     FetchResult.with(url: url, broken_url: false, content_data: kit.to_jpg, content_type: 'image/jpeg')
   rescue IMGKit::CommandFailedError

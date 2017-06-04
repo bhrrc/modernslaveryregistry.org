@@ -102,6 +102,8 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.3)
     erubis (2.7.0)
+    ethon (0.10.1)
+      ffi (>= 1.3.0)
     execjs (2.7.0)
     ffi (1.9.18)
     gherkin (4.1.3)
@@ -248,6 +250,8 @@ GEM
     tilt (2.0.7)
     trix (0.10.1)
       rails
+    typhoeus (1.1.2)
+      ethon (>= 0.9.0)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uglifier (3.2.0)
@@ -308,6 +312,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   trix
+  typhoeus
   tzinfo-data
   uglifier (>= 1.3.0)
   values

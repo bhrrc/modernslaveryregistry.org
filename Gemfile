@@ -48,6 +48,7 @@ gem 'imgkit'
 gem 'pundit'
 gem 'rollbar'
 gem 'trix'
+gem 'typhoeus'
 gem 'values'
 gem 'wkhtmltoimage-binary'
 
