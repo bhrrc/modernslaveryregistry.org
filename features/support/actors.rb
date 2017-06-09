@@ -1,9 +1,45 @@
+require_relative './dom_struct'
+
+# Implementation of the Screenplay pattern, inspired by:
+#
+# * https://www.infoq.com/articles/Beyond-Page-Objects-Test-Automation-Serenity-Screenplay
+# * http://serenity-js.org/
+# * https://github.com/serenity-bdd/serenity-core/tree/master/serenity-screenplay
+
 Before do
-  @actors = {}
+  @actors = {
+    'Joe'      => Administrator.named('Joe'),
+    'Patricia' => Administrator.named('Patricia'),
+    'Vicky'    => Visitor.new('Vicky')
+  }
+end
+
+class Actor
+  include Rails.application.routes.url_helpers
+  include Capybara::DSL
+  include DomStruct
+
+  def default_url_options
+    Rails.application.routes.default_url_options
+  end
+
+  attr_reader :name
+
+  def self.named(name)
+    new(name)
+  end
+
+  def initialize(name)
+    @name = name
+  end
+end
+
+class Visitor < Actor
+end
+
+class Administrator < Visitor
 end
 
 Transform(/^(Joe|Patricia|Vicky)$/) do |actor_name|
-  @actors[actor_name] ||= Fellini::Actor
-                          .named(actor_name)
-                          .who_can(Fellini::Abilities::BrowseTheWeb.new)
+  @actors[actor_name]
 end

@@ -8,66 +8,51 @@ end
 
 When(/^(Joe|Patricia|Vicky) logs in$/) do |actor|
   find_or_create_user(name: actor.name, admin: actor.name != 'Vicky')
-  actor.attempts_to(LogIn)
+  actor.attempts_to_log_in
 end
 
 When(/^(Joe|Patricia|Vicky) visits the administrator dashboard$/) do |actor|
-  actor.attempts_to(VisitAdminDashboard)
+  actor.attempts_to_visit_admin_dashboard
 end
 
 Then(/^(Joe|Patricia|Vicky) should see the administrator dashboard$/) do |actor|
-  expect(actor.to_see(VisibleArea)).to eq('Admin Dashboard')
+  expect(actor.visible_location_title).to eq('Admin Dashboard')
 end
 
 Then(/^(Joe|Patricia|Vicky) should not see the administrator dashboard$/) do |actor|
-  expect(actor.to_see(VisibleArea)).not_to eq('Admin Dashboard')
+  expect(actor.visible_location_title).not_to eq('Admin Dashboard')
 end
 
 Then(/^(Joe|Patricia|Vicky) should see the home page/) do |actor|
-  expect(actor.to_see(VisibleArea)).to eq('Modern Slavery Registry')
+  expect(actor.visible_location_title).to eq('Modern Slavery Registry')
 end
 
-class LogIn < Fellini::Task
-  include Rails.application.routes.url_helpers
-
-  def perform_as(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.visit new_user_session_path
-    browser.fill_in 'Email', with: "#{actor.name}@test.com"
-    browser.fill_in 'Password', with: 's3cr3t'
-    browser.click_on 'Log in'
-  end
-
-  def self.perform_as(actor)
-    new.perform_as(actor)
+module AttemptsToLogIn
+  def attempts_to_log_in
+    visit new_user_session_path
+    fill_in 'Email', with: "#{name}@test.com"
+    fill_in 'Password', with: 's3cr3t'
+    click_on 'Log in'
   end
 end
 
-class VisitAdminDashboard < Fellini::Task
-  include Rails.application.routes.url_helpers
-
-  def perform_as(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    begin
-      browser.visit admin_dashboard_path
-      true
-    rescue ActionController::RoutingError
-      false
-    end
-  end
-
-  def self.perform_as(actor)
-    new.perform_as(actor)
+module AttemptsToVisitAdminDashboard
+  def attempts_to_visit_admin_dashboard
+    visit admin_dashboard_path
+    true
+  rescue ActionController::RoutingError
+    false
   end
 end
 
-class VisibleArea < Fellini::Question
-  def answered_by(actor)
-    browser = Fellini::Abilities::BrowseTheWeb.as(actor)
-    browser.title && browser.title.strip.gsub(/\s+\|\s+Modern Slavery Registry/, '')
+module SeesLocationTitle
+  def visible_location_title
+    title && title.strip.gsub(/\s+\|\s+Modern Slavery Registry/, '')
   end
+end
 
-  def self.answered_by(actor)
-    new.answered_by(actor)
-  end
+class Visitor
+  include AttemptsToLogIn
+  include AttemptsToVisitAdminDashboard
+  include SeesLocationTitle
 end
