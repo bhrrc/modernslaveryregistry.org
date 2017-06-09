@@ -11,7 +11,7 @@ When(/^(Joe|Patricia|Vicky) logs in$/) do |actor|
   actor.attempts_to_log_in
 end
 
-When(/^(Joe|Patricia|Vicky) visits the administrator dashboard$/) do |actor|
+When(/^(Joe|Patricia|Vicky) visits the administrator dashboard$/) do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_visit_admin_dashboard
 end
 
