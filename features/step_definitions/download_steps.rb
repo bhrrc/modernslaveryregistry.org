@@ -1,4 +1,4 @@
-When(/^(Joe|Patricia) downloads all statements$/) do |actor|
+When(/^(Joe|Patricia) downloads all statements$/) do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_download_all_statements
 end
 

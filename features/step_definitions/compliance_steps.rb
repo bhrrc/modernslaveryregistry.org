@@ -1,4 +1,4 @@
-When(/^(Joe|Patricia) views the compliance stats$/) do |actor|
+When(/^(Joe|Patricia) views the compliance stats$/) do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_view_minimum_compliance_requirements_stats
 end
 
