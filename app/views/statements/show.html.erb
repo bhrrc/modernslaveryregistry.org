@@ -94,7 +94,7 @@
               <span class="label">Latest snapshot</span>
             </div>
             <div class="column" data-content="latest_shapshot">
-              <%= link_to 'Download', company_statement_snapshot_path(@statement.company, @statement) %>
+              <%= link_to 'Download', company_statement_snapshot_path(@statement.company, @statement), target: :_blank %>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@
         </div>
       </div>
     <% else %>
-      <%= link_to('Read statement', @statement.url, class: 'button is-primary') %>
+      <%= link_to('Read statement', @statement.url, class: 'button is-primary', target: :_blank) %>
     <% end %>
   </div>
 </div>
