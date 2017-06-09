@@ -44,6 +44,7 @@ gem 'chosen-rails'
 gem 'leaflet-rails'
 
 gem 'devise'
+gem 'rails-erd'
 gem 'imgkit'
 gem 'pundit'
 gem 'rollbar'
