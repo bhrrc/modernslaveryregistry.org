@@ -77,35 +77,71 @@ RSpec.describe Statement, type: :model do
     )
   end
 
-  context 'when the searcher is an admin' do
-    it 'finds latest statements ordered by company name' do
-      search = Statement.search(admin: true, criteria: {})
-      expect(search.statements).to eq([cucumber_2017, potato_2017])
+  describe '.search' do
+    context 'when the searcher is an admin' do
+      it 'finds latest statements ordered by company name' do
+        search = Statement.search(admin: true, criteria: {})
+        expect(search.statements).to eq([cucumber_2017, potato_2017])
+      end
+
+      it 'counts the statements' do
+        expect(Statement.search(admin: true, criteria: {}).stats).to eq(
+          statements: 2,
+          sectors: 2,
+          countries: 2
+        )
+        potato_2016.delete
+        expect(Statement.search(admin: true, criteria: {}).stats).to eq(
+          statements: 2,
+          sectors: 2,
+          countries: 2
+        )
+      end
     end
-  end
 
-  context 'when the searcher is not an admin' do
-    it 'finds latest published statements ordered by company name' do
-      search = Statement.search(admin: false, criteria: {})
-      expect(search.statements).to eq([cucumber_2016, potato_2016])
+    context 'when the searcher is not an admin' do
+      it 'finds latest published statements ordered by company name' do
+        search = Statement.search(admin: false, criteria: {})
+        expect(search.statements).to eq([cucumber_2016, potato_2016])
+      end
+
+      it 'counts the statements' do
+        expect(Statement.search(admin: false, criteria: {}).stats).to eq(
+          statements: 2,
+          sectors: 2,
+          countries: 2
+        )
+        potato.update!(sector: software)
+        expect(Statement.search(admin: false, criteria: {}).stats).to eq(
+          statements: 2,
+          sectors: 1,
+          countries: 2
+        )
+        potato_2016.delete
+        expect(Statement.search(admin: false, criteria: {}).stats).to eq(
+          statements: 1,
+          sectors: 1,
+          countries: 1
+        )
+      end
     end
-  end
 
-  it 'filters statements by company name' do
-    expect(Statement.search(admin: false, criteria: { company_name: 'cucum' }).statements).to eq([cucumber_2016])
-  end
+    it 'filters statements by company name' do
+      expect(Statement.search(admin: false, criteria: { company_name: 'cucum' }).statements).to eq([cucumber_2016])
+    end
 
-  it 'filters statements by countries' do
-    expect(Statement.search(admin: true, criteria: { countries: [no.id] }).statements).to eq([potato_2017])
-    expect(Statement.search(admin: false, criteria: { countries: [gb.id, no.id] }).statements).to eq(
-      [cucumber_2016, potato_2016]
-    )
-  end
+    it 'filters statements by countries' do
+      expect(Statement.search(admin: true, criteria: { countries: [no.id] }).statements).to eq([potato_2017])
+      expect(Statement.search(admin: false, criteria: { countries: [gb.id, no.id] }).statements).to eq(
+        [cucumber_2016, potato_2016]
+      )
+    end
 
-  it 'filters statements by company sectors' do
-    expect(Statement.search(admin: true, criteria: { sectors: [agriculture.id] }).statements).to eq([potato_2017])
-    expect(Statement.search(admin: false, criteria: { sectors: [agriculture.id, software.id] }).statements).to eq(
-      [cucumber_2016, potato_2016]
-    )
+    it 'filters statements by company sectors' do
+      expect(Statement.search(admin: true, criteria: { sectors: [agriculture.id] }).statements).to eq([potato_2017])
+      expect(Statement.search(admin: false, criteria: { sectors: [agriculture.id, software.id] }).statements).to eq(
+        [cucumber_2016, potato_2016]
+      )
+    end
   end
 end

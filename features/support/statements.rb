@@ -31,7 +31,7 @@ module Statements
       contributor_email: props['contributor_email'],
       verified_by: verifier,
       date_seen: props['date_seen'] || '2017-01-01',
-      published: verifier.present?
+      published: props['published'] == 'Yes' || verifier.present?
     )
   end
 end
