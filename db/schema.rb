@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602144706) do
+ActiveRecord::Schema.define(version: 20170610060421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,21 +62,25 @@ ActiveRecord::Schema.define(version: 20170602144706) do
   end
 
   create_table "statements", force: :cascade do |t|
-    t.integer  "company_id",         null: false
-    t.string   "url",                null: false
-    t.date     "date_seen",          null: false
+    t.integer  "company_id",                         null: false
+    t.string   "url",                                null: false
+    t.date     "date_seen",                          null: false
     t.string   "approved_by_board"
     t.string   "approved_by"
     t.boolean  "signed_by_director"
     t.string   "signed_by"
     t.boolean  "link_on_front_page"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.boolean  "broken_url"
     t.integer  "verified_by_id"
     t.boolean  "published"
     t.string   "contributor_email"
+    t.boolean  "latest",             default: false
+    t.boolean  "latest_published",   default: false
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree
+    t.index ["latest"], name: "index_statements_on_latest", where: "latest", using: :btree
+    t.index ["latest_published"], name: "index_statements_on_latest_published", where: "latest_published", using: :btree
     t.index ["published"], name: "index_statements_on_published", using: :btree
     t.index ["verified_by_id"], name: "index_statements_on_verified_by_id", using: :btree
   end

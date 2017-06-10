@@ -7,7 +7,15 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
-  def newest_statement
-    statements.newest.first
+  def latest_statement
+    statements.latest.first
+  end
+
+  def country_name
+    try(:country).try(:name) || 'Country unknown'
+  end
+
+  def sector_name
+    try(:sector).try(:name) || 'Sector unknown'
   end
 end

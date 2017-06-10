@@ -18,13 +18,16 @@ class Statement < ApplicationRecord
   validates :signed_by_director, inclusion: { in: [true, false] }, if: :verified?
 
   before_create :set_date_seen
+  after_save :mark_latest
+  after_save :mark_latest_published
 
-  scope(:newest, lambda {
-    select('DISTINCT ON (statements.company_id) statements.*')
-      .order(:company_id, date_seen: :desc)
-  })
+  scope(:latest, -> { where(latest: true) })
+  scope(:latest_published, -> { where(latest_published: true) })
 
   scope(:published, -> { where(published: true) })
+
+  delegate :country_name, to: :company
+  delegate :sector_name, to: :company
 
   def self.search(admin:, criteria:)
     StatementSearch.new(admin, criteria)
@@ -43,22 +46,8 @@ class Statement < ApplicationRecord
     approved_by_board == 'Yes' && link_on_front_page? && signed_by_director?
   end
 
-  def country_name
-    company.country.name
-  rescue
-    'Country unknown'
-  end
-
-  def sector_name
-    company.sector.name
-  rescue
-    'Sector unknown'
-  end
-
   def verified_by_email
-    verified_by.email
-  rescue
-    nil
+    try(:verified_by).try(:email)
   end
 
   def self.to_csv(statements, extra)
@@ -123,4 +112,17 @@ class Statement < ApplicationRecord
       image_content_data: image_fetch_result && image_fetch_result.content_data
     )
   end
+
+  # rubocop:disable Rails/SkipsModelValidations
+  def mark_latest
+    company.statements.update_all(latest: false)
+    company.statements.order(date_seen: :desc).limit(1).update_all(latest: true)
+  end
+
+  def mark_latest_published
+    return unless published?
+    company.statements.update_all(latest_published: false)
+    company.statements.published.order(date_seen: :desc).limit(1).update_all(latest_published: true)
+  end
+  # rubocop:enable Rails/SkipsModelValidations
 end

@@ -10,7 +10,7 @@ Feature: Search statements
   Scenario: Search by company name
     Given Joe is logged in
     When Joe searches for "cucumber"
-    Then Joe should only see "Cucumber Ltd, Cucumber Inc" in the search results
+    Then Joe should only see "Cucumber Inc, Cucumber Ltd" in the search results
 
   Scenario: Filter by sector
     When Joe selects sector "Agriculture"

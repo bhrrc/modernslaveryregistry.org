@@ -69,25 +69,25 @@ Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |acto
   expect(actor.visible_listed_statements_from_search.map(&:company_name)).to eq(company_names)
 end
 
-Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was verified by herself$/) do |actor, company_name|
-  expect(actor.visible_newest_statement_by_company(company_name: company_name).verified_by).to eq(actor.name)
+Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" was verified by herself$/) do |actor, company_name|
+  expect(actor.visible_latest_statement_by_company(company_name: company_name).verified_by).to eq(actor.name)
 end
 
-Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was contributed by (.*)$/) do |actor, company_name, contributor_email|
+Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" was contributed by (.*)$/) do |actor, company_name, contributor_email|
   contributor_email = User.find_by!(first_name: actor.name).email if contributor_email == 'herself'
-  expect(actor.visible_newest_statement_by_company(company_name: company_name).contributor_email).to eq(contributor_email)
+  expect(actor.visible_latest_statement_by_company(company_name: company_name).contributor_email).to eq(contributor_email)
 end
 
-Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" is not published$/) do |actor, company_name|
-  expect(actor.visible_newest_statement_by_company(company_name: company_name).published).to eq('Draft')
+Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" is not published$/) do |actor, company_name|
+  expect(actor.visible_latest_statement_by_company(company_name: company_name).published).to eq('Draft')
 end
 
-Then(/^(Joe|Patricia) should see that the newest statement for "([^"]*)" was not verified$/) do |actor, company_name|
-  expect(actor.visible_newest_statement_by_company(company_name: company_name).verified_by).to eq(nil)
+Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" was not verified$/) do |actor, company_name|
+  expect(actor.visible_latest_statement_by_company(company_name: company_name).verified_by).to eq(nil)
 end
 
 Then(/^(Joe|Patricia) should see that no statement for "([^"]*)" exists$/) do |actor, company_name|
-  expect(actor.visible_newest_statement_by_company(company_name: company_name)).to be_nil
+  expect(actor.visible_latest_statement_by_company(company_name: company_name)).to be_nil
 end
 
 Then(/^(Joe|Patricia) should see that the statement was invalid and not saved$/) do |actor|
@@ -140,7 +140,7 @@ end
 module AttemptsToUpdateStatement
   def attempts_to_update_statement(company_name:, new_values:)
     company = Company.find_by!(name: company_name)
-    visit company_statement_path(company, company.newest_statement)
+    visit company_statement_path(company, company.latest_statement)
     click_link 'Edit'
     fill_in('Company name', with: new_values.fetch('company_name'))
     click_button 'Submit'
@@ -159,16 +159,16 @@ module AttemptsToDeleteLatestStatementByCompany
 
   def attempts_to_delete_latest_statement_by_company(company_name:)
     company = Company.find_by(name: company_name)
-    visit company_statement_path(company, company.newest_statement)
+    visit company_statement_path(company, company.latest_statement)
     click_on 'Delete'
   end
 end
 
-module SeesTheNewestStatement
-  def visible_newest_statement_by_company(company_name:)
+module SeesTheLatestStatement
+  def visible_latest_statement_by_company(company_name:)
     company = Company.find_by(name: company_name)
-    return nil if company.newest_statement.nil?
-    visit company_statement_path(company, company.newest_statement)
+    return nil if company.latest_statement.nil?
+    visit company_statement_path(company, company.latest_statement)
 
     dom_struct(:statement, :verified_by, :contributor_email, :published)
   end
@@ -206,7 +206,7 @@ class Visitor
   include AttemptsToUpdateStatement
   include AttemptsToFindAllStatementsByCompany
   include AttemptsToDeleteLatestStatementByCompany
-  include SeesTheNewestStatement
+  include SeesTheLatestStatement
   include SeesTheListedStatements
   include SeesValidationErrors
 end
