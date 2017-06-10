@@ -5,16 +5,16 @@ class StatementSearch
   end
 
   def statements
-    @statements = Statement.newest.includes(:verified_by, company: %i[sector country])
+    @statements = Statement.includes(:verified_by, company: %i[sector country])
     filter_by_published
     filter_by_company
-    @statements
+    @statements.order('companies.name')
   end
 
   private
 
   def filter_by_published
-    @statements = @statements.published unless @admin
+    @statements = @admin ? @statements.latest : @statements.latest_published
   end
 
   def filter_by_company

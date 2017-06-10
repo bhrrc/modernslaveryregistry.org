@@ -73,8 +73,7 @@ RSpec.describe Statement, type: :model do
                                   date_seen: Date.parse('2017-03-22'),
                                   published: true)
 
-      statements = Statement.newest.published.includes(company: %i[sector country])
-      csv = Statement.to_csv(statements, false)
+      csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), false)
 
       expect(csv).to eq(<<~CSV
         Company,URL,Sector,HQ,Date Added
@@ -103,8 +102,7 @@ CSV
                                   date_seen: Date.parse('2017-03-22'),
                                   published: true)
 
-      statements = Statement.newest.published.includes(company: %i[sector country])
-      csv = Statement.to_csv(statements, true)
+      csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), true)
 
       expect(csv).to eq(<<~CSV
         Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL

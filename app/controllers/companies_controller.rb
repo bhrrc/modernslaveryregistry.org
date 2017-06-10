@@ -54,7 +54,7 @@ class CompaniesController < ApplicationController
   def after_save_path_for_company(company)
     if company.statements.any?
       if admin?
-        company_statement_path(company, company.newest_statement)
+        company_statement_path(company, company.latest_statement)
       else
         thanks_path
       end

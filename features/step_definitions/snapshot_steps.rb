@@ -34,7 +34,7 @@ end
 module AttemptsToViewTheLatestSnapshot
   def attempts_to_view_the_latest_snapshot(company_name:)
     company = Company.find_by(name: company_name)
-    visit(company_statement_path(company, company.newest_statement))
+    visit(company_statement_path(company, company.latest_statement))
     within '[data-content="latest_shapshot"]' do
       click_on 'Download'
     end
