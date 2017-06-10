@@ -11,6 +11,14 @@ class StatementSearch
     @statements.order('companies.name')
   end
 
+  def stats
+    {
+      statements: statements.size,
+      sectors: statements.select('companies.sector_id').distinct.count,
+      countries: statements.select('companies.country_id').distinct.count
+    }
+  end
+
   private
 
   def filter_by_published

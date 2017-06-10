@@ -1,3 +1,7 @@
 class WelcomeController < ApplicationController
-  def index; end
+  include ApplicationHelper
+
+  def index
+    @stats = Statement.search(admin: admin?, criteria: {}).stats
+  end
 end
