@@ -1,16 +1,19 @@
-<% statements.each do |statement| %>
-  <div class="columns <%= statement.published? ? 'published' : 'draft'%> statements-list" data-content="statement">
-    <div class="column">
-      <% if statement.broken_url && admin? %>
-        <%= image_tag('broken-link.png', size: '24') %>
-      <% end %>
-      <%= link_to(statement.company.name, company_statement_path(statement.company, statement), {'data-content': 'company_name'}) %>
+<div class="statements-list">
+  <% statements.each do |statement| %>
+    <div class="columns <%= statement.published? ? 'published' : 'draft'%>" data-content="statement">
+      <div class="column">
+        <% if statement.broken_url && admin? %>
+          <%= image_tag('broken-link.png', size: '24') %>
+        <% end %>
+        <%= link_to(statement.company.name, company_statement_path(statement.company, statement), {'data-content': 'company_name'}) %>
+      </div>
+      <div class="column" data-content="country">
+        <%= statement.country_name %>
+      </div>
+      <div class="column" data-content="sector">
+        <%= statement.sector_name %>
+      </div>
     </div>
-    <div class="column" data-content="country">
-      <%= statement.country_name %>
-    </div>
-    <div class="column" data-content="sector">
-      <%= statement.sector_name %>
-    </div>
-  </div>
-<% end %>
+  <% end %>
+  <%= paginate statements %>
+</div>

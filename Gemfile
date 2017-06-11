@@ -45,6 +45,7 @@ gem 'leaflet-rails'
 
 gem 'devise'
 gem 'imgkit'
+gem 'kaminari'
 gem 'pundit'
 gem 'rails-erd'
 gem 'rollbar'
