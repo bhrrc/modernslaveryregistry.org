@@ -21,5 +21,5 @@ Rails.application.routes.draw do
     resources :pages
   end
 
-  get ':id', to: 'pages#show', as: :page
+  get 'pages/:id', to: 'pages#show', as: :page
 end
