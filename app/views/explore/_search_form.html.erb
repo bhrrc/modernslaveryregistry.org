@@ -1,4 +1,4 @@
-<%= form_tag explore_path, method: :get do %>
+<%= form_tag explore_path, enforce_utf8: false, method: :get do %>
   <div class="field is-horizontal">
     <div class="field-label is-normal">
       <label class="label">Sectors</label>
@@ -92,35 +92,49 @@ $('.chosen-select').chosen({
   width: '100%'
 })
 
-function debounce(fn, ctx) {
-  var pending = null;
-  function clear() { pending = null; }
-  return function() {
-    if (pending) return pending;
-    pending = fn.apply(ctx, arguments);
-    pending.then(clear, clear);
-    return pending;
+var searchInProgress = false
+
+function performSearch(element) {
+  var newUrl = buildSearchUrl($(element).closest('form'))
+
+  if (window.location.href != newUrl) {
+    history.replaceState({}, document.title, newUrl)
+    if (!searchInProgress) {
+      searchInProgress = true
+      loadSearchResultsForUrl(newUrl)
+    }
   }
 }
 
-function performSearch (element) {
+function buildSearchUrl(form) {
+  var qs = form.find(':input').filter(function(i) { return $(this).val() != '' }).serialize()
+  return location.protocol + '//' + location.host + '/explore' + (qs ? '?' + qs : '')
+}
+
+function loadSearchResultsForUrl(url) {
   var searchResultsSelector = '[data-content="statements-search-results"]'
+  var sidebarSelector = '[data-content="statements-search-sidebar"]'
   $(searchResultsSelector).html('')
-  return $.get('/explore', $(element).closest('form').serialize())
+  $(sidebarSelector).html('')
+  return $.get(url)
     .then(function (html) {
       $(searchResultsSelector).html(
         $(html).find(searchResultsSelector).html() || 'No statements found'
       )
+      $(sidebarSelector).html($(html).find(sidebarSelector).html())
+      if (window.location.href == url) {
+        searchInProgress = false
+      } else {
+        return loadSearchResultsForUrl(window.location.href)
+      }
     })
 }
 
-var queueSearch = debounce(performSearch)
-
 $(document).on('change', 'select.js-auto-submit', function() {
-  queueSearch(this)
+  performSearch(this)
 })
 
 $(document).on('keyup', 'input.js-auto-submit', function() {
-  queueSearch(this)
+  performSearch(this)
 })
 </script>

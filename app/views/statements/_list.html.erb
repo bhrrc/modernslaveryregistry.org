@@ -1,5 +1,5 @@
 <% statements.each do |statement| %>
-  <div class="columns <%= statement.published? ? 'published' : 'draft'%>" data-content="statement">
+  <div class="columns <%= statement.published? ? 'published' : 'draft'%> statements-list" data-content="statement">
     <div class="column">
       <% if statement.broken_url && admin? %>
         <%= image_tag('broken-link.png', size: '24') %>

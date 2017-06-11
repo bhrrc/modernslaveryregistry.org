@@ -19,7 +19,21 @@ class StatementSearch
     }
   end
 
+  def sector_stats
+    counts = count_by_company_attribute(:sector_id)
+    groups = Sector.where(id: counts.keys).each_with_object([]) do |sector, array|
+      array << GroupCount.with(group: sector, count: counts[sector.id])
+    end
+    groups.sort_by(&:count).reverse
+  end
+
   private
+
+  def count_by_company_attribute(attribute)
+    statements.select("companies.#{attribute}").pluck(attribute).each_with_object(Hash.new(0)) do |id, count|
+      count[id] += 1
+    end
+  end
 
   def filter_by_published
     @statements = @admin ? @statements.latest : @statements.latest_published
@@ -34,7 +48,7 @@ class StatementSearch
 
   def filter_by_company_name
     return if @criteria[:company_name].blank?
-    @company_join = @company_join.where('LOWER(name) LIKE LOWER(?)', "%#{@criteria[:company_name]}%")
+    @company_join = @company_join.where('LOWER(companies.name) LIKE LOWER(?)', "%#{@criteria[:company_name]}%")
     @statements = @company_join
   end
 

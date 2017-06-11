@@ -9,9 +9,6 @@
         </div>
         <div class="box" data-content="statements-search-results">
           <% if @search.statements.any? %>
-            <div class="level">
-              <%= pluralize @search.statements.size, 'statement' %> <%= link_to 'Download', @download_url %>
-            </div>
             <%= render partial: 'statements/list', locals: { statements: @search.statements } %>
           <% else %>
             <h2 class="title">No statements found</h2>
@@ -28,9 +25,32 @@
           <% end %>
         </div>
       </div>
-      <div class="column">
-        <div class="box">
-          <div id="world-map"></div>
+      <div class="column is-narrow">
+        <div style="width: 450px;">
+          <div class="box" style="width: 450px">
+            <div id="world-map"></div>
+            <div data-content="statements-search-sidebar">
+              <div class="level" style="padding: 5px; padding-top: 10px; padding-bottom: 0">
+                <strong><%= pluralize @search.statements.size, 'statement' %></strong>
+                <% if @search.statements.any? %>
+                  <%= link_to 'Download CSV', @download_url %>
+                <% end %>
+              </div>
+              <% stats = @search.sector_stats %>
+              <% if stats.any? %>
+                <table id="sector-stats">
+                  <tbody data-content="sector_stats">
+                    <% stats.each do |group_count| %>
+                      <tr>
+                        <td data-content="sector" style="padding: 5px"><%= group_count.group.name %></td>
+                        <td data-content="count" style="padding: 5px; text-align: right"><%= group_count.count %></td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </div>

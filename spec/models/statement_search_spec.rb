@@ -97,6 +97,16 @@ RSpec.describe Statement, type: :model do
           countries: 2
         )
       end
+
+      it 'groups the statements by company sector' do
+        search = Statement.search(admin: true, criteria: {})
+        expect(search.sector_stats).to eq(
+          [
+            GroupCount.with(group: agriculture, count: 1),
+            GroupCount.with(group: software, count: 1)
+          ]
+        )
+      end
     end
 
     context 'when the searcher is not an admin' do
