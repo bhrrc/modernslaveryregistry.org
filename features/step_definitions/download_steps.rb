@@ -28,14 +28,12 @@ Then(/^(Joe|Patricia) should see all the statements including drafts$/) do |acto
   expect(actor.visible_downloaded_statements).to match_array(expected_downloads)
 end
 
-module AttemptsToDownloadAllStatements
+module DownloadsStatements
   def attempts_to_download_all_statements
     visit root_path
     click_link 'Download statements'
   end
-end
 
-module SeesDownloadedStatements
   def visible_downloaded_statements
     CSV.parse(html, headers: true).map(&:to_h).map do |row|
       DownloadedStatement.with(
@@ -50,8 +48,7 @@ module SeesDownloadedStatements
 end
 
 class Visitor
-  include AttemptsToDownloadAllStatements
-  include SeesDownloadedStatements
+  include DownloadsStatements
 end
 
 class DownloadedStatement < Value.new(

@@ -94,7 +94,7 @@ Then(/^(Joe|Patricia) should see that the statement was invalid and not saved$/)
   expect(actor.visible_validation_error_summary).to eq(["Statements url can't be blank"])
 end
 
-module AttemptsToSubmitStatement
+module SubmitsStatements
   def attempts_to_submit_statement(options)
     visit_form(options)
     fill_in_form(options)
@@ -137,7 +137,7 @@ module AttemptsToSubmitStatement
   end
 end
 
-module AttemptsToUpdateStatement
+module UpdatesStatements
   def attempts_to_update_statement(company_name:, new_values:)
     company = Company.find_by!(name: company_name)
     visit company_statement_path(company, company.latest_statement)
@@ -147,14 +147,7 @@ module AttemptsToUpdateStatement
   end
 end
 
-module AttemptsToFindAllStatementsByCompany
-  def attempts_to_find_all_statements_by_company(company_name:)
-    company = Company.find_by!(name: company_name)
-    visit company_path(company)
-  end
-end
-
-module AttemptsToDeleteLatestStatementByCompany
+module DeletesStatements
   include Rails.application.routes.url_helpers
 
   def attempts_to_delete_latest_statement_by_company(company_name:)
@@ -164,7 +157,12 @@ module AttemptsToDeleteLatestStatementByCompany
   end
 end
 
-module SeesTheLatestStatement
+module ViewsStatements
+  def attempts_to_find_all_statements_by_company(company_name:)
+    company = Company.find_by!(name: company_name)
+    visit company_path(company)
+  end
+
   def visible_latest_statement_by_company(company_name:)
     company = Company.find_by(name: company_name)
     return nil if company.latest_statement.nil?
@@ -172,9 +170,7 @@ module SeesTheLatestStatement
 
     dom_struct(:statement, :verified_by, :contributor_email, :published)
   end
-end
 
-module SeesTheListedStatements
   def visible_listed_statements_from_search
     visible_listed_statements_structs %i[company_name sector country]
   end
@@ -202,11 +198,12 @@ module SeesValidationErrors
 end
 
 class Visitor
-  include AttemptsToSubmitStatement
-  include AttemptsToUpdateStatement
-  include AttemptsToFindAllStatementsByCompany
-  include AttemptsToDeleteLatestStatementByCompany
-  include SeesTheLatestStatement
-  include SeesTheListedStatements
+  include SubmitsStatements
+  include ViewsStatements
   include SeesValidationErrors
+end
+
+class Administrator
+  include UpdatesStatements
+  include DeletesStatements
 end

@@ -26,7 +26,7 @@ Then(/^(Vicky) should not have admin access$/) do |actor|
   expect(User.find_by!(first_name: actor.name)).not_to be_admin
 end
 
-module PerformsUserAdmin
+module ManagesUsers
   def attempts_to_search_users
     visit admin_users_path
     click_on 'Search'
@@ -52,5 +52,5 @@ module PerformsUserAdmin
 end
 
 class Visitor
-  include PerformsUserAdmin
+  include ManagesUsers
 end

@@ -55,7 +55,7 @@ Then(/^(Joe|Patricia) should not see the deleted page on the website$/) do |acto
   expect(actor.visible_main_navigation_menu.titles).to eq([])
 end
 
-module AttemptsToCreatePage
+module ManagesPages
   def attempts_to_create_page(slug:, title:, short_title:, body_html:)
     visit admin_pages_path
     click_on 'New Page'
@@ -65,9 +65,7 @@ module AttemptsToCreatePage
     find('input[name="page[body_html]"]', visible: false).set(body_html)
     click_on 'Create Page'
   end
-end
 
-module AttemptsToEditPage
   def attempts_to_edit_page(title:, updates:)
     visit admin_pages_path
     click_on title
@@ -75,6 +73,16 @@ module AttemptsToEditPage
       set_page_attribute(attribute, value)
     end
     click_on 'Update Page'
+  end
+
+  def attempts_to_delete_page(title:)
+    visit admin_pages_path
+    click_on "Delete '#{title}'"
+  end
+
+  def attempts_to_move_page(title:, direction:)
+    visit admin_pages_path
+    click_on "Move '#{title}' #{direction}"
   end
 
   private
@@ -90,21 +98,7 @@ module AttemptsToEditPage
   end
 end
 
-module AttemptsToDeletePage
-  def attempts_to_delete_page(title:)
-    visit admin_pages_path
-    click_on "Delete '#{title}'"
-  end
-end
-
-module AttemptsToMovePage
-  def attempts_to_move_page(title:, direction:)
-    visit admin_pages_path
-    click_on "Move '#{title}' #{direction}"
-  end
-end
-
-module SeesThePage
+module SeesPages
   def visible_page(title:)
     visit page_path(Page.find_by!(title: title))
     RenderedPage.with(
@@ -114,9 +108,7 @@ module SeesThePage
 
   class RenderedPage < Value.new(:page_html)
   end
-end
 
-module SeesTheMainNavigationMenu
   def visible_main_navigation_menu
     visit root_path
     NavMenu.with(titles: all('header .nav-menu .nav-item').map(&:text))
@@ -127,10 +119,9 @@ module SeesTheMainNavigationMenu
 end
 
 class Administrator
-  include AttemptsToCreatePage
-  include AttemptsToEditPage
-  include AttemptsToDeletePage
-  include AttemptsToMovePage
-  include SeesThePage
-  include SeesTheMainNavigationMenu
+  include ManagesPages
+end
+
+class Visitor
+  include SeesPages
 end

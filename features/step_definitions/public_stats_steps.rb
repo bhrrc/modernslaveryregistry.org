@@ -6,7 +6,7 @@ Then(/^(Vicky) should see the following public stats:$/) do |actor, table|
   expect(actor.visible_public_stats.to_h).to include(table.rows_hash.to_h.symbolize_keys)
 end
 
-module AttemptsToViewPublicStats
+module ViewsPublicStats
   def attempts_to_view_public_stats
     visit root_path
   end
@@ -17,5 +17,5 @@ module AttemptsToViewPublicStats
 end
 
 class Visitor
-  include AttemptsToViewPublicStats
+  include ViewsPublicStats
 end

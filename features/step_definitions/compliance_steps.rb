@@ -6,13 +6,11 @@ Then(/^(Joe|Patricia) should see the following stats:$/) do |actor, table|
   expect(actor.visible_minimum_compliance_requirements_stats.to_h).to eq(table.rows_hash.symbolize_keys)
 end
 
-module AttemptsToViewStats
+module ViewsMinimumComplianceStats
   def attempts_to_view_minimum_compliance_requirements_stats
     visit(admin_dashboard_path)
   end
-end
 
-module SeesStats
   def visible_minimum_compliance_requirements_stats
     dom_struct(
       :minimum_compliance_requirements_stats,
@@ -25,6 +23,5 @@ module SeesStats
 end
 
 class Administrator
-  include AttemptsToViewStats
-  include SeesStats
+  include ViewsMinimumComplianceStats
 end

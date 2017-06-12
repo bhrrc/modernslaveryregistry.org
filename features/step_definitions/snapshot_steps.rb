@@ -31,7 +31,7 @@ Then(/^(Joe|Patricia) should see a (PDF|PNG) snapshot of the statement for "([^"
   expect(actor.visible_snapshot).to eq("#{format.content_type} snapshot for statement by '#{company_name}'")
 end
 
-module AttemptsToViewTheLatestSnapshot
+module ViewsSnapshots
   def attempts_to_view_the_latest_snapshot(company_name:)
     company = Company.find_by(name: company_name)
     visit(company_statement_path(company, company.latest_statement))
@@ -39,15 +39,12 @@ module AttemptsToViewTheLatestSnapshot
       click_on 'Download'
     end
   end
-end
 
-module SeesTheSnapshot
   def visible_snapshot
     text
   end
 end
 
 class Administrator
-  include AttemptsToViewTheLatestSnapshot
-  include SeesTheSnapshot
+  include ViewsSnapshots
 end
