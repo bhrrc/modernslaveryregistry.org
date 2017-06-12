@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   namespace :admin do
     root 'dashboard#show', as: :dashboard
     resources :pages
+    resources :users
   end
 
   get 'pages/:id', to: 'pages#show', as: :page

@@ -16,4 +16,14 @@ class User < ApplicationRecord
   def name
     [first_name, last_name].compact.join(' ')
   end
+
+  def self.search(query)
+    wild = "%#{query}%"
+    User.where(
+      'lower(first_name) like lower(?) or lower(last_name) like lower(?) or lower(email) like lower(?)',
+      wild,
+      wild,
+      wild
+    )
+  end
 end

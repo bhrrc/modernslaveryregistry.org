@@ -1,0 +1,62 @@
+<% title 'Admin: Users' %>
+
+<div class="container section content">
+
+  <div class="level">
+
+    <h1 class="title level-left">
+      Users
+    </h1>
+
+    <div class="level-right">
+      <%= form_tag '', method: :get do %>
+        <div class="field has-addons">
+          <div class="control">
+            <%= text_field_tag :query, params[:query], class: 'input' %>
+          </div>
+          <div class="control">
+            <%= submit_tag 'Search', class: 'button is-primary' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+
+  <div class="box">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Email</td>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Admin?</th>
+          <th style="width:1px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+        <tr data-content="user">
+          <td data-content="email"><%= link_to user.email, edit_admin_user_path(user) %></td>
+          <td data-content="first_name"><%= link_to user.first_name, edit_admin_user_path(user) %></td>
+          <td data-content="last_name"><%= link_to user.last_name || '', edit_admin_user_path(user) %></td>
+          <td data-content="admin"><%= user.admin? ? 'Yes' : 'No' %></td>
+          <td>
+            <%= form_for [:admin, user], method: 'user' do |f| %>
+              <span class="icon">
+                <%= f.button '',
+                      title: "Delete '#{user.email}'",
+                      class: 'fa fa-trash icon-button',
+                      data: { confirm: 'Are you sure?' } %>
+              </span>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= paginate @users %>
+  </div>
+
+</div>

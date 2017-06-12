@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-      <% @pages.each do |page| %>
+        <% @pages.each do |page| %>
         <tr>
           <td><%= link_to page.title, edit_admin_page_path(page) %></td>
           <td>
@@ -61,8 +61,8 @@
             <% end %>
           </td>
         </tr>
-      <% end %>
-    </tbody>
+        <% end %>
+      </tbody>
     </table>
 
   </div>
