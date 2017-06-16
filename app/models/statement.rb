@@ -18,6 +18,7 @@ class Statement < ApplicationRecord
   validates :signed_by_director, inclusion: { in: [true, false] }, if: :verified?
 
   before_create :set_date_seen
+  before_save :fetch_statement_from_url! unless ENV['no_fetch']
   after_save :mark_latest
   after_save :mark_latest_published
 
@@ -89,8 +90,6 @@ class Statement < ApplicationRecord
   def company_name
     company.name
   end
-
-  before_save :fetch_statement_from_url! unless ENV['no_fetch']
 
   def set_date_seen
     self.date_seen ||= Time.zone.today
