@@ -23,4 +23,9 @@ Rails.application.routes.draw do
   end
 
   get 'pages/:id', to: 'pages#show', as: :page
+
+  require 'sidekiq/web'
+  authenticate(:user, ->(u) { u.admin? }) do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
