@@ -24,7 +24,7 @@ RSpec.describe Statement, type: :model do
                                               link_on_front_page: true,
                                               date_seen: Date.parse('21 May 2016'),
                                               contributor_email: 'anon@host.com')
-
+      statement.fetch_snapshot
       expect(statement.url).to eq('https://cucumber.io/')
     end
   end
@@ -35,6 +35,7 @@ RSpec.describe Statement, type: :model do
                                              verified_by: nil,
                                              contributor_email: 'anon@host.com')
 
+      statement.fetch_snapshot
       expect(statement.errors.messages).to eq({})
     end
   end
@@ -64,15 +65,17 @@ RSpec.describe Statement, type: :model do
                           email: 'someone@somewhere.com',
                           password: 'whatevs')
 
-      @company.statements.create!(url: 'http://cucumber.io/',
-                                  approved_by: 'Big Boss',
-                                  approved_by_board: 'Yes',
-                                  signed_by_director: false,
-                                  link_on_front_page: true,
-                                  verified_by: user,
-                                  date_seen: Date.parse('2017-03-22'),
-                                  published: true)
+      statement = @company.statements.create!(url: 'http://cucumber.io/',
+                                              approved_by: 'Big Boss',
+                                              approved_by_board: 'Yes',
+                                              signed_by_director: false,
+                                              link_on_front_page: true,
+                                              verified_by: user,
+                                              date_seen: Date.parse('2017-03-22'),
+                                              published: true)
 
+      statement.fetch_snapshot
+      statement.save!
       csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), false)
 
       expect(csv).to eq(<<~CSV
@@ -91,17 +94,19 @@ CSV
                           password: 'whatevs',
                           admin: true)
 
-      @company.statements.create!(url: 'http://cucumber.io/',
-                                  approved_by: 'Big Boss',
-                                  approved_by_board: 'Yes',
-                                  signed_by_director: false,
-                                  signed_by: 'Little Boss',
-                                  link_on_front_page: true,
-                                  verified_by: user,
-                                  contributor_email: 'contributor@somewhere.com',
-                                  date_seen: Date.parse('2017-03-22'),
-                                  published: true)
+      statement = @company.statements.create!(url: 'http://cucumber.io/',
+                                              approved_by: 'Big Boss',
+                                              approved_by_board: 'Yes',
+                                              signed_by_director: false,
+                                              signed_by: 'Little Boss',
+                                              link_on_front_page: true,
+                                              verified_by: user,
+                                              contributor_email: 'contributor@somewhere.com',
+                                              date_seen: Date.parse('2017-03-22'),
+                                              published: true)
 
+      statement.fetch_snapshot
+      statement.save!
       csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), true)
 
       expect(csv).to eq(<<~CSV

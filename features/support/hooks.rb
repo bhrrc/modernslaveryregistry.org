@@ -1,6 +1,7 @@
 require 'cucumber/rspec/doubles'
 
 Before do
+  Rails.application.config.active_job.queue_adapter = :inline
   Country.find_or_create_by!(code: 'GB', name: 'United Kingdom')
   Country.find_or_create_by!(code: 'US', name: 'United States')
   Country.find_or_create_by!(code: 'FR', name: 'France')
