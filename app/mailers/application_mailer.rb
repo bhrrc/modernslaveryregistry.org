@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'carrier@business-humanrights.org'
+  default from: 'Modern Slavery Registry <carrier@business-humanrights.org>'
   layout 'mailer'
 end
