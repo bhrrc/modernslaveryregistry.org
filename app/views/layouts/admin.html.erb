@@ -13,8 +13,10 @@
     <%= favicon_link_tag 'favicon.png' %>
   </head>
 
-  <body>
+  <body class="admin">
     <%= render "layouts/nav_admin" %>
     <%= yield %>
+    <footer>
+    </footer>
   </body>
 </html>

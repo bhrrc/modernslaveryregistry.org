@@ -2,13 +2,11 @@
 
 <div class="container">
   <div class="section">
-    <h1 class="title">Admin</h1>
+    <h1 class="title">Admin Dashboard</h1>
   </div>
 
   <div class="section content box">
-
     <h2 class="title">Compliance Stats</h2>
-
     <table data-content="minimum_compliance_requirements_stats">
       <tbody>
         <tr>
@@ -46,4 +44,43 @@
       </tbody>
     </table>
   </div>
+
+  <div class="section content box">
+    <h2 class="title">New Statements</h2>
+    <% if @new_statements.any? %>
+      <table data-content="new_statements">
+        <tbody>
+          <% @new_statements.each do |statement| %>
+            <tr>
+              <td>
+                <%= link_to statement.company.name, company_statement_path(statement.company, statement) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      All statements are published
+    <% end %>
+  </div>
+
+  <div class="section content box">
+    <h2 class="title">Broken URLs</h2>
+    <% if @broken_urls.any? %>
+      <table data-content="broken_urls">
+        <tbody>
+          <% @broken_urls.each do |statement| %>
+            <tr>
+              <td>
+                <%= link_to statement.company.name, company_statement_path(statement.company, statement) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      No broken URLs
+    <% end %>
+  </div>
+
 </div>
