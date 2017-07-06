@@ -71,6 +71,7 @@ group :development do
 end
 
 group :test do
+  gem 'capybara-email'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'launchy'

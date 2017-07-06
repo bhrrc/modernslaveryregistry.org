@@ -17,6 +17,7 @@ class CompaniesController < ApplicationController
     @company = Company.new(company_params)
     @company.statements.each { |s| s.associate_with_user current_user }
     if @company.save
+      send_submission_email
       redirect_to after_save_path_for_company(@company)
     else
       # TODO: Fix rendering when there are errors
@@ -50,6 +51,11 @@ class CompaniesController < ApplicationController
   end
 
   private
+
+  def send_submission_email
+    email = @company.statements.reverse.map(&:contributor_email).compact.first
+    StatementMailer.submitted(email).deliver_later if email.present?
+  end
 
   def after_save_path_for_company(company)
     if company.statements.any?
