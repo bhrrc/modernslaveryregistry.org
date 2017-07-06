@@ -94,7 +94,11 @@
               <span class="label">Latest snapshot</span>
             </div>
             <div class="column" data-content="latest_shapshot">
-              <%= link_to 'Download', company_statement_snapshot_path(@statement.company, @statement), target: :_blank %>
+              <% if @statement.snapshot.present? %>
+                <%= link_to 'Download', company_statement_snapshot_path(@statement.company, @statement), target: :_blank %>
+              <% else %>
+                No snapshot available. It may be in progress, try <a href="javascript:location.reload()">reloading this page</a>.
+              <% end %>
             </div>
           </div>
         </div>
