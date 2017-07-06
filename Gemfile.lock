@@ -57,6 +57,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-email (2.5.0)
+      capybara (~> 2.4)
+      mail
     chartjs-ror (3.3.1)
       rails (>= 3.1)
     childprocess (0.7.0)
@@ -309,6 +312,7 @@ DEPENDENCIES
   acts_as_list
   bulma-rails (= 0.4.1.pre)
   byebug
+  capybara-email
   chartjs-ror
   chosen-rails
   coffee-rails (~> 4.2)
