@@ -1,119 +1,129 @@
 require 'rails_helper'
 
 RSpec.describe Statement, type: :model do
-  before do
-    allow(ScreenGrab).to receive(:fetch) do |url|
-      FetchResult.with(
-        url: url,
-        broken_url: false,
-        content_type: 'image/jpeg',
-        content_data: 'image data!'
-      )
-    end
-    @sw = Sector.create! name: 'Software'
-    @gb = Country.create! code: 'GB', name: 'United Kingdom'
-    @company = Company.create! name: 'Cucumber Ltd', country_id: @gb.id, sector_id: @sw.id
-  end
-
-  it 'converts url to https if it exists' do
-    VCR.use_cassette('cucumber.io') do
-      statement = @company.statements.create!(url: 'http://cucumber.io/',
-                                              approved_by: 'Big Boss',
-                                              approved_by_board: 'Yes',
-                                              signed_by_director: false,
-                                              link_on_front_page: true,
-                                              date_seen: Date.parse('21 May 2016'),
-                                              contributor_email: 'anon@host.com')
-      statement.fetch_snapshot
-      expect(statement.url).to eq('https://cucumber.io/')
+  describe 'validation' do
+    it 'disallows invalid URLs' do
+      statement = Statement.new(url: '\\')
+      expect(statement).to_not be_valid
+      expect(statement.errors[:url]).to eq(['is not a valid URL'])
     end
   end
 
-  it 'does not validate admin-only visible fields for non-admins' do
-    VCR.use_cassette('cucumber.io') do
-      statement = @company.statements.create(url: 'http://cucumber.io/',
-                                             verified_by: nil,
-                                             contributor_email: 'anon@host.com')
-
-      statement.fetch_snapshot
-      expect(statement.errors.messages).to eq({})
+  describe 'fetching snapshots' do
+    before do
+      allow(ScreenGrab).to receive(:fetch) do |url|
+        FetchResult.with(
+          url: url,
+          broken_url: false,
+          content_type: 'image/jpeg',
+          content_data: 'image data!'
+        )
+      end
+      @sw = Sector.create! name: 'Software'
+      @gb = Country.create! code: 'GB', name: 'United Kingdom'
+      @company = Company.create! name: 'Cucumber Ltd', country_id: @gb.id, sector_id: @sw.id
     end
-  end
 
-  it 'validates admin-only visible fields for admins' do
-    VCR.use_cassette('cucumber.io') do
-      user = User.create!(first_name: 'Super',
-                          last_name: 'Admin',
-                          email: 'admin@somewhere.com',
-                          password: 'whatevs',
-                          admin: true)
-
-      statement = @company.statements.create(url: 'http://cucumber.io/',
-                                             verified_by: user,
-                                             contributor_email: 'somebody@host.com')
-
-      expect(statement.errors.messages).to eq(approved_by_board: ['is not included in the list'],
-                                              link_on_front_page: ['is not included in the list'],
-                                              signed_by_director: ['is not included in the list'])
+    it 'converts url to https if it exists' do
+      VCR.use_cassette('cucumber.io') do
+        statement = @company.statements.create!(url: 'http://cucumber.io/',
+                                                approved_by: 'Big Boss',
+                                                approved_by_board: 'Yes',
+                                                signed_by_director: false,
+                                                link_on_front_page: true,
+                                                date_seen: Date.parse('21 May 2016'),
+                                                contributor_email: 'anon@host.com')
+        statement.fetch_snapshot
+        expect(statement.url).to eq('https://cucumber.io/')
+      end
     end
-  end
 
-  it 'turns rows into CSV' do
-    VCR.use_cassette('cucumber.io') do
-      user = User.create!(first_name: 'Someone',
-                          last_name: 'Smith',
-                          email: 'someone@somewhere.com',
-                          password: 'whatevs')
+    it 'does not validate admin-only visible fields for non-admins' do
+      VCR.use_cassette('cucumber.io') do
+        statement = @company.statements.create(url: 'http://cucumber.io/',
+                                               verified_by: nil,
+                                               contributor_email: 'anon@host.com')
 
-      statement = @company.statements.create!(url: 'http://cucumber.io/',
-                                              approved_by: 'Big Boss',
-                                              approved_by_board: 'Yes',
-                                              signed_by_director: false,
-                                              link_on_front_page: true,
-                                              verified_by: user,
-                                              date_seen: Date.parse('2017-03-22'),
-                                              published: true)
-
-      statement.fetch_snapshot
-      statement.save!
-      csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), false)
-
-      expect(csv).to eq(<<~CSV
-        Company,URL,Sector,HQ,Date Added
-        Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22
-CSV
-                       )
+        statement.fetch_snapshot
+        expect(statement.errors.messages).to eq({})
+      end
     end
-  end
 
-  it 'turns rows into CSV with more rows for admins' do
-    VCR.use_cassette('cucumber.io') do
-      user = User.create!(first_name: 'Super',
-                          last_name: 'Admin',
-                          email: 'admin@somewhere.com',
-                          password: 'whatevs',
-                          admin: true)
+    it 'validates admin-only visible fields for admins' do
+      VCR.use_cassette('cucumber.io') do
+        user = User.create!(first_name: 'Super',
+                            last_name: 'Admin',
+                            email: 'admin@somewhere.com',
+                            password: 'whatevs',
+                            admin: true)
 
-      statement = @company.statements.create!(url: 'http://cucumber.io/',
-                                              approved_by: 'Big Boss',
-                                              approved_by_board: 'Yes',
-                                              signed_by_director: false,
-                                              signed_by: 'Little Boss',
-                                              link_on_front_page: true,
-                                              verified_by: user,
-                                              contributor_email: 'contributor@somewhere.com',
-                                              date_seen: Date.parse('2017-03-22'),
-                                              published: true)
+        statement = @company.statements.create(url: 'http://cucumber.io/',
+                                               verified_by: user,
+                                               contributor_email: 'somebody@host.com')
 
-      statement.fetch_snapshot
-      statement.save!
-      csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), true)
+        expect(statement.errors.messages).to eq(approved_by_board: ['is not included in the list'],
+                                                link_on_front_page: ['is not included in the list'],
+                                                signed_by_director: ['is not included in the list'])
+      end
+    end
 
-      expect(csv).to eq(<<~CSV
-        Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL
-        Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false
-CSV
-                       )
+    it 'turns rows into CSV' do
+      VCR.use_cassette('cucumber.io') do
+        user = User.create!(first_name: 'Someone',
+                            last_name: 'Smith',
+                            email: 'someone@somewhere.com',
+                            password: 'whatevs')
+
+        statement = @company.statements.create!(url: 'http://cucumber.io/',
+                                                approved_by: 'Big Boss',
+                                                approved_by_board: 'Yes',
+                                                signed_by_director: false,
+                                                link_on_front_page: true,
+                                                verified_by: user,
+                                                date_seen: Date.parse('2017-03-22'),
+                                                published: true)
+
+        statement.fetch_snapshot
+        statement.save!
+        csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), false)
+
+        expect(csv).to eq(<<~CSV
+          Company,URL,Sector,HQ,Date Added
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22
+  CSV
+                         )
+      end
+    end
+
+    it 'turns rows into CSV with more rows for admins' do
+      VCR.use_cassette('cucumber.io') do
+        user = User.create!(first_name: 'Super',
+                            last_name: 'Admin',
+                            email: 'admin@somewhere.com',
+                            password: 'whatevs',
+                            admin: true)
+
+        statement = @company.statements.create!(url: 'http://cucumber.io/',
+                                                approved_by: 'Big Boss',
+                                                approved_by_board: 'Yes',
+                                                signed_by_director: false,
+                                                signed_by: 'Little Boss',
+                                                link_on_front_page: true,
+                                                verified_by: user,
+                                                contributor_email: 'contributor@somewhere.com',
+                                                date_seen: Date.parse('2017-03-22'),
+                                                published: true)
+
+        statement.fetch_snapshot
+        statement.save!
+        csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), true)
+
+        expect(csv).to eq(<<~CSV
+          Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false
+  CSV
+                         )
+      end
     end
   end
 end
