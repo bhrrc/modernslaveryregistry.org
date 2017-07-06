@@ -1,4 +1,4 @@
-Given(/^a statement was submitted for "([^"]*)" that responds with a (PDF|HTML)$/) do |company_name, mime_type|
+Given(/^a statement was submitted for "([^"]*)" that responds with (PDF|HTML)$/) do |company_name, mime_type|
   statement_url = "https://cucumber.io/statement.#{mime_type.extension}"
   content_data = "#{mime_type.content_type} snapshot for statement by '#{company_name}'"
   allow(StatementUrl).to receive(:fetch).with(statement_url).and_return(

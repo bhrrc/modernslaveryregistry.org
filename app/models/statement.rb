@@ -2,7 +2,6 @@ require 'securerandom'
 require 'uri'
 require 'open-uri'
 require 'timeout'
-require 'csv'
 
 class Statement < ApplicationRecord
   # Why optional: true
@@ -18,7 +17,8 @@ class Statement < ApplicationRecord
   validates :signed_by_director, inclusion: { in: [true, false] }, if: :verified?
 
   before_create :set_date_seen
-  before_save :fetch_statement_from_url! unless ENV['no_fetch']
+  after_save :enqueue_snapshot unless ENV['no_fetch']
+  after_commit :perform_snapshot_job
   after_save :mark_latest
   after_save :mark_latest_published
 
@@ -29,6 +29,8 @@ class Statement < ApplicationRecord
 
   delegate :country_name, to: :company
   delegate :sector_name, to: :company
+
+  attr_accessor :should_enqueue_snapshot
 
   def self.search(admin:, criteria:)
     StatementSearch.new(admin, criteria)
@@ -52,40 +54,27 @@ class Statement < ApplicationRecord
   end
 
   def self.to_csv(statements, extra)
-    fields = BASIC_EXPORT_FIELDS.merge(extra ? EXTRA_EXPORT_FIELDS : {})
-    CSV.generate do |csv|
-      csv << fields.map { |_, heading| heading }
-      statements.each do |statement|
-        csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
-      end
-    end
+    StatementExport.to_csv(statements, extra)
   end
 
-  def self.format_for_csv(value)
-    value.respond_to?(:iso8601) ? value.iso8601 : value
+  def enqueue_snapshot
+    @should_enqueue_snapshot = true if url_changed?
+  end
+
+  def perform_snapshot_job
+    return unless @should_enqueue_snapshot
+    FetchStatementSnapshotJob.perform_later(id)
+    @should_enqueue_snapshot = false
+  end
+
+  def fetch_snapshot
+    fetch_result = StatementUrl.fetch(url)
+    self.url = fetch_result.url
+    self.broken_url = fetch_result.broken_url
+    build_snapshot_from_result(fetch_result) unless broken_url
   end
 
   private
-
-  BASIC_EXPORT_FIELDS = {
-    company_name: 'Company',
-    url: 'URL',
-    sector_name: 'Sector',
-    country_name: 'HQ',
-    date_seen: 'Date Added'
-  }.freeze
-
-  EXTRA_EXPORT_FIELDS = {
-    approved_by_board: 'Approved by Board',
-    approved_by: 'Approved by',
-    signed_by_director: 'Signed by Director',
-    signed_by: 'Signed by',
-    link_on_front_page: 'Link on Front Page',
-    published: 'Published',
-    verified_by_email: 'Verified by',
-    contributor_email: 'Contributed by',
-    broken_url: 'Broken URL'
-  }.freeze
 
   def company_name
     company.name
@@ -93,13 +82,6 @@ class Statement < ApplicationRecord
 
   def set_date_seen
     self.date_seen ||= Time.zone.today
-  end
-
-  def fetch_statement_from_url!
-    fetch_result = StatementUrl.fetch(url)
-    self.url = fetch_result.url
-    self.broken_url = fetch_result.broken_url
-    build_snapshot_from_result(fetch_result) unless broken_url
   end
 
   def build_snapshot_from_result(fetch_result)
