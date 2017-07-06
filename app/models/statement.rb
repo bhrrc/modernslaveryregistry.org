@@ -12,6 +12,7 @@ class Statement < ApplicationRecord
   has_one :snapshot, dependent: :destroy
 
   validates :url, presence: true
+  validates_with UrlFormatValidator
   validates :link_on_front_page, inclusion: { in: [true, false] }, if: :verified?
   validates :approved_by_board,  inclusion: { in: ['Yes', 'No', 'Not explicit'] }, if: :verified?
   validates :signed_by_director, inclusion: { in: [true, false] }, if: :verified?
