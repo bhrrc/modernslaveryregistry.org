@@ -44,10 +44,6 @@ class StatementUrl
     begin
       try_to_open_with_scheme uri, 'http'
     rescue
-      # Set the statement URL to http, even though we haven't been able to
-      # establish whether or not the url should be http or https.
-      # It's more likely that http works than https.
-      @url = uri.to_s
       @broken_url = true
     end
   end
@@ -57,14 +53,19 @@ class StatementUrl
     response = try_to_open uri
     @url = uri.to_s
     @broken_url = false
-    @content_data = response.read
-    @content_type = response.meta['content-type']
+    @content_data = response.body
+    @content_type = response.headers[:content_type]
   end
 
   def try_to_open(uri)
     # The :read_timeout option for open-uri's open doesn't work with https,
     # only http.
-    Timeout.timeout(3) { open(uri.to_s, 'User-Agent' => browser_user_agent) }
+    RestClient::Request.execute(
+      method: :get,
+      url: uri.to_s,
+      timeout: 25,
+      headers: { 'User-Agent' => browser_user_agent, 'Accept-Encoding' => 'identity' }
+    )
   end
 
   def browser_user_agent
