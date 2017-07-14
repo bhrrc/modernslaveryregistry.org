@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pundit
+  include ApplicationHelper
   protect_from_forgery with: :exception, prepend: true
 
   layout :layout_by_resource

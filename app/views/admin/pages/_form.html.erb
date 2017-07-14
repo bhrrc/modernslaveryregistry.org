@@ -74,6 +74,16 @@
       </p>
     </div>
 
+    <div class="field">
+      <label class="label">Status</label>
+      <div class="control">
+        <label class="checkbox">
+          <%= f.check_box(:published) %>
+          Published?
+        </label>
+      </div>
+    </div>
+
   </div>
 
   <%= f.submit class: 'button is-primary' %>
