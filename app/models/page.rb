@@ -8,6 +8,10 @@ class Page < ApplicationRecord
 
   scope(:as_list, -> { order(:position) })
 
+  def self.include_drafts(include_drafts)
+    include_drafts ? all : where(published: true)
+  end
+
   def to_param
     slug
   end

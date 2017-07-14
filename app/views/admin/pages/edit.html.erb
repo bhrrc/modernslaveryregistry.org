@@ -1,8 +1,20 @@
-<% title "Edit Page: #{@page.title}" %> 
+<% title "Edit Page: #{@page.title}" %>
 
 <div class="container">
   <div class="section">
-    <h1 class="title">Edit Page</h1>
+
+    <div class="level">
+
+      <h1 class="title level-left">
+        Edit Page
+      </h1>
+
+      <%= link_to 'Visit on Website', page_path(@page), class: 'button level-right', target: '_blank' %>
+
+    </div>
+
+
+
     <%= render partial: 'form', locals: { page: @page } %>
   </div>
 </div>
