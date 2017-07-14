@@ -4,5 +4,6 @@ class FetchStatementSnapshotJob < ApplicationJob
   def perform(statement_id)
     statement = Statement.find(statement_id)
     statement.fetch_snapshot
+    statement.save!
   end
 end
