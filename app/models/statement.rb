@@ -33,8 +33,8 @@ class Statement < ApplicationRecord
 
   attr_accessor :should_enqueue_snapshot
 
-  def self.search(admin:, criteria:)
-    StatementSearch.new(admin, criteria)
+  def self.search(include_unpublished:, criteria:)
+    StatementSearch.new(include_unpublished, criteria)
   end
 
   def associate_with_user(user)

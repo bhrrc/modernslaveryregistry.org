@@ -1,6 +1,6 @@
 class StatementSearch
-  def initialize(admin, criteria)
-    @admin = admin
+  def initialize(include_unpublished, criteria)
+    @include_unpublished = include_unpublished
     @criteria = criteria
   end
 
@@ -36,7 +36,7 @@ class StatementSearch
   end
 
   def filter_by_published
-    @statements = @admin ? @statements.latest : @statements.latest_published
+    @statements = @include_unpublished ? @statements.latest : @statements.latest_published
   end
 
   def filter_by_company
