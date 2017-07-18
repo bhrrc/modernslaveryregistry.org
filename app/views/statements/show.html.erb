@@ -25,6 +25,10 @@
                 method: :delete,
                 data: { confirm: 'Are you sure?' } %>
         <% end %>
+        <% if @statement.broken_url && admin? %>
+          <br>
+          <%= link_to 'Mark as not broken', mark_url_not_broken_company_statement_path(@statement.company, @statement), method: :post %>
+        <% end %>
         <% if @statement.verified_by %>
           <p>Authenticated by <span data-content="verified_by"><%= @statement.verified_by.name %></span></p>
         <% else %>

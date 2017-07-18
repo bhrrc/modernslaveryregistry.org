@@ -27,7 +27,7 @@ When(/^(Joe|Patricia) views the latest snapshot of the statement for "([^"]*)"$/
   actor.attempts_to_view_the_latest_snapshot(company_name: company_name)
 end
 
-Then(/^(Joe|Patricia) should see a (PDF|PNG) snapshot of the statement for "([^"]*)"$/) do |actor, format, company_name|
+Then(/^(Joe|Patricia) should see a (PDF|JPEG) snapshot of the statement for "([^"]*)"$/) do |actor, format, company_name|
   expect(actor.visible_snapshot).to eq("#{format.content_type} snapshot for statement by '#{company_name}'")
 end
 

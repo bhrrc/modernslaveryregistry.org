@@ -4,6 +4,22 @@ Given(/^the following statements have been submitted:$/) do |table|
   end
 end
 
+Given(/^a statement was submitted for "([^"]*)" that responds with a 404$/) do |company_name|
+  statement_url = 'https://cucumber.io/some-404'
+  allow(StatementUrl).to receive(:fetch).with(statement_url).and_return(
+    FetchResult.with(
+      url: statement_url,
+      broken_url: true,
+      content_type: 'text/plain',
+      content_data: 'ooooops! nothing here...'
+    )
+  )
+  submit_statement(
+    statement_url: statement_url,
+    company_name: company_name
+  )
+end
+
 When(/^(Joe|Patricia) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
   props = table.rows_hash
   actor.attempts_to_submit_statement(
@@ -54,6 +70,19 @@ end
 
 When(/^(Joe|Patricia) finds all statements by "([^"]*)"$/) do |actor, company_name|
   actor.attempts_to_find_all_statements_by_company(company_name: company_name)
+end
+
+When(/^(Joe|Patricia) marks the URL for "([^"]*)" as not broken$/) do |actor, company_name|
+  url = Company.find_by!(name: company_name).latest_statement.url
+  allow(ScreenGrab).to receive(:fetch).with(url).and_return(
+    FetchResult.with(
+      url: url,
+      broken_url: false,
+      content_data: "image/jpeg snapshot for statement by 'Cucumber Ltd'",
+      content_type: 'image/png'
+    )
+  )
+  actor.attempts_to_mark_statement_url_as_not_broken(company_name: company_name)
 end
 
 Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
@@ -144,6 +173,12 @@ module UpdatesStatements
     click_link 'Edit'
     fill_in('Company name', with: new_values.fetch('company_name'))
     click_button 'Submit'
+  end
+
+  def attempts_to_mark_statement_url_as_not_broken(company_name:)
+    company = Company.find_by!(name: company_name)
+    visit company_statement_path(company, company.latest_statement)
+    click_on 'Mark as not broken'
   end
 end
 

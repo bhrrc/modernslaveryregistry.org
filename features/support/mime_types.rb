@@ -1,7 +1,7 @@
 mime_types = {
   'PDF' => 'application/pdf',
   'HTML' => 'text/html',
-  'PNG' => 'image/jpeg'
+  'JPEG' => 'image/jpeg'
 }
 
 class MimeType < Value.new(:format, :content_type)

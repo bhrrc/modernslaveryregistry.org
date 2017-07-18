@@ -11,4 +11,4 @@ Feature: Snapshots
   Scenario: Snapshot of HTML statement
     Given a statement was submitted for "Cucumber Ltd" that responds with HTML
     When Patricia views the latest snapshot of the statement for "Cucumber Ltd"
-    Then Patricia should see a PNG snapshot of the statement for "Cucumber Ltd"
+    Then Patricia should see a JPEG snapshot of the statement for "Cucumber Ltd"
