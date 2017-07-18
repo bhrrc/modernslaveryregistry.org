@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     get :new_statement, on: :collection, as: 'new_company_statement'
     resources :statements do
       resource :snapshot, only: :show
+      post :mark_url_not_broken, on: :member
     end
   end
 

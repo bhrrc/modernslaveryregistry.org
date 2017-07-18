@@ -33,6 +33,17 @@ class StatementsController < ApplicationController
     end
   end
 
+  def mark_url_not_broken
+    unless admin?
+      render status: :forbidden, text: "Sorry, can't do that"
+      return
+    end
+    @company = company_from_params
+    @statement = @company.statements.find(params[:id])
+    @statement.update!(broken_url: false, marked_not_broken_url: true)
+    redirect_to [@company, @statement]
+  end
+
   private
 
   def company_from_params

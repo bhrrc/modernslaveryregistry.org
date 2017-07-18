@@ -59,7 +59,7 @@ class Statement < ApplicationRecord
   end
 
   def enqueue_snapshot
-    @should_enqueue_snapshot = true if url_changed?
+    @should_enqueue_snapshot = true if url_changed? || marked_not_broken_url_changed?
   end
 
   def perform_snapshot_job
@@ -72,7 +72,7 @@ class Statement < ApplicationRecord
     fetch_result = StatementUrl.fetch(url)
     self.url = fetch_result.url
     self.broken_url = fetch_result.broken_url
-    build_snapshot_from_result(fetch_result) unless broken_url
+    build_snapshot_from_result(fetch_result) unless broken_url && !marked_not_broken_url?
   end
 
   private
