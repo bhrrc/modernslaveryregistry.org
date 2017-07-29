@@ -1,13 +1,9 @@
-Given(/^(Joe|Patricia) is logged in$/) do |actor|
-  login_as(find_or_create_user(name: actor.name, admin: true))
-end
-
-Given(/^(Vicky) is logged in$/) do |actor|
-  login_as(find_or_create_user(name: actor.name, admin: false))
+Given(/^(Joe|Patricia|Vicky) is logged in$/) do |actor|
+  login_as(find_or_create_user(actor))
 end
 
 When(/^(Joe|Patricia|Vicky) logs in$/) do |actor|
-  find_or_create_user(name: actor.name, admin: actor.name != 'Vicky')
+  find_or_create_user(actor)
   actor.attempts_to_log_in
 end
 
@@ -30,7 +26,7 @@ end
 module AttemptsToLogIn
   def attempts_to_log_in
     visit new_user_session_path
-    fill_in 'Email', with: "#{name}@test.com"
+    fill_in 'Email', with: email
     fill_in 'Password', with: 's3cr3t'
     click_on 'Log in'
   end

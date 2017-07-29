@@ -32,12 +32,22 @@ class Actor
   def initialize(name)
     @name = name
   end
+
+  def email
+    "#{name}@test.com"
+  end
 end
 
 class Visitor < Actor
+  def admin?
+    false
+  end
 end
 
 class Administrator < Visitor
+  def admin?
+    true
+  end
 end
 
 Transform(/^(Joe|Patricia|Vicky)$/) do |actor_name|

@@ -1,5 +1,5 @@
 Given(/^(Vicky) has a user account$/) do |actor|
-  find_or_create_user(name: actor.name, admin: false)
+  find_or_create_user(actor)
 end
 
 When(/^(Patricia) searches users$/) do |actor| # rubocop:disable Style/SymbolProc
