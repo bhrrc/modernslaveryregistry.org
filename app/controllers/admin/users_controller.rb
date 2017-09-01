@@ -18,6 +18,10 @@ module Admin
       @user = User.find(params[:id])
     end
 
+    def show
+      redirect_to [:edit, :admin, User.find(params[:id])]
+    end
+
     def destroy
       User.find(params[:id]).delete
       redirect_to %i[admin users]

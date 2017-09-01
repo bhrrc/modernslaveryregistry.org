@@ -1,0 +1,51 @@
+<div class="statement-details">
+  <p class="date-added">
+    Date added: <span data-content="date_seen"><%= l statement.date_seen, format: :long%></span>
+  </p>
+
+  <% if statement.verified_by %>
+    <p>Authenticated by <span data-content="verified_by"><%= statement.verified_by.name %></span></p>
+  <% else %>
+    <p><span data-content="publish_status">Draft</span></p>
+  <% end %>
+</div>
+
+<% if statement.snapshot.present? %>
+  <div class="browser-wrapper">
+    <div class="browser-navigation-bar">
+      <i class="top-bar"></i>
+      <i class="top-bar"></i>
+      <i class="top-bar"></i>
+      <%= link_to(statement.url, statement.url, class: 'url') %>
+    </div>
+
+    <div class="browser-container">
+      <iframe src="<%= company_statement_snapshot_path(statement.company, statement) %>" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <div class="snapshot-label has-text-centered">
+    Snapshot of <%= link_to statement.url, statement.url %>
+    <br />
+    fetched <%= l statement.snapshot.created_at, format: :long %>
+  </div>
+
+<% elsif URI(statement.url).scheme == 'https' %>
+  <div class="browser-wrapper">
+    <div class="browser-navigation-bar">
+      <i class="top-bar"></i>
+      <i class="top-bar"></i>
+      <i class="top-bar"></i>
+      <%= link_to(statement.url, statement.url, class: 'url', target: '_blank') %>
+    </div>
+
+    <div class="browser-container">
+      <iframe src="<%= statement.url %>" frameborder="0"></iframe>
+    </div>
+  </div>
+<% else %>
+
+  <div class="box">
+    <%= link_to('Read statement', statement.url, class: 'button is-primary', target: :_blank) %>
+  </div>
+<% end %>

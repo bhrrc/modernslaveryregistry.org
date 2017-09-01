@@ -153,7 +153,7 @@ Page.where(
   short_title: 'Contact us',
   body_html: <<~HTML
 <p>
-  To submit a statement please see <a href="/companies/new_statement">here</a>.
+  To submit a statement please see <a href="/companies/new">here</a>.
 </p>
 <p>
   For <strong>general enquiries</strong> please contact:

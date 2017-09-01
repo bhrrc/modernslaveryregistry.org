@@ -18,4 +18,20 @@ class Company < ApplicationRecord
   def sector_name
     try(:sector).try(:name) || 'Sector unknown'
   end
+
+  def self.search(query)
+    wild = "%#{query}%"
+    Company.where(
+      'lower(name) like lower(?)',
+      wild
+    )
+  end
+
+  def associate_all_statements_with_user(user)
+    statements.each { |s| s.associate_with_user user }
+  end
+
+  def to_param
+    [id, name.parameterize].join('-')
+  end
 end

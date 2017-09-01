@@ -5,37 +5,17 @@ class CompaniesController < ApplicationController
 
   def new
     @company = Company.new
-  end
-
-  def new_statement
-    @company = Company.new
     @company.statements.build
-    render 'new'
   end
 
   def create
     @company = Company.new(company_params)
-    @company.statements.each { |s| s.associate_with_user current_user }
     if @company.save
       send_submission_email
-      redirect_to after_save_path_for_company(@company)
+      redirect_to thanks_path
     else
       # TODO: Fix rendering when there are errors
       render 'new'
-    end
-  end
-
-  def update
-    @company = Company.find(params[:id])
-    authorize @company
-
-    @company.assign_attributes(company_params)
-    @company.statements.each { |s| s.associate_with_user current_user }
-
-    if @company.save
-      redirect_to after_save_path_for_company(@company)
-    else
-      render 'edit'
     end
   end
 
@@ -43,11 +23,7 @@ class CompaniesController < ApplicationController
     @company = Company.find(params[:id])
     @statements = @company.statements.order('date_seen DESC')
     @new_statement = Statement.new(company: @company)
-  end
-
-  def edit
-    @company = Company.find(params[:id])
-    authorize @company, :update?
+    @statement = @company.latest_statement
   end
 
   private
@@ -55,18 +31,6 @@ class CompaniesController < ApplicationController
   def send_submission_email
     email = @company.statements.reverse.map(&:contributor_email).compact.first
     StatementMailer.submitted(email).deliver_later if email.present?
-  end
-
-  def after_save_path_for_company(company)
-    if company.statements.any?
-      if admin?
-        company_statement_path(company, company.latest_statement)
-      else
-        thanks_path
-      end
-    else
-      company_path(company)
-    end
   end
 
   def company_params

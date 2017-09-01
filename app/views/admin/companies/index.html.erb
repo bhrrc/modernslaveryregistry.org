@@ -1,0 +1,55 @@
+<% title 'Admin: Companies' %>
+
+<div class="container">
+
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li class="is-active"><a href="#" aria-current="page">Companies</a></li>
+      </ul>
+    </nav>
+
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1">
+          Companies
+        </h1>
+      </div>
+      <div class="column is-narrow">
+        <%= link_to 'New Company', new_admin_company_path, class: 'button' %>
+      </div>
+    </div>
+
+    <div class="box">
+      <%= form_tag '', method: :get do %>
+        <div class="field has-addons is-horizontal is-pulled-right">
+          <div class="control">
+            <%= text_field_tag :query, params[:query], class: 'input' %>
+          </div>
+          <div class="control">
+            <%= submit_tag 'Search', class: 'button is-primary' %>
+          </div>
+        </div>
+      <% end %>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% @companies.each do |company| %>
+          <tr>
+            <td><%= link_to company.name, [:admin, company] %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <%= paginate @companies %>
+
+    </div>
+  </div>
+
+</div>

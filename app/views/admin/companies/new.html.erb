@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Companies', [:admin, :companies] %></li>
+        <li class="is-active"><a href="#" aria-current="page">New Company</a></li>
+      </ul>
+    </nav>
+
+    <h1 class="title is-1">
+      New Company
+    </h1>
+    <%= render partial: 'form', locals: { company: @company, build_statement: true } %>
+  </div>
+</div>

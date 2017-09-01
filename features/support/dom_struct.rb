@@ -44,7 +44,8 @@ module DomStruct
   private
 
   def field_value_from_element(field_name, element)
-    element.find(selector(field_name)).text
+    field = element.find(selector(field_name))
+    field['data-value'] || field.text
   rescue ::Capybara::ElementNotFound
     nil
   end

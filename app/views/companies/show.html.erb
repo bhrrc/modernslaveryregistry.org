@@ -2,36 +2,61 @@
 
 <div class="container">
   <div class="section" data-content="company">
-    <h2 class="title is-3" data-content="company_name"><%= @company.name %></h2>
 
-    <h3 class="title is-5"><%= link_to 'Submit Statement', new_company_statement_path(@company) %></h3>
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1" data-content="name"><%= @company.name %></h1>
+      </div>
+      <div class="column is-narrow">
+        <% if admin? %>
+          <%= link_to 'Visit Company in Admin', admin_company_path(@company), class: 'button' %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="columns" data-content="statement">
+      <div class="column">
+        <ul class="tags">
+          <li class="tag is-dark-navy"><%= @company.country_name %></li>
+          <li class="tag is-dark-navy"><%= @company.sector_name %></li>
+        </ul>
+
+        <% if @company.latest_statement.present? %>
+          <%= render 'statements/preview', statement: @company.latest_statement %>
+        <% end %>
+      </div>
+    </div>
   </div>
 
   <div class="section">
-    <h3 class="title is-5">Statements</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Date seen</th>
-          <% if admin? %>
-            <th>Signed by director</th>
-            <th>Approved by board</th>
-            <th>Link on front page</th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% @statements.each do |statement| %>
-          <tr data-content="statement">
-            <td><%= link_to(statement.date_seen, [@company, statement], {'data-content': 'date_seen'}) %></td>
-            <% if admin? %>
-              <td><%= yes_no(statement.signed_by_director) %></td>
-              <td><%= yes_no_not_explicit(statement.approved_by_board) %></td>
-              <td><%= yes_no(statement.link_on_front_page) %></td>
-            <% end %>
+    <h3 class="title is-3">Statement History</h3>
+    <div class="box">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date added</th>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @statements.each do |statement| %>
+            <tr data-content="company_statements_list">
+              <td>
+                <% if statement.latest? %>
+                  <span data-content="date_seen" data-value="<%= statement.date_seen %>"><%= l(statement.date_seen, format: :long) %></span> (latest)
+                <% else %>
+                  <%= link_to(l(statement.date_seen, format: :long), [@company, statement], { 'data-content': 'date_seen', 'data-value': statement.date_seen }) %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3 class="title is-5">
+      <%= link_to "Submit a new statement by #{@company.name}", new_company_statement_path(@company), class: 'button is-medium is-primary' %>
+    </h3>
   </div>
 </div>

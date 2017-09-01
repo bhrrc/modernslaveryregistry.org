@@ -6,12 +6,12 @@ Given(/^company "([^"]*)" has been submitted$/) do |company_name|
 end
 
 When(/^(Joe|Patricia) submits company "([^"]*)"$/) do |actor, company_name|
-  actor.attempts_to_submit_company(name: company_name)
+  actor.attempts_to_create_company(name: company_name)
 end
 
 When(/^(Vicky) submits the following company:$/) do |actor, table|
   details = table.rows_hash
-  actor.attempts_to_submit_company_as_visitor(
+  actor.attempts_to_submit_company_with_statement(
     name: details.fetch('Company name'),
     statement_url: details.fetch('Statement URL'),
     your_email: details.fetch('Your email')
@@ -27,17 +27,19 @@ Then(/^(Joe|Patricia) should find company "([^"]*)"$/) do |actor, company_name|
   expect(actor.visible_company_name).to eq(company_name)
 end
 
-module AttemptsToSubmitCompany
-  def attempts_to_submit_company(name:)
-    visit new_company_path
-    fill_in 'Company name', with: name
-    select 'United Kingdom', from: 'Company HQ'
+module AttemptsToCreateCompany
+  def attempts_to_create_company(name:)
+    visit new_admin_company_path
+    fill_in 'Name', with: name
+    select 'United Kingdom', from: 'Country'
     select 'Software', from: 'Sector'
-    click_button 'Submit'
+    click_button 'Create Company'
   end
+end
 
-  def attempts_to_submit_company_as_visitor(name:, statement_url:, your_email:)
-    visit new_company_statement_companies_path
+module AttemptsToSubmitCompanyWithStatement
+  def attempts_to_submit_company_with_statement(name:, statement_url:, your_email:)
+    visit new_company_path
     fill_in 'Company name', with: name
     fill_in 'Statement URL', with: statement_url
     fill_in 'Your email', with: your_email
@@ -47,11 +49,15 @@ end
 
 module SeesACompanyOnThePage
   def visible_company_name
-    find('[data-content="company_name"]').text
+    find('[data-content="company"] [data-content="name"]').text
   end
 end
 
 class Visitor
-  include AttemptsToSubmitCompany
+  include AttemptsToSubmitCompanyWithStatement
   include SeesACompanyOnThePage
+end
+
+class Administrator
+  include AttemptsToCreateCompany
 end

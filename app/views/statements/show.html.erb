@@ -4,126 +4,12 @@
   <div class="section">
     <div class="columns">
       <div class="column">
-        <h1 class="title is-marginless">
+        <h1 class="title is-1">
           <%= link_to @statement.company.name, @statement.company, {'data-content': "company-name"} %>
         </h1>
-        <ul class="tags">
-          <li class="tag is-dark-navy"><%= @statement.country_name %></li>
-          <li class="tag is-dark-navy"><%= @statement.sector_name %></li>
-        </ul>
-        <p class="date-added">
-          <% if @statement.broken_url && admin? %>
-            <%= image_tag('broken-link.png', size: '24') %>
-          <% end %>
-          Date added: <%= @statement.date_seen.strftime('%d %B %Y') %>
-        </p>
-        <% if admin? %>
-          <%= link_to('Edit', edit_company_path(@statement.company)) %>
-          <br>
-          <%= link_to 'Delete',
-                company_statement_path(@statement.company, @statement),
-                method: :delete,
-                data: { confirm: 'Are you sure?' } %>
-        <% end %>
-        <% if @statement.broken_url && admin? %>
-          <br>
-          <%= link_to 'Mark as not broken', mark_url_not_broken_company_statement_path(@statement.company, @statement), method: :post %>
-        <% end %>
-        <% if @statement.verified_by %>
-          <p>Authenticated by <span data-content="verified_by"><%= @statement.verified_by.name %></span></p>
-        <% else %>
-          <p><span data-content="published">Draft</span></p>
-        <% end %>
+
+        <%= render 'statements/preview', { statement: @statement } %>
       </div>
-      <% if admin? %>
-        <div class="column">
-          <div class="columns">
-            <div class="column">
-              <span class="label">Contributed by</span>
-            </div>
-            <div class="column" data-content="contributor_email">
-              <%= @statement.contributor_email %>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <span class="label">Signed by director or equivalent</span>
-            </div>
-            <div class="column">
-              <%= yes_no(@statement.signed_by_director) %>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <span class="label">Signed by</span>
-            </div>
-            <div class="column">
-              <%= @statement.signed_by %>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <span class="label">Approved by board or equivalent</span>
-            </div>
-            <div class="column">
-              <%= yes_no_not_explicit(@statement.approved_by_board) %>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <span class="label">Approved by</span>
-            </div>
-            <div class="column">
-              <%= @statement.approved_by %>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <span class="label">Link on Front page</span>
-            </div>
-            <div class="column">
-              <%= yes_no(@statement.link_on_front_page) %>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <span class="label">Content Type</span>
-            </div>
-            <div class="column">
-              <%= content_type_tag(@statement.snapshot && @statement.snapshot.content_type) %>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <span class="label">Latest snapshot</span>
-            </div>
-            <div class="column" data-content="latest_shapshot">
-              <% if @statement.snapshot.present? %>
-                <%= link_to 'Download', company_statement_snapshot_path(@statement.company, @statement), target: :_blank %>
-              <% else %>
-                No snapshot available. It may be in progress, try <a href="javascript:location.reload()">reloading this page</a>.
-              <% end %>
-            </div>
-          </div>
-        </div>
-      <% end %>
     </div>
-
-    <% if URI(@statement.url).scheme == 'https' %>
-      <div class="browser-wrapper">
-        <div class="browser-navigation-bar">
-          <i class="top-bar"></i>
-          <i class="top-bar"></i>
-          <i class="top-bar"></i>
-          <%= link_to(@statement.url, @statement.url, class: 'url') %>
-        </div>
-
-        <div class="browser-container">
-          <iframe src="<%= @statement.url %>" frameborder="0"></iframe>
-        </div>
-      </div>
-    <% else %>
-      <%= link_to('Read statement', @statement.url, class: 'button is-primary', target: :_blank) %>
-    <% end %>
   </div>
 </div>

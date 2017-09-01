@@ -2,85 +2,100 @@
 
 <div class="container">
   <div class="section">
-    <h1 class="title">Admin Dashboard</h1>
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1" data-content="name">
+          Admin Dashboard
+        </h1>
+      </div>
+      <div class="column is-narrow">
+        <%= link_to 'Visit Public Site', root_path, class: 'button' %>
+      </div>
+    </div>
   </div>
 
-  <div class="section content box">
-    <h2 class="title">Compliance Stats</h2>
-    <table data-content="minimum_compliance_requirements_stats">
-      <tbody>
-        <tr>
-          <td>
-            Link on front page
-          </td>
-          <td data-content="percent_link_on_front_page">
-            <%= @total > 0 ? ((@stats[:link_on_front_page].to_f / @total.to_f) * 100).to_i : 0 %>%
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Signed by director
-          </td>
-          <td data-content="percent_signed_by_director">
-            <%= @total > 0 ? ((@stats[:signed_by_director].to_f / @total.to_f) * 100).to_i : 0 %>%
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Approved by board
-          </td>
-          <td data-content="percent_approved_by_board">
-            <%= @total > 0 ? ((@stats[:approved_by_board].to_f / @total.to_f) * 100).to_i : 0 %>%
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Yes to all minimum compliance questions
-          </td>
-          <td data-content="percent_fully_compliant">
-            <%= @total > 0 ? ((@stats[:fully_compliant].to_f / @total.to_f) * 100).to_i : 0 %>%
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="section content box">
-    <h2 class="title">New Statements</h2>
-    <% if @new_statements.any? %>
-      <table data-content="new_statements">
+  <div class="subsection">
+    <div class="box">
+      <h2 class="title is-2">Compliance Stats</h2>
+      <table data-content="minimum_compliance_requirements_stats" class="table">
         <tbody>
-          <% @new_statements.each do |statement| %>
-            <tr>
-              <td>
-                <%= link_to statement.company.name, company_statement_path(statement.company, statement) %>
-              </td>
-            </tr>
-          <% end %>
+          <tr>
+            <td>
+              Link on front page
+            </td>
+            <td data-content="percent_link_on_front_page">
+              <%= @total > 0 ? ((@stats[:link_on_front_page].to_f / @total.to_f) * 100).to_i : 0 %>%
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Signed by director
+            </td>
+            <td data-content="percent_signed_by_director">
+              <%= @total > 0 ? ((@stats[:signed_by_director].to_f / @total.to_f) * 100).to_i : 0 %>%
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Approved by board
+            </td>
+            <td data-content="percent_approved_by_board">
+              <%= @total > 0 ? ((@stats[:approved_by_board].to_f / @total.to_f) * 100).to_i : 0 %>%
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Yes to all minimum compliance questions
+            </td>
+            <td data-content="percent_fully_compliant">
+              <%= @total > 0 ? ((@stats[:fully_compliant].to_f / @total.to_f) * 100).to_i : 0 %>%
+            </td>
+          </tr>
         </tbody>
       </table>
-    <% else %>
-      All statements are published
-    <% end %>
+    </div>
   </div>
 
-  <div class="section content box">
-    <h2 class="title">Broken URLs</h2>
-    <% if @broken_urls.any? %>
-      <table data-content="broken_urls">
-        <tbody>
-          <% @broken_urls.each do |statement| %>
-            <tr>
-              <td>
-                <%= link_to statement.company.name, company_statement_path(statement.company, statement) %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      No broken URLs
-    <% end %>
+  <div class="subsection">
+    <div class="box">
+      <h2 class="title is-2">New Statements</h2>
+      <% if @new_statements.any? %>
+        <table data-content="new_statements" class="table">
+          <tbody>
+            <% @new_statements.each do |statement| %>
+              <tr>
+                <td>
+                  <%= link_to statement.company.name, admin_company_statement_path(statement.company, statement) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        All statements are published
+      <% end %>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="box">
+      <h2 class="title is-2">Broken URLs</h2>
+      <% if @broken_urls.any? %>
+        <table data-content="broken_urls" class="table">
+          <tbody>
+            <% @broken_urls.each do |statement| %>
+              <tr>
+                <td>
+                  <%= link_to statement.company.name, admin_company_statement_path(statement.company, statement) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        No broken URLs
+      <% end %>
+    </div>
   </div>
 
 </div>

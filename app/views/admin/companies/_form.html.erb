@@ -1,0 +1,48 @@
+<%= form_for [:admin, company] do |f| %>
+
+  <%= render 'errors/summary', { object: company } %>
+
+  <div class="box">
+    <div class="field">
+      <%= f.label :name, class: 'label' %>
+      <p class="control">
+        <%= f.text_field :name, class: 'input' %>
+      </p>
+    </div>
+
+    <div class="field">
+      <%= f.label :country_id, class: 'label' %>
+      <p class="control">
+        <div class="select is-fullwidth">
+          <%= f.collection_select(:country_id, Country.order(:name).all, :id, :name, include_blank: true) %>
+        </div>
+      </p>
+    </div>
+
+    <div class="field">
+      <%= f.label :sector_id, class: 'label' %>
+      <p class="control">
+        <div class="select is-fullwidth">
+          <%= f.collection_select(:sector_id, Sector.order(:name).all, :id, :name, include_blank: true) %>
+        </div>
+      </p>
+    </div>
+  </div>
+
+  <% if build_statement %>
+    <h2 class="title is-h2">Statement</h2>
+    <%= f.fields_for :statements,  company.statements.build do |f| %>
+      <%= render partial: 'admin/statements/fields', locals: { f: f } %>
+    <% end %>
+  <% end %>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <%= f.submit class: 'button is-primary' %>
+    </div>
+    <div class="control">
+      <%= link_to 'Cancel', [:admin, company], class: 'button' %>
+    </div>
+  </div>
+
+<% end %>

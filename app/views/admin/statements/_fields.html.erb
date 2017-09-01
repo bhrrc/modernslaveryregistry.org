@@ -1,0 +1,63 @@
+<div class="box">
+  <div class="field">
+    <%= f.label :url, class: 'label' %>
+    <p class="control">
+      <%= f.text_field :url, class: 'input', onchange: 'document.getElementById("open_statement_link").href = this.value' %>
+
+      <%= link_to 'open in new tab', f.object.url, onclick: 'this.href = statement_url.value', id: 'open_statement_link', target: '_blank' %>
+    </p>
+  </div>
+
+  <div class="field">
+    <%= f.label :contributor_email, class: 'label' %>
+    <p class="control">
+      <%= f.text_field :contributor_email, class: 'input' %>
+    </p>
+  </div>
+
+  <div class="field" data-content="Approved by board">
+    <%= f.label :approved_by_board, class: 'label' %>
+    <label class="radio">
+      <%= f.radio_button(:approved_by_board, 'Yes') %>
+      Yes
+    </label>
+    <label class="radio">
+      <%= f.radio_button(:approved_by_board, 'No') %>
+      No
+    </label>
+    <label class="radio">
+      <%= f.radio_button(:approved_by_board, 'Not explicit') %>
+      Not explicit
+    </label>
+  </div>
+
+  <div class="field">
+    <%= f.label :signed_by, class: 'label' %>
+    <p class="control">
+      <%= f.text_field :signed_by, class: 'input' %>
+    </p>
+  </div>
+
+  <div class="field">
+    <label class="label">Other</label>
+
+    <div class="control">
+      <label class="checkbox">
+        <%= f.check_box(:signed_by_director) %>
+        Signed by director?
+      </label>
+    </div>
+    <div class="control">
+      <label class="checkbox">
+        <%= f.check_box(:link_on_front_page) %>
+        Link on front page?
+      </label>
+    </div>
+    <div class="control">
+      <label class="checkbox">
+        <%= f.check_box(:published) %>
+        Published?
+      </label>
+    </div>
+  </div>
+</div>

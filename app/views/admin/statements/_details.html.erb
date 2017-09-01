@@ -1,0 +1,122 @@
+<div data-content="statement">
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">URL</span>
+    </div>
+    <div class="column">
+      <%= link_to statement.url, statement.url, class: 'is-url', data: { content: 'url' } %>
+    </div>
+  </div>
+
+  <% if statement.broken_url? %>
+    <div class="columns">
+      <div class="column is-one-quarter">
+        <span class="label is-warning">Broken URL</span>
+      </div>
+      <div class="column">
+        <%= button_to 'Mark URL not broken', [:mark_url_not_broken, :admin, statement.company, statement], class: 'button' %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Contributed by</span>
+    </div>
+    <div class="column" data-content="contributor_email">
+      <%= mail_to statement.contributor_or_verifier_email, statement.contributor_or_verifier_email %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Authenticated By</span>
+    </div>
+    <% if statement.verified_by.present? %>
+      <div class="column" data-content="verified_by">
+        <%= link_to(statement.verified_by.name, [:admin, statement.verified_by]) %>
+      </div>
+    <% else %>
+      <div class="column" data-content="publish_status">
+        Draft
+      </div>
+    <% end %>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Signed by director?</span>
+    </div>
+    <div class="column" data-content="signed_by_director">
+      <%= yes_no statement.signed_by_director? %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Approved by board?</span>
+    </div>
+    <div class="column" data-content="approved_by_board">
+      <%= yes_no_not_explicit statement.approved_by_board %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Link on front page?</span>
+    </div>
+    <div class="column" data-content="link_on_front_page">
+      <%= yes_no statement.link_on_front_page? %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Published?</span>
+    </div>
+    <div class="column" data-content="published">
+      <%= yes_no statement.published? %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Content type</span>
+    </div>
+    <div class="column" data-content="content_type">
+      <%= content_type_tag(statement.snapshot && statement.snapshot.content_type) %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Snapshot</span>
+    </div>
+    <div class="column" data-content="snapshot_fetched_at">
+      <% if statement.snapshot %>
+        Fetched <%= l statement.snapshot.updated_at, format: :long %>
+        &nbsp;(<%= time_ago_in_words statement.snapshot.updated_at %> ago)
+      <% else %>
+        Statement has no snapshot
+      <% end %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label"></span>
+    </div>
+    <div class="column">
+      <div class="field is-grouped">
+        <% if statement.snapshot %>
+          <div class="control">
+            <%= link_to 'Open Snapshot in new tab', [statement.company, statement, :snapshot], class: 'button', target: '_blank' %>
+          </div>
+        <% end %>
+        <div class="control">
+          <%= button_to 'Fetch new Snapshot now', [:snapshot, :admin, statement.company, statement], class: 'button' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

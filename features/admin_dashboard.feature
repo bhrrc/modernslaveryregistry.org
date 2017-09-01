@@ -1,5 +1,6 @@
 Feature: Admin dashboard
-  Administrators have a dedicated area for administrative functionality
+  So the public site looks the same to everyone including administrators
+  Administrators have a dedicated area for admin-specific functionality
   Which is not accessible to regular users
 
   Scenario: Logging in as admin

@@ -10,10 +10,8 @@ Rails.application.routes.draw do
 
   resources :countries
   resources :companies do
-    get :new_statement, on: :collection, as: 'new_company_statement'
     resources :statements do
       resource :snapshot, only: :show
-      post :mark_url_not_broken, on: :member
     end
   end
 
@@ -21,6 +19,12 @@ Rails.application.routes.draw do
     root 'dashboard#show', as: :dashboard
     resources :pages
     resources :users
+    resources :companies do
+      resources :statements do
+        post :mark_url_not_broken, on: :member
+        post :snapshot, on: :member
+      end
+    end
   end
 
   get 'pages/:id', to: 'pages#show', as: :page
