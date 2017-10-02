@@ -12,9 +12,9 @@ Feature: Submit company
 
   Scenario: Administrator submits a new company
     Given Patricia is logged in
-    When Patricia submits company "Cucumber Ltd"
+    When Patricia submits the company "Cucumber Ltd"
     Then Patricia should see company "Cucumber Ltd"
-    And Patricia should not receive a thank you for submitting email 
+    And Patricia should not receive a thank you for submitting email
 
   Scenario: Visitor submits a new company
     When Vicky submits the following company:

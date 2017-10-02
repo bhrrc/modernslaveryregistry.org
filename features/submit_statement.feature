@@ -17,7 +17,7 @@ Feature: Submit statement
       | link_on_front_page | No                                         |
 
   Scenario: Administrator submits statement for existing company
-    Given company "Cucumber Ltd" has been submitted
+    Given the company "Cucumber Ltd" has been submitted
     And Patricia is logged in
     When Patricia submits the following statement for "Cucumber Ltd":
       | url                | https://cucumber.io/anti-slavery-statement |
@@ -50,7 +50,7 @@ Feature: Submit statement
       | link_on_front_page | Yes                                        |
 
   Scenario: Administrator submits statement with missing details
-    Given company "Cucumber Ltd" has been submitted
+    Given the company "Cucumber Ltd" has been submitted
     And Patricia is logged in
     When Patricia submits the following statement for "Cucumber Ltd":
       | signed_by_director | No                                         |

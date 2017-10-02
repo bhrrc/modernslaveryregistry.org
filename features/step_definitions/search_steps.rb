@@ -6,6 +6,11 @@ When(/^(Joe|Patricia) selects sector "([^"]*)"$/) do |actor, sector|
   actor.attempts_to_filter_by_sector(sector)
 end
 
+Then(/^(Joe|Patricia) should find no company called "([^"]*)" exists$/) do |actor, company_name|
+  actor.attempts_to_search_for(company_name)
+  expect(actor.visible_statement_search_results_summary).to eq('No statements found')
+end
+
 module ExploresStatements
   def attempts_to_search_for(query)
     visit explore_path
@@ -17,6 +22,10 @@ module ExploresStatements
     visit explore_path
     select sector, from: 'sectors_'
     click_button 'Search'
+  end
+
+  def visible_statement_search_results_summary
+    find('[data-content="company_search_results"] h2').text
   end
 end
 

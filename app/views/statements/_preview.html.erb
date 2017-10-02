@@ -25,9 +25,7 @@
   </div>
 
   <div class="snapshot-label has-text-centered">
-    Snapshot of <%= link_to statement.url, statement.url %>
-    <br />
-    fetched <%= l statement.snapshot.created_at, format: :long %>
+    Snapshot fetched <%= l statement.snapshot.created_at, format: :long %>
   </div>
 
 <% elsif URI(statement.url).scheme == 'https' %>

@@ -1,11 +1,11 @@
-Given(/^company "([^"]*)" has been submitted$/) do |company_name|
+Given(/^the company "([^"]*)" has been submitted$/) do |company_name|
   Company.create!(
     name: company_name,
     country: Country.find_or_create_by!(code: 'GB', name: 'United Kingdom')
   )
 end
 
-When(/^(Joe|Patricia) submits company "([^"]*)"$/) do |actor, company_name|
+When(/^(Joe|Patricia) submits the company "([^"]*)"$/) do |actor, company_name|
   actor.attempts_to_create_company(name: company_name)
 end
 
@@ -16,6 +16,10 @@ When(/^(Vicky) submits the following company:$/) do |actor, table|
     statement_url: details.fetch('Statement URL'),
     your_email: details.fetch('Your email')
   )
+end
+
+When(/^(Joe|Patricia) deletes the company "([^"]*)"$/) do |actor, company_name|
+  actor.attempts_to_delete_company(company_name: company_name)
 end
 
 Then(/^(Joe|Patricia) should see company "([^"]*)"$/) do |actor, company_name|
@@ -47,6 +51,14 @@ module AttemptsToSubmitCompanyWithStatement
   end
 end
 
+module AttemptsToDeleteCompany
+  def attempts_to_delete_company(company_name:)
+    company = Company.find_by!(name: company_name)
+    visit admin_company_path(company)
+    click_button 'Delete Company'
+  end
+end
+
 module SeesACompanyOnThePage
   def visible_company_name
     find('[data-content="company"] [data-content="name"]').text
@@ -60,4 +72,5 @@ end
 
 class Administrator
   include AttemptsToCreateCompany
+  include AttemptsToDeleteCompany
 end

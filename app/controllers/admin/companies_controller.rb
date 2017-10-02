@@ -38,6 +38,12 @@ module Admin
       end
     end
 
+    def destroy
+      @company = Company.find(params[:id])
+      @company.destroy
+      redirect_to admin_companies_path
+    end
+
     private
 
     def company_params
