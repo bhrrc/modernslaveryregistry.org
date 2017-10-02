@@ -1,0 +1,21 @@
+<% title "New Statement" %>
+
+<div class="container">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Companies', [:admin, :companies] %></li>
+        <li><%= link_to @company.name, [:admin, @company] %></li>
+        <li class="is-active"><a href="#" aria-current="page">New Statement</a></li>
+      </ul>
+    </nav>
+
+    <h1 class="title is-1">New Statement</h1>
+
+    <%= render 'admin/statements/form', {
+      company: @company,
+      statement: @statement,
+      cancel_url: admin_company_path(@company)
+    } %>
+  </div>
+</div>

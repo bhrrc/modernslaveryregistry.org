@@ -1,0 +1,18 @@
+<% title "Edit Company: #{@company.name}" %>
+
+<div class="container">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Companies', [:admin, :companies] %></li>
+        <li><%= link_to @company.name, [:admin, @company] %></li>
+        <li class="is-active"><a href="#" aria-current="page">Edit</a></li>
+      </ul>
+    </nav>
+
+    <h1 class="title is-1">
+      <%= @company.name %>
+    </h1>
+    <%= render partial: 'form', locals: { company: @company, build_statement: false } %>
+  </div>
+</div>

@@ -12,7 +12,7 @@ class StatementUrl
   end
 
   def fetch
-    visit_unless_broken
+    visit_if_url_format_valid
     FetchResult.with(
       url: @url,
       broken_url: @broken_url,
@@ -23,7 +23,7 @@ class StatementUrl
 
   private
 
-  def visit_unless_broken
+  def visit_if_url_format_valid
     uri = try_to_parse(@url)
     if uri.nil?
       @broken_url = true
@@ -58,14 +58,14 @@ class StatementUrl
   end
 
   def try_to_open(uri)
-    # The :read_timeout option for open-uri's open doesn't work with https,
-    # only http.
     RestClient::Request.execute(
       method: :get,
       url: uri.to_s,
       timeout: 25,
       headers: { 'User-Agent' => browser_user_agent, 'Accept-Encoding' => 'identity' }
     )
+  rescue => e
+    e.response || raise(e)
   end
 
   def browser_user_agent

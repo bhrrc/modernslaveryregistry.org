@@ -1,15 +1,21 @@
 <% title 'Admin: Pages' %>
 
-<div class="container section content">
+<div class="container section">
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li class="is-active"><a href="#" aria-current="page">Pages</a></li>
+    </ul>
+  </nav>
 
-  <div class="level">
-
-    <h1 class="title level-left">
-      Pages
-    </h1>
-
-    <%= link_to 'New Page', new_admin_page_path, class: 'button level-right' %>
-
+  <div class="columns">
+    <div class="column">
+      <h1 class="title is-1">
+        Pages
+      </h1>
+    </div>
+    <div class="column is-narrow">
+      <%= link_to 'New Page', new_admin_page_path, class: 'button' %>
+    </div>
   </div>
 
   <div class="box">

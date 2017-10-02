@@ -1,0 +1,119 @@
+<% title @company.name %>
+
+<div class="container" data-content="company">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Companies', [:admin, :companies] %></li>
+        <li class="is-active"><a href="#" aria-current="page"><%= @company.name %></a></li>
+      </ul>
+    </nav>
+
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1" data-content="name">
+          <%= @company.name %>
+        </h1>
+      </div>
+      <div class="column is-narrow">
+        <%= link_to 'Edit Company', edit_admin_company_path(@company), class: 'button' %>
+        &nbsp;
+        <%= button_to "Delete Company", [:admin, @company], method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
+        &nbsp;
+        <%= link_to 'Visit Company on Website', company_path(@company), class: 'button' %>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="columns">
+        <div class="column label is-one-quarter">
+          Country
+        </div>
+        <div class="column">
+          <span class="tag" data-content="country"><%= @company.country_name %></span>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column label is-one-quarter">
+          Sector
+        </div>
+        <div class="column">
+          <span class="tag" data-content="sector"><%= @company.sector_name %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="columns">
+      <div class="column">
+        <h2 class="title is-2">
+          Latest Statement
+        </h2>
+      </div>
+      <div class="column is-narrow">
+        <% if @company.latest_statement.present? %>
+          <%= link_to 'Edit Latest Statement', edit_admin_company_statement_path(@company, @company.latest_statement), class: 'button' %>
+        <% end %>
+      </div>
+    </div>
+    <div class="box">
+      <% if @company.latest_statement.present? %>
+        <%= render partial: 'admin/statements/details', locals: { statement: @company.latest_statement } %>
+      <% else %>
+        <%= @company.name %> has no statements. <%= link_to 'Add one', new_admin_company_statement_path(@company) %>.
+      <% end %>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="columns">
+      <div class="column">
+        <h2 class="title is-2">
+          Statements
+        </h2>
+      </div>
+      <div class="column is-narrow">
+        <%= link_to 'New Statement', new_admin_company_statement_path(@company), class: 'button' %>
+      </div>
+    </div>
+    <div class="box">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>
+              Date Seen
+            </th>
+            <th>
+              Content Type
+            </th>
+            <th>
+              Snapshot
+            </th>
+          </tr>
+        </thead>
+        <% @company.statements.each do |statement| %>
+          <tr>
+            <td>
+              <%= link_to l(statement.date_seen), admin_company_statement_path(statement.company, statement) %><%= statement.latest? ? ' (Latest)' : '' %>
+            </td>
+            <td>
+              <%= statement.snapshot.present? ?
+                content_type_tag(statement.snapshot.content_type)
+                :
+                content_type_tag(nil)
+              %>
+            </td>
+            <td>
+              <%= statement.snapshot.present? ?
+                link_to('Open snapshot', company_statement_snapshot_path(statement.company, statement), target: '_blank')
+                :
+                'In progress'
+              %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<% title "Edit Statement" %>
+
+<div class="container">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Companies', [:admin, :companies] %></li>
+        <li><%= link_to @statement.company.name, [:admin, @statement.company] %></li>
+        <li><%= link_to "Statement #{@statement.id}", [:admin, @statement.company, @statement] %></li>
+        <li class="is-active"><a href="#" aria-current="page">Edit</a></li>
+      </ul>
+    </nav>
+
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1">
+          Edit Statement
+        </h1>
+      </div>
+      <div class="column is-narrow">
+        <%= button_to "Delete Statement", [:admin, @statement.company, @statement], method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
+      </div>
+    </div>
+
+    <%= render 'admin/statements/form', {
+      company: @company,
+      statement: @statement,
+      cancel_url: [:admin, @company, @statement]
+    } %>
+  </div>
+</div>

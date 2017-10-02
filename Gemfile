@@ -38,7 +38,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'json', '~> 2.0.3'
 
 gem 'acts_as_list'
-gem 'bulma-rails', '0.4.1.pre'
+gem 'bulma-rails', '0.4.3'
 gem 'chartjs-ror'
 gem 'chosen-rails'
 gem 'leaflet-rails'

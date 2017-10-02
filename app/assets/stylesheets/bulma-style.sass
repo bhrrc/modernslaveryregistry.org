@@ -171,6 +171,10 @@ $nav-height: 6.25rem !default
   .nav-item
     background: $dark-navy !important
 
+header
+  .nav-right
+    margin-right: 18px
+
 .footer
   .nav-item
     color: darken($grey, 25%)
@@ -187,6 +191,15 @@ $nav-height: 6.25rem !default
   color: $dark-navy !important
 
 @import "bulma"
+
+.is-dark-grey
+  color: $white
+  background-color: #333
+
+  .nav-item a, a.nav-item
+    color: white
+    &:hover
+      color: $yellow
 
 .is-dark-navy
   color: $white
@@ -206,6 +219,16 @@ $nav-height: 6.25rem !default
     &:hover,
     &.is-hovered
       border-color: red
+
+.is-url
+  word-break: break-word
+  white-space: normal
+
+.breadcrumb
+  margin-top: -50px
+  background: #efefef
+  a
+    color: $turquoise
 
 .not-bold
   font-weight: normal
@@ -259,9 +282,15 @@ $nav-height: 6.25rem !default
   // top: 50%
   // transform: translateY(-50%)
 
+.subsection
+  padding: 0 1.5rem 3rem 1.5rem
+
 .admin
   footer
-    margin-top: 40px 
+    margin-top: 40px
+
+  form.button_to
+    display: inline
 
 trix-toolbar .button_group button.icon, trix-toolbar .button_group input[type=button].icon
   display: initial
@@ -277,7 +306,7 @@ trix-toolbar .button_group button.icon, trix-toolbar .button_group input[type=bu
   h2
     color: $red
 
-.statements-list
+.explore_companies_results
   a
     font-weight: bold
 
@@ -302,3 +331,9 @@ trix-toolbar .button_group button.icon, trix-toolbar .button_group input[type=bu
 
     span a
       border: 1px solid #ccc
+
+.statement-details
+  margin-bottom: 20px
+
+.snapshot-label
+  padding: 1em

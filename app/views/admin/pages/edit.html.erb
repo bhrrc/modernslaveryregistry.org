@@ -2,19 +2,23 @@
 
 <div class="container">
   <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Pages', [:admin, :pages] %></li>
+        <li class="is-active"><a href="#" aria-current="page"><%= @page.title %></a></li>
+      </ul>
+    </nav>
 
-    <div class="level">
-
-      <h1 class="title level-left">
-        Edit Page
-      </h1>
-
-      <%= link_to 'Visit on Website', page_path(@page), class: 'button level-right', target: '_blank' %>
-
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1">
+          Edit Page
+        </h1>
+      </div>
+      <div class="column is-narrow">
+        <%= link_to 'Visit on Website', page_path(@page), class: 'button', target: '_blank' %>
+      </div>
     </div>
-
-
-
     <%= render partial: 'form', locals: { page: @page } %>
   </div>
 </div>

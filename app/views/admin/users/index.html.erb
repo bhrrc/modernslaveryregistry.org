@@ -1,14 +1,21 @@
 <% title 'Admin: Users' %>
 
-<div class="container section content">
+<div class="container section">
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li class="is-active"><a href="#" aria-current="page">Users</a></li>
+    </ul>
+  </nav>
 
-  <div class="level">
+  <div class="columns">
 
-    <h1 class="title level-left">
-      Users
-    </h1>
+    <div class="column">
+      <h1 class="title is-1">
+        Users
+      </h1>
+    </div>
 
-    <div class="level-right">
+    <div class="column is-narrow">
       <%= form_tag '', method: :get do %>
         <div class="field has-addons">
           <div class="control">

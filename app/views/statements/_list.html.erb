@@ -1,11 +1,8 @@
-<div class="statements-list">
+<div class="explore_companies_results">
   <% statements.each do |statement| %>
-    <div class="columns <%= statement.published? ? 'published' : 'draft'%>" data-content="statement">
+    <div class="columns <%= statement.published? ? 'published' : 'draft'%>" data-content="company">
       <div class="column">
-        <% if statement.broken_url && admin? %>
-          <%= image_tag('broken-link.png', size: '24') %>
-        <% end %>
-        <%= link_to(statement.company.name, company_statement_path(statement.company, statement), {'data-content': 'company_name'}) %>
+        <%= link_to(statement.company.name, company_path(statement.company), {'data-content': 'name'}) %>
       </div>
       <div class="column" data-content="country">
         <%= statement.country_name %>

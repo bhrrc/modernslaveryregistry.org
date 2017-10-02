@@ -1,0 +1,35 @@
+<% title "Statement" %>
+
+<div class="container">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Companies', [:admin, :companies] %></li>
+        <li><%= link_to @statement.company.name, [:admin, @statement.company] %></li>
+        <li class="is-active"><a href="#" aria-current="page">Statement <%= @statement.id %></a></li>
+      </ul>
+    </nav>
+
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1">
+          Statement
+        </h1>
+      </div>
+      <div class="column is-narrow">
+        <div class="field is-grouped">
+          <div class="control">
+            <%= link_to 'Edit Statement', edit_admin_company_statement_path(@statement.company, @statement), class: 'button' %>
+          </div>
+          <div class="control">
+            <%= button_to "Delete Statement", [:admin, @statement.company, @statement], method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%= render 'admin/statements/details', {
+      statement: @statement
+    } %>
+  </div>
+</div>

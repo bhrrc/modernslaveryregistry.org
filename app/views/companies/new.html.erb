@@ -4,7 +4,7 @@
   <div class="section">
     <div class="columns">
       <div class="column">
-        <h2 class="title is-5"><%= @company.statements.any? ? 'Submit Statement' : 'Submit Company' %></h2>
+        <h2 class="title is-2"><%= @company.statements.any? ? 'Submit Statement' : 'Submit Company' %></h2>
         <%= render partial: 'company_form', locals: { company: @company } %>
       </div>
       <div class="column content">

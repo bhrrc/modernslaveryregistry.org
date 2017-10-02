@@ -2,7 +2,14 @@
 
 <div class="container">
   <div class="section">
-    <h1 class="title">New Page</h1>
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Pages', [:admin, :pages] %></li>
+        <li class="is-active"><a href="#" aria-current="page">New Page</a></li>
+      </ul>
+    </nav>
+
+    <h1 class="title is-1">New Page</h1>
     <%= render partial: 'form', locals: { page: @page } %>
   </div>
 </div>

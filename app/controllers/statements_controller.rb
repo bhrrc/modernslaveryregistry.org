@@ -11,16 +11,6 @@ class StatementsController < ApplicationController
     @statement = statements.find(params[:id])
   end
 
-  def destroy
-    unless admin?
-      render status: :forbidden, text: "Sorry, can't do that"
-      return
-    end
-    statement = Statement.destroy(params[:id])
-    flash[:notice] = "Deleted statement for #{statement.company.name}"
-    redirect_to root_path
-  end
-
   def create
     @company = company_from_params
     @statement = @company.statements.build(statement_params)
@@ -31,17 +21,6 @@ class StatementsController < ApplicationController
     else
       render 'new'
     end
-  end
-
-  def mark_url_not_broken
-    unless admin?
-      render status: :forbidden, text: "Sorry, can't do that"
-      return
-    end
-    @company = company_from_params
-    @statement = @company.statements.find(params[:id])
-    @statement.update!(broken_url: false, marked_not_broken_url: true)
-    redirect_to [@company, @statement]
   end
 
   private

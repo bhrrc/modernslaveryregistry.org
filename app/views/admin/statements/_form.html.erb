@@ -1,0 +1,18 @@
+<%= form_for [:admin, company, statement] do |f| %>
+
+  <%= render 'errors/summary', { object: statement } %>
+
+  <%= render partial: 'admin/statements/fields', locals: { f: f } %>
+
+  <div class="field is-grouped">
+    <div class="control">
+      <%= f.submit class: 'button is-primary' %>
+    </div>
+    <% if defined? cancel_url %>
+      <div class="control">
+        <%= link_to 'Cancel', cancel_url, class: 'button' %>
+      </div>
+    <% end %>
+  </div>
+  
+<% end %>

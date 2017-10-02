@@ -34,7 +34,13 @@
 
   </div>
 
-  <%= f.submit class: 'button is-primary' %>
-  <%= link_to 'Cancel', [:admin, :users], class: 'button' %>
+  <div class="field is-grouped">
+    <div class="control">
+      <%= f.submit class: 'button is-primary' %>
+    </div>
+    <div class="control">
+      <%= link_to 'Cancel', [:admin, :users], class: 'button' %>
+    </div>
+  </div>
 
 <% end %>

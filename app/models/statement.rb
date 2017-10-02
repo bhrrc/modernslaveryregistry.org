@@ -38,8 +38,8 @@ class Statement < ApplicationRecord
   end
 
   def associate_with_user(user)
-    self.verified_by = published? ? user : nil
-    self.contributor_email ||= user && user.email
+    self.verified_by ||= user if user.admin? && published?
+    self.contributor_email = user && user.email if contributor_email.blank?
   end
 
   def verified?
@@ -52,6 +52,10 @@ class Statement < ApplicationRecord
 
   def verified_by_email
     try(:verified_by).try(:email)
+  end
+
+  def contributor_or_verifier_email
+    contributor_email.blank? ? verified_by_email : contributor_email
   end
 
   def self.to_csv(statements, extra)
