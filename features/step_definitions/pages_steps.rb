@@ -1,11 +1,11 @@
 Given(/^the following pages exist:$/) do |table|
   table.hashes.each do |props|
     Page.create!(
-      title: props['title'],
-      short_title: props['title'],
-      slug: props['title'].downcase.delete(' '),
-      body_html: "Body of #{props['title']}",
-      published: props['published'] == 'yes'
+      title: props['Title'],
+      short_title: props['Title'],
+      slug: props['Title'].downcase.delete(' '),
+      body_html: "Body of #{props['Title']}",
+      published: props['Published'] == 'Yes'
     )
   end
 end
@@ -85,7 +85,7 @@ Then(/^(Joe|Patricia) should see the updated page on the website$/) do |actor|
 end
 
 Then(/^(Joe|Patricia) should see the following menu on the website:$/) do |actor, table|
-  expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['title'] })
+  expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 
 Then(/^(Joe|Patricia) should not see the deleted page on the website$/) do |actor|
@@ -93,7 +93,7 @@ Then(/^(Joe|Patricia) should not see the deleted page on the website$/) do |acto
 end
 
 Then(/^(Vicky) should see the following pages on the website:$/) do |actor, table|
-  expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['title'] })
+  expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 
 module ManagesPages
@@ -134,7 +134,7 @@ module ManagesPages
     elsif attribute == :body_html
       find('input[name="page[body_html]"]', visible: false).set value
     elsif attribute == :published
-      value ? check('Published?') : uncheck('Published?')
+      value ? check('Published') : uncheck('Published')
     else
       raise "#{attribute} is not a page attribute"
     end

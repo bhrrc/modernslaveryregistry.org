@@ -2,7 +2,7 @@ Feature: Search statements
 
   Background:
     Given the following statements have been submitted:
-      | company_name | statement_url          | country        | sector      | verified_by | contributor_email |
+      | Company name | Statement URL          | Country        | Sector      | Verified by | Contributor email |
       | Cucumber Ltd | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    |                   |
       | Banana Ltd   | https://banana.io/s    | France         | Agriculture | Patricia    |                   |
       | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      |             | bob@host.com      |

@@ -34,7 +34,7 @@ end
 module AttemptsToCreateCompany
   def attempts_to_create_company(name:)
     visit new_admin_company_path
-    fill_in 'Name', with: name
+    fill_in 'Company name', with: name
     select 'United Kingdom', from: 'Country'
     select 'Software', from: 'Sector'
     click_button 'Create Company'
