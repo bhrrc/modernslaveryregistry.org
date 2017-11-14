@@ -10,6 +10,7 @@ class CompaniesController < ApplicationController
 
   def create
     @company = Company.new(company_params)
+    @company.associate_all_statements_with_user(current_user) if user_signed_in?
     if @company.save
       send_submission_email
       redirect_to thanks_path

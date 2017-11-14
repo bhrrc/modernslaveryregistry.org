@@ -20,7 +20,7 @@ Given(/^a statement was submitted for "([^"]*)" that responds with a 404$/) do |
   )
 end
 
-When(/^(Joe|Patricia) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
+When(/^(Joe|Patricia|Vicky) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
   actor.attempts_to_submit_new_statement_for_existing_company(
     company_name: company_name,
     options: table.rows_hash.symbolize_keys
@@ -31,6 +31,7 @@ Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, tabl
   actor.attempts_to_create_company_with_statement(options: table.rows_hash.symbolize_keys)
 end
 
+# TODO: fix up naming of this step
 When(/^(Joe|Patricia|Vicky) submits the following statement:$/) do |actor, table|
   actor.attempts_to_create_company_with_statement(options: table.rows_hash.symbolize_keys)
 end
@@ -108,41 +109,7 @@ Then(/^(Joe|Patricia) should see that the statement was invalid and not saved$/)
   expect(actor.visible_validation_error_summary).to eq(["Url can't be blank"])
 end
 
-module SubmitsStatementsAsVisitor
-  def attempts_to_create_company_with_statement(options:)
-    visit new_company_path
-    fill_in 'Company name', with: options.fetch(:company_name)
-    fill_in 'Statement URL', with: options.fetch(:url)
-    fill_in 'Your email', with: options.fetch(:contributor_email)
-    select options[:country], from: 'Company HQ' if options[:country]
-    click_button 'Submit'
-  end
-
-  def attempts_to_submit_new_statement_for_existing_company(company_name:, options:)
-    company = Company.find_by!(name: company_name)
-    visit company_path(company)
-    click_on "Submit a new statement by #{company_name}"
-    fill_in_fields(options)
-    click_button 'Create Statement'
-  end
-end
-
-module SubmitsStatementsAsAdmin
-  def attempts_to_create_company_with_statement(options:)
-    visit new_admin_company_path
-    fill_in_fields(options)
-    click_button 'Create Company'
-  end
-
-  def attempts_to_submit_new_statement_for_existing_company(company_name:, options:)
-    company = Company.find_by!(name: company_name)
-    visit new_admin_company_statement_path(company)
-    fill_in_fields(options)
-    click_button 'Create Statement'
-  end
-
-  private
-
+module FillsInForms
   def fill_in_fields(options)
     options.symbolize_keys.each do |option, value|
       fill_in_field(option, value)
@@ -168,7 +135,7 @@ module SubmitsStatementsAsAdmin
   def text_field_labels
     {
       company_name: 'Name',
-      url: 'Url'
+      url: 'Statement URL'
     }
   end
 
@@ -190,6 +157,44 @@ module SubmitsStatementsAsAdmin
     {
       approved_by_board: 'Approved by board'
     }
+  end
+end
+
+module SubmitsStatementsAsVisitor
+  include FillsInForms
+
+  def attempts_to_create_company_with_statement(options:)
+    visit new_company_path
+    fill_in 'Company name', with: options.fetch(:company_name)
+    fill_in 'Statement URL', with: options.fetch(:url)
+    fill_in 'Your email', with: options.fetch(:contributor_email)
+    select options[:country], from: 'Company HQ' if options[:country]
+    click_button 'Submit'
+  end
+
+  def attempts_to_submit_new_statement_for_existing_company(company_name:, options:)
+    company = Company.find_by!(name: company_name)
+    visit company_path(company)
+    click_on "Submit a new statement by #{company_name}"
+    fill_in_fields(options)
+    click_button 'Submit'
+  end
+end
+
+module SubmitsStatementsAsAdmin
+  include FillsInForms
+
+  def attempts_to_create_company_with_statement(options:)
+    visit new_admin_company_path
+    fill_in_fields(options)
+    click_button 'Create Company'
+  end
+
+  def attempts_to_submit_new_statement_for_existing_company(company_name:, options:)
+    company = Company.find_by!(name: company_name)
+    visit new_admin_company_statement_path(company)
+    fill_in_fields(options)
+    click_button 'Create Statement'
   end
 end
 

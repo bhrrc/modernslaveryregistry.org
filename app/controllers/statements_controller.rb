@@ -14,10 +14,10 @@ class StatementsController < ApplicationController
   def create
     @company = company_from_params
     @statement = @company.statements.build(statement_params)
-    @statement.associate_with_user current_user
+    @statement.associate_with_user(current_user) if user_signed_in?
 
     if @statement.save
-      redirect_to [@company, @statement]
+      redirect_to '/thanks'
     else
       render 'new'
     end
