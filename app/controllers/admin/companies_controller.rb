@@ -21,7 +21,7 @@ module Admin
       if @company.statements.first.present? && @company.statements.first.url.blank?
         @company.statements = []
       end
-      @company.associate_all_statements_with_user(current_user)
+      @company.associate_all_statements_with_user(current_user) if user_signed_in?
       if @company.save
         redirect_to admin_company_path(@company)
       else
