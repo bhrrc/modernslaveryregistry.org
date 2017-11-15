@@ -18,9 +18,7 @@ module Admin
 
     def create
       @company = Company.new(company_params)
-      if @company.statements.first.present? && @company.statements.first.url.blank?
-        @company.statements = []
-      end
+      @company.remove_blank_first_statement
       @company.associate_all_statements_with_user(current_user) if user_signed_in?
       if @company.save
         redirect_to admin_company_path(@company)

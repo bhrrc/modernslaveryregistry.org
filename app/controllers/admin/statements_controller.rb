@@ -1,21 +1,20 @@
 module Admin
   class StatementsController < AdminController
+    before_action :find_company
+
     def edit
-      @company = Company.find(params[:company_id])
       @statement = @company.statements.find(params[:id])
     end
 
     def show
-      @statement = Statement.find(params[:id])
+      @statement = @company.statements.find(params[:id])
     end
 
     def new
-      @company = Company.find(params[:company_id])
       @statement = @company.statements.build
     end
 
     def create
-      @company = Company.find(params[:company_id])
       @statement = @company.statements.build(statement_params)
       if @statement.save
         redirect_to admin_company_path(@company)
@@ -25,7 +24,6 @@ module Admin
     end
 
     def snapshot
-      @company = Company.find(params[:company_id])
       @statement = @company.statements.find(params[:id])
       @statement.fetch_snapshot
       @statement.save!
@@ -33,13 +31,11 @@ module Admin
     end
 
     def destroy
-      @company = Company.find(params[:company_id])
       @company.statements.destroy(params[:id])
       redirect_to [:admin, @company]
     end
 
     def update
-      @company = Company.find(params[:company_id])
       @statement = @company.statements.find(params[:id])
       if @statement.update_attributes(statement_params)
         @statement.associate_with_user(current_user) if user_signed_in?
@@ -51,13 +47,16 @@ module Admin
     end
 
     def mark_url_not_broken
-      @company = Company.find(params[:company_id])
       @statement = @company.statements.find(params[:id])
       @statement.update!(broken_url: false, marked_not_broken_url: true)
       redirect_to [:admin, @company, @statement]
     end
 
     private
+
+    def find_company
+      @company = Company.find(params[:company_id])
+    end
 
     def statement_params
       params.require(:statement).permit(STATEMENT_ATTRIBUTES)

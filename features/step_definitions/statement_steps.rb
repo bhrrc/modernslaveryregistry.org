@@ -117,22 +117,42 @@ module FillsInForms
   end
 
   def fill_in_field(option, value)
-    if text_field_labels.include?(option)
-      fill_in(option, with: value)
-    elsif drop_downs.include?(option)
-      select(value, from: option)
-    elsif check_boxes.include?(option)
-      value =~ /yes|true/i ? check(option) : uncheck(option)
-    elsif radios.include?(option)
-      within("*[data-content='#{option}']") do
-        choose(value)
-      end
-    else
-      raise "Don't know how to fill in field '#{option}'"
-    end
+    raise "Don't know how to fill in field '#{option}'" unless
+      try_filling_text_field(option, value) ||
+      try_filling_drop_down(option, value) ||
+      try_filling_check_box(option, value) ||
+      try_filling_radio(option, value)
   end
 
-  def text_field_labels
+  private
+
+  def try_filling_text_field(option, value)
+    return false unless text_fields.include?(option)
+    fill_in(option, with: value)
+    true
+  end
+
+  def try_filling_drop_down(option, value)
+    return false unless drop_downs.include?(option)
+    select(value, from: option)
+    true
+  end
+
+  def try_filling_check_box(option, value)
+    return false unless check_boxes.include?(option)
+    value =~ /yes|true/i ? check(option) : uncheck(option)
+    true
+  end
+
+  def try_filling_radio(option, value)
+    return false unless radios.include?(option)
+    within("*[data-content='#{option}']") do
+      choose(value)
+    end
+    true
+  end
+
+  def text_fields
     ['Company name', 'Statement URL']
   end
 

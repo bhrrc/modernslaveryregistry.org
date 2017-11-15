@@ -31,6 +31,10 @@ class Company < ApplicationRecord
     statements.each { |s| s.associate_with_user user }
   end
 
+  def remove_blank_first_statement
+    self.statements = [] if statements.first.present? && statements.first.url.blank?
+  end
+
   def to_param
     [id, name.parameterize].join('-')
   end
