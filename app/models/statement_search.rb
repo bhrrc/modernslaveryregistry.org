@@ -48,7 +48,11 @@ class StatementSearch
 
   def filter_by_company_name
     return if @criteria[:company_name].blank?
-    @company_join = @company_join.where('LOWER(companies.name) LIKE LOWER(?)', "%#{@criteria[:company_name]}%")
+    like = "%#{@criteria[:company_name]}%"
+    @company_join = @company_join.where(
+      'LOWER(companies.name) LIKE LOWER(?) or LOWER(companies.subsidiary_names) LIKE LOWER(?)',
+      like, like
+    )
     @statements = @company_join
   end
 

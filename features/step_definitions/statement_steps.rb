@@ -153,7 +153,7 @@ module FillsInForms
   end
 
   def text_fields
-    ['Company name', 'Statement URL']
+    ['Company name', 'Subsidiary names', 'Statement URL']
   end
 
   def drop_downs

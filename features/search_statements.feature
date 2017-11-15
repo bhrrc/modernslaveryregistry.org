@@ -2,15 +2,20 @@ Feature: Search statements
 
   Background:
     Given the following statements have been submitted:
-      | Company name | Statement URL          | Country        | Sector      | Verified by | Contributor email |
-      | Cucumber Ltd | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    |                   |
-      | Banana Ltd   | https://banana.io/s    | France         | Agriculture | Patricia    |                   |
-      | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      |             | bob@host.com      |
+      | Company name | Subsidiary names | Statement URL          | Country        | Sector      | Verified by | Contributor email |
+      | Cucumber Ltd | Cuke Labs        | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    |                   |
+      | Banana Ltd   |                  | https://banana.io/s    | France         | Agriculture | Patricia    |                   |
+      | Cucumber Inc |                  | https://cucumber.inc/s | United States  | Retail      |             | bob@host.com      |
 
   Scenario: Search by company name
     Given Joe is logged in
     When Joe searches for "cucumber"
     Then Joe should only see "Cucumber Inc, Cucumber Ltd" in the search results
+
+  Scenario: Search by subsidiary name
+    Given Joe is logged in
+    When Joe searches for "cuke"
+    Then Joe should only see "Cucumber Ltd" in the search results
 
   Scenario: Filter by sector
     When Joe selects sector "Agriculture"
