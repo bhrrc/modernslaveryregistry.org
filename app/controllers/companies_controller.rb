@@ -40,20 +40,10 @@ class CompaniesController < ApplicationController
 
   COMPANY_ATTRIBUTES = %i[
     name
-    country_id
-    sector_id
   ].freeze
 
   STATEMENTS_ATTRIBUTES = %i[
-    id
     url
-    linked_from
-    link_on_front_page
-    approved_by
-    approved_by_board
-    signed_by
-    signed_by_director
-    published
     contributor_email
   ].freeze
 end
