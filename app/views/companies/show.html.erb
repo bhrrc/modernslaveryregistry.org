@@ -35,6 +35,7 @@
         <thead>
           <tr>
             <th>Date added</th>
+            <th>Period covered</th>
           </tr>
         </thead>
         <tbody>
@@ -46,6 +47,9 @@
                 <% else %>
                   <%= link_to(l(statement.date_seen, format: :long), [@company, statement], { 'data-content': 'date_seen', 'data-value': statement.date_seen }) %>
                 <% end %>
+              </td>
+              <td data-content="period_covered">
+                <%= statement.period_covered %>
               </td>
             </tr>
           <% end %>

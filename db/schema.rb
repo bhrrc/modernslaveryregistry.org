@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115160523) do
+ActiveRecord::Schema.define(version: 20171115163643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(version: 20171115160523) do
     t.boolean  "latest",                default: false
     t.boolean  "latest_published",      default: false
     t.boolean  "marked_not_broken_url", default: false
+    t.string   "period_covered",        default: ""
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree
     t.index ["latest"], name: "index_statements_on_latest", where: "latest", using: :btree
     t.index ["latest_published"], name: "index_statements_on_latest_published", where: "latest_published", using: :btree

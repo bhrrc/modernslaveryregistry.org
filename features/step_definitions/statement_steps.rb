@@ -76,7 +76,9 @@ Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, s
 end
 
 Then(/^(Joe|Patricia) should see the following statements:$/) do |actor, table|
-  expect(actor.visible_listed_statements_with_date_seen.map(&:date_seen)).to eq(table.hashes.map { |row| row['Date seen'] })
+  expect(actor.visible_listed_statements_date_seen_and_period_covered).to eq(table.hashes.map do |row|
+    { date_seen: row['Date seen'], period_covered: row['Period covered'] }
+  end)
 end
 
 Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
@@ -153,7 +155,7 @@ module FillsInForms
   end
 
   def text_fields
-    ['Company name', 'Subsidiary names', 'Statement URL']
+    ['Company name', 'Subsidiary names', 'Statement URL', 'Period covered']
   end
 
   def drop_downs
@@ -270,10 +272,18 @@ module ViewsStatements
     visible_company_statements_list_structs(%i[date_seen])
   end
 
+  def visible_listed_statements_date_seen_and_period_covered
+    visible_company_statements_hashes(%i[date_seen period_covered])
+  end
+
   private
 
   def visible_company_statements_list_structs(struct_fields)
     dom_structs(:company_statements_list, *struct_fields)
+  end
+
+  def visible_company_statements_hashes(struct_fields)
+    visible_company_statements_list_structs(struct_fields).map(&:to_h)
   end
 end
 

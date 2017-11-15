@@ -73,6 +73,7 @@ module Admin
       signed_by_director
       published
       contributor_email
+      period_covered
     ].freeze
   end
 end

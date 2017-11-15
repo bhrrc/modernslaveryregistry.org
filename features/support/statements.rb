@@ -33,6 +33,7 @@ module Statements
       approved_by_board: props['Approved by board'] || 'Not explicit',
       link_on_front_page: props['Link on front page'] == 'Yes',
       contributor_email: props['Contributor email'],
+      period_covered: props['Period covered'],
       verified_by: verifier,
       date_seen: props['Date seen'] || '2017-01-01',
       published: props['Published'] == 'Yes' || verifier.present?
