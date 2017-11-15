@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171115163643) do
+ActiveRecord::Schema.define(version: 20171115194032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,22 @@ ActiveRecord::Schema.define(version: 20171115163643) do
     t.float    "lng"
     t.index ["code"], name: "index_countries_on_code", unique: true, using: :btree
     t.index ["name"], name: "index_countries_on_name", unique: true, using: :btree
+  end
+
+  create_table "legislation_statements", force: :cascade do |t|
+    t.integer  "legislation_id", null: false
+    t.integer  "statement_id",   null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["legislation_id"], name: "index_legislation_statements_on_legislation_id", using: :btree
+    t.index ["statement_id"], name: "index_legislation_statements_on_statement_id", using: :btree
+  end
+
+  create_table "legislations", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "icon",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pages", force: :cascade do |t|
@@ -117,6 +133,8 @@ ActiveRecord::Schema.define(version: 20171115163643) do
   end
 
   add_foreign_key "companies", "countries"
+  add_foreign_key "legislation_statements", "legislations"
+  add_foreign_key "legislation_statements", "statements"
   add_foreign_key "snapshots", "statements"
   add_foreign_key "statements", "companies"
   add_foreign_key "statements", "users", column: "verified_by_id"

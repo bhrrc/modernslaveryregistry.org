@@ -17,6 +17,15 @@
     </div>
   </div>
 
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Legislations</span>
+    </div>
+    <div class="column" data-content="legislations">
+      <%= statement.legislations.map(&:name).join(', ') %>
+    </div>
+  </div>
+
   <% if statement.broken_url? %>
     <div class="columns">
       <div class="column is-one-quarter">

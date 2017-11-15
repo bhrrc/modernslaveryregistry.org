@@ -22,6 +22,18 @@
     </p>
   </div>
 
+  <div class="field" data-content="Legislations">
+    <%= f.label :legislations, class: 'label' %>
+    <%= f.collection_check_boxes :legislation_ids, Legislation.all, :id, :name do |m| %>
+      <div class="control">
+        <%= m.label do %>
+          <%= m.check_box %>
+          <%= m.text %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
   <div class="field" data-content="Approved by board">
     <%= f.label :approved_by_board, class: 'label' %>
     <label class="radio">

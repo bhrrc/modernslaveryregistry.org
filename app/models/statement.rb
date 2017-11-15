@@ -11,6 +11,9 @@ class Statement < ApplicationRecord
   belongs_to :verified_by, class_name: 'User', optional: true
   has_one :snapshot, dependent: :destroy
 
+  has_many :legislation_statements
+  has_many :legislations, through: :legislation_statements
+
   validates :url, presence: true
   validates_with UrlFormatValidator
   validates :link_on_front_page, inclusion: { in: [true, false] }, if: :verified?

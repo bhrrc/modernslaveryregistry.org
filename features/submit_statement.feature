@@ -3,6 +3,10 @@ Feature: Submit statement
 
   Scenario: Administrator submits statement for new company
     Given Patricia is logged in
+    And the following Legislations exist:
+      | Name              |
+      | Green Edibles Act |
+      | Vegetables Act    |
     When Patricia submits the following statement:
       | Company name       | Cucumber Ltd                               |
       | Country            | United Kingdom                             |
@@ -10,11 +14,13 @@ Feature: Submit statement
       | Signed by director | Yes                                        |
       | Approved by board  | No                                         |
       | Link on front page | No                                         |
+      | Legislations       | Green Edibles Act, Vegetables Act          |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL      | https://cucumber.io/anti-slavery-statement |
       | Signed by director | Yes                                        |
       | Approved by board  | No                                         |
       | Link on front page | No                                         |
+      | Legislations       | Green Edibles Act, Vegetables Act          |
 
   Scenario: Administrator submits statement for existing company
     Given the company "Cucumber Ltd" has been submitted
