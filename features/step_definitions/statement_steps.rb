@@ -1,6 +1,6 @@
 Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
-    submit_statement props.symbolize_keys
+    submit_statement props
   end
 end
 
@@ -15,25 +15,25 @@ Given(/^a statement was submitted for "([^"]*)" that responds with a 404$/) do |
     )
   )
   submit_statement(
-    statement_url: statement_url,
-    company_name: company_name
+    'Statement URL' => statement_url,
+    'Company name' => company_name
   )
 end
 
 When(/^(Joe|Patricia|Vicky) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
   actor.attempts_to_submit_new_statement_for_existing_company(
     company_name: company_name,
-    options: table.rows_hash.symbolize_keys
+    options: table.rows_hash
   )
 end
 
 Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, table|
-  actor.attempts_to_create_company_with_statement(options: table.rows_hash.symbolize_keys)
+  actor.attempts_to_create_company_with_statement(options: table.rows_hash)
 end
 
 # TODO: fix up naming of this step
 When(/^(Joe|Patricia|Vicky) submits the following statement:$/) do |actor, table|
-  actor.attempts_to_create_company_with_statement(options: table.rows_hash.symbolize_keys)
+  actor.attempts_to_create_company_with_statement(options: table.rows_hash)
 end
 
 When(/^(Joe|Patricia) updates the statement for "([^"]*)" to:$/) do |actor, company_name, table|
@@ -65,9 +65,9 @@ Then(/^(Joe|Patricia) should see 1 statement for "([^"]*)" with:$/) do |actor, c
   statements = actor.visible_listed_statements_for_company(company_name: company_name)
   expect(statements.length).to eq(1)
   latest = actor.visible_latest_statement_by_company(company_name: company_name)
-  attrs = table.rows_hash.symbolize_keys
-  attrs.each do |attr, value|
-    expect("#{attr}=#{latest.send(attr)}").to eq("#{attr}=#{value}")
+  table.rows_hash.each do |key, value|
+    ruby_name = key.downcase.gsub(/\s/, '_').gsub(/^statement_/, '')
+    expect("#{ruby_name}=#{latest.send(ruby_name)}").to eq("#{ruby_name}=#{value}")
   end
 end
 
@@ -76,7 +76,7 @@ Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, s
 end
 
 Then(/^(Joe|Patricia) should see the following statements:$/) do |actor, table|
-  expect(actor.visible_listed_statements_with_date_seen.map(&:date_seen)).to eq(table.hashes.map { |row| row['date_seen'] })
+  expect(actor.visible_listed_statements_with_date_seen.map(&:date_seen)).to eq(table.hashes.map { |row| row['Date seen'] })
 end
 
 Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
@@ -111,20 +111,20 @@ end
 
 module FillsInForms
   def fill_in_fields(options)
-    options.symbolize_keys.each do |option, value|
+    options.each do |option, value|
       fill_in_field(option, value)
     end
   end
 
   def fill_in_field(option, value)
     if text_field_labels.include?(option)
-      fill_in(text_field_labels[option], with: value)
+      fill_in(option, with: value)
     elsif drop_downs.include?(option)
-      select(value, from: drop_downs[option])
+      select(value, from: option)
     elsif check_boxes.include?(option)
-      value =~ /yes|true/i ? check(check_boxes[option]) : uncheck(check_boxes[option])
+      value =~ /yes|true/i ? check(option) : uncheck(option)
     elsif radios.include?(option)
-      within("*[data-content='#{radios[option]}']") do
+      within("*[data-content='#{option}']") do
         choose(value)
       end
     else
@@ -133,30 +133,19 @@ module FillsInForms
   end
 
   def text_field_labels
-    {
-      company_name: 'Name',
-      url: 'Statement URL'
-    }
+    ['Company name', 'Statement URL']
   end
 
   def drop_downs
-    {
-      country: 'Country'
-    }
+    ['Country']
   end
 
   def check_boxes
-    {
-      signed_by_director: 'Signed by director?',
-      link_on_front_page: 'Link on front page?',
-      published: 'Published?'
-    }
+    ['Signed by director', 'Link on front page', 'Published']
   end
 
   def radios
-    {
-      approved_by_board: 'Approved by board'
-    }
+    ['Approved by board']
   end
 end
 
@@ -165,9 +154,9 @@ module SubmitsStatementsAsVisitor
 
   def attempts_to_create_company_with_statement(options:)
     visit new_company_path
-    fill_in 'Company name', with: options.fetch(:company_name)
-    fill_in 'Statement URL', with: options.fetch(:url)
-    fill_in 'Your email', with: options.fetch(:contributor_email)
+    fill_in 'Company name', with: options.fetch('Company name')
+    fill_in 'Statement URL', with: options.fetch('Statement URL')
+    fill_in 'Your email', with: options.fetch('Contributor email')
     select options[:country], from: 'Company HQ' if options[:country]
     click_button 'Submit'
   end
@@ -254,7 +243,7 @@ module ViewsStatements
   end
 
   def visible_count_of_statements_by_company(company_name:)
-    visible_listed_statements_for_company(company_name:company_name).size
+    visible_listed_statements_for_company(company_name: company_name).size
   end
 
   def visible_listed_statements_with_date_seen

@@ -3,7 +3,7 @@ Feature: Public stats
 
   Scenario: Visitor sees counts of statements, countries and sectors
     Given the following statements have been submitted:
-      | company_name | statement_url          | country        | sector      | published |
+      | Company name | Statement URL          | Country        | Sector      | Published |
       | Cucumber Ltd | https://cucumber.ltd/s | United Kingdom | Software    | Yes       |
       | Banana Ltd   | https://banana.io/s    | France         | Agriculture | No        |
       | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      | Yes       |

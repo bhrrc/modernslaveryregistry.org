@@ -31,34 +31,34 @@ Feature: Amend pages
 
   Scenario: Change menu order
     Given the following pages exist:
-      | title  |
+      | Title  |
       | Page A |
       | Page B |
       | Page C |
     When Joe moves the page "Page A" down
     And Joe moves the page "Page C" up
     Then Joe should see the following menu on the website:
-      | title  |
+      | Title  |
       | Page B |
       | Page C |
       | Page A |
 
   Scenario: Visitors can only see published pages in the menu
     Given the following pages exist:
-      | title  | published |
-      | Page A | yes       |
-      | Page B | no        |
-      | Page C | yes       |
+      | Title  | Published |
+      | Page A | Yes       |
+      | Page B | No        |
+      | Page C | Yes       |
     When Vicky is logged in
     Then Vicky should see the following pages on the website:
-      | title  |
+      | Title  |
       | Page A |
       | Page C |
 
   Scenario: Visitors can only visit published pages
     Given the following pages exist:
-      | title  | published |
-      | Page A | no        |
+      | Title  | Published |
+      | Page A | No        |
     When Vicky is logged in
     And Vicky visits the page "Page A"
     Then Vicky should not see the page on the website

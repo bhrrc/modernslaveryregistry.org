@@ -14,10 +14,10 @@ module ViewsMinimumComplianceStats
   def visible_minimum_compliance_requirements_stats
     dom_struct(
       :minimum_compliance_requirements_stats,
-      :percent_link_on_front_page,
-      :percent_signed_by_director,
-      :percent_approved_by_board,
-      :percent_fully_compliant
+      :'Percent link on front page',
+      :'Percent signed by director',
+      :'Percent approved by board',
+      :'Percent fully compliant'
     )
   end
 end

@@ -19,7 +19,7 @@ Given(/^a statement was submitted for "([^"]*)" that responds with (PDF|HTML)$/)
       )
     )
   end
-  submit_statement(statement_url: statement_url, company_name: company_name)
+  submit_statement('Statement URL' => statement_url, 'Company name' => company_name)
   expect(StatementUrl).to have_received(:fetch).with(statement_url)
 end
 
