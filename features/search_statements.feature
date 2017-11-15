@@ -2,10 +2,10 @@ Feature: Search statements
 
   Background:
     Given the following statements have been submitted:
-      | Company name | Subsidiary names | Statement URL          | Country        | Sector      | Verified by | Contributor email |
-      | Cucumber Ltd | Cuke Labs        | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    |                   |
-      | Banana Ltd   |                  | https://banana.io/s    | France         | Agriculture | Patricia    |                   |
-      | Cucumber Inc |                  | https://cucumber.inc/s | United States  | Retail      |             | bob@host.com      |
+      | Company name | Subsidiary names | Statement URL          | Country        | Sector      | Verified by | Contributor email | Published |
+      | Cucumber Ltd | Cuke Labs        | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    |                   | Yes       |
+      | Banana Ltd   |                  | https://banana.io/s    | France         | Agriculture | Patricia    |                   | Yes       |
+      | Cucumber Inc |                  | https://cucumber.inc/s | United States  | Retail      |             | bob@host.com      | No        |
 
   Scenario: Search by company name
     Given Joe is logged in

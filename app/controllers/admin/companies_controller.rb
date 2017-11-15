@@ -46,7 +46,7 @@ module Admin
 
     def company_params
       params.require(:company).permit(COMPANY_ATTRIBUTES,
-        statements_attributes: STATEMENTS_ATTRIBUTES + [{ legislation_ids: [] }])
+                                      statements_attributes: STATEMENTS_ATTRIBUTES + [{ legislation_ids: [] }])
     end
 
     COMPANY_ATTRIBUTES = %i[
