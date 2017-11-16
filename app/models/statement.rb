@@ -79,6 +79,10 @@ class Statement < ApplicationRecord
     build_snapshot_from_result(fetch_result) unless broken_url && !marked_not_broken_url?
   end
 
+  def previewable_snapshot?
+    snapshot.present? && snapshot.previewable?
+  end
+
   private
 
   def company_name

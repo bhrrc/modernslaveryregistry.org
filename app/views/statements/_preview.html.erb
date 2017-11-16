@@ -10,7 +10,7 @@
   <% end %>
 </div>
 
-<% if statement.snapshot.present? && !statement.snapshot.html? %>
+<% if statement.previewable_snapshot? %>
   <div class="browser-wrapper">
     <div class="browser-navigation-bar">
       <i class="top-bar"></i>
