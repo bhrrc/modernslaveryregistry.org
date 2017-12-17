@@ -64,7 +64,10 @@ class StatementUrl
       timeout: 25,
       headers: { 'User-Agent' => browser_user_agent, 'Accept-Encoding' => 'identity' }
     )
+  rescue RestClient::NotFound => e
+    raise(e)
   rescue => e
+    # sometimes error responses still respond with a body
     e.response || raise(e)
   end
 
