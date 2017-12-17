@@ -201,7 +201,7 @@ module SubmitsStatementsAsVisitor
   def attempts_to_submit_new_statement_for_existing_company(company_name:, options:)
     company = Company.find_by!(name: company_name)
     visit company_path(company)
-    click_on "Submit a new statement by #{company_name}"
+    click_on 'Submit new statement'
     fill_in_fields(options)
     click_button 'Submit'
   end

@@ -11,7 +11,7 @@ class Statement < ApplicationRecord
   belongs_to :verified_by, class_name: 'User', optional: true
   has_one :snapshot, dependent: :destroy
 
-  has_many :legislation_statements
+  has_many :legislation_statements, dependent: :destroy
   has_many :legislations, through: :legislation_statements
 
   validates :url, presence: true

@@ -3,12 +3,14 @@ class StatementsController < ApplicationController
 
   def new
     @company = Company.find(params[:company_id])
-    @statement = @company.statements.build
+    @statements = admin? ? @company.statements : @company.statements.published
+    @new_statement = Statement.new(company: @company)
   end
 
   def show
-    statements = admin? ? Statement : Statement.published
-    @statement = statements.find(params[:id])
+    @company = Company.find(params[:company_id])
+    @statements = admin? ? @company.statements : @company.statements.published
+    @statement = @statements.find(params[:id])
   end
 
   def create
