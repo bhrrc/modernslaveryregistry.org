@@ -3,13 +3,13 @@ class StatementsController < ApplicationController
 
   def new
     @company = Company.find(params[:company_id])
-    @statements = admin? ? @company.statements : @company.statements.published
+    @statements = @company.recent_published_statements
     @new_statement = Statement.new(company: @company)
   end
 
   def show
     @company = Company.find(params[:company_id])
-    @statements = admin? ? @company.statements : @company.statements.published
+    @statements = @company.recent_published_statements
     @statement = @statements.find(params[:id])
   end
 

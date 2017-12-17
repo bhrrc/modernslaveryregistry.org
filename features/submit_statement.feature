@@ -15,6 +15,7 @@ Feature: Submit statement
       | Approved by board  | No                                         |
       | Link on front page | No                                         |
       | Legislations       | Green Edibles Act, Vegetables Act          |
+      | Published          | Yes                                        |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL      | https://cucumber.io/anti-slavery-statement |
       | Signed by director | Yes                                        |
@@ -30,6 +31,7 @@ Feature: Submit statement
       | Signed by director | No                                         |
       | Approved by board  | Not explicit                               |
       | Link on front page | Yes                                        |
+      | Published          | Yes                                        |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL      | https://cucumber.io/anti-slavery-statement |
       | Signed by director | No                                         |
@@ -42,6 +44,9 @@ Feature: Submit statement
       | Statement URL      | https://featurist.co.uk/anti-slavery-statement |
     Then Vicky should see a thank you message
     When Patricia is logged in
+    When Patricia updates the statement for "Featurist Ltd" to:
+      | Approved by board  | No                                             |
+      | Published          | Yes                                            |
     Then Patricia should see 1 statement for "Featurist Ltd" with:
       | Statement URL      | https://featurist.co.uk/anti-slavery-statement |
 
@@ -53,6 +58,7 @@ Feature: Submit statement
       | Signed by director | Yes                                        |
       | Approved by board  | No                                         |
       | Link on front page | No                                         |
+      | Published          | Yes                                        |
     When Patricia updates the statement for "Cucumber Ltd" to:
       | Statement URL      | https://cucumber.io/updated-statement      |
       | Signed by director | No                                         |

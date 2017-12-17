@@ -11,6 +11,10 @@ class Company < ApplicationRecord
     statements.latest.first
   end
 
+  def recent_published_statements
+    statements.published.order('period_covered DESC, date_seen DESC')
+  end
+
   def country_name
     try(:country).try(:name) || 'Country unknown'
   end

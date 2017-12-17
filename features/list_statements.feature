@@ -4,10 +4,10 @@ Feature: List statements
 
   Background:
     Given the following statements have been submitted:
-      | Company name | Statement URL                                   | Period covered |
-      | Cucumber Ltd | https://cucumber.io/anti-slavery-statement-2015 | 2015-2016      |
-      | Banana Ltd   | https://banana.io/anti-slavery-statement        | 2011-2012      |
-      | Cucumber Ltd | https://cucumber.io/anti-slavery-statement-2016 | 2016-2017      |
+      | Company name | Statement URL                                   | Period covered | Published |
+      | Cucumber Ltd | https://cucumber.io/anti-slavery-statement-2015 | 2015-2016      | true      |
+      | Banana Ltd   | https://banana.io/anti-slavery-statement        | 2011-2012      | true      |
+      | Cucumber Ltd | https://cucumber.io/anti-slavery-statement-2016 | 2016-2017      | true      |
 
   Scenario: List all statements by one company
     When Patricia finds all statements by "Cucumber Ltd"

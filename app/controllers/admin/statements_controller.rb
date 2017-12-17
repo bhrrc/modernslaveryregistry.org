@@ -38,7 +38,7 @@ module Admin
     def update
       @statement = @company.statements.find(params[:id])
       if @statement.update_attributes(statement_params)
-        @statement.associate_with_user(current_user) if user_signed_in?
+        @statement.associate_with_user(current_user)
         @statement.save!
         redirect_to admin_company_path(@company)
       else
