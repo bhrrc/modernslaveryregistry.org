@@ -10,17 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170811071500) do
+ActiveRecord::Schema.define(version: 20171115194032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "companies", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "name",             null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
     t.integer  "country_id"
     t.integer  "sector_id"
+    t.string   "subsidiary_names"
     t.index ["country_id"], name: "index_companies_on_country_id", using: :btree
     t.index ["sector_id"], name: "index_companies_on_sector_id", using: :btree
   end
@@ -34,6 +35,22 @@ ActiveRecord::Schema.define(version: 20170811071500) do
     t.float    "lng"
     t.index ["code"], name: "index_countries_on_code", unique: true, using: :btree
     t.index ["name"], name: "index_countries_on_name", unique: true, using: :btree
+  end
+
+  create_table "legislation_statements", force: :cascade do |t|
+    t.integer  "legislation_id", null: false
+    t.integer  "statement_id",   null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["legislation_id"], name: "index_legislation_statements_on_legislation_id", using: :btree
+    t.index ["statement_id"], name: "index_legislation_statements_on_statement_id", using: :btree
+  end
+
+  create_table "legislations", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "icon",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pages", force: :cascade do |t|
@@ -82,6 +99,7 @@ ActiveRecord::Schema.define(version: 20170811071500) do
     t.boolean  "latest",                default: false
     t.boolean  "latest_published",      default: false
     t.boolean  "marked_not_broken_url", default: false
+    t.string   "period_covered",        default: ""
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree
     t.index ["latest"], name: "index_statements_on_latest", where: "latest", using: :btree
     t.index ["latest_published"], name: "index_statements_on_latest_published", where: "latest_published", using: :btree
@@ -115,6 +133,8 @@ ActiveRecord::Schema.define(version: 20170811071500) do
   end
 
   add_foreign_key "companies", "countries"
+  add_foreign_key "legislation_statements", "legislations"
+  add_foreign_key "legislation_statements", "statements"
   add_foreign_key "snapshots", "statements"
   add_foreign_key "statements", "companies"
   add_foreign_key "statements", "users", column: "verified_by_id"

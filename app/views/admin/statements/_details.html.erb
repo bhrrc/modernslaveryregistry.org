@@ -8,6 +8,24 @@
     </div>
   </div>
 
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Period covered</span>
+    </div>
+    <div class="column" data-content="period_covered">
+      <%= link_to statement.period_covered, statement.period_covered %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Legislations</span>
+    </div>
+    <div class="column" data-content="legislations">
+      <%= statement.legislations.map(&:name).join(', ') %>
+    </div>
+  </div>
+
   <% if statement.broken_url? %>
     <div class="columns">
       <div class="column is-one-quarter">
@@ -30,7 +48,7 @@
 
   <div class="columns">
     <div class="column is-one-quarter">
-      <span class="label">Authenticated By</span>
+      <span class="label">Authenticated by</span>
     </div>
     <% if statement.verified_by.present? %>
       <div class="column" data-content="verified_by">
@@ -45,7 +63,7 @@
 
   <div class="columns">
     <div class="column is-one-quarter">
-      <span class="label">Signed by director?</span>
+      <span class="label">Signed by director</span>
     </div>
     <div class="column" data-content="signed_by_director">
       <%= yes_no statement.signed_by_director? %>
@@ -54,7 +72,7 @@
 
   <div class="columns">
     <div class="column is-one-quarter">
-      <span class="label">Approved by board?</span>
+      <span class="label">Approved by board</span>
     </div>
     <div class="column" data-content="approved_by_board">
       <%= yes_no_not_explicit statement.approved_by_board %>
@@ -63,7 +81,7 @@
 
   <div class="columns">
     <div class="column is-one-quarter">
-      <span class="label">Link on front page?</span>
+      <span class="label">Link on front page</span>
     </div>
     <div class="column" data-content="link_on_front_page">
       <%= yes_no statement.link_on_front_page? %>

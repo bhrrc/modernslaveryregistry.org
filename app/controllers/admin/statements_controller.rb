@@ -59,7 +59,7 @@ module Admin
     end
 
     def statement_params
-      params.require(:statement).permit(STATEMENT_ATTRIBUTES)
+      params.require(:statement).permit(STATEMENT_ATTRIBUTES + [{ legislation_ids: [] }])
     end
 
     STATEMENT_ATTRIBUTES = %i[
@@ -73,6 +73,7 @@ module Admin
       signed_by_director
       published
       contributor_email
+      period_covered
     ].freeze
   end
 end

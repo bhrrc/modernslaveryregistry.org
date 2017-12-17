@@ -35,19 +35,15 @@ class CompaniesController < ApplicationController
   end
 
   def company_params
-    params.require(:company).permit(:name, :url, :country_id, :sector_id, statements_attributes: STATEMENTS_ATTRIBUTES)
+    params.require(:company).permit(COMPANY_ATTRIBUTES, statements_attributes: STATEMENTS_ATTRIBUTES)
   end
 
+  COMPANY_ATTRIBUTES = %i[
+    name
+  ].freeze
+
   STATEMENTS_ATTRIBUTES = %i[
-    id
     url
-    linked_from
-    link_on_front_page
-    approved_by
-    approved_by_board
-    signed_by
-    signed_by_director
-    published
     contributor_email
   ].freeze
 end

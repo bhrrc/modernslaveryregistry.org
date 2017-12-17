@@ -76,7 +76,9 @@ Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, s
 end
 
 Then(/^(Joe|Patricia) should see the following statements:$/) do |actor, table|
-  expect(actor.visible_listed_statements_with_date_seen.map(&:date_seen)).to eq(table.hashes.map { |row| row['Date seen'] })
+  expect(actor.visible_listed_statements_date_seen_and_period_covered).to eq(table.hashes.map do |row|
+    { date_seen: row['Date seen'], period_covered: row['Period covered'] }
+  end)
 end
 
 Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
@@ -121,7 +123,8 @@ module FillsInForms
       try_filling_text_field(option, value) ||
       try_filling_drop_down(option, value) ||
       try_filling_check_box(option, value) ||
-      try_filling_radio(option, value)
+      try_filling_radio(option, value) ||
+      try_filling_check_box_list(option, value)
   end
 
   private
@@ -152,8 +155,18 @@ module FillsInForms
     true
   end
 
+  def try_filling_check_box_list(option, value)
+    return false unless check_box_lists.include?(option)
+    within("*[data-content='#{option}']") do
+      value.split(', ').each do |label|
+        check(label)
+      end
+    end
+    true
+  end
+
   def text_fields
-    ['Company name', 'Statement URL']
+    ['Company name', 'Subsidiary names', 'Statement URL', 'Period covered']
   end
 
   def drop_downs
@@ -166,6 +179,10 @@ module FillsInForms
 
   def radios
     ['Approved by board']
+  end
+
+  def check_box_lists
+    ['Legislations']
   end
 end
 
@@ -184,7 +201,7 @@ module SubmitsStatementsAsVisitor
   def attempts_to_submit_new_statement_for_existing_company(company_name:, options:)
     company = Company.find_by!(name: company_name)
     visit company_path(company)
-    click_on "Submit a new statement by #{company_name}"
+    click_on 'Submit new statement'
     fill_in_fields(options)
     click_button 'Submit'
   end
@@ -244,7 +261,8 @@ module ViewsStatements
     raise "#{company.name} has no latest statement!" if company.latest_statement.nil?
     visit admin_company_statement_path(company, company.latest_statement)
     dom_struct(:statement, :url, :verified_by, :contributor_email,
-               :published, :signed_by_director, :approved_by_board, :link_on_front_page)
+               :published, :signed_by_director, :approved_by_board, :link_on_front_page,
+               :legislations)
   end
 
   def visible_listed_company_names_from_search
@@ -270,10 +288,18 @@ module ViewsStatements
     visible_company_statements_list_structs(%i[date_seen])
   end
 
+  def visible_listed_statements_date_seen_and_period_covered
+    visible_company_statements_hashes(%i[date_seen period_covered])
+  end
+
   private
 
   def visible_company_statements_list_structs(struct_fields)
     dom_structs(:company_statements_list, *struct_fields)
+  end
+
+  def visible_company_statements_hashes(struct_fields)
+    visible_company_statements_list_structs(struct_fields).map(&:to_h)
   end
 end
 

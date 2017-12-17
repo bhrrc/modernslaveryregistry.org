@@ -1,10 +1,31 @@
+<div class="columns">
+  <div class="column content">
+    <p>
+      Use the form below to submit a new statement by <%= statement.company.name %>.
+      If the statement you have found is <i>not</i> by <%= statement.company.name %> then please use this <%= link_to 'alternative form', new_company_path %>
+    </p>
+
+    <p>
+      After you submit a statement to us, it will be reviewed and, if accepted, uploaded to the Registry. We take time to verify each statement carefully so that that information on the Registry is both useful and credible. We will also add the country of headquarters and sector for each statement. You will be notified by email when we have published the statement you have submitted.
+    </p>
+
+    <p>
+      Thank you for contributing to the Modern Slavery Registry!
+    </p>
+  </div>
+</div>
+
 <%= form_for [statement.company, statement] do |f| %>
   <%= render partial: 'statements/statement_fields', locals: { f: f } %>
 
-  <div class="field">
-    <p class="control">
-      <%= f.button "Submit", class: 'button is-primary' %>
-      <%= link_to('Cancel', back_or_root, class: 'button') %>
-    </p>
+  <div class="field is-horizontal">
+    <div class="field-label">
+    </div>
+    <div class="field-body">
+      <p class="control">
+        <%= f.button "Submit", class: 'button is-primary' %>
+        <%= link_to('Cancel', back_or_root, class: 'button') %>
+      </p>
+    </div>
   </div>
 <% end %>

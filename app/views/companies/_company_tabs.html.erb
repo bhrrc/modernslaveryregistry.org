@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="section" data-content="company">
+
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1" data-content="name"><%= @company.name %></h1>
+      </div>
+      <div class="column is-narrow">
+        <% if admin? %>
+          <%= link_to 'Visit Company in Admin', admin_company_path(@company), class: 'button' %>
+        <% end %>
+      </div>
+    </div>
+
+    <ul class="tags">
+      <li class="tag is-dark-navy"><%= @company.country_name %></li>
+      <li class="tag is-dark-navy"><%= @company.sector_name %></li>
+    </ul>
+
+    <div class="tabs is-boxed statements-tabs">
+      <ul>
+        <li class="<%= active_statement.nil? ? 'is-active' : '' %>">
+          <a href="<%= new_company_statement_path(@company) %>">
+            <span>Submit new statement</span>
+          </a>
+        </li>
+        <% @statements.each do |statement| %>
+          <li class="<%= statement == active_statement ? 'is-active' : '' %>" data-content="company_statements_list">
+            <a href="<%= company_statement_path(@company, statement) %>">
+              <span data-content="period_covered"><%= statement.period_covered.blank? ? l(statement.date_seen, format: :long) : statement.period_covered %></span>
+              <% statement.legislations.each do |legislation| %>
+                <span class="icon is-small"><%= image_tag 'icon-' + legislation.icon + '.svg' %></span>
+              <% end %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="statements-tabs-content">
+      <div class="columns" data-content="statement">
+        <div class="column">
+          <% if active_statement.nil? || active_statement.new_record? %>
+            <%= render partial: 'statements/new_statement_form', locals: { statement: @new_statement } %>
+          <% else %>
+            <%= render 'statements/preview', statement: active_statement %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

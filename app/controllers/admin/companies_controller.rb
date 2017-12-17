@@ -45,8 +45,16 @@ module Admin
     private
 
     def company_params
-      params.require(:company).permit(:name, :country_id, :sector_id, statements_attributes: STATEMENTS_ATTRIBUTES)
+      params.require(:company).permit(COMPANY_ATTRIBUTES,
+                                      statements_attributes: STATEMENTS_ATTRIBUTES + [{ legislation_ids: [] }])
     end
+
+    COMPANY_ATTRIBUTES = %i[
+      name
+      subsidiary_names
+      country_id
+      sector_id
+    ].freeze
 
     STATEMENTS_ATTRIBUTES = %i[
       id

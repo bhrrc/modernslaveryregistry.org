@@ -8,30 +8,53 @@ module Statements
   private
 
   def find_or_create_company(props)
-    sector = Sector.find_by!(name: props['Sector'] || 'Software')
-    country = Country.find_by!(name: props['Country'] || 'United Kingdom')
-    company = Company.find_or_create_by!(name: props['Company name'], sector: sector, country: country)
+    sector = Sector.find_by!(name: props.delete('Sector') || 'Software')
+    country = Country.find_by!(name: props.delete('Country') || 'United Kingdom')
+    company = Company.find_or_create_by!(
+      name: props.delete('Company name'),
+      subsidiary_names: props.delete('Subsidiary names'),
+      sector: sector,
+      country: country
+    )
     company
   end
 
   def find_or_create_verifier(props)
-    props['Verified by'].present? && User.where(
-      first_name: props['Verified by'],
-      email: "#{props['Verified by']}@host.com"
-    ).first_or_create(password: 'whatevs')
+    name = props.delete('Verified by')
+    return nil if name.nil?
+    User.where(first_name: name, email: "#{name}@host.com").first_or_create(password: 'whatevs')
   end
 
   def create_statement(company, verifier, props)
     company.statements.create!(
-      url: props.fetch('Statement URL'),
-      signed_by_director: props['Signed by director'] == 'Yes',
-      approved_by_board: props['Approved by board'] || 'Not explicit',
-      link_on_front_page: props['Link on front page'] == 'Yes',
-      contributor_email: props['Contributor email'],
-      verified_by: verifier,
-      date_seen: props['Date seen'] || '2017-01-01',
-      published: props['Published'] == 'Yes' || verifier.present?
+      default_statement_attributes.merge(
+        url: props.delete('Statement URL'),
+        verified_by: verifier,
+        approved_by_board: props.delete('Approved by board') || 'Not explicit'
+      ).merge(overridden_attributes(props))
     )
+  end
+
+  def overridden_attributes(props)
+    overrides = {}
+    props.each do |key, value|
+      overrides[key.downcase.tr(' ', '_').to_sym] = attribute_value(value)
+    end
+    overrides
+  end
+
+  def attribute_value(string)
+    return true if string == 'Yes'
+    return false if string == 'No'
+    string
+  end
+
+  def default_statement_attributes
+    {
+      signed_by_director: false,
+      link_on_front_page: false,
+      date_seen: '2017-01-01'
+    }
   end
 end
 

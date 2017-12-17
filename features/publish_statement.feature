@@ -7,8 +7,10 @@ Feature: Publish statement
     Given Patricia is logged in
     When Patricia submits the following statement:
       | Company name       | Cucumber Ltd                               |
+      | Subsidiary names   | Gherkin Dudes, Cuke Labs                   |
       | Country            | United Kingdom                             |
       | Statement URL      | https://cucumber.io/anti-slavery-statement |
+      | Period covered     | 2008-2017                                  |
       | Signed by director | Yes                                        |
       | Approved by board  | No                                         |
       | Link on front page | No                                         |

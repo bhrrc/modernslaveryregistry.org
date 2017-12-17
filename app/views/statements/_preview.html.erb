@@ -1,5 +1,9 @@
 <div class="statement-details">
   <p class="date-added">
+    Legislation: <span data-content="legislation"><%= statement.legislations.map(&:name).join(', ') %></span>
+  </p>
+
+  <p class="date-added">
     Date added: <span data-content="date_seen"><%= l statement.date_seen, format: :long%></span>
   </p>
 

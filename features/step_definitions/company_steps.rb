@@ -37,6 +37,7 @@ module AttemptsToCreateCompany
     fill_in 'Company name', with: name
     select 'United Kingdom', from: 'Country'
     select 'Software', from: 'Sector'
+    fill_in 'Subsidiary names', with: "#{name} Labs, #{name} Express"
     click_button 'Create Company'
   end
 end
