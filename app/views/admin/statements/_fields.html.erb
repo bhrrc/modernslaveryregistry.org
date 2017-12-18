@@ -12,7 +12,7 @@
     <%= f.label :period_covered, class: 'label' %>
     <p class="control checkboxes" data-content="Period covered">
       <% 2014.upto(Time.current.year).each do |year| %>
-        <label for="statement[year_covered]">
+        <label>
           <input type="checkbox" name="statement[year_covered][]" value="<%= year %>"
             <% if (f.object.first_year_covered..f.object.last_year_covered).cover?(year) %>
               checked="checked"
