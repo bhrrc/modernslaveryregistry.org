@@ -27,7 +27,7 @@
         <% @statements.each do |statement| %>
           <li class="<%= statement == active_statement ? 'is-active' : '' %>" data-content="company_statements_list">
             <a href="<%= company_statement_path(@company, statement) %>">
-              <span data-content="period_covered"><%= statement.period_covered.blank? ? l(statement.date_seen, format: :long) : statement.period_covered %></span>
+              <span data-content="period_covered"><%= statement.period_covered %></span>
               <% statement.legislations.each do |legislation| %>
                 <span class="icon is-small"><%= image_tag 'icon-' + legislation.icon + '.svg' %></span>
               <% end %>

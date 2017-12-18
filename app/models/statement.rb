@@ -86,6 +86,21 @@ class Statement < ApplicationRecord
     snapshot.present? && snapshot.previewable?
   end
 
+  def year_covered=(array_of_years)
+    self.first_year_covered = array_of_years.map(&:to_i).min
+    self.last_year_covered = array_of_years.map(&:to_i).max
+  end
+
+  def period_covered
+    "#{first_year_covered}-#{last_year_covered}"
+  end
+
+  def period_covered=(period)
+    years = period.split('-').map(&:to_i)
+    self.first_year_covered = years[0]
+    self.last_year_covered = years[1]
+  end
+
   private
 
   def company_name
