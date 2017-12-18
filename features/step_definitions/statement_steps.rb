@@ -124,7 +124,8 @@ module FillsInForms
       try_filling_drop_down(option, value) ||
       try_filling_check_box(option, value) ||
       try_filling_radio(option, value) ||
-      try_filling_check_box_list(option, value)
+      try_filling_check_box_list(option, value) ||
+      try_filling_period_covered(option, value)
   end
 
   private
@@ -165,8 +166,17 @@ module FillsInForms
     true
   end
 
+  def try_filling_period_covered(option, value)
+    return false unless option == 'Period covered'
+    within("*[data-content='Period covered']") do
+      value.split('-').each do |year|
+        check(year)
+      end
+    end
+  end
+
   def text_fields
-    ['Company name', 'Subsidiary names', 'Statement URL', 'Period covered']
+    ['Company name', 'Subsidiary names', 'Statement URL']
   end
 
   def drop_downs
