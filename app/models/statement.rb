@@ -92,7 +92,7 @@ class Statement < ApplicationRecord
   end
 
   def period_covered
-    "#{first_year_covered}-#{last_year_covered}"
+    [first_year_covered, last_year_covered].uniq.join('-')
   end
 
   def period_covered=(period)
