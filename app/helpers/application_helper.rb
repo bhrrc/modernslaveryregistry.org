@@ -45,8 +45,6 @@ module ApplicationHelper
   end
 
   def banner_page
-    Page.include_drafts(admin?).as_list.find do |page|
-      page.banner?
-    end
+    Page.include_drafts(admin?).as_list.find(&:banner?)
   end
 end
