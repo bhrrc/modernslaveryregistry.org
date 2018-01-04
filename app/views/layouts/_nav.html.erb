@@ -17,7 +17,9 @@
 
       <div class="nav-right nav-menu">
         <% Page.include_drafts(admin?).as_list.each do |page| %>
-          <%= link_to page.short_title, page_path(page), class: 'nav-item' %>
+          <% if !page.banner? %>
+            <%= link_to page.short_title, page_path(page), class: 'nav-item' %>
+          <% end %>
         <% end %>
       </div>
 

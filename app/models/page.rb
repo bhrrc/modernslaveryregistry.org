@@ -19,4 +19,8 @@ class Page < ApplicationRecord
   def self.from_param(param)
     find_by!(slug: param)
   end
+
+  def banner?
+    short_title =~ /memory/i
+  end
 end

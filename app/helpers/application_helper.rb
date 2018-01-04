@@ -43,4 +43,10 @@ module ApplicationHelper
   def back_or_root
     request.referer.present? ? request.referer : root_path
   end
+
+  def banner_page
+    Page.include_drafts(admin?).as_list.find do |page|
+      page.banner?
+    end
+  end
 end

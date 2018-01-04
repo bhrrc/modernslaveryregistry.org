@@ -1,0 +1,9 @@
+<% if request.path == '/' && banner_page %>
+<header style="background: red">
+  <div class="container" class="has-text-centered">
+    <p class="has-text-centered">
+      <%= link_to banner_page.short_title, page_path(banner_page), class: 'has-text-white' %>
+    </p>
+  </div>
+</header>
+<% end %>
