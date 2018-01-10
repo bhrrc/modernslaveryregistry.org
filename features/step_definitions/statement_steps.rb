@@ -20,6 +20,11 @@ Given(/^a statement was submitted for "([^"]*)" that responds with a 404$/) do |
   )
 end
 
+Given(/^the legislation "([^"]*)" requires values for the following attributes:$/) do |legislation_name, table|
+  attributes = table.hashes.map { |row| row['Attribute'].downcase.tr(' ', '_') }.join(',')
+  Legislation.create!(name: legislation_name, requires_statement_attributes: attributes, icon: 'whatevs')
+end
+
 When(/^(Joe|Patricia|Vicky) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
   actor.attempts_to_submit_new_statement_for_existing_company(
     company_name: company_name,
@@ -107,8 +112,8 @@ Then(/^(Joe|Patricia) should see that no statement for "([^"]*)" exists$/) do |a
   expect(actor.visible_count_of_statements_by_company(company_name: company_name)).to eq(0)
 end
 
-Then(/^(Joe|Patricia) should see that the statement was invalid and not saved$/) do |actor|
-  expect(actor.visible_validation_error_summary).to eq(["Url can't be blank"])
+Then(/^(Joe|Patricia) should see that the statement was not saved due to the following errors:$/) do |actor, table|
+  expect(actor.visible_validation_error_summary).to eq(table.hashes.map { |hash| hash['Message'] })
 end
 
 module FillsInForms
@@ -184,11 +189,11 @@ module FillsInForms
   end
 
   def check_boxes
-    ['Signed by director', 'Link on front page', 'Published']
+    ['Published']
   end
 
   def radios
-    ['Approved by board']
+    ['Approved by board', 'Signed by director', 'Link on front page']
   end
 
   def check_box_lists
@@ -315,7 +320,7 @@ end
 
 module SeesValidationErrors
   def visible_validation_error_summary
-    dom_structs(:validation_errors, :validation_error).map(&:validation_error)
+    dom_structs(:validation_error, :message).map(&:message)
   end
 end
 

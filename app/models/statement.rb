@@ -1,8 +1,3 @@
-require 'securerandom'
-require 'uri'
-require 'open-uri'
-require 'timeout'
-
 class Statement < ApplicationRecord
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
@@ -16,9 +11,13 @@ class Statement < ApplicationRecord
 
   validates :url, presence: true
   validates_with UrlFormatValidator
-  validates :link_on_front_page, inclusion: { in: [true, false] }, if: :verified?
-  validates :approved_by_board,  inclusion: { in: ['Yes', 'No', 'Not explicit'] }, if: :verified?
-  validates :signed_by_director, inclusion: { in: [true, false] }, if: :verified?
+  validates :link_on_front_page, inclusion: { in: [true, false], message: "can't be blank" }, if: lambda {
+    legislation_requires?(:link_on_front_page)
+  }
+  validates :approved_by_board, presence: true, if: -> { legislation_requires?(:approved_by_board) }
+  validates :signed_by_director, inclusion: { in: [true, false], message: "can't be blank" }, if: lambda {
+    legislation_requires?(:signed_by_director)
+  }
 
   before_create :set_date_seen
   after_save :enqueue_snapshot unless ENV['no_fetch']
@@ -43,10 +42,6 @@ class Statement < ApplicationRecord
   def associate_with_user(user)
     self.verified_by ||= user if user.admin? && published?
     self.contributor_email = user && user.email if contributor_email.blank?
-  end
-
-  def verified?
-    verified_by.present?
   end
 
   def fully_compliant?
@@ -102,6 +97,10 @@ class Statement < ApplicationRecord
   end
 
   private
+
+  def legislation_requires?(attribute)
+    published? && legislations.any? { |legislation| legislation.requires_statement_attribute?(attribute) }
+  end
 
   def company_name
     company.name
