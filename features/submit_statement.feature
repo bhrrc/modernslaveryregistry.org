@@ -70,11 +70,39 @@ Feature: Submit statement
       | Approved by board  | Yes                                        |
       | Link on front page | Yes                                        |
 
-  Scenario: Administrator submits statement with missing details
+  Scenario: Administrator publishes new statement with missing details
     Given the company "Cucumber Ltd" has been submitted
     And Patricia is logged in
+    And the legislation "UK Modern Slavery Act" requires values for the following attributes:
+      | Attribute          |
+      | Signed by director |
+      | Approved by board  |
+      | Link on front page |
     When Patricia submits the following statement for "Cucumber Ltd":
-      | Signed by director | No                                         |
-      | Approved by board  | Not explicit                               |
-      | Link on front page | Yes                                        |
-    Then Patricia should see that the statement was invalid and not saved
+      | Legislations       | UK Modern Slavery Act |
+      | Published          | Yes                   |
+    Then Patricia should see that the statement was not saved due to the following errors:
+      | Message                           |
+      | Url can't be blank                |
+      | Link on front page can't be blank |
+      | Approved by board can't be blank  |
+      | Signed by director can't be blank |
+
+  Scenario: Administrator publishes existing statement with missing details
+    Given Patricia is logged in
+    And Patricia has submitted the following statement:
+      | Company name       | Cucumber Ltd                               |
+      | Statement URL      | https://cucumber.io/anti-slavery-statement |
+    And the legislation "UK Modern Slavery Act" requires values for the following attributes:
+      | Attribute          |
+      | Signed by director |
+      | Approved by board  |
+      | Link on front page |
+    When Patricia updates the statement for "Cucumber Ltd" to:
+    | Legislations       | UK Modern Slavery Act |
+    | Published          | Yes                   |
+    Then Patricia should see that the statement was not saved due to the following errors:
+      | Message                           |
+      | Link on front page can't be blank |
+      | Approved by board can't be blank  |
+      | Signed by director can't be blank |

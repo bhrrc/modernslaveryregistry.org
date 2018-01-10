@@ -33,7 +33,7 @@
 
   <div class="field" data-content="Legislations">
     <%= f.label :legislations, class: 'label' %>
-    <%= f.collection_check_boxes :legislation_ids, Legislation.all, :id, :name do |m| %>
+    <%= f.collection_check_boxes :legislation_ids, Legislation.all.order(:id), :id, :name do |m| %>
       <div class="control">
         <%= m.label do %>
           <%= m.check_box %>
@@ -43,20 +43,48 @@
     <% end %>
   </div>
 
-  <div class="field" data-content="Approved by board">
-    <%= f.label :approved_by_board, class: 'label' %>
-    <label class="radio">
-      <%= f.radio_button(:approved_by_board, 'Yes') %>
-      Yes
-    </label>
-    <label class="radio">
-      <%= f.radio_button(:approved_by_board, 'No') %>
-      No
-    </label>
-    <label class="radio">
-      <%= f.radio_button(:approved_by_board, 'Not explicit') %>
-      Not explicit
-    </label>
+  <div class="columns">
+
+    <div class="field column is-narrow" data-content="Approved by board">
+      <%= f.label :approved_by_board, class: 'label' %>
+      <label class="radio">
+        <%= f.radio_button(:approved_by_board, 'Yes') %>
+        Yes
+      </label>
+      <label class="radio">
+        <%= f.radio_button(:approved_by_board, 'No') %>
+        No
+      </label>
+      <label class="radio">
+        <%= f.radio_button(:approved_by_board, 'Not explicit') %>
+        Not explicit
+      </label>
+    </div>
+
+    <div class="field column is-narrow" data-content="Signed by director">
+      <%= f.label :signed_by_director, class: 'label' %>
+      <label class="radio">
+        <%= f.radio_button(:signed_by_director, true) %>
+        Yes
+      </label>
+      <label class="radio">
+        <%= f.radio_button(:signed_by_director, false) %>
+        No
+      </label>
+    </div>
+
+    <div class="field column" data-content="Link on front page">
+      <%= f.label :link_on_front_page, class: 'label' %>
+      <label class="radio">
+        <%= f.radio_button(:link_on_front_page, true) %>
+        Yes
+      </label>
+      <label class="radio">
+        <%= f.radio_button(:link_on_front_page, false) %>
+        No
+      </label>
+    </div>
+
   </div>
 
   <div class="field">
@@ -67,20 +95,7 @@
   </div>
 
   <div class="field">
-    <label class="label">Other</label>
-
-    <div class="control">
-      <label class="checkbox">
-        <%= f.check_box(:signed_by_director) %>
-        Signed by director?
-      </label>
-    </div>
-    <div class="control">
-      <label class="checkbox">
-        <%= f.check_box(:link_on_front_page) %>
-        Link on front page?
-      </label>
-    </div>
+    <label class="label">Visibility</label>
     <div class="control">
       <label class="checkbox">
         <%= f.check_box(:published) %>

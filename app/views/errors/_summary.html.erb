@@ -2,9 +2,9 @@
   <div class="notification is-danger">
     <h2><%= pluralize(object.errors.count, "error") %> prohibited this <%= object.class.name.humanize.downcase %> from being saved:</h2>
 
-    <ul data-content="validation_errors">
+    <ul>
     <% object.errors.full_messages.each do |msg| %>
-      <li data-content="validation_error"><%= msg %></li>
+      <li data-content="validation_error"><span data-content="message"><%= msg %></span></li>
     <% end %>
     </ul>
   </div>

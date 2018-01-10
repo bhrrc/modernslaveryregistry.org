@@ -1,3 +1,8 @@
+require 'securerandom'
+require 'uri'
+require 'open-uri'
+require 'timeout'
+
 # Tries to set the URL to https if possible - even if it was entered as http.
 # This is not only more secure, but it allows the site to display the statement
 # inside an iframe. Most browsers will block non-https iframes on an https site.
