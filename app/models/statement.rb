@@ -2,36 +2,27 @@ class Statement < ApplicationRecord
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
   belongs_to :company, optional: true
-
   belongs_to :verified_by, class_name: 'User', optional: true
   has_one :snapshot, dependent: :destroy
-
   has_many :legislation_statements, dependent: :destroy
   has_many :legislations, through: :legislation_statements
 
-  validates :url, presence: true
-  validates_with UrlFormatValidator
-  validates :link_on_front_page, inclusion: { in: [true, false], message: "can't be blank" }, if: lambda {
-    legislation_requires?(:link_on_front_page)
-  }
-  validates :approved_by_board, presence: true, if: -> { legislation_requires?(:approved_by_board) }
-  validates :signed_by_director, inclusion: { in: [true, false], message: "can't be blank" }, if: lambda {
-    legislation_requires?(:signed_by_director)
-  }
+  validates :url, presence: true, url_format: true
+  validates :link_on_front_page, boolean: true, if: -> { legislation_requires?(:link_on_front_page) }
+  validates :approved_by_board, yes_no_not_explicit: true, if: -> { legislation_requires?(:approved_by_board) }
+  validates :signed_by_director, boolean: true, if: -> { legislation_requires?(:signed_by_director) }
 
-  before_create :set_date_seen
+  before_create { self.date_seen ||= Time.zone.today }
   after_save :enqueue_snapshot unless ENV['no_fetch']
   after_commit :perform_snapshot_job
   after_save :mark_latest
   after_save :mark_latest_published
 
+  scope(:published, -> { where(published: true) })
   scope(:latest, -> { where(latest: true) })
   scope(:latest_published, -> { where(latest_published: true) })
 
-  scope(:published, -> { where(published: true) })
-
-  delegate :country_name, to: :company
-  delegate :sector_name, to: :company
+  delegate :country_name, :sector_name, to: :company
 
   attr_accessor :should_enqueue_snapshot
 
@@ -104,10 +95,6 @@ class Statement < ApplicationRecord
 
   def company_name
     company.name
-  end
-
-  def set_date_seen
-    self.date_seen ||= Time.zone.today
   end
 
   def build_snapshot_from_result(fetch_result)

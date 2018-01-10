@@ -123,14 +123,14 @@ module FillsInForms
     end
   end
 
+  def input_types
+    %i[text_field drop_down check_box radio check_box_list period_covered]
+  end
+
   def fill_in_field(option, value)
-    raise "Don't know how to fill in field '#{option}'" unless
-      try_filling_text_field(option, value) ||
-      try_filling_drop_down(option, value) ||
-      try_filling_check_box(option, value) ||
-      try_filling_radio(option, value) ||
-      try_filling_check_box_list(option, value) ||
-      try_filling_period_covered(option, value)
+    raise "Don't know how to fill in field '#{option}'" unless input_types.any? do |input_type|
+      send("try_filling_#{input_type}", option, value)
+    end
   end
 
   private

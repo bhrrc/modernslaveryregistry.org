@@ -57,13 +57,19 @@ RSpec.describe Statement, type: :model do
                             password: 'whatevs',
                             admin: true)
 
+        legislation = Legislation.create!(
+          name: 'Silly sausage act',
+          icon: 'me',
+          requires_statement_attributes: 'approved_by_board'
+        )
+
         statement = @company.statements.create(url: 'http://cucumber.io/',
                                                verified_by: user,
-                                               contributor_email: 'somebody@host.com')
+                                               contributor_email: 'somebody@host.com',
+                                               legislations: [legislation],
+                                               published: true)
 
-        expect(statement.errors.messages).to eq(approved_by_board: ['is not included in the list'],
-                                                link_on_front_page: ['is not included in the list'],
-                                                signed_by_director: ['is not included in the list'])
+        expect(statement.errors.messages).to eq(approved_by_board: ["can't be blank"])
       end
     end
 
