@@ -24,7 +24,7 @@
               Link on front page
             </td>
             <td data-content="Percent link on front page">
-              <%= @total > 0 ? ((@stats[:link_on_front_page].to_f / @total.to_f) * 100).to_i : 0 %>%
+              <%= @compliance_stats.percent_link_on_front_page %>%
             </td>
           </tr>
           <tr>
@@ -32,7 +32,7 @@
               Signed by director
             </td>
             <td data-content="Percent signed by director">
-              <%= @total > 0 ? ((@stats[:signed_by_director].to_f / @total.to_f) * 100).to_i : 0 %>%
+              <%= @compliance_stats.percent_signed_by_director %>%
             </td>
           </tr>
           <tr>
@@ -40,7 +40,7 @@
               Approved by board
             </td>
             <td data-content="Percent approved by board">
-              <%= @total > 0 ? ((@stats[:approved_by_board].to_f / @total.to_f) * 100).to_i : 0 %>%
+              <%= @compliance_stats.percent_approved_by_board %>%
             </td>
           </tr>
           <tr>
@@ -48,7 +48,7 @@
               Yes to all minimum compliance questions
             </td>
             <td data-content="Percent fully compliant">
-              <%= @total > 0 ? ((@stats[:fully_compliant].to_f / @total.to_f) * 100).to_i : 0 %>%
+              <%= @compliance_stats.percent_fully_compliant %>%
             </td>
           </tr>
         </tbody>
