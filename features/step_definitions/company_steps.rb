@@ -9,6 +9,16 @@ When(/^(Joe|Patricia) submits the company "([^"]*)"$/) do |actor, company_name|
   actor.attempts_to_create_company(name: company_name)
 end
 
+When(/^(Joe|Patricia) submits the following company as a visitor:$/) do |actor, table|
+  details = table.rows_hash
+  actor.attempts_to_submit_company_with_statement_as_visitor(
+    name: details.fetch('Company name'),
+    country: details.fetch('Company HQ'),
+    sector: details.fetch('Sector'),
+    statement_url: details.fetch('Statement URL')
+  )
+end
+
 When(/^(Vicky) submits the following company:$/) do |actor, table|
   details = table.rows_hash
   actor.attempts_to_submit_company_with_statement(
@@ -31,6 +41,14 @@ Then(/^(Joe|Patricia) should find company "([^"]*)"$/) do |actor, company_name|
   expect(actor.visible_company_name).to eq(company_name)
 end
 
+Then(/^(Joe|Patricia) should find company "([^"]*)" with:$/) do |actor, company_name, table|
+  actor.attempts_to_search_for company_name
+  expect(actor.visible_company_name).to eq(company_name)
+  details = table.rows_hash
+  expect(actor.visible_company.country).to eq(details['Company HQ'])
+  expect(actor.visible_company.sector).to eq(details['Sector'])
+end
+
 module AttemptsToCreateCompany
   def attempts_to_create_company(name:)
     visit new_admin_company_path
@@ -39,6 +57,15 @@ module AttemptsToCreateCompany
     select 'Software', from: 'Sector'
     fill_in 'Subsidiary names', with: "#{name} Labs, #{name} Express"
     click_button 'Create Company'
+  end
+
+  def attempts_to_submit_company_with_statement_as_visitor(name:, country:, sector:, statement_url:)
+    visit new_company_path
+    fill_in 'Company name', with: name
+    select country, from: 'Company HQ'
+    select sector, from: 'Sector'
+    fill_in 'Statement URL', with: statement_url
+    click_button 'Submit'
   end
 end
 
@@ -61,6 +88,10 @@ module AttemptsToDeleteCompany
 end
 
 module SeesACompanyOnThePage
+  def visible_company
+    dom_struct(:company, :country, :sector)
+  end
+
   def visible_company_name
     find('[data-content="company"] [data-content="name"]').text
   end
