@@ -50,16 +50,16 @@
   <div class="container">
     <div class="columns has-text-centered" data-content="stats_counters">
       <div class="column">
-        <p class="title is-1" data-content="statements"><%= @stats[:statements] %></p>
+        <p class="title is-1" data-content="statements"><%= @statement_stats.statements_count %></p>
         <p class="subtitle is-3">statements</p>
       </div>
       <div class="column">
-        <p class="title is-1" data-content="sectors"><%= @stats[:sectors] %></p>
+        <p class="title is-1" data-content="sectors"><%= @statement_stats.sectors_count %></p>
         <p class="subtitle is-3">sectors</p>
       </div>
       <div class="column">
-        <p class="title is-1" data-content="countries"><%= @stats[:countries] %></p>
-        <p class="subtitle is-3">countries</p>
+        <p class="title is-1" data-content="companies"><%= @statement_stats.companies_count %></p>
+        <p class="subtitle is-3">companies</p>
       </div>
     </div>
     <div class="columns has-text-centered">

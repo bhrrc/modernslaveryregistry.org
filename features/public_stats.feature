@@ -1,15 +1,16 @@
 Feature: Public stats
   Anonymous visitors can see statistics about activity
 
-  Scenario: Visitor sees counts of statements, countries and sectors
+  Scenario: Visitor sees counts of statements, companies and sectors
     Given the following statements have been submitted:
-      | Company name | Statement URL          | Country        | Sector      | Published |
-      | Cucumber Ltd | https://cucumber.ltd/s | United Kingdom | Software    | Yes       |
-      | Banana Ltd   | https://banana.io/s    | France         | Agriculture | No        |
-      | Cucumber Inc | https://cucumber.inc/s | United States  | Retail      | Yes       |
-      | Cucumber Plc | https://cucumber.plc/s | United Kingdom | Software    | Yes       |
+      | Company name | Statement URL             | Sector      | Published |
+      | Cucumber Ltd | https://cucumber.ltd/s    | Software    | Yes       |
+      | Banana Ltd   | https://banana.io/s       | Agriculture | No        |
+      | Cucumber Inc | https://cucumber.inc/s    | Retail      | Yes       |
+      | Cucumber Plc | https://cucumber.plc/2017 | Software    | Yes       |
+      | Cucumber Plc | https://cucumber.plc/2018 | Software    | Yes       |
     When Vicky views the public stats
     Then Vicky should see the following public stats:
-      | statements | 3 |
-      | countries  | 2 |
+      | statements | 4 |
+      | companies  | 3 |
       | sectors    | 2 |
