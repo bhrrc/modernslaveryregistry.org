@@ -16,6 +16,17 @@ Feature: Submit company
     Then Patricia should see company "Cucumber Ltd"
     And Patricia should not receive a thank you for submitting email
 
+  Scenario: Administrator submits a new company
+    Given Patricia is logged in
+    When Patricia submits the following company as a visitor:
+      | Company name  | Cucumber Ltd                     |
+      | Company HQ    | United Kingdom                   |
+      | Sector        | Software                         |
+      | Statement URL | http://cucumber.io/msa-statement |
+    Then Patricia should find company "Cucumber Ltd" with:
+      | Company HQ    | United Kingdom                   |
+      | Sector        | Software                         |
+
   Scenario: Visitor submits a new company
     When Vicky submits the following company:
       | Company name  | Cucumber Ltd                     |
