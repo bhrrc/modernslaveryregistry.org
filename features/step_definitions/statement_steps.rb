@@ -173,6 +173,10 @@ module FillsInForms
 
   def try_filling_period_covered(option, value)
     return false unless option == 'Period covered'
+    enter_period_covered(value)
+  end
+
+  def enter_period_covered(value)
     within("*[data-content='Period covered']") do
       value.split('-').each do |year|
         check(year)
@@ -265,10 +269,10 @@ module DeletesStatements
   end
 end
 
-module ViewsStatements
-  def attempts_to_find_all_statements_by_company(company_name:)
-    company = Company.find_by!(name: company_name)
-    visit company_path(company)
+module ViewsStatementsAsAdmin
+  def visible_listed_statements_for_company(company_name:)
+    visit(admin_company_path(Company.find_by!(name: company_name)))
+    visible_listed_statements
   end
 
   def visible_latest_statement_by_company(company_name:)
@@ -277,7 +281,14 @@ module ViewsStatements
     visit admin_company_statement_path(company, company.latest_statement)
     dom_struct(:statement, :url, :verified_by, :contributor_email,
                :published, :signed_by_director, :approved_by_board, :link_on_front_page,
-               :legislations)
+               :legislations, :period_covered)
+  end
+end
+
+module ViewsStatements
+  def attempts_to_find_all_statements_by_company(company_name:)
+    company = Company.find_by!(name: company_name)
+    visit company_path(company)
   end
 
   def visible_listed_company_names_from_search
@@ -292,15 +303,15 @@ module ViewsStatements
 
   def visible_listed_statements_for_company(company_name:)
     visit(company_path(Company.find_by!(name: company_name)))
-    visible_listed_statements_with_date_seen
+    visible_listed_statements
   end
 
   def visible_count_of_statements_by_company(company_name:)
     visible_listed_statements_for_company(company_name: company_name).size
   end
 
-  def visible_listed_statements_with_date_seen
-    visible_company_statements_list_structs(%i[date_seen])
+  def visible_listed_statements
+    visible_company_statement_structs(%i[date_seen period_covered])
   end
 
   def visible_listed_statements_date_seen_and_period_covered
@@ -309,12 +320,12 @@ module ViewsStatements
 
   private
 
-  def visible_company_statements_list_structs(struct_fields)
-    dom_structs(:company_statements_list, *struct_fields)
+  def visible_company_statement_structs(struct_fields)
+    dom_structs(:company_statement, *struct_fields)
   end
 
   def visible_company_statements_hashes(struct_fields)
-    visible_company_statements_list_structs(struct_fields).map(&:to_h)
+    visible_company_statement_structs(struct_fields).map(&:to_h)
   end
 end
 
@@ -331,6 +342,7 @@ class Visitor
 end
 
 class Administrator
+  include ViewsStatementsAsAdmin
   include SubmitsStatementsAsAdmin
   include UpdatesStatements
   include DeletesStatements
