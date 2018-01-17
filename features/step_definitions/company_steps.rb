@@ -9,6 +9,17 @@ When(/^(Joe|Patricia) submits the company "([^"]*)"$/) do |actor, company_name|
   actor.attempts_to_create_company(name: company_name)
 end
 
+When(/^(Joe|Patricia) submits the following company:$/) do |actor, table|
+  details = table.rows_hash
+  actor.attempts_to_submit_company_with_statement(
+    name: details.fetch('Company name'),
+    country: details.fetch('Company HQ'),
+    sector: details.fetch('Sector'),
+    statement_url: details.fetch('Statement URL'),
+    period_covered: details.fetch('Period Covered')
+  )
+end
+
 When(/^(Joe|Patricia) submits the following company as a visitor:$/) do |actor, table|
   details = table.rows_hash
   actor.attempts_to_submit_company_with_statement_as_visitor(
@@ -56,6 +67,16 @@ module AttemptsToCreateCompany
     select 'United Kingdom', from: 'Country'
     select 'Software', from: 'Sector'
     fill_in 'Subsidiary names', with: "#{name} Labs, #{name} Express"
+    click_button 'Create Company'
+  end
+
+  def attempts_to_submit_company_with_statement(name:, country:, sector:, statement_url:, period_covered:)
+    visit new_admin_company_path
+    fill_in 'Company name', with: name
+    select country, from: 'Country'
+    select sector, from: 'Sector'
+    fill_in 'Statement URL', with: statement_url
+    enter_period_covered(period_covered)
     click_button 'Create Company'
   end
 

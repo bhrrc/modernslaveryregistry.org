@@ -25,7 +25,7 @@
           </a>
         </li>
         <% @statements.each do |statement| %>
-          <li class="<%= statement == active_statement ? 'is-active' : '' %>" data-content="company_statements_list">
+          <li class="<%= statement == active_statement ? 'is-active' : '' %>" data-content="company_statement">
             <a href="<%= company_statement_path(@company, statement) %>">
               <span data-content="period_covered"><%= statement.period_covered %></span>
               <% statement.legislations.each do |legislation| %>

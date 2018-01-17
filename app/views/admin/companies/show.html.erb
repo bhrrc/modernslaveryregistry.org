@@ -74,7 +74,7 @@
     </div>
   </div>
 
-  <div class="subsection">
+  <div class="subsection" >
     <div class="columns">
       <div class="column">
         <h2 class="title is-2">
@@ -93,6 +93,9 @@
               Date Seen
             </th>
             <th>
+              Period Covered
+            </th>
+            <th>
               Content Type
             </th>
             <th>
@@ -101,9 +104,12 @@
           </tr>
         </thead>
         <% @company.statements.each do |statement| %>
-          <tr>
+          <tr data-content="company_statement">
             <td>
               <%= link_to l(statement.date_seen), admin_company_statement_path(statement.company, statement) %><%= statement.latest? ? ' (Latest)' : '' %>
+            </td>
+            <td data-content="period_covered">
+              <%= statement.period_covered %>
             </td>
             <td>
               <%= statement.snapshot.present? ?

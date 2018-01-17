@@ -59,10 +59,10 @@ module Admin
     end
 
     def statement_params
-      params.require(:statement).permit(STATEMENT_ATTRIBUTES + [{ legislation_ids: [], year_covered: [] }])
+      params.require(:statement).permit(STATEMENT_ATTRIBUTES)
     end
 
-    STATEMENT_ATTRIBUTES = %i[
+    STATEMENT_ATTRIBUTES = (%i[
       id
       url
       linked_from
@@ -73,6 +73,6 @@ module Admin
       signed_by_director
       published
       contributor_email
-    ].freeze
+    ] + [{ legislation_ids: [], year_covered: [] }]).freeze
   end
 end

@@ -46,7 +46,7 @@ module Admin
 
     def company_params
       params.require(:company).permit(COMPANY_ATTRIBUTES,
-                                      statements_attributes: STATEMENTS_ATTRIBUTES + [{ legislation_ids: [] }])
+                                      statements_attributes: STATEMENTS_ATTRIBUTES)
     end
 
     COMPANY_ATTRIBUTES = %i[
@@ -56,7 +56,7 @@ module Admin
       sector_id
     ].freeze
 
-    STATEMENTS_ATTRIBUTES = %i[
+    STATEMENTS_ATTRIBUTES = (%i[
       id
       url
       linked_from
@@ -67,6 +67,6 @@ module Admin
       signed_by_director
       published
       contributor_email
-    ].freeze
+    ] + [{ legislation_ids: [], year_covered: [] }]).freeze
   end
 end
