@@ -12,7 +12,7 @@ module ViewsPublicStats
   end
 
   def visible_public_stats
-    dom_struct(:stats_counters, :statements, :countries, :sectors)
+    dom_struct(:stats_counters, :statements, :companies, :sectors)
   end
 end
 
