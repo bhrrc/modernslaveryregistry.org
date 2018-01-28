@@ -73,7 +73,7 @@
 ## Styling
 
 ## Deployment
-- [ ] Deploy to Heroku
+- [x] Deploy to Heroku
 - [ ] Map domain name
 - [ ] https / let's encrypt
 
