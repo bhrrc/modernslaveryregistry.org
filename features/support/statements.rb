@@ -33,7 +33,9 @@ module Statements
         url: props.delete('Statement URL'),
         verified_by: verifier,
         approved_by_board: props.delete('Approved by board') || 'Not explicit',
-        legislations: (props.delete('Legislations') || '').split(',').map { |name| Legislation.find_by!(name: name.strip) }
+        legislations: (props.delete('Legislations') || '').split(',').map do |name|
+          Legislation.find_by!(name: name.strip)
+        end
       ).merge(overridden_attributes(props))
     )
   end

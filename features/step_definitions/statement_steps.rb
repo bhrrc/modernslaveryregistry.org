@@ -53,6 +53,10 @@ When(/^(Joe|Patricia) finds all statements by "([^"]*)"$/) do |actor, company_na
   actor.attempts_to_find_all_statements_by_company(company_name: company_name)
 end
 
+When(/^(Joe|Patricia) views the stats of statements added by month$/) do |actor| # rubocop:disable Style/SymbolProc
+  actor.attempts_to_view_statements_added_by_month
+end
+
 When(/^(Joe|Patricia) marks the URL for "([^"]*)" as not broken$/) do |actor, company_name|
   url = Company.find_by!(name: company_name).latest_statement.url
   allow(ScreenGrab).to receive(:fetch).with(url).and_return(
@@ -114,6 +118,11 @@ end
 
 Then(/^(Joe|Patricia) should see that the statement was not saved due to the following errors:$/) do |actor, table|
   expect(actor.visible_validation_error_summary).to eq(table.hashes.map { |hash| hash['Message'] })
+end
+
+Then(/^(Joe|Patricia) sees the following statements added by month:$/) do |actor, table|
+  rendered_data = table.hashes.map { |hash| { label: hash['Month'], statements: hash['Statements'].to_i } }
+  expect(actor.visible_statements_added_by_month_stats).to eq(rendered_data)
 end
 
 module FillsInForms
@@ -335,6 +344,16 @@ module SeesValidationErrors
   end
 end
 
+module ViewsStatementsAddedByMonth
+  def attempts_to_view_statements_added_by_month
+    visit root_path
+  end
+
+  def visible_statements_added_by_month_stats
+    JSON.parse(html.match(/renderTotalStatementsOverTime\((\[.+\])\)/)[1]).map(&:symbolize_keys)
+  end
+end
+
 class Visitor
   include SubmitsStatementsAsVisitor
   include ViewsStatements
@@ -346,4 +365,5 @@ class Administrator
   include SubmitsStatementsAsAdmin
   include UpdatesStatements
   include DeletesStatements
+  include ViewsStatementsAddedByMonth
 end
