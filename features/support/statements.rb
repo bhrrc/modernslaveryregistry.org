@@ -1,5 +1,7 @@
 module Statements
   def submit_statement(props)
+    props['Company name'] = SecureRandom.uuid unless props.include?('Company name')
+    props['Statement URL'] = 'https://' + SecureRandom.uuid unless props.include?('Statement URL')
     verifier = find_or_create_verifier(props)
     company = find_or_create_company(props)
     create_statement(company, verifier, props)
@@ -30,7 +32,8 @@ module Statements
       default_statement_attributes.merge(
         url: props.delete('Statement URL'),
         verified_by: verifier,
-        approved_by_board: props.delete('Approved by board') || 'Not explicit'
+        approved_by_board: props.delete('Approved by board') || 'Not explicit',
+        legislations: (props.delete('Legislations') || '').split(',').map { |name| Legislation.find_by!(name: name.strip) }
       ).merge(overridden_attributes(props))
     )
   end
