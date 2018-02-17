@@ -3,7 +3,7 @@ Feature: Submit statement
 
   Scenario: Administrator submits statement for new company
     Given Patricia is logged in
-    And the following Legislations exist:
+    And the following legislations exist:
       | Name              |
       | Green Edibles Act |
       | Vegetables Act    |
