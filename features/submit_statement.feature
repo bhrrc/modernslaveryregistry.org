@@ -8,20 +8,22 @@ Feature: Submit statement
       | Green Edibles Act | approved_by_board             |
       | Vegetables Act    |                               |
     When Patricia submits the following statement:
-      | Company name       | Cucumber Ltd                               |
-      | Country            | United Kingdom                             |
-      | Statement URL      | https://cucumber.io/anti-slavery-statement |
-      | Signed by director | Yes                                        |
-      | Approved by board  | Not explicit                               |
-      | Link on front page | No                                         |
-      | Legislations       | Green Edibles Act, Vegetables Act          |
-      | Published          | Yes                                        |
+      | Company name          | Cucumber Ltd                               |
+      | Country               | United Kingdom                             |
+      | Statement URL         | https://cucumber.io/anti-slavery-statement |
+      | Signed by director    | Yes                                        |
+      | Approved by board     | Not explicit                               |
+      | Link on front page    | No                                         |
+      | Legislations          | Green Edibles Act, Vegetables Act          |
+      | Published             | Yes                                        |
+      | Also covers companies | Gherkin Holdings                           |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
-      | Statement URL      | https://cucumber.io/anti-slavery-statement |
-      | Signed by director | Yes                                        |
-      | Approved by board  | Not explicit                               |
-      | Link on front page | No                                         |
-      | Legislations       | Green Edibles Act, Vegetables Act          |
+      | Statement URL         | https://cucumber.io/anti-slavery-statement |
+      | Signed by director    | Yes                                        |
+      | Approved by board     | Not explicit                               |
+      | Link on front page    | No                                         |
+      | Legislations          | Green Edibles Act, Vegetables Act          |
+      | Also covers companies | Gherkin Holdings                           |
 
   Scenario: Administrator submits statement for existing company
     Given the company "Cucumber Ltd" has been submitted
@@ -53,22 +55,23 @@ Feature: Submit statement
   Scenario: Administrator edits existing statement
     Given Patricia is logged in
     And Patricia has submitted the following statement:
-      | Company name       | Cucumber Ltd                               |
-      | Statement URL      | https://cucumber.io/anti-slavery-statement |
-      | Signed by director | Yes                                        |
-      | Approved by board  | No                                         |
-      | Link on front page | No                                         |
-      | Published          | Yes                                        |
+      | Company name          | Cucumber Ltd                               |
+      | Statement URL         | https://cucumber.io/anti-slavery-statement |
+      | Signed by director    | Yes                                        |
+      | Approved by board     | No                                         |
+      | Link on front page    | No                                         |
+      | Published             | Yes                                        |
     When Patricia updates the statement for "Cucumber Ltd" to:
-      | Statement URL      | https://cucumber.io/updated-statement      |
-      | Signed by director | No                                         |
-      | Approved by board  | Yes                                        |
-      | Link on front page | Yes                                        |
+      | Statement URL         | https://cucumber.io/updated-statement      |
+      | Signed by director    | No                                         |
+      | Approved by board     | Yes                                        |
+      | Link on front page    | Yes                                        |
+      | Also covers companies | Gherkin Holdings                           |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
-      | Statement URL      | https://cucumber.io/updated-statement      |
-      | Signed by director | No                                         |
-      | Approved by board  | Yes                                        |
-      | Link on front page | Yes                                        |
+      | Statement URL         | https://cucumber.io/updated-statement      |
+      | Signed by director    | No                                         |
+      | Approved by board     | Yes                                        |
+      | Link on front page    | Yes                                        |
 
   Scenario: Administrator publishes new statement with missing details
     Given the company "Cucumber Ltd" has been submitted

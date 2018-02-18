@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180217165315) do
+ActiveRecord::Schema.define(version: 20180218114433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 20180217165315) do
     t.boolean  "marked_not_broken_url", default: false
     t.integer  "first_year_covered"
     t.integer  "last_year_covered"
+    t.string   "also_covers_companies"
     t.index ["company_id"], name: "index_statements_on_company_id", using: :btree
     t.index ["latest"], name: "index_statements_on_latest", where: "latest", using: :btree
     t.index ["latest_published"], name: "index_statements_on_latest_published", where: "latest_published", using: :btree

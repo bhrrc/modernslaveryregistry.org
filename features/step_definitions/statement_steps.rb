@@ -194,7 +194,7 @@ module FillsInForms
   end
 
   def text_fields
-    ['Company name', 'Subsidiary names', 'Statement URL']
+    ['Company name', 'Subsidiary names', 'Statement URL', 'Also covers companies']
   end
 
   def drop_downs
@@ -290,7 +290,7 @@ module ViewsStatementsAsAdmin
     visit admin_company_statement_path(company, company.latest_statement)
     dom_struct(:statement, :url, :verified_by, :contributor_email,
                :published, :signed_by_director, :approved_by_board, :link_on_front_page,
-               :legislations, :period_covered)
+               :legislations, :period_covered, :also_covers_companies)
   end
 end
 
