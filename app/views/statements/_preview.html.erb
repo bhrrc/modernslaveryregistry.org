@@ -15,7 +15,7 @@
     </p>
   </div>
 
-  <div class="column is-narrow">
+  <div class="column">
     <% unless statement.also_covers_companies.blank? %>
       <p>
         This statement also covers the following companies:
@@ -42,7 +42,7 @@
   </div>
 
   <div class="snapshot-label has-text-centered">
-    Snapshot fetched <%= l statement.snapshot.created_at, format: :long %>
+    Snapshot fetched: <%= l statement.snapshot.created_at, format: :long %>
   </div>
 
 <% elsif URI(statement.url).scheme == 'https' %>
