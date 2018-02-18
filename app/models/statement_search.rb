@@ -5,9 +5,10 @@ class StatementSearch
   end
 
   def statements
-    @statements = Statement.includes(:verified_by, company: %i[sector country])
+    @statements = Statement.includes(:verified_by, :legislations, company: %i[sector country])
     filter_by_published
     filter_by_company
+    filter_by_legislations
     @statements.order('companies.name')
   end
 
@@ -66,5 +67,13 @@ class StatementSearch
     return if @criteria[:countries].blank?
     @company_join = @company_join.where(companies: { country_id: @criteria[:countries] })
     @statements = @company_join
+  end
+
+  def filter_by_legislations
+    return if
+      @criteria[:legislation_names].blank? ||
+      @criteria[:legislation_names].empty? ||
+      @criteria[:legislation_names].size == Legislation.count
+    @statements = @statements.joins(:legislations).where('legislations.name' => @criteria[:legislation_names])
   end
 end

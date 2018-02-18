@@ -71,6 +71,34 @@
   </div>
 
   <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label">Legislation</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <% all_legislations = params.to_unsafe_hash.none? { |key,_| key =~ /^legislation_/ } %>
+          <% Legislation.all.order(:id).each do |legislation| %>
+            <div class="control">
+              <label for="legislation_<%= legislation.id %>">
+                <input
+                  id="legislation_<%= legislation.id %>"
+                  type="checkbox"
+                  name="legislation_<%= legislation.name %>"
+                  value="yes"
+                  class="js-auto-submit"
+                  <%= params['legislation_' + legislation.name] == 'yes' || all_legislations ? 'checked="checked"' : '' %>
+                  />
+                <%= legislation.name %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field is-horizontal">
     <div class="field-label">
       <!-- Left empty for spacing -->
     </div>
@@ -130,7 +158,7 @@ function loadSearchResultsForUrl(url) {
     })
 }
 
-$(document).on('change', 'select.js-auto-submit', function() {
+$(document).on('change', 'select.js-auto-submit, .js-auto-submit:checkbox', function() {
   performSearch(this)
 })
 

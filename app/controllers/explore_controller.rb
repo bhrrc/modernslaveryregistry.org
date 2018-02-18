@@ -28,7 +28,11 @@ class ExploreController < ApplicationController
     {
       sectors: params[:sectors],
       countries: params[:countries],
-      company_name: params[:company_name]
+      company_name: params[:company_name],
+      legislation_names: params
+        .to_unsafe_hash
+        .find_all { |key, _| key =~ /^legislation_/ }
+        .map { |key, _| key.gsub(/^legislation_/, '') }
     }
   end
 
