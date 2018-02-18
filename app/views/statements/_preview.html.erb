@@ -1,17 +1,30 @@
-<div class="statement-details">
-  <p class="date-added">
-    Legislation: <span data-content="legislation"><%= statement.legislations.map(&:name).join(', ') %></span>
-  </p>
+<div class="statement-details columns">
+  <div class="column">
+    <p>
+      Legislation: <span data-content="legislation"><%= statement.legislations.map(&:name).join(', ') %></span>
+    </p>
 
-  <p class="date-added">
-    Date added: <span data-content="date_seen"><%= l statement.date_seen, format: :long%></span>
-  </p>
+    <% if statement.verified_by %>
+      <p>Authenticated by: <span data-content="verified_by"><%= statement.verified_by.name %></span></p>
+    <% else %>
+      <p><span data-content="publish_status">Draft</span></p>
+    <% end %>
 
-  <% if statement.verified_by %>
-    <p>Authenticated by <span data-content="verified_by"><%= statement.verified_by.name %></span></p>
-  <% else %>
-    <p><span data-content="publish_status">Draft</span></p>
-  <% end %>
+    <p>
+      Added on: <span data-content="date_seen"><%= l statement.date_seen, format: :long %></span>
+    </p>
+  </div>
+
+  <div class="column is-narrow">
+    <% unless statement.also_covers_companies.blank? %>
+      <p>
+        This statement also covers the following companies:
+        <br />
+        <span data-content="also_covers_companies"><%= statement.also_covers_companies %></span>
+      </p>
+    <% end %>
+  </div>
+
 </div>
 
 <% if statement.previewable_snapshot? %>

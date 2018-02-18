@@ -73,6 +73,7 @@ module Admin
       signed_by_director
       published
       contributor_email
+      also_covers_companies
     ] + [{ legislation_ids: [], year_covered: [] }]).freeze
   end
 end
