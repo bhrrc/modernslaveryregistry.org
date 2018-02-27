@@ -8,7 +8,7 @@ module Admin
 
       statement_params_array = CSV.parse(csv_io.read, headers: :first_row).map(&:to_hash)
       imported = bulk_create(statement_params_array)
-      flash[:notice] = "Importing #{statement_params_array} statements"
+      flash[:notice] = "Imported #{imported} statements"
 
       redirect_to admin_dashboard_path
     end
@@ -19,9 +19,11 @@ module Admin
     end
 
     def bulk_create(statement_params_array)
+      before = Statement.count
       statement_params_array.each do |statement_params|
-        BulkImportJob.perform_later(statement_params['company_name'], statement_params['statement_url'])
+        Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
       end
+      Statement.count - before
     end
   end
 end
