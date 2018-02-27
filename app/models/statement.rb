@@ -1,4 +1,4 @@
-class Statement < ApplicationRecord
+class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
   belongs_to :company, optional: true
@@ -28,6 +28,18 @@ class Statement < ApplicationRecord
 
   def self.search(include_unpublished:, criteria:)
     StatementSearch.new(include_unpublished, criteria)
+  end
+
+  def self.bulk_create!(company_name, statement_url)
+    return if Statement.exists?(url: statement_url)
+
+    begin
+      company = Company.find_or_create_by!(name: company_name)
+      company.statements.create!(url: statement_url)
+    rescue ActiveRecord::RecordInvalid => e
+      e.message += "\nCompany Name: '#{company_name}', Statement URL: '#{statement_url}'"
+      raise e
+    end
   end
 
   def associate_with_user(user)
