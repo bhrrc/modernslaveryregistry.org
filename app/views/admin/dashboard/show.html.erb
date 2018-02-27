@@ -27,7 +27,7 @@
       <p>
       <%= form_tag(admin_bulk_upload_path, method: 'post', multipart: true) do %>
         <%= file_field_tag("csv", class: 'button is-light') %>
-        <%= submit_tag("Upload", class: 'button is-primary') %>
+        <%= submit_tag("Upload", class: 'button is-primary', data: { disable_with: 'Please wait...' }) %>
       <% end %>
       </p>
     </div>
