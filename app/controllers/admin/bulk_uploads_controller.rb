@@ -7,7 +7,7 @@ module Admin
       return alert_csv if csv_io.nil?
 
       statement_params_array = CSV.parse(csv_io.read, headers: :first_row).map(&:to_hash)
-      imported = bulk_create(statement_params_array)
+      bulk_create(statement_params_array)
       flash[:notice] = "Importing #{statement_params_array} statements"
 
       redirect_to admin_dashboard_path
