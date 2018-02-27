@@ -1,3 +1,10 @@
+require 'csv'
+require 'tempfile'
+
+Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, table|
+  actor.attempts_to_create_company_with_statement(options: table.rows_hash)
+end
+
 Given(/^the following statements have been submitted:$/) do |table|
   table.hashes.each do |props|
     submit_statement props
@@ -32,8 +39,8 @@ When(/^(Joe|Patricia|Vicky) submits the following statement for "([^"]*)":$/) do
   )
 end
 
-Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, table|
-  actor.attempts_to_create_company_with_statement(options: table.rows_hash)
+When(/^(Joe|Patricia|Vicky) uploads a CSV with the following statements:$/) do |actor, table|
+  actor.attempts_to_upload_statement_csv(csv_data: table.raw)
 end
 
 # TODO: fix up naming of this step
@@ -242,6 +249,19 @@ module SubmitsStatementsAsAdmin
     visit new_admin_company_path
     fill_in_fields(options)
     click_button 'Create Company'
+  end
+
+  def attempts_to_upload_statement_csv(csv_data:)
+    csv_string = CSV.generate do |csv|
+      csv_data.each { |row| csv << row }
+    end
+    file = Tempfile.new(['statements', '.csv'])
+    file.write(csv_string)
+    file.close
+
+    visit admin_dashboard_path
+    attach_file('csv', file.path)
+    click_button('Upload')
   end
 
   def attempts_to_submit_new_statement_for_existing_company(company_name:, options:)

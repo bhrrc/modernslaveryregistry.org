@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     root 'dashboard#show', as: :dashboard
     resources :pages
     resources :users
+    resource :bulk_upload
     resources :companies do
       resources :statements do
         post :mark_url_not_broken, on: :member

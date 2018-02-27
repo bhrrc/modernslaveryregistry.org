@@ -16,6 +16,25 @@
 
   <div class="subsection">
     <div class="box">
+      <h2 class="title is-2">Bulk import</h2>
+
+      <p>
+        You can bulk import statements from a CSV file by uploading it below. The
+        CSV file <strong>must</strong> have a header row with <strong>company_name</strong>
+        and <strong>statement_url</strong> columns.
+      </p>
+
+      <p>
+      <%= form_tag(admin_bulk_upload_path, method: 'post', multipart: true) do %>
+        <%= file_field_tag("csv", class: 'button is-light') %>
+        <%= submit_tag("Upload", class: 'button is-primary') %>
+      <% end %>
+      </p>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="box">
       <h2 class="title is-2">Compliance Stats</h2>
       <table data-content="minimum_compliance_requirements_stats" class="table">
         <tbody>
