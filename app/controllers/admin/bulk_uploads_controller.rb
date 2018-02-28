@@ -20,8 +20,10 @@ module Admin
 
     def bulk_create(statement_params_array)
       before = Statement.count
-      statement_params_array.each do |statement_params|
-        Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
+      ActiveRecord::Base.transaction do
+        statement_params_array.each do |statement_params|
+          Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
+        end
       end
       Statement.count - before
     end

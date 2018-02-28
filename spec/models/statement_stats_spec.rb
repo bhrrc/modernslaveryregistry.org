@@ -30,7 +30,7 @@ RSpec.describe StatementStats do
   end
 
   let! :itv do
-    Company.create! name: 'BBC Ltd', country: gb, sector: broadcasting
+    Company.create! name: 'ITV Ltd', country: gb, sector: broadcasting
   end
 
   let! :tesco do

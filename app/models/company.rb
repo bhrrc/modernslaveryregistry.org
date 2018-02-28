@@ -3,7 +3,7 @@ class Company < ApplicationRecord
   belongs_to :country, optional: true
   belongs_to :sector, optional: true
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
 
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
