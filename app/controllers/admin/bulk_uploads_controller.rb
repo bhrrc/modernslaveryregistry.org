@@ -19,10 +19,8 @@ module Admin
     end
 
     def bulk_create(statement_params_array)
-      ActiveRecord::Base.transaction do
-        statement_params_array.each do |statement_params|
-          Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
-        end
+      statement_params_array.each do |statement_params|
+        Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
       end
     end
   end
