@@ -1,3 +1,5 @@
+require 'uri'
+
 class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
@@ -30,8 +32,16 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     StatementSearch.new(include_unpublished, criteria)
   end
 
+  def self.url_exists?(url)
+    uri = URI(url)
+    uri.scheme = 'https'
+    return true if exists?(url: uri.to_s)
+    uri.scheme = 'http'
+    exists?(url: uri.to_s)
+  end
+
   def self.bulk_create!(company_name, statement_url)
-    return if Statement.exists?(url: statement_url)
+    return if Statement.url_exists?(statement_url)
 
     begin
       company = Company.find_or_create_by!(name: company_name)

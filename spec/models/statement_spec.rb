@@ -9,6 +9,20 @@ RSpec.describe Statement, type: :model do
     end
   end
 
+  describe '#url_exists?' do
+    it 'returns true for http when https exists' do
+      company = Company.create!(name: 'BigCorp')
+      company.statements.create!(url: 'https://host.com')
+      expect(Statement.url_exists?('http://host.com')).to eq(true)
+    end
+
+    it 'returns true for https when http exists' do
+      company = Company.create!(name: 'BigCorp')
+      company.statements.create!(url: 'http://host.com')
+      expect(Statement.url_exists?('https://host.com')).to eq(true)
+    end
+  end
+
   describe 'fetching snapshots' do
     before do
       allow(ScreenGrab).to receive(:fetch) do |url|
