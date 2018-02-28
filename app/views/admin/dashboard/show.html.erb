@@ -77,7 +77,7 @@
 
   <div class="subsection">
     <div class="box">
-      <h2 class="title is-2">New Statements</h2>
+      <h2 class="title is-2">New Statements (<%= @new_statements.count %>)</h2>
       <% if @new_statements.any? %>
         <table data-content="new_statements" class="table">
           <tbody>
@@ -98,7 +98,7 @@
 
   <div class="subsection">
     <div class="box">
-      <h2 class="title is-2">Broken URLs</h2>
+      <h2 class="title is-2">Broken URLs (<%= @broken_urls.count %>)</h2>
       <% if @broken_urls.any? %>
         <table data-content="broken_urls" class="table">
           <tbody>
