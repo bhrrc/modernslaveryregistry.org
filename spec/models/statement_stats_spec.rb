@@ -110,8 +110,14 @@ RSpec.describe StatementStats do
     StatementStats.new
   end
 
+  let :search do
+    StatementSearch.new(false, {})
+  end
+
   it 'counts published statements' do
     expect(stats.statements_count).to eq(4)
+    # Verify that search count is consistent
+    expect(search.statements.size).to eq(4)
   end
 
   it 'counts companies with published statements' do
