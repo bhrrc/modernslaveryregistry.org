@@ -79,20 +79,20 @@ RSpec.describe Statement, type: :model do
 
   describe '.search' do
     context 'when the searcher is an admin' do
-      it 'finds latest statements ordered by company name' do
+      it 'finds all statements ordered by company name and descending publish date' do
         search = Statement.search(include_unpublished: true, criteria: {})
-        expect(search.statements).to eq([cucumber_2017, potato_2017])
+        expect(search.statements).to eq([cucumber_2017, cucumber_2016, potato_2017, potato_2016])
       end
 
       it 'counts the statements' do
         expect(Statement.search(include_unpublished: true, criteria: {}).stats).to eq(
-          statements: 2,
+          statements: 4,
           sectors: 2,
           countries: 2
         )
         potato_2016.delete
         expect(Statement.search(include_unpublished: true, criteria: {}).stats).to eq(
-          statements: 2,
+          statements: 3,
           sectors: 2,
           countries: 2
         )
@@ -102,8 +102,8 @@ RSpec.describe Statement, type: :model do
         search = Statement.search(include_unpublished: true, criteria: {})
         expect(search.sector_stats).to eq(
           [
-            GroupCount.with(group: agriculture, count: 1),
-            GroupCount.with(group: software, count: 1)
+            GroupCount.with(group: agriculture, count: 2),
+            GroupCount.with(group: software, count: 2)
           ]
         )
       end
@@ -145,7 +145,7 @@ RSpec.describe Statement, type: :model do
     it 'filters statements by countries' do
       expect(
         Statement.search(include_unpublished: true, criteria: { countries: [no.id] }).statements
-      ).to eq([potato_2017])
+      ).to eq([potato_2017, potato_2016])
       expect(
         Statement.search(include_unpublished: false, criteria: { countries: [gb.id, no.id] }).statements
       ).to eq([cucumber_2016, potato_2016])
@@ -154,7 +154,7 @@ RSpec.describe Statement, type: :model do
     it 'filters statements by company sectors' do
       expect(
         Statement.search(include_unpublished: true, criteria: { sectors: [agriculture.id] }).statements
-      ).to eq([potato_2017])
+      ).to eq([potato_2017, potato_2016])
       expect(
         Statement.search(include_unpublished: false, criteria: { sectors: [agriculture.id, software.id] }).statements
       ).to eq([cucumber_2016, potato_2016])

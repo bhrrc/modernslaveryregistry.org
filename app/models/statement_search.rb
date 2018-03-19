@@ -9,7 +9,7 @@ class StatementSearch
     filter_by_published
     filter_by_company
     filter_by_legislations
-    @statements.order('companies.name')
+    @statements.order('companies.name', 'date_seen DESC')
   end
 
   def stats
@@ -37,7 +37,7 @@ class StatementSearch
   end
 
   def filter_by_published
-    @statements = @include_unpublished ? @statements.latest : @statements.latest_published
+    @statements = @include_unpublished ? @statements : @statements.published
   end
 
   def filter_by_company
