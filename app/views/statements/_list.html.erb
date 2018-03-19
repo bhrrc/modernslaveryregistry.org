@@ -2,7 +2,7 @@
   <% statements.each do |statement| %>
     <div class="columns <%= statement.published? ? 'published' : 'draft'%>" data-content="company">
       <div class="column">
-        <%= link_to(statement.company.name, company_path(statement.company), {'data-content': 'name'}) %>
+        <%= link_to(statement.company.name, company_statement_path(statement.company, statement), {'data-content': 'name'}) %>
       </div>
       <div class="column" data-content="country">
         <%= statement.country_name %>
