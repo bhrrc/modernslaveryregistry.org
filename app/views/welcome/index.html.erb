@@ -93,15 +93,17 @@
   </div>
 </section>
 
-<% if admin? %>
-
 <section class="section is-dark-navy">
   <div class="stats-summary container">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
     <h3 class="title is-3 has-text-centered is-turquoise-text">Compliance with minimum requirements</h3>
 
-      <p class="has-text-centered">(note: this section is only visible because you are an administrator)</p>
+      <% if numbers_explained_page %>
+        <h2 class="subtitle has-text-centered">
+          <%= link_to "more information", page_path(numbers_explained_page) %>
+        </h2>
+      <% end %>
 
       <div class="columns">
 
@@ -200,10 +202,6 @@ renderDonut('approved_by_board_donut', <%= @compliance_stats.percent_approved_by
 renderDonut('fully_compliant_donut', <%= @compliance_stats.percent_fully_compliant %>)
 
 </script>
-
-<% end %>
-
-
 
 <% if admin? %>
 
