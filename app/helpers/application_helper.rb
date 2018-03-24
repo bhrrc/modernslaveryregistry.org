@@ -47,4 +47,8 @@ module ApplicationHelper
   def banner_page
     Page.include_drafts(admin?).as_list.find(&:banner?)
   end
+
+  def numbers_explained_page
+    Page.include_drafts(admin?).as_list.find(&:numbers_explained?)
+  end
 end

@@ -51,15 +51,25 @@
     <div class="columns has-text-centered" data-content="stats_counters">
       <div class="column">
         <p class="title is-1" data-content="statements"><%= @statement_stats.statements_count %></p>
-        <p class="subtitle is-3">statements</p>
+        <p class="subtitle is-3"><%= "statement".pluralize(@statement_stats.statements_count) %></p>
+        <% if numbers_explained_page %>
+          <p class="subtitle">
+            <%= link_to "more information", page_path(numbers_explained_page) %>
+          </p>
+        <% end %>
       </div>
       <div class="column">
         <p class="title is-1" data-content="sectors"><%= @statement_stats.sectors_count %></p>
-        <p class="subtitle is-3">sectors</p>
+        <p class="subtitle is-3"><%= "sector".pluralize(@statement_stats.sectors_count) %></p>
       </div>
       <div class="column">
         <p class="title is-1" data-content="companies"><%= @statement_stats.companies_count %></p>
-        <p class="subtitle is-3">companies</p>
+        <p class="subtitle is-3"><%= "company".pluralize(@statement_stats.companies_count) %></p>
+        <% if numbers_explained_page %>
+          <p class="subtitle">
+            <%= link_to "more information", page_path(numbers_explained_page) %>
+          </p>
+        <% end %>
       </div>
     </div>
     <div class="columns has-text-centered">

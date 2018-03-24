@@ -21,6 +21,12 @@ class Page < ApplicationRecord
   end
 
   def banner?
+    # Banner page was used for "in memory of". Change this regexp to make other
+    # pages show up as banner.
     short_title =~ /memory/i
+  end
+
+  def numbers_explained?
+    short_title =~ /numbers explained/i
   end
 end
