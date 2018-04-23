@@ -36,6 +36,14 @@ module ApplicationHelper
     end
   end
 
+  def industry_tag(industry)
+    if industry.blank?
+      content_tag :span, 'unknown', class: 'tag is-warning'
+    else
+      content_tag :span, industry.industry_name, class: 'tag'
+    end
+  end
+
   def admin?
     current_user && current_user.admin?
   end

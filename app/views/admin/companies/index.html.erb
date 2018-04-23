@@ -35,13 +35,17 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Name</td>
+            <th>Name</th>
+            <th>Industry</th>
           </tr>
         </thead>
         <tbody>
           <% @companies.each do |company| %>
           <tr>
             <td><%= link_to company.name, [:admin, company] %></td>
+            <td>
+              <%= industry_tag(company.industry) %>
+            </td>
           </tr>
           <% end %>
         </tbody>
