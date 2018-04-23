@@ -54,6 +54,7 @@ module Admin
       subsidiary_names
       country_id
       sector_id
+      industry_id
     ].freeze
 
     STATEMENTS_ATTRIBUTES = (%i[

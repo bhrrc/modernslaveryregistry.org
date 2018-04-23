@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180218114433) do
+ActiveRecord::Schema.define(version: 20180420221557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,9 @@ ActiveRecord::Schema.define(version: 20180218114433) do
     t.integer  "country_id"
     t.integer  "sector_id"
     t.string   "subsidiary_names"
+    t.integer  "industry_id"
     t.index ["country_id"], name: "index_companies_on_country_id", using: :btree
+    t.index ["industry_id"], name: "index_companies_on_industry_id", using: :btree
     t.index ["sector_id"], name: "index_companies_on_sector_id", using: :btree
   end
 
@@ -35,6 +37,15 @@ ActiveRecord::Schema.define(version: 20180218114433) do
     t.float    "lng"
     t.index ["code"], name: "index_countries_on_code", unique: true, using: :btree
     t.index ["name"], name: "index_countries_on_name", unique: true, using: :btree
+  end
+
+  create_table "industries", force: :cascade do |t|
+    t.string  "sector_name"
+    t.integer "sector_code"
+    t.string  "industry_group_name"
+    t.integer "industry_group_code"
+    t.string  "industry_name"
+    t.integer "industry_code"
   end
 
   create_table "legislation_statements", force: :cascade do |t|
@@ -137,6 +148,7 @@ ActiveRecord::Schema.define(version: 20180218114433) do
   end
 
   add_foreign_key "companies", "countries"
+  add_foreign_key "companies", "industries"
   add_foreign_key "legislation_statements", "legislations"
   add_foreign_key "legislation_statements", "statements"
   add_foreign_key "snapshots", "statements"

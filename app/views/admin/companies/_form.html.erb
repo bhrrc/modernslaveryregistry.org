@@ -34,6 +34,15 @@
         </div>
       </p>
     </div>
+
+    <div class="field">
+      <%= f.label :industry_id, class: 'label' %>
+      <p class="control">
+        <div class="select is-fullwidth">
+          <%= f.collection_select(:industry_id, Industry.order(:sector_code, :industry_group_code, :industry_code).all, :id, :deep_name, include_blank: true) %>
+        </div>
+      </p>
+    </div>
   </div>
 
   <% if build_statement %>
