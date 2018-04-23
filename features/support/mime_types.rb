@@ -10,8 +10,8 @@ class MimeType < Value.new(:format, :content_type)
   end
 end
 
-mime_types.each do |format, content_type|
-  Transform(/^(#{format})$/) do |f|
-    MimeType.with(format: f, content_type: content_type)
-  end
-end
+ParameterType(
+  name: 'mime_type',
+  regexp: /(#{mime_types.keys.join('|')})/,
+  transformer: ->(str) { MimeType.with(format: str, content_type: mime_types[str]) }
+)

@@ -1,8 +1,8 @@
-When(/^(Joe|Patricia) views the compliance stats$/) do |actor| # rubocop:disable Style/SymbolProc
+When('{actor} views the compliance stats') do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_view_minimum_compliance_requirements_stats
 end
 
-Then(/^(Joe|Patricia) should see the following stats:$/) do |actor, table|
+Then('{actor} should see the following stats:') do |actor, table|
   expect(actor.visible_minimum_compliance_requirements_stats.to_h).to eq(table.rows_hash.symbolize_keys)
 end
 

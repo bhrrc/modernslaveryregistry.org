@@ -1,26 +1,35 @@
-Given(/^the company "([^"]*)" has been submitted$/) do |company_name|
+Given('the company {string} has been submitted') do |company_name|
   Company.create!(
     name: company_name,
     country: Country.find_or_create_by!(code: 'GB', name: 'United Kingdom')
   )
 end
 
-When(/^(Joe|Patricia) submits the company "([^"]*)"$/) do |actor, company_name|
+When('{actor} submits the company {string}') do |actor, company_name|
   actor.attempts_to_create_company(name: company_name)
 end
 
-When(/^(Joe|Patricia) submits the following company:$/) do |actor, table|
+When('{actor} submits the following company:') do |actor, table|
   details = table.rows_hash
-  actor.attempts_to_submit_company_with_statement(
-    name: details.fetch('Company name'),
-    country: details.fetch('Company HQ'),
-    sector: details.fetch('Sector'),
-    statement_url: details.fetch('Statement URL'),
-    period_covered: details.fetch('Period Covered')
-  )
+
+  if details['Your email']
+    actor.attempts_to_submit_company_with_statement(
+      name: details.fetch('Company name'),
+      statement_url: details.fetch('Statement URL'),
+      your_email: details.fetch('Your email')
+    )
+  else
+    actor.attempts_to_submit_company_with_statement(
+      name: details.fetch('Company name'),
+      country: details.fetch('Company HQ'),
+      sector: details.fetch('Sector'),
+      statement_url: details.fetch('Statement URL'),
+      period_covered: details.fetch('Period Covered')
+    )
+  end
 end
 
-When(/^(Joe|Patricia) submits the following company as a visitor:$/) do |actor, table|
+When('{actor} submits the following company as a visitor:') do |actor, table|
   details = table.rows_hash
   actor.attempts_to_submit_company_with_statement_as_visitor(
     name: details.fetch('Company name'),
@@ -30,29 +39,20 @@ When(/^(Joe|Patricia) submits the following company as a visitor:$/) do |actor, 
   )
 end
 
-When(/^(Vicky) submits the following company:$/) do |actor, table|
-  details = table.rows_hash
-  actor.attempts_to_submit_company_with_statement(
-    name: details.fetch('Company name'),
-    statement_url: details.fetch('Statement URL'),
-    your_email: details.fetch('Your email')
-  )
-end
-
-When(/^(Joe|Patricia) deletes the company "([^"]*)"$/) do |actor, company_name|
+When('{actor} deletes the company {string}') do |actor, company_name|
   actor.attempts_to_delete_company(company_name: company_name)
 end
 
-Then(/^(Joe|Patricia) should see company "([^"]*)"$/) do |actor, company_name|
+Then('{actor} should see company {string}') do |actor, company_name|
   expect(actor.visible_company_name).to eq(company_name)
 end
 
-Then(/^(Joe|Patricia) should find company "([^"]*)"$/) do |actor, company_name|
+Then('{actor} should find company {string}') do |actor, company_name|
   actor.attempts_to_search_for company_name
   expect(actor.visible_company_name).to eq(company_name)
 end
 
-Then(/^(Joe|Patricia) should find company "([^"]*)" with:$/) do |actor, company_name, table|
+Then('{actor} should find company {string} with:') do |actor, company_name, table|
   actor.attempts_to_search_for company_name
   expect(actor.visible_company_name).to eq(company_name)
   details = table.rows_hash

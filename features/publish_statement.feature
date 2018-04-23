@@ -40,7 +40,7 @@ Feature: Publish statement
     Given Patricia is logged in
     Then Patricia should see that the latest statement for "Cucumber Ltd" is not published
     And Patricia should see that the latest statement for "Cucumber Ltd" was not verified
-    And Patricia should see that the latest statement for "Cucumber Ltd" was contributed by vicky@host.com
+    And Patricia should see that the latest statement for "Cucumber Ltd" was contributed by "vicky@host.com"
 
   Scenario: Admin deletes a statement
     When Vicky submits the following statement:

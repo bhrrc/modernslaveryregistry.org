@@ -1,4 +1,4 @@
-Given(/^the following pages exist:$/) do |table|
+Given('the following pages exist:') do |table|
   table.hashes.each do |props|
     Page.create!(
       title: props['Title'],
@@ -10,7 +10,7 @@ Given(/^the following pages exist:$/) do |table|
   end
 end
 
-When(/^(Joe|Patricia) creates a new page$/) do |actor|
+When('{actor} creates a new page') do |actor|
   actor.attempts_to_create_page(
     slug: 'new-page',
     title: 'New Page',
@@ -19,11 +19,11 @@ When(/^(Joe|Patricia) creates a new page$/) do |actor|
   )
 end
 
-When(/^(Joe|Patricia|Vicky) visits the page$/) do |actor| # rubocop:disable Style/SymbolProc
+When('{actor} visits the page') do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_visit_latest_page
 end
 
-When(/^(Joe|Patricia) edits an existing page$/) do |actor|
+When('{actor} edits an existing page') do |actor|
   Page.create!(slug: 'existing-page', title: 'Existing Title', short_title: 'Existing', body_html: 'Existing Body')
   actor.attempts_to_edit_page(
     title: 'Existing Title',
@@ -35,7 +35,7 @@ When(/^(Joe|Patricia) edits an existing page$/) do |actor|
   )
 end
 
-When(/^(Joe) publishes a page$/) do |actor|
+When('{actor} publishes a page') do |actor|
   Page.create!(slug: 'existing-page', title: 'Title', short_title: 'Title', body_html: 'Body')
   actor.attempts_to_edit_page(
     title: 'Title',
@@ -45,7 +45,7 @@ When(/^(Joe) publishes a page$/) do |actor|
   )
 end
 
-When(/^(Joe) unpublishes a page$/) do |actor|
+When('{actor} unpublishes a page') do |actor|
   Page.create!(slug: 'existing-page', title: 'Title', short_title: 'Title', body_html: 'Body', published: true)
   actor.attempts_to_edit_page(
     title: 'Title',
@@ -55,44 +55,44 @@ When(/^(Joe) unpublishes a page$/) do |actor|
   )
 end
 
-When(/^(Joe|Patricia) deletes an existing page$/) do |actor|
+When('{actor} deletes an existing page') do |actor|
   Page.create!(slug: 'page-to-delete', title: 'Title To Delete', short_title: 'To Delete', body_html: 'Body To Delete')
   actor.attempts_to_delete_page(title: 'Title To Delete')
 end
 
-When(/^(Joe|Patricia) moves the page "([^"]+)" (up|down)$/) do |actor, title, direction|
+When('{actor} moves the page {string} {direction}') do |actor, title, direction|
   actor.attempts_to_move_page(title: title, direction: direction)
 end
 
-When(/^(Vicky) visits the page "([^"]*)"$/) do |actor, title|
+When('{actor} visits the page {string}') do |actor, title|
   actor.attempts_to_visit_page(title: title)
 end
 
-Then(/^(Joe|Patricia) should see the new page on the website$/) do |actor|
+Then('{actor} should see the new page on the website') do |actor|
   expect(actor.visible_page.page_html).to eq('<b>This is the body</b>')
 end
 
-Then(/^(Vicky) should see the page on the website$/) do |actor|
+Then('{actor} should see the page on the website') do |actor|
   expect(actor.visible_page.page_html).to eq(Page.last.body_html)
 end
 
-Then(/^(Vicky) should not see the page on the website$/) do |actor|
+Then('{actor} should not see the page on the website') do |actor|
   expect(actor.visible_page).to be_nil
 end
 
-Then(/^(Joe|Patricia) should see the updated page on the website$/) do |actor|
+Then('{actor} should see the updated page on the website') do |actor|
   expect(actor.visible_page.page_html).to eq('New Body')
 end
 
-Then(/^(Joe|Patricia) should see the following menu on the website:$/) do |actor, table|
+Then('{actor} should see the following menu on the website:') do |actor, table|
   expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 
-Then(/^(Joe|Patricia) should not see the deleted page on the website$/) do |actor|
+Then('{actor} should not see the deleted page on the website') do |actor|
   expect(actor.visible_main_navigation_menu.titles).to eq([])
 end
 
-Then(/^(Vicky) should see the following pages on the website:$/) do |actor, table|
+Then('{actor} should see the following pages on the website:') do |actor, table|
   expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 

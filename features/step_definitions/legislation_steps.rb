@@ -1,4 +1,4 @@
-Given(/^the following legislations exist:$/) do |table|
+Given('the following legislations exist:') do |table|
   table.hashes.each do |hash|
     Legislation.create!(
       name: hash['Name'],

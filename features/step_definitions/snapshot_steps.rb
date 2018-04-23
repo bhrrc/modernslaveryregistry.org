@@ -1,4 +1,4 @@
-Given(/^a statement was submitted for "([^"]*)" that responds with (PDF|HTML)$/) do |company_name, mime_type|
+Given('a statement was submitted for {string} that responds with {mime_type}') do |company_name, mime_type|
   statement_url = "https://cucumber.io/statement.#{mime_type.extension}"
   content_data = "#{mime_type.content_type} snapshot for statement by '#{company_name}'"
   allow(StatementUrl).to receive(:fetch).with(statement_url).and_return(
@@ -23,11 +23,11 @@ Given(/^a statement was submitted for "([^"]*)" that responds with (PDF|HTML)$/)
   expect(StatementUrl).to have_received(:fetch).with(statement_url)
 end
 
-When(/^(Joe|Patricia) views the latest snapshot of the statement for "([^"]*)"$/) do |actor, company_name|
+When('{actor} views the latest snapshot of the statement for {string}') do |actor, company_name|
   actor.attempts_to_view_the_latest_snapshot(company_name: company_name)
 end
 
-Then(/^(Joe|Patricia) should see a (PDF|JPEG) snapshot of the statement for "([^"]*)"$/) do |actor, format, company_name|
+Then('{actor} should see a {mime_type} snapshot of the statement for {string}') do |actor, format, company_name|
   expect(actor.visible_snapshot).to eq("#{format.content_type} snapshot for statement by '#{company_name}'")
 end
 

@@ -1,16 +1,16 @@
-When(/^(Joe|Patricia) searches for "([^"]*)"$/) do |actor, query|
+When('{actor} searches for {string}') do |actor, query|
   actor.attempts_to_search_for(query)
 end
 
-When(/^(Joe|Patricia) selects sector "([^"]*)"$/) do |actor, sector|
+When('{actor} selects sector {string}') do |actor, sector|
   actor.attempts_to_filter_by_sector(sector)
 end
 
-When(/^(Joe|Patricia) selects legislation "([^"]*)"$/) do |actor, legislation|
+When('{actor} selects legislation {string}') do |actor, legislation|
   actor.attempts_to_filter_by_legislation(legislation)
 end
 
-Then(/^(Joe|Patricia) should find no company called "([^"]*)" exists$/) do |actor, company_name|
+Then('{actor} should find no company called {string} exists') do |actor, company_name|
   actor.attempts_to_search_for(company_name)
   expect(actor.visible_statement_search_results_summary).to eq('No statements found')
 end

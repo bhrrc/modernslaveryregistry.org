@@ -14,6 +14,12 @@ Before do
   }
 end
 
+ParameterType(
+  name: 'actor',
+  regexp: /(Joe|Patricia|Vicky)/,
+  transformer: ->(str) { @actors[str] }
+)
+
 class Actor
   include Rails.application.routes.url_helpers
   include Capybara::DSL
@@ -48,8 +54,4 @@ class Administrator < Visitor
   def admin?
     true
   end
-end
-
-Transform(/^(Joe|Patricia|Vicky)$/) do |actor_name|
-  @actors[actor_name]
 end

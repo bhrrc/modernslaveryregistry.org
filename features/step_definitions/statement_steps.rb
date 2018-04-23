@@ -1,17 +1,17 @@
 require 'csv'
 require 'tempfile'
 
-Given(/^(Joe|Patricia) has submitted the following statement:$/) do |actor, table|
+Given('{actor} has submitted the following statement:') do |actor, table|
   actor.attempts_to_create_company_with_statement(options: table.rows_hash)
 end
 
-Given(/^the following statements have been submitted:$/) do |table|
+Given('the following statements have been submitted:') do |table|
   table.hashes.each do |props|
     submit_statement props
   end
 end
 
-Given(/^a statement was submitted for "([^"]*)" that responds with a 404$/) do |company_name|
+Given('a statement was submitted for {string} that responds with a 404') do |company_name|
   statement_url = 'https://cucumber.io/some-404'
   allow(StatementUrl).to receive(:fetch).with(statement_url).and_return(
     FetchResult.with(
@@ -27,44 +27,44 @@ Given(/^a statement was submitted for "([^"]*)" that responds with a 404$/) do |
   )
 end
 
-Given(/^the legislation "([^"]*)" requires values for the following attributes:$/) do |legislation_name, table|
+Given('the legislation {string} requires values for the following attributes:') do |legislation_name, table|
   attributes = table.hashes.map { |row| row['Attribute'].downcase.tr(' ', '_') }.join(',')
   Legislation.create!(name: legislation_name, requires_statement_attributes: attributes, icon: 'whatevs')
 end
 
-When(/^(Joe|Patricia|Vicky) submits the following statement for "([^"]*)":$/) do |actor, company_name, table|
+When('{actor} submits the following statement for {string}:') do |actor, company_name, table|
   actor.attempts_to_submit_new_statement_for_existing_company(
     company_name: company_name,
     options: table.rows_hash
   )
 end
 
-When(/^(Joe|Patricia|Vicky) uploads a CSV with the following statements:$/) do |actor, table|
+When('{actor} uploads a CSV with the following statements:') do |actor, table|
   actor.attempts_to_upload_statement_csv(csv_data: table.raw)
 end
 
 # TODO: fix up naming of this step
-When(/^(Joe|Patricia|Vicky) submits the following statement:$/) do |actor, table|
+When('{actor} submits the following statement:') do |actor, table|
   actor.attempts_to_create_company_with_statement(options: table.rows_hash)
 end
 
-When(/^(Joe|Patricia) updates the statement for "([^"]*)" to:$/) do |actor, company_name, table|
+When('{actor} updates the statement for {string} to:') do |actor, company_name, table|
   actor.attempts_to_update_statement(company_name: company_name, new_values: table.rows_hash)
 end
 
-When(/^(Joe|Patricia) deletes the statement for "([^"]*)"$/) do |actor, company_name|
+When('{actor} deletes the statement for {string}') do |actor, company_name|
   actor.attempts_to_delete_latest_statement_by_company(company_name: company_name)
 end
 
-When(/^(Joe|Patricia) finds all statements by "([^"]*)"$/) do |actor, company_name|
+When('{actor} finds all statements by {string}') do |actor, company_name|
   actor.attempts_to_find_all_statements_by_company(company_name: company_name)
 end
 
-When(/^(Joe|Patricia) views the stats of statements added by month$/) do |actor| # rubocop:disable Style/SymbolProc
+When('{actor} views the stats of statements added by month') do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_view_statements_added_by_month
 end
 
-When(/^(Joe|Patricia) marks the URL for "([^"]*)" as not broken$/) do |actor, company_name|
+When('{actor} marks the URL for {string} as not broken') do |actor, company_name|
   url = Company.find_by!(name: company_name).latest_statement.url
   allow(ScreenGrab).to receive(:fetch).with(url).and_return(
     FetchResult.with(
@@ -77,7 +77,7 @@ When(/^(Joe|Patricia) marks the URL for "([^"]*)" as not broken$/) do |actor, co
   actor.attempts_to_mark_statement_url_as_not_broken(company_name: company_name)
 end
 
-Then(/^(Joe|Patricia) should see 1 statement for "([^"]*)" with:$/) do |actor, company_name, table|
+Then('{actor} should see 1 statement for {string} with:') do |actor, company_name, table|
   statements = actor.visible_listed_statements_for_company(company_name: company_name)
   expect(statements.length).to eq(1)
   latest = actor.visible_latest_statement_by_company(company_name: company_name)
@@ -87,47 +87,51 @@ Then(/^(Joe|Patricia) should see 1 statement for "([^"]*)" with:$/) do |actor, c
   end
 end
 
-Then(/^(Joe|Patricia) should see (\d+) statements? for "([^"]*)"$/) do |actor, statement_count, company_name|
+Then('{actor} should see (\d+) statements? for {string}') do |actor, statement_count, company_name|
   expect(actor.visible_listed_statements_for_company(company_name: company_name).length).to eq(statement_count.to_i)
 end
 
-Then(/^(Joe|Patricia) should see the following statements:$/) do |actor, table|
+Then('{actor} should see the following statements:') do |actor, table|
   expect(actor.visible_listed_statements_date_seen_and_period_covered).to eq(table.hashes.map do |row|
     { date_seen: row['Date seen'], period_covered: row['Period covered'] }
   end)
 end
 
-Then(/(Joe|Patricia) should only see "([^"]*)" in the search results$/) do |actor, company_names_string|
+Then('{actor} should only see {string} in the search results') do |actor, company_names_string|
   company_names = company_names_string.split(',').map(&:strip)
   expect(actor.visible_listed_company_names_from_search).to eq(company_names)
 end
 
-Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" was verified by herself$/) do |actor, company_name|
+Then('{actor} should see that the latest statement for {string} was verified by herself') do |actor, company_name|
   expect(actor.visible_latest_statement_by_company(company_name: company_name).verified_by).to eq(actor.name)
 end
 
-Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" was contributed by (.*)$/) do |actor, company_name, contributor_email|
-  contributor_email = User.find_by!(first_name: actor.name).email if contributor_email == 'herself'
+Then('{actor} should see that the latest statement for {string} was contributed by herself') do |actor, company_name|
+  contributor_email = User.find_by!(first_name: actor.name).email
   expect(actor.visible_latest_statement_by_company(company_name: company_name).contributor_email).to eq(contributor_email)
 end
 
-Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" is not published$/) do |actor, company_name|
+Then('{actor} should see that the latest statement for {string} was contributed by {string}') do |actor, company_name, contributor_email|
+  expect(actor.visible_latest_statement_by_company(company_name: company_name).contributor_email).to eq(contributor_email)
+end
+
+Then('{actor} should see that the latest statement for {string} is not published') do |actor, company_name|
   expect(actor.visible_latest_statement_by_company(company_name: company_name).published).to eq('No')
 end
 
-Then(/^(Joe|Patricia) should see that the latest statement for "([^"]*)" was not verified$/) do |actor, company_name|
+Then('{actor} should see that the latest statement for {string} was not verified') do |actor, company_name|
   expect(actor.visible_latest_statement_by_company(company_name: company_name).verified_by).to eq(nil)
 end
 
-Then(/^(Joe|Patricia) should see that no statement for "([^"]*)" exists$/) do |actor, company_name|
+Then('{actor} should see that no statement for {string} exists') do |actor, company_name|
   expect(actor.visible_count_of_statements_by_company(company_name: company_name)).to eq(0)
 end
 
-Then(/^(Joe|Patricia) should see that the statement was not saved due to the following errors:$/) do |actor, table|
+Then('{actor} should see that the statement was not saved due to the following errors:') do |actor, table|
   expect(actor.visible_validation_error_summary).to eq(table.hashes.map { |hash| hash['Message'] })
 end
 
-Then(/^(Joe|Patricia) sees the following statements added by month:$/) do |actor, table|
+Then('{actor} sees the following statements added by month:') do |actor, table|
   rendered_data = table.hashes.map { |hash| { label: hash['Month'], statements: hash['Statements'].to_i } }
   expect(actor.visible_statements_added_by_month_stats).to eq(rendered_data)
 end

@@ -1,4 +1,4 @@
-Then(/^(Vicky) should see a thank you message$/) do |actor|
+Then('{actor} should see a thank you message') do |actor|
   expect(actor.visible_text).to include('Thank you!')
 end
 

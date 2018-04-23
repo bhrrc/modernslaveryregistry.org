@@ -1,28 +1,28 @@
-Given(/^(Vicky) has a user account$/) do |actor|
+Given('{actor} has a user account') do |actor|
   find_or_create_user(actor)
 end
 
-When(/^(Patricia) searches users$/) do |actor| # rubocop:disable Style/SymbolProc
+When('{actor} searches users') do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_search_users
 end
 
-When(/^(Patricia) makes Vicky an administrator$/) do |actor|
+When('{actor} makes Vicky an administrator') do |actor|
   actor.attempts_to_make_user_administrator('Vicky')
 end
 
-When(/^(Patricia) makes Vicky a non-administrator$/) do |actor|
+When('{actor} makes Vicky a non-administrator') do |actor|
   actor.attempts_to_make_user_non_administrator('Vicky')
 end
 
-Then(/^(Patricia) should see Patricia and Vicky$/) do |actor|
+Then('{actor} should see Patricia and Vicky') do |actor|
   expect(actor.visible_user_account_first_names).to match_array(%w[Patricia Vicky])
 end
 
-Then(/^(Vicky) should have admin access$/) do |actor|
+Then('{actor} should have admin access') do |actor|
   expect(User.find_by!(first_name: actor.name)).to be_admin
 end
 
-Then(/^(Vicky) should not have admin access$/) do |actor|
+Then('{actor} should not have admin access') do |actor|
   expect(User.find_by!(first_name: actor.name)).not_to be_admin
 end
 

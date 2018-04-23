@@ -1,8 +1,8 @@
-When(/^(Joe|Patricia) downloads all statements$/) do |actor| # rubocop:disable Style/SymbolProc
+When('{actor} downloads all statements') do |actor| # rubocop:disable Style/SymbolProc
   actor.attempts_to_download_all_statements
 end
 
-Then(/^(Joe|Patricia) should see all the published statements$/) do |actor|
+Then('{actor} should see all the published statements') do |actor|
   expected_downloads = Statement.published.map do |statement|
     DownloadedStatement.with(
       company_name: statement.company.name,
@@ -15,7 +15,7 @@ Then(/^(Joe|Patricia) should see all the published statements$/) do |actor|
   expect(actor.visible_downloaded_statements).to match_array(expected_downloads)
 end
 
-Then(/^(Joe|Patricia) should see all the statements including drafts$/) do |actor|
+Then('{actor} should see all the statements including drafts') do |actor|
   expected_downloads = Statement.all.map do |statement|
     DownloadedStatement.with(
       company_name: statement.company.name,
