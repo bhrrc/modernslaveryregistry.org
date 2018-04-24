@@ -32,6 +32,8 @@ class StatementExport
     published: 'Published',
     verified_by_email: 'Verified by',
     contributor_email: 'Contributed by',
-    broken_url: 'Broken URL'
+    broken_url: 'Broken URL',
+    industry_name: 'Industry',
+    company_id: 'Company ID'
   }.freeze
 end

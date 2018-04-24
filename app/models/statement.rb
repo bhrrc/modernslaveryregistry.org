@@ -66,7 +66,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def contributor_or_verifier_email
-    contributor_email.blank? ? verified_by_email : contributor_email
+    contributor_email.presence || verified_by_email
   end
 
   def self.to_csv(statements, extra)
@@ -117,6 +117,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def company_name
     company.name
+  end
+
+  def industry_name
+    company.industry_name
   end
 
   def build_snapshot_from_result(fetch_result)
