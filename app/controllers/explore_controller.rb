@@ -4,7 +4,7 @@ class ExploreController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @download_url = explore_path(criteria_params.merge(format: 'csv'))
+        @download_url = build_csv_url
         @search = search
         @statements = search.statements.page params[:page]
       end
@@ -15,6 +15,11 @@ class ExploreController < ApplicationController
   end
 
   private
+
+  def build_csv_url
+    explore_path(params
+      .to_unsafe_hash.merge(format: 'csv'))
+  end
 
   def search
     Statement.search(include_unpublished: admin?, criteria: criteria_params)
