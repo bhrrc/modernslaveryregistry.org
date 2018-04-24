@@ -5,7 +5,7 @@ class StatementSearch
   end
 
   def statements
-    @statements = Statement.includes(:verified_by, :legislations, company: %i[sector country])
+    @statements = Statement.includes(:verified_by, :legislations, company: %i[sector country industry])
     filter_by_published
     filter_by_company
     filter_by_legislations

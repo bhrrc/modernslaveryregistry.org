@@ -34,8 +34,9 @@ RSpec.describe Statement, type: :model do
         )
       end
       @sw = Sector.create! name: 'Software'
+      @vegetables = Industry.create!(industry_name: 'Vegetables')
       @gb = Country.create! code: 'GB', name: 'United Kingdom'
-      @company = Company.create! name: 'Cucumber Ltd', country_id: @gb.id, sector_id: @sw.id
+      @company = Company.create! name: 'Cucumber Ltd', country: @gb, sector: @sw, industry: @vegetables
     end
 
     it 'converts url to https if it exists' do
@@ -115,7 +116,7 @@ RSpec.describe Statement, type: :model do
       end
     end
 
-    it 'turns rows into CSV with more rows for admins' do
+    it 'turns rows into CSV with more columns for admins' do
       VCR.use_cassette('cucumber.io') do
         user = User.create!(first_name: 'Super',
                             last_name: 'Admin',
@@ -132,15 +133,15 @@ RSpec.describe Statement, type: :model do
                                                 verified_by: user,
                                                 contributor_email: 'contributor@somewhere.com',
                                                 date_seen: Date.parse('2017-03-22'),
-                                                published: true)
+                                                published: true,)
 
         statement.fetch_snapshot
         statement.save!
         csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), true)
 
         expect(csv).to eq(<<~CSV
-          Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false
+          Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Industry,Company ID
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,Vegetables,#{statement.company_id}
   CSV
                          )
       end

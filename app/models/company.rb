@@ -24,6 +24,10 @@ class Company < ApplicationRecord
     try(:sector).try(:name) || 'Sector unknown'
   end
 
+  def industry_name
+    try(:industry).try(:industry_name) || ''
+  end
+
   def self.search(query)
     wild = "%#{query}%"
     Company.where(
