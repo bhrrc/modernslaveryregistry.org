@@ -1,19 +1,19 @@
 <%= form_tag explore_path, enforce_utf8: false, method: :get, class: 'statements-search-form' do %>
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label class="label">Sectors</label>
+      <label class="label">Industries</label>
     </div>
     <div class="field-body">
       <div class="field">
         <div class="control">
           <%=
           select_tag(
-            'sectors[]',
+            'industries[]',
             options_from_collection_for_select(
-              Sector.with_companies.order(:name),
+              Industry.with_companies.order(:name),
               :id,
               :name,
-              params[:sectors]
+              params[:industries]
             ),
             {
               include_blank: true,

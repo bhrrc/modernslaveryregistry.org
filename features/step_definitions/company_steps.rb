@@ -22,7 +22,7 @@ When('{actor} submits the following company:') do |actor, table|
     actor.attempts_to_submit_company_with_statement(
       name: details.fetch('Company name'),
       country: details.fetch('Company HQ'),
-      sector: details.fetch('Sector'),
+      industry: details.fetch('Industry'),
       statement_url: details.fetch('Statement URL'),
       period_covered: details.fetch('Period Covered')
     )
@@ -34,7 +34,7 @@ When('{actor} submits the following company as a visitor:') do |actor, table|
   actor.attempts_to_submit_company_with_statement_as_visitor(
     name: details.fetch('Company name'),
     country: details.fetch('Company HQ'),
-    sector: details.fetch('Sector'),
+    industry: details.fetch('Industry'),
     statement_url: details.fetch('Statement URL')
   )
 end
@@ -57,7 +57,7 @@ Then('{actor} should find company {string} with:') do |actor, company_name, tabl
   expect(actor.visible_company_name).to eq(company_name)
   details = table.rows_hash
   expect(actor.visible_company.country).to eq(details['Company HQ'])
-  expect(actor.visible_company.sector).to eq(details['Sector'])
+  expect(actor.visible_company.industry).to eq(details['Industry'])
 end
 
 module AttemptsToCreateCompany
@@ -65,26 +65,26 @@ module AttemptsToCreateCompany
     visit new_admin_company_path
     fill_in 'Company name', with: name
     select 'United Kingdom', from: 'Country'
-    select 'Software', from: 'Sector'
+    select 'Software', from: 'Industry'
     fill_in 'Subsidiary names', with: "#{name} Labs, #{name} Express"
     click_button 'Create Company'
   end
 
-  def attempts_to_submit_company_with_statement(name:, country:, sector:, statement_url:, period_covered:)
+  def attempts_to_submit_company_with_statement(name:, country:, industry:, statement_url:, period_covered:)
     visit new_admin_company_path
     fill_in 'Company name', with: name
     select country, from: 'Country'
-    select sector, from: 'Sector'
+    select industry, from: 'Industry'
     fill_in 'Statement URL', with: statement_url
     enter_period_covered(period_covered)
     click_button 'Create Company'
   end
 
-  def attempts_to_submit_company_with_statement_as_visitor(name:, country:, sector:, statement_url:)
+  def attempts_to_submit_company_with_statement_as_visitor(name:, country:, industry:, statement_url:)
     visit new_company_path
     fill_in 'Company name', with: name
     select country, from: 'Company HQ'
-    select sector, from: 'Sector'
+    select industry, from: 'Industry'
     fill_in 'Statement URL', with: statement_url
     click_button 'Submit'
   end
@@ -110,7 +110,7 @@ end
 
 module SeesACompanyOnThePage
   def visible_company
-    dom_struct(:company, :country, :sector)
+    dom_struct(:company, :country, :industry)
   end
 
   def visible_company_name

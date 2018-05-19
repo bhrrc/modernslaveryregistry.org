@@ -2,19 +2,19 @@ require 'rails_helper'
 
 RSpec.describe StatementStats do
   let! :software do
-    Sector.create! name: 'Software'
+    Industry.create! name: 'Software'
   end
 
   let! :broadcasting do
-    Sector.create! name: 'Broadcasting'
+    Industry.create! name: 'Broadcasting'
   end
 
   let! :retail do
-    Sector.create! name: 'Retail'
+    Industry.create! name: 'Retail'
   end
 
   let! :movies do
-    Sector.create! name: 'Movies'
+    Industry.create! name: 'Movies'
   end
 
   let! :gb do
@@ -22,23 +22,23 @@ RSpec.describe StatementStats do
   end
 
   let! :cucumber do
-    Company.create! name: 'Cucumber Ltd', country: gb, sector: software
+    Company.create! name: 'Cucumber Ltd', country: gb, industry: software
   end
 
   let! :bbc do
-    Company.create! name: 'BBC Ltd', country: gb, sector: broadcasting
+    Company.create! name: 'BBC Ltd', country: gb, industry: broadcasting
   end
 
   let! :itv do
-    Company.create! name: 'ITV Ltd', country: gb, sector: broadcasting
+    Company.create! name: 'ITV Ltd', country: gb, industry: broadcasting
   end
 
   let! :tesco do
-    Company.create! name: 'Tesco Plc', country: gb, sector: retail
+    Company.create! name: 'Tesco Plc', country: gb, industry: retail
   end
 
   let! :pixar do
-    Company.create! name: 'Pixar', country: gb, sector: movies
+    Company.create! name: 'Pixar', country: gb, industry: movies
   end
 
   let! :cucumber_2016 do
@@ -124,7 +124,7 @@ RSpec.describe StatementStats do
     expect(stats.companies_count).to eq(2)
   end
 
-  it 'counts sectors of companies with published statements' do
-    expect(stats.sectors_count).to eq(2)
+  it 'counts industries of companies with published statements' do
+    expect(stats.industries_count).to eq(2)
   end
 end

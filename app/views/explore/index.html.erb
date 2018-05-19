@@ -36,13 +36,13 @@
                   <%= link_to 'Download CSV', @download_url, class: 'is-pulled-right' %>
                 <% end %>
               </div>
-              <% stats = @search.sector_stats %>
+              <% stats = @search.industry_stats %>
               <% if stats.any? %>
-                <table id="sector-stats">
-                  <tbody data-content="sector_stats">
+                <table id="industry-stats">
+                  <tbody data-content="industry_stats">
                     <% stats.each do |group_count| %>
                       <tr>
-                        <td data-content="sector" style="padding: 5px"><%= group_count.group.name %></td>
+                        <td data-content="industry" style="padding: 5px"><%= group_count.group.name %></td>
                         <td data-content="count" style="padding: 5px; text-align: right"><%= group_count.count %></td>
                       </tr>
                     <% end %>

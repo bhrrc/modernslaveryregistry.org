@@ -31,7 +31,7 @@ class ExploreController < ApplicationController
 
   def criteria_params
     {
-      sectors: params[:sectors],
+      industries: params[:industries],
       countries: params[:countries],
       company_name: params[:company_name],
       legislation_names: params

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180420221557) do
+ActiveRecord::Schema.define(version: 20180519060859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20180420221557) do
     t.integer "sector_code"
     t.string  "industry_group_name"
     t.integer "industry_group_code"
-    t.string  "industry_name"
+    t.string  "name"
     t.integer "industry_code"
   end
 

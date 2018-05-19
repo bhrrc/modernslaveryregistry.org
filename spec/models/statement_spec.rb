@@ -33,10 +33,10 @@ RSpec.describe Statement, type: :model do
           content_data: 'image data!'
         )
       end
-      @sw = Sector.create! name: 'Software'
-      @vegetables = Industry.create!(industry_name: 'Vegetables')
+      @sw = Industry.create! name: 'Software'
+      @vegetables = Industry.create!(name: 'Vegetables')
       @gb = Country.create! code: 'GB', name: 'United Kingdom'
-      @company = Company.create! name: 'Cucumber Ltd', country: @gb, sector: @sw, industry: @vegetables
+      @company = Company.create! name: 'Cucumber Ltd', country: @gb, industry: @sw
     end
 
     it 'converts url to https if it exists' do
@@ -106,10 +106,10 @@ RSpec.describe Statement, type: :model do
 
         statement.fetch_snapshot
         statement.save!
-        csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), false)
+        csv = Statement.to_csv(@company.statements.includes(company: %i[industry country]), false)
 
         expect(csv).to eq(<<~CSV
-          Company,URL,Sector,HQ,Date Added
+          Company,URL,Industry,HQ,Date Added
           Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22
   CSV
                          )
@@ -133,15 +133,15 @@ RSpec.describe Statement, type: :model do
                                                 verified_by: user,
                                                 contributor_email: 'contributor@somewhere.com',
                                                 date_seen: Date.parse('2017-03-22'),
-                                                published: true,)
+                                                published: true)
 
         statement.fetch_snapshot
         statement.save!
-        csv = Statement.to_csv(@company.statements.includes(company: %i[sector country]), true)
+        csv = Statement.to_csv(@company.statements.includes(company: %i[industry country]), true)
 
         expect(csv).to eq(<<~CSV
-          Company,URL,Sector,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Industry,Company ID
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,Vegetables,#{statement.company_id}
+          Company,URL,Industry,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Company ID
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,#{statement.company_id}
   CSV
                          )
       end

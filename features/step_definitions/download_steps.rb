@@ -7,7 +7,7 @@ Then('{actor} should see all the published statements') do |actor|
     DownloadedStatement.with(
       company_name: statement.company.name,
       company_url: statement.url,
-      sector_name: statement.company.sector.name,
+      industry_name: statement.company.industry.name,
       country_name: statement.company.country.name,
       date_seen: statement.date_seen.iso8601
     )
@@ -20,7 +20,7 @@ Then('{actor} should see all the statements including drafts') do |actor|
     DownloadedStatement.with(
       company_name: statement.company.name,
       company_url: statement.url,
-      sector_name: statement.company.sector.name,
+      industry_name: statement.company.industry.name,
       country_name: statement.company.country.name,
       date_seen: statement.date_seen.iso8601
     )
@@ -39,7 +39,7 @@ module DownloadsStatements
       DownloadedStatement.with(
         company_name: row['Company'],
         company_url: row['URL'],
-        sector_name: row['Sector'],
+        industry_name: row['Industry'],
         country_name: row['HQ'],
         date_seen: row['Date Added']
       )
@@ -54,7 +54,7 @@ end
 class DownloadedStatement < Value.new(
   :company_name,
   :company_url,
-  :sector_name,
+  :industry_name,
   :country_name,
   :date_seen
 )

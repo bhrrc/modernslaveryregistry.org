@@ -40,7 +40,7 @@ module ApplicationHelper
     if industry.blank?
       content_tag :span, 'unknown', class: 'tag is-warning'
     else
-      content_tag :span, industry.industry_name, class: 'tag'
+      content_tag :span, industry.name, class: 'tag'
     end
   end
 

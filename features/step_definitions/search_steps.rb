@@ -2,8 +2,8 @@ When('{actor} searches for {string}') do |actor, query|
   actor.attempts_to_search_for(query)
 end
 
-When('{actor} selects sector {string}') do |actor, sector|
-  actor.attempts_to_filter_by_sector(sector)
+When('{actor} selects industry {string}') do |actor, industry|
+  actor.attempts_to_filter_by_industry(industry)
 end
 
 When('{actor} selects legislation {string}') do |actor, legislation|
@@ -22,9 +22,9 @@ module ExploresStatements
     click_button 'Search'
   end
 
-  def attempts_to_filter_by_sector(sector)
+  def attempts_to_filter_by_industry(industry)
     visit explore_path
-    select sector, from: 'sectors_'
+    select industry, from: 'industries_'
     click_button 'Search'
   end
 
