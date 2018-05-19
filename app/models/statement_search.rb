@@ -5,7 +5,7 @@ class StatementSearch
   end
 
   def statements
-    @statements = Statement.includes(:verified_by, :legislations, company: %i[sector country industry])
+    @statements = Statement.includes(:verified_by, :legislations, company: %i[industry country industry])
     filter_by_published
     filter_by_company
     filter_by_legislations
@@ -15,15 +15,15 @@ class StatementSearch
   def stats
     {
       statements: statements.size,
-      sectors: statements.select('companies.sector_id').distinct.count,
+      industries: statements.select('companies.industry_id').distinct.count,
       countries: statements.select('companies.country_id').distinct.count
     }
   end
 
-  def sector_stats
-    counts = count_by_company_attribute(:sector_id)
-    groups = Sector.where(id: counts.keys).each_with_object([]) do |sector, array|
-      array << GroupCount.with(group: sector, count: counts[sector.id])
+  def industry_stats
+    counts = count_by_company_attribute(:industry_id)
+    groups = Industry.where(id: counts.keys).each_with_object([]) do |industry, array|
+      array << GroupCount.with(group: industry, count: counts[industry.id])
     end
     groups.sort_by(&:count).reverse
   end
@@ -43,7 +43,7 @@ class StatementSearch
   def filter_by_company
     @company_join = @statements.joins(:company)
     filter_by_company_name
-    filter_by_company_sector
+    filter_by_company_industry
     filter_by_company_country
   end
 
@@ -57,9 +57,9 @@ class StatementSearch
     @statements = @company_join
   end
 
-  def filter_by_company_sector
-    return if @criteria[:sectors].blank?
-    @company_join = @company_join.where(companies: { sector_id: @criteria[:sectors] })
+  def filter_by_company_industry
+    return if @criteria[:industries].blank?
+    @company_join = @company_join.where(companies: { industry_id: @criteria[:industries] })
     @statements = @company_join
   end
 

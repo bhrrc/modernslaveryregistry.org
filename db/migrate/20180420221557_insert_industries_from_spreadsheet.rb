@@ -52,7 +52,7 @@ class InsertIndustriesFromSpreadsheet < ActiveRecord::Migration[5.0]
   end
 
   def find_industry(name)
-    industry = Industry.find_by(industry_name: name)
+    industry = Industry.find_by(name: name)
     raise "no industry with name '#{name}'" unless industry
     industry
   end

@@ -1,7 +1,6 @@
 class Company < ApplicationRecord
   has_many :statements, dependent: :destroy
   belongs_to :country, optional: true
-  belongs_to :sector, optional: true
   belongs_to :industry, optional: true
 
   validates :name, presence: true, uniqueness: true
@@ -20,12 +19,8 @@ class Company < ApplicationRecord
     try(:country).try(:name) || 'Country unknown'
   end
 
-  def sector_name
-    try(:sector).try(:name) || 'Sector unknown'
-  end
-
   def industry_name
-    try(:industry).try(:industry_name) || ''
+    try(:industry).try(:name) || 'Industry unknown'
   end
 
   def self.search(query)

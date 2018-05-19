@@ -10,12 +10,12 @@ module Statements
   private
 
   def find_or_create_company(props)
-    sector = Sector.find_by!(name: props.delete('Sector') || 'Software')
+    industry = Industry.find_by!(name: props.delete('Industry') || 'Software')
     country = Country.find_by!(name: props.delete('Country') || 'United Kingdom')
     company = Company.find_or_create_by!(
       name: props.delete('Company name'),
       subsidiary_names: props.delete('Subsidiary names'),
-      sector: sector,
+      industry: industry,
       country: country
     )
     company

@@ -18,7 +18,7 @@ class StatementExport
   BASIC_FIELDS = {
     company_name: 'Company',
     url: 'URL',
-    sector_name: 'Sector',
+    industry_name: 'Industry',
     country_name: 'HQ',
     date_seen: 'Date Added'
   }.freeze
@@ -33,7 +33,6 @@ class StatementExport
     verified_by_email: 'Verified by',
     contributor_email: 'Contributed by',
     broken_url: 'Broken URL',
-    industry_name: 'Industry',
     company_id: 'Company ID'
   }.freeze
 end

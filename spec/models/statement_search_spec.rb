@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Statement, type: :model do
   let :software do
-    Sector.create! name: 'Software'
+    Industry.create! name: 'Software'
   end
 
   let :agriculture do
-    Sector.create! name: 'Agriculture'
+    Industry.create! name: 'Agriculture'
   end
 
   let :gb do
@@ -18,11 +18,11 @@ RSpec.describe Statement, type: :model do
   end
 
   let :cucumber do
-    Company.create! name: 'Cucumber Ltd', country: gb, sector: software
+    Company.create! name: 'Cucumber Ltd', country: gb, industry: software
   end
 
   let :potato do
-    Company.create! name: 'Potato Ltd', country: no, sector: agriculture
+    Company.create! name: 'Potato Ltd', country: no, industry: agriculture
   end
 
   let! :cucumber_2016 do
@@ -87,20 +87,20 @@ RSpec.describe Statement, type: :model do
       it 'counts the statements' do
         expect(Statement.search(include_unpublished: true, criteria: {}).stats).to eq(
           statements: 4,
-          sectors: 2,
+          industries: 2,
           countries: 2
         )
         potato_2016.delete
         expect(Statement.search(include_unpublished: true, criteria: {}).stats).to eq(
           statements: 3,
-          sectors: 2,
+          industries: 2,
           countries: 2
         )
       end
 
-      it 'groups the statements by company sector' do
+      it 'groups the statements by company industry' do
         search = Statement.search(include_unpublished: true, criteria: {})
-        expect(search.sector_stats).to eq(
+        expect(search.industry_stats).to eq(
           [
             GroupCount.with(group: agriculture, count: 2),
             GroupCount.with(group: software, count: 2)
@@ -118,19 +118,19 @@ RSpec.describe Statement, type: :model do
       it 'counts the statements' do
         expect(Statement.search(include_unpublished: false, criteria: {}).stats).to eq(
           statements: 2,
-          sectors: 2,
+          industries: 2,
           countries: 2
         )
-        potato.update!(sector: software)
+        potato.update!(industry: software)
         expect(Statement.search(include_unpublished: false, criteria: {}).stats).to eq(
           statements: 2,
-          sectors: 1,
+          industries: 1,
           countries: 2
         )
         potato_2016.delete
         expect(Statement.search(include_unpublished: false, criteria: {}).stats).to eq(
           statements: 1,
-          sectors: 1,
+          industries: 1,
           countries: 1
         )
       end
@@ -151,12 +151,12 @@ RSpec.describe Statement, type: :model do
       ).to eq([cucumber_2016, potato_2016])
     end
 
-    it 'filters statements by company sectors' do
+    it 'filters statements by company industries' do
       expect(
-        Statement.search(include_unpublished: true, criteria: { sectors: [agriculture.id] }).statements
+        Statement.search(include_unpublished: true, criteria: { industries: [agriculture.id] }).statements
       ).to eq([potato_2017, potato_2016])
       expect(
-        Statement.search(include_unpublished: false, criteria: { sectors: [agriculture.id, software.id] }).statements
+        Statement.search(include_unpublished: false, criteria: { industries: [agriculture.id, software.id] }).statements
       ).to eq([cucumber_2016, potato_2016])
     end
   end

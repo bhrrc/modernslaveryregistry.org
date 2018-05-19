@@ -31,13 +31,13 @@
 <% if admin? %>
 <div class="field is-horizontal">
   <div class="field-label is-normal">
-    <%= f.label :sector_id, 'Sector', class: 'label' %>
+    <%= f.label :industry_id, 'Industry', class: 'label' %>
   </div>
   <div class="field-body">
     <div class="field is-narrow">
       <div class="control">
         <div class="select is-fullwidth">
-          <%= f.collection_select(:sector_id, Sector.order(:name).all, :id, :name, include_blank: true) %>
+          <%= f.collection_select(:industry_id, Industry.order(:name).all, :id, :name, include_blank: true) %>
         </div>
       </div>
     </div>

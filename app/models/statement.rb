@@ -24,7 +24,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:latest, -> { where(latest: true) })
   scope(:latest_published, -> { where(latest_published: true) })
 
-  delegate :country_name, :sector_name, to: :company
+  delegate :country_name, :industry_name, to: :company
 
   attr_accessor :should_enqueue_snapshot
 
@@ -117,10 +117,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def company_name
     company.name
-  end
-
-  def industry_name
-    company.industry_name
   end
 
   def build_snapshot_from_result(fetch_result)

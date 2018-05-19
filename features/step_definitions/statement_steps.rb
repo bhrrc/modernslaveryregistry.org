@@ -330,7 +330,7 @@ module ViewsStatements
 
   def visible_listed_companies_from_search
     within "*[data-content='company_search_results']" do
-      dom_structs(:company, :name, :sector, :country)
+      dom_structs(:company, :name, :industry, :country)
     end
   end
 

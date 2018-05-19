@@ -7,8 +7,8 @@ class StatementStats
     @companies_count ||= published_statements_with_companies.select('companies.id').distinct.count
   end
 
-  def sectors_count
-    published_statements_with_companies.select('companies.sector_id').distinct.count
+  def industries_count
+    published_statements_with_companies.select('companies.industry_id').distinct.count
   end
 
   def total_statements_over_time

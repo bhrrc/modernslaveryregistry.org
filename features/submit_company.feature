@@ -15,12 +15,12 @@ Feature: Submit company
     When Patricia submits the following company:
       | Company name   | Cucumber Ltd                     |
       | Company HQ     | United Kingdom                   |
-      | Sector         | Software                         |
+      | Industry       | Software                         |
       | Statement URL  | http://cucumber.io/msa-statement |
       | Period Covered | 2016-2017                        |
     Then Patricia should find company "Cucumber Ltd" with:
       | Company HQ    | United Kingdom                   |
-      | Sector        | Software                         |
+      | Industry      | Software                         |
     And Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL      | http://cucumber.io/msa-statement |
       | Period Covered     | 2016-2017                        |
@@ -31,7 +31,7 @@ Feature: Submit company
     When Patricia submits the following company as a visitor:
       | Company name   | Cucumber Ltd                     |
       | Company HQ     | United Kingdom                   |
-      | Sector         | Software                         |
+      | Industry       | Software                         |
       | Statement URL  | http://cucumber.io/msa-statement |
       | Period Covered | 2016-2017                        |
 

@@ -53,7 +53,6 @@ module Admin
       name
       subsidiary_names
       country_id
-      sector_id
       industry_id
     ].freeze
 
