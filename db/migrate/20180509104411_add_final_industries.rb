@@ -11,14 +11,14 @@ class AddFinalIndustries < ActiveRecord::Migration[5.0]
   def set_company_industry(company_id, industry_name)
     puts "Updating '#{company_id}' to '#{industry_name}'..."
     company = Company.find(company_id)
-    company.update!(industry: find_industry(industry_name))
+    company.update!(industry_id: find_industry(industry_name))
     puts "Updated '#{company_id}' to '#{industry_name}'"
   rescue => e
     puts "Failed to update '#{company_id}' to '#{industry_name}'"
   end
 
   def find_industry(name)
-    industry = Industry.find_by(name: name)
+    industry = Industry.find_by_sql("select * from industries where industry_name = '#{name}'")
     raise "no industry with name '#{name}'" unless industry
     industry
   end
