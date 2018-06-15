@@ -26,3 +26,27 @@ set `no_verify_statement_urls=true`:
 For production you should use:
 
     heroku run rails db:seed # the env vars are already set
+
+## Developing using Vagrant
+
+```
+# On the host machine
+$ vagrant up
+$ vagrant ssh
+
+# On the Vagrant VM
+$ cd /vagrant/
+$ bundle install
+$ bundle exec rake db:create
+$ bin/rails db:environment:set RAILS_ENV=development
+$ bundle exec rake db:schema:load
+
+# Run the tests
+$ bundle exec rake
+
+# Make the site accessible from laptop on http://localhost:9292
+$ rackup --host 0.0.0.0
+
+# Optionally restore database backup from Heroku
+$ pg_restore --no-owner --clean --if-exists --dbname="msaregistry_development" ./tmp/modern-slavery-db.pgdump
+```
