@@ -8,7 +8,7 @@ module Admin
 
       # Admins frequently upload badly encoded CSVs, so just force fix it.
       csv = csv_io.read.encode(Encoding.find('UTF-8'), { invalid: :replace, undef: :replace, replace: '' })
-  
+
       statement_params_array = CSV.parse(csv, headers: :first_row).map(&:to_hash)
       bulk_create(statement_params_array)
       flash[:notice] = 'Successfully imported statements'
