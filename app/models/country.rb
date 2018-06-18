@@ -1,5 +1,5 @@
 class Country < ApplicationRecord
-  has_many :companies
+  has_many :companies, dependent: :restrict_with_exception
 
   scope(:with_companies, lambda {
     joins(:companies).group('countries.id')

@@ -1,8 +1,6 @@
 class CompaniesController < ApplicationController
   include ApplicationHelper
 
-  before_action :authenticate_user!, only: %i[update edit]
-
   def new
     @company = Company.new
     @company.statements.build

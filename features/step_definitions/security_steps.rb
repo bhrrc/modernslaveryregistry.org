@@ -43,7 +43,7 @@ end
 
 module SeesLocationTitle
   def visible_location_title
-    title && title.strip.gsub(/\s+\|\s+Modern Slavery Registry/, '')
+    title&.strip&.gsub(/\s+\|\s+Modern Slavery Registry/, '')
   end
 end
 

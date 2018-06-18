@@ -45,11 +45,11 @@ module ApplicationHelper
   end
 
   def admin?
-    current_user && current_user.admin?
+    current_user&.admin?
   end
 
   def back_or_root
-    request.referer.present? ? request.referer : root_path
+    request.referer.presence || root_path
   end
 
   def banner_page

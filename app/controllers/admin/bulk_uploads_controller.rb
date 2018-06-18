@@ -7,8 +7,8 @@ module Admin
       return alert_csv if csv_io.nil?
 
       # Admins frequently upload badly encoded CSVs, so just force fix it.
-      csv = csv_io.read.encode(Encoding.find('UTF-8'), { invalid: :replace, undef: :replace, replace: '' })
-  
+      csv = csv_io.read.encode(Encoding.find('UTF-8'), invalid: :replace, undef: :replace, replace: '')
+
       statement_params_array = CSV.parse(csv, headers: :first_row).map(&:to_hash)
       bulk_create(statement_params_array)
       flash[:notice] = 'Successfully imported statements'
@@ -25,7 +25,7 @@ module Admin
       statement_params_array.each do |statement_params|
         begin
           Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
-        rescue => e
+        rescue StandardError => e
           logger.error(e)
         end
       end

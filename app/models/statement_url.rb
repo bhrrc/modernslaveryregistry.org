@@ -39,16 +39,16 @@ class StatementUrl
 
   def try_to_parse(url)
     URI(url)
-  rescue
+  rescue StandardError
     nil
   end
 
   def visit_uri(uri)
     try_to_open_with_scheme uri, 'https'
-  rescue
+  rescue StandardError
     begin
       try_to_open_with_scheme uri, 'http'
-    rescue
+    rescue StandardError
       @broken_url = true
     end
   end
@@ -71,7 +71,7 @@ class StatementUrl
     )
   rescue RestClient::NotFound => e
     raise(e)
-  rescue => e
+  rescue StandardError => e
     # sometimes error responses still respond with a body
     e.response || raise(e)
   end
