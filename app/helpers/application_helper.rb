@@ -45,7 +45,7 @@ module ApplicationHelper
   end
 
   def admin?
-    current_user && current_user.admin?
+    current_user&.admin?
   end
 
   def back_or_root
