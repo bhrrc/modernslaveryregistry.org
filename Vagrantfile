@@ -81,6 +81,11 @@ Vagrant.configure('2') do |config|
     gem update --system
     gem install bundler
 
+    # Required by wkhtmltoimage
+    apt-get install -y libxrender1
+    apt-get install -y libfontconfig1
+    apt-get install -y libxext6
+
     # Update locale in preparation for installing postgresql
     update-locale LANG=en_US.UTF-8
 
