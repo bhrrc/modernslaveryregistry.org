@@ -1,5 +1,5 @@
 class Industry < ApplicationRecord
-  has_many :companies
+  has_many :companies, dependent: :restrict_with_exception
   has_many :countries, -> { distinct }, through: :companies
 
   scope(:with_companies, lambda {
