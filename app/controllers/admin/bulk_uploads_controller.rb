@@ -25,7 +25,7 @@ module Admin
       statement_params_array.each do |statement_params|
         begin
           Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
-        rescue => e
+        rescue StandardError => e
           logger.error(e)
         end
       end
