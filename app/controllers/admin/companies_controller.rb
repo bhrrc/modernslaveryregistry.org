@@ -29,7 +29,7 @@ module Admin
 
     def update
       @company = Company.find(params[:id])
-      if @company.update_attributes(company_params)
+      if @company.update(company_params)
         redirect_to admin_company_path(@company)
       else
         render :edit
