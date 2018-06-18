@@ -49,7 +49,7 @@ module ApplicationHelper
   end
 
   def back_or_root
-    request.referer.present? ? request.referer : root_path
+    request.referer.presence || root_path
   end
 
   def banner_page
