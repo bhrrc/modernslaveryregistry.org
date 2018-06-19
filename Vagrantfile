@@ -76,6 +76,9 @@ Vagrant.configure('2') do |config|
 
     apt-get update
 
+    # Install ImageMagick to resize image snapshots stored in database
+    apt-get install -y imagemagick
+
     # Install Ruby 2.4, update Rubygems and install Bundler
     apt-get install -y ruby2.4 ruby2.4-dev
     gem update --system
