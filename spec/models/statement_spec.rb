@@ -111,7 +111,7 @@ RSpec.describe Statement, type: :model do
         expect(csv).to eq(<<~CSV
           Company,URL,Industry,HQ,Date Added
           Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22
-  CSV
+        CSV
                          )
       end
     end
@@ -142,7 +142,7 @@ RSpec.describe Statement, type: :model do
         expect(csv).to eq(<<~CSV
           Company,URL,Industry,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Company ID
           Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,#{statement.company_id}
-  CSV
+        CSV
                          )
       end
     end
