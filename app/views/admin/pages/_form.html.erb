@@ -41,7 +41,10 @@
 
       <p class="control content">
         <%= f.text_area :body_html, class: 'textarea', style: 'height: 500px; font-family: monospace' %>
-        <%= f.trix_editor :body_html %>
+
+        <!-- Use Trix editor for page content - https://github.com/basecamp/trix -->
+        <input id="page_body_html_trix_input" value="<%= page.body_html %>" type="hidden" name="page[body_html]">
+        <trix-editor input="page_body_html_trix_input"></trix-editor>
 
         <script>
           var textarea = $('textarea[name="page[body_html]"]')[0]

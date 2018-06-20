@@ -13,7 +13,6 @@
  *= require chosen-bulma
  *= require chosen
  *= require leaflet
- *= require trix
  *= require_tree .
  *= require_self
  */

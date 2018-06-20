@@ -51,7 +51,6 @@ gem 'rails-erd'
 gem 'rest-client'
 gem 'rollbar'
 gem 'sidekiq'
-gem 'trix'
 gem 'values'
 gem 'wkhtmltoimage-binary'
 
