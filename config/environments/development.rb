@@ -29,6 +29,10 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
+  # Avoid sending emails in development
+  #   to protect against accidentally emailing real addresses
+  config.action_mailer.delivery_method = :file
+
   config.action_mailer.perform_caching = false
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
