@@ -124,12 +124,12 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       content_type: fetch_result.content_type,
       content_data: fetch_result.content_data
     )
-    return if fetch_result.content_type =~ /pdf/
-
     attach_screenshot_to_snapshot(snapshot)
   end
 
   def attach_screenshot_to_snapshot(snapshot)
+    return if snapshot.original_is_pdf?
+
     image_fetch_result = ScreenGrab.fetch(url)
     snapshot.image_content_type = image_fetch_result.content_type
     snapshot.image_content_data = image_fetch_result.content_data
