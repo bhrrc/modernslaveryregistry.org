@@ -74,7 +74,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def enqueue_snapshot
-    @should_enqueue_snapshot = true if url_changed? || marked_not_broken_url_changed?
+    @should_enqueue_snapshot = true if saved_change_to_url? || saved_change_to_marked_not_broken_url?
   end
 
   def perform_snapshot_job
