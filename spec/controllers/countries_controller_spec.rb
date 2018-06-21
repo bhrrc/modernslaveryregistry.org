@@ -4,7 +4,7 @@ RSpec.describe CountriesController, type: :controller do
   describe 'GET #index' do
     it 'returns http success' do
       get :index
-      expect(response).to have_http_status(:success)
+      expect(response).to be_successful
     end
 
     it 'loads all of the countries with companies' do
