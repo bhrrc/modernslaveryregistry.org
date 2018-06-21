@@ -45,7 +45,7 @@ $ bundle exec rake db:schema:load
 $ bundle exec rake
 
 # Make the site accessible from laptop on http://localhost:9292
-$ rackup --host 0.0.0.0
+$ PORT=9292 foreman start
 
 # Optionally restore database backup from Heroku
 $ pg_restore --no-owner --clean --if-exists --dbname="msaregistry_development" ./tmp/modern-slavery-db.pgdump

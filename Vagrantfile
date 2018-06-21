@@ -84,6 +84,9 @@ Vagrant.configure('2') do |config|
     gem update --system
     gem install bundler
 
+    # Install foreman for running the web server and worker
+    gem install foreman
+
     # Required by wkhtmltoimage
     apt-get install -y libxrender1
     apt-get install -y libfontconfig1
