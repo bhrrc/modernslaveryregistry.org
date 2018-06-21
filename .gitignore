@@ -24,3 +24,7 @@ latest.dump
 
 # Ignore Vagrant files
 /.vagrant
+
+# Ignore ActiveStorage files uploaded in development
+/storage
+
