@@ -7,17 +7,13 @@ class Snapshot < ApplicationRecord
   end
 
   def previewable?
-    image_of_html? || original_is_not_html?
+    (original_is_html? && screenshot_file.attached?) || original_is_not_html?
   end
 
   private
 
   def original_is_html?
     content_type =~ /html/
-  end
-
-  def image_of_html?
-    original_is_html? && screenshot_file.attached?
   end
 
   def original_is_not_html?
