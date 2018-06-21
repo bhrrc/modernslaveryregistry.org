@@ -17,7 +17,7 @@ class Snapshot < ApplicationRecord
   end
 
   def image_of_html?
-    html? && image_content_type.present?
+    html? && screenshot_file.attached?
   end
 
   def non_html_document?
