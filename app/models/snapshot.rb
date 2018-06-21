@@ -12,16 +12,16 @@ class Snapshot < ApplicationRecord
 
   private
 
-  def html?
+  def original_is_html?
     content_type =~ /html/
   end
 
   def image_of_html?
-    html? && screenshot_file.attached?
+    original_is_html? && screenshot_file.attached?
   end
 
   def non_html_document?
-    !html?
+    !original_is_html?
   end
 
   def original_file
