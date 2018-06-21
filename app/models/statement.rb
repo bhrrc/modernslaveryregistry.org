@@ -126,9 +126,18 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     )
     return if fetch_result.content_type =~ /pdf/
 
+    attach_screenshot_to_snapshot(snapshot)
+  end
+
+  def attach_screenshot_to_snapshot(snapshot)
     image_fetch_result = ScreenGrab.fetch(url)
     snapshot.image_content_type = image_fetch_result.content_type
     snapshot.image_content_data = image_fetch_result.content_data
+    snapshot.screenshot.attach(
+      io: StringIO.new(image_fetch_result.content_data),
+      filename: 'screenshot.png',
+      content_type: image_fetch_result.content_type
+    )
   end
 
   # rubocop:disable Rails/SkipsModelValidations
