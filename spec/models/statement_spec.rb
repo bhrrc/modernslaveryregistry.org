@@ -53,6 +53,25 @@ RSpec.describe Statement, type: :model do
       end
     end
 
+    it 'does not store a screenshot if image generation fails' do
+      url = 'http://cucumber.io/'
+
+      original_fetch_result = FetchResult.with(
+        url: url, broken_url: false,
+        content_type: 'text/html', content_data: 'original'
+      )
+      screenshot_fetch_result = FetchResult.with(
+        url: url, broken_url: true,
+        content_type: nil, content_data: nil
+      )
+      allow(StatementUrl).to receive(:fetch).with(url).and_return(original_fetch_result)
+      allow(ScreenGrab).to receive(:fetch).with(url).and_return(screenshot_fetch_result)
+
+      statement = @company.statements.create!(url: url)
+      statement.fetch_snapshot
+      expect(statement.snapshot.screenshot).not_to be_attached
+    end
+
     it 'uses active storage to save the original of the statement' do
       VCR.use_cassette('cucumber.io') do
         statement = @company.statements.create!(url: 'http://cucumber.io/',
