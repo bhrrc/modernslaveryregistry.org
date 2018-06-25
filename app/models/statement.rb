@@ -116,10 +116,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   private
 
-  def broken_url_not_marked_as_fixed?
-    !marked_not_broken_url?
-  end
-
   def legislation_requires?(attribute)
     published? && legislations.any? { |legislation| legislation.requires_statement_attribute?(attribute) }
   end
