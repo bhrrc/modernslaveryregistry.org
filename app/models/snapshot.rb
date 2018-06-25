@@ -1,11 +1,13 @@
 class Snapshot < ApplicationRecord
   belongs_to :statement, optional: true
 
+  has_one_attached :original
   has_one_attached :screenshot
 
   def screenshot_or_original
     return screenshot if screenshot.attached?
     return screenshot_file if screenshot_file.attached?
+    return original if original.attached?
     original_file
   end
 

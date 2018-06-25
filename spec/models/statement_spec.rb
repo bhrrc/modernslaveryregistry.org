@@ -53,6 +53,20 @@ RSpec.describe Statement, type: :model do
       end
     end
 
+    it 'uses active storage to save the original of the statement' do
+      VCR.use_cassette('cucumber.io') do
+        statement = @company.statements.create!(url: 'http://cucumber.io/',
+                                                approved_by: 'Big Boss',
+                                                approved_by_board: 'Yes',
+                                                signed_by_director: false,
+                                                link_on_front_page: true,
+                                                date_seen: Date.parse('21 May 2016'),
+                                                contributor_email: 'anon@host.com')
+        statement.fetch_snapshot
+        expect(statement.snapshot.original).to be_attached
+      end
+    end
+
     it 'converts url to https if it exists' do
       VCR.use_cassette('cucumber.io') do
         statement = @company.statements.create!(url: 'http://cucumber.io/',
