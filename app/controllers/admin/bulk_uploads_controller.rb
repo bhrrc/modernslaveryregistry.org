@@ -22,9 +22,9 @@ module Admin
     end
 
     def bulk_create(statement_params_array)
-      statement_params_array.each do |statement_params|
+      statement_params_array.each do |params|
         begin
-          Statement.bulk_create!(statement_params['company_name'], statement_params['statement_url'])
+          Statement.bulk_create!(params['company_name'], params['statement_url'], params['legislation'])
         rescue StandardError => e
           logger.error(e)
         end

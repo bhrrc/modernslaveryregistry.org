@@ -40,12 +40,14 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     exists?(url: uri.to_s)
   end
 
-  def self.bulk_create!(company_name, statement_url)
+  def self.bulk_create!(company_name, statement_url, legislation_name)
     return if Statement.url_exists?(statement_url)
 
     begin
       company = Company.find_or_create_by!(name: company_name)
-      company.statements.create!(url: statement_url)
+      legislation = Legislation.find_by(name: legislation_name)
+      statement = company.statements.create!(url: statement_url)
+      statement.legislations << legislation
     rescue ActiveRecord::RecordInvalid => e
       e.message += "\nCompany Name: '#{company_name}', Statement URL: '#{statement_url}'"
       raise e

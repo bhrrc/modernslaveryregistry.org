@@ -44,6 +44,11 @@ module ApplicationHelper
     end
   end
 
+  def legislation_name_list
+    str = Legislation.pluck(:name).map { |name| content_tag :em, name }.join(' or ')
+    sanitize(str, tags: ['em'])
+  end
+
   def admin?
     current_user&.admin?
   end

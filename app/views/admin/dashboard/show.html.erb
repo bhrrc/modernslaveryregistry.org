@@ -19,9 +19,14 @@
       <h2 class="title is-2">Bulk import</h2>
 
       <p>
-        You can bulk import statements from a CSV file by uploading it below. The
-        CSV file <strong>must</strong> have a header row with <strong>company_name</strong>
+        You can bulk import statements from a CSV file by uploading it
+        below. The CSV file <strong>must</strong> have a header row
+        with <strong>company_name</strong>
         and <strong>statement_url</strong> columns.
+        It <strong>may</strong> have a third
+        column <strong>legislation</strong> whose
+        values <strong>must</strong> match one of the exiting
+        legislation types <%= legislation_name_list %>.
       </p>
 
       <p>
