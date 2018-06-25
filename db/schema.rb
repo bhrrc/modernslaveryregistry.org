@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_25_155843) do
+ActiveRecord::Schema.define(version: 2018_06_25_161431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -47,7 +47,9 @@ ActiveRecord::Schema.define(version: 2018_06_25_155843) do
     t.integer "industry_id"
     t.index ["country_id"], name: "index_companies_on_country_id"
     t.index ["industry_id"], name: "index_companies_on_industry_id"
+    t.index ["name"], name: "index_companies_on_name", opclass: :gist_trgm_ops, using: :gist
     t.index ["sector_id"], name: "index_companies_on_sector_id"
+    t.index ["subsidiary_names"], name: "index_companies_on_subsidiary_names", opclass: :gist_trgm_ops, using: :gist
   end
 
   create_table "countries", force: :cascade do |t|
