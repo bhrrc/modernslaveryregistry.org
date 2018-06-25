@@ -120,12 +120,23 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def build_snapshot_from_result(fetch_result)
-    image_fetch_result = fetch_result.content_type =~ /pdf/ ? nil : ScreenGrab.fetch(url)
-    self.snapshot = Snapshot.new(
+    build_snapshot(
       content_type: fetch_result.content_type,
-      content_data: fetch_result.content_data,
-      image_content_type: image_fetch_result && image_fetch_result.content_type,
-      image_content_data: image_fetch_result && image_fetch_result.content_data
+      content_data: fetch_result.content_data
+    )
+    attach_screenshot_to_snapshot(snapshot)
+  end
+
+  def attach_screenshot_to_snapshot(snapshot)
+    return if snapshot.original_is_pdf?
+
+    image_fetch_result = ScreenGrab.fetch(url)
+    snapshot.image_content_type = image_fetch_result.content_type
+    snapshot.image_content_data = image_fetch_result.content_data
+    snapshot.screenshot.attach(
+      io: StringIO.new(image_fetch_result.content_data),
+      filename: 'screenshot.png',
+      content_type: image_fetch_result.content_type
     )
   end
 
