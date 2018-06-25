@@ -51,7 +51,7 @@ class StatementSearch
     return if @criteria[:company_name].blank?
     like = "%#{@criteria[:company_name]}%"
     @company_join = @company_join.where(
-      'LOWER(companies.name) LIKE LOWER(?) or LOWER(companies.subsidiary_names) LIKE LOWER(?)',
+      'companies.name % ? or companies.subsidiary_names % ?',
       like, like
     )
     @statements = @company_join
