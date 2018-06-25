@@ -129,6 +129,11 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       content_type: fetch_result.content_type,
       content_data: fetch_result.content_data
     )
+    snapshot.original.attach(
+      io: StringIO.new(fetch_result.content_data),
+      filename: 'original',
+      content_type: fetch_result.content_type
+    )
     attach_screenshot_to_snapshot(snapshot)
   end
 
