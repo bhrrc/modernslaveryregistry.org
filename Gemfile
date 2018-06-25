@@ -6,31 +6,31 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.2.0'
-gem 'pg', '~> 0.18'
-gem 'puma', '~> 3.0'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.2'
-gem 'jquery-rails'
-gem 'jbuilder', '~> 2.5'
-gem 'json', '~> 2.0.3'
 gem 'acts_as_list'
+gem 'aws-sdk-s3', require: false
 gem 'bulma-rails', '0.4.3'
 gem 'chartjs-ror'
 gem 'chosen-rails'
-gem 'leaflet-rails'
+gem 'coffee-rails', '~> 4.2'
 gem 'devise'
 gem 'imgkit'
+gem 'jbuilder', '~> 2.5'
+gem 'jquery-rails'
+gem 'json', '~> 2.0.3'
 gem 'kaminari'
+gem 'leaflet-rails'
+gem 'pg', '~> 0.18'
+gem 'puma', '~> 3.0'
 gem 'pundit'
+gem 'rails', '~> 5.2.0'
 gem 'rails-erd'
 gem 'rest-client'
 gem 'rollbar'
+gem 'sass-rails', '~> 5.0'
 gem 'sidekiq'
+gem 'uglifier', '>= 1.3.0'
 gem 'values'
 gem 'wkhtmltoimage-binary'
-gem 'aws-sdk-s3', require: false
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -39,8 +39,8 @@ group :development, :test do
 end
 
 group :development do
-  gem 'web-console', '>= 3.3.0'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
