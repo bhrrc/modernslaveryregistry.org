@@ -169,7 +169,7 @@ module FillsInForms
 
   def try_filling_check_box(option, value)
     return false unless check_boxes.include?(option)
-    value =~ /yes|true/i ? check(option) : uncheck(option)
+    /yes|true/i.match?(value) ? check(option) : uncheck(option)
     true
   end
 

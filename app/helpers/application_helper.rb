@@ -27,9 +27,9 @@ module ApplicationHelper
   def content_type_tag(content_type)
     if content_type.nil?
       content_tag :span, 'Unknown', class: 'tag is-light'
-    elsif content_type =~ /html/
+    elsif /html/.match?(content_type)
       content_tag :span, 'HTML', class: 'tag is-success'
-    elsif content_type =~ /pdf/
+    elsif /pdf/.match?(content_type)
       content_tag :span, 'PDF', class: 'tag is-warning'
     else
       content_tag :span, content_type, class: 'tag is-danger'
