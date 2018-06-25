@@ -89,7 +89,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     fetch_result = StatementUrl.fetch(url)
     self.url = fetch_result.url
     self.broken_url = fetch_result.broken_url
-    build_snapshot_from_result(fetch_result) unless broken_url && !marked_not_broken_url?
+
+    return if broken_url && broken_url_not_marked_as_fixed?
+
+    build_snapshot_from_result(fetch_result)
   end
 
   def previewable_snapshot?
@@ -112,6 +115,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def broken_url_not_marked_as_fixed?
+    !marked_not_broken_url?
+  end
 
   def legislation_requires?(attribute)
     published? && legislations.any? { |legislation| legislation.requires_statement_attribute?(attribute) }
