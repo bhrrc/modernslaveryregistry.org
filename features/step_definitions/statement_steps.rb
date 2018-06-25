@@ -66,6 +66,14 @@ end
 
 When('{actor} marks the URL for {string} as not broken') do |actor, company_name|
   url = Company.find_by!(name: company_name).latest_statement.url
+  allow(StatementUrl).to receive(:fetch).with(url).and_return(
+    FetchResult.with(
+      url: url,
+      broken_url: false,
+      content_type: 'text/html',
+      content_data: 'HTML statement'
+    )
+  )
   allow(ScreenGrab).to receive(:fetch).with(url).and_return(
     FetchResult.with(
       url: url,

@@ -90,7 +90,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     self.url = fetch_result.url
     self.broken_url = fetch_result.broken_url
 
-    return if broken_url && broken_url_not_marked_as_fixed?
+    return if broken_url
 
     build_snapshot_from_result(fetch_result)
   end
