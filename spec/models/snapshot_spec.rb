@@ -27,6 +27,19 @@ RSpec.describe Snapshot, type: :model do
     expect(snapshot.screenshot_or_original.content_type).to eq('screenshot-content-type')
   end
 
+  it 'prefers to display original content from active storage if available' do
+    snapshot = Snapshot.new
+    snapshot.content_data = 'original-content-data'
+    snapshot.content_type = 'original-content-type'
+    snapshot.original.attach(
+      io: StringIO.new('original-in-active-storage'),
+      filename: 'original.html'
+    )
+
+    expect(snapshot.screenshot_or_original.download).to eq('original-in-active-storage')
+    expect(snapshot.screenshot_or_original.content_type).to eq('text/html')
+  end
+
   it 'falls back to the original content if screenshot is not available' do
     snapshot = Snapshot.new
     snapshot.content_data = 'original-content-data'
