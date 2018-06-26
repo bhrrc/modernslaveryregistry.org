@@ -10,6 +10,7 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require chosen_bug_fix
  *= require chosen-bulma
  *= require chosen
  *= require leaflet
