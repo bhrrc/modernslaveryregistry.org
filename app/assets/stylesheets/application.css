@@ -11,8 +11,6 @@
  * It is generally better to create a new file per style scope.
  *
  *= require chosen_bug_fix
- *= require chosen-bulma
- *= require chosen
  *= require leaflet
  *= require_tree .
  *= require_self
