@@ -26,10 +26,4 @@ class Snapshot < ApplicationRecord
   def original_is_not_html?
     !original_is_html?
   end
-
-  class Attachment < Value.new(:download, :content_type)
-    def attached?
-      download.present?
-    end
-  end
 end
