@@ -125,10 +125,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def build_snapshot_from_result(fetch_result)
-    build_snapshot(
-      content_type: 'content-type-placeholder',
-      content_data: 'content-data-placeholder'
-    )
+    build_snapshot
     snapshot.original.attach(
       io: StringIO.new(fetch_result.content_data),
       filename: 'original',

@@ -400,11 +400,7 @@ ALTER SEQUENCE sectors_id_seq OWNED BY sectors.id;
 
 CREATE TABLE snapshots (
     id bigint NOT NULL,
-    content_data bytea NOT NULL,
-    content_type character varying NOT NULL,
     statement_id integer,
-    image_content_type character varying,
-    image_content_data bytea,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1017,6 +1013,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180621082254'),
 ('20180625155843'),
 ('20180625161431'),
-('20180627105355');
+('20180627105355'),
+('20180627130240');
 
 
