@@ -4,6 +4,7 @@ class Snapshot < ApplicationRecord
   def original_needs_to_be_uploaded?
     content_data.present? && !original.attached?
   end
+
   def screenshot_needs_to_be_uploaded?
     image_content_data.present? && !screenshot.attached?
   end
