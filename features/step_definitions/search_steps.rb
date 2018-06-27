@@ -15,6 +15,11 @@ Then('{actor} should find no company called {string} exists') do |actor, company
   expect(actor.visible_statement_search_results_summary).to eq('No statements found')
 end
 
+Given('a search alias from {string} to {string} exists') do |target, substitution|
+  query = "INSERT INTO search_aliases VALUES(DEFAULT, to_tsquery('#{target}'), to_tsquery('#{substitution}'));"
+  ActiveRecord::Base.connection.execute(query)
+end
+
 module ExploresStatements
   def attempts_to_search_for(query)
     visit explore_path

@@ -16,6 +16,12 @@ Feature: Search statements
     When Joe searches for "cucumber"
     Then Joe should only see "Cucumber Inc, Cucumber Ltd" in the search results
 
+  Scenario: Search by company name with 'limited' instead of 'ltd'
+    Given Joe is logged in
+    And a search alias from 'limited' to 'ltd' exists
+    When Joe searches for "cucumber limited"
+    Then Joe should only see "Cucumber Ltd" in the search results
+
   Scenario: Search by subsidiary name
     Given Joe is logged in
     When Joe searches for "cuke"

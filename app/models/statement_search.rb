@@ -50,10 +50,15 @@ class StatementSearch
   def filter_by_company_name
     return if @criteria[:company_name].blank?
     query = @criteria[:company_name].split.join(' & ')
-    @company_join = @company_join.where(
-      "to_tsvector(concat_ws(' ', companies.name, companies.subsidiary_names)) @@ to_tsquery(?)", query
-    )
+    @company_join = @company_join.where(company_search_query, query)
     @statements = @company_join
+  end
+
+  def company_search_query
+    <<-SQL
+      to_tsvector(concat_ws(' ', companies.name, companies.subsidiary_names)) @@
+      ts_rewrite(to_tsquery(?), 'SELECT target, substitute FROM search_aliases')
+    SQL
   end
 
   def filter_by_company_industry

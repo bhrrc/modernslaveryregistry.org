@@ -334,6 +334,36 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: search_aliases; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE search_aliases (
+    id bigint NOT NULL,
+    target tsquery,
+    substitute tsquery
+);
+
+
+--
+-- Name: search_aliases_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE search_aliases_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: search_aliases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE search_aliases_id_seq OWNED BY search_aliases.id;
+
+
+--
 -- Name: sectors; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -551,6 +581,13 @@ ALTER TABLE ONLY pages ALTER COLUMN id SET DEFAULT nextval('pages_id_seq'::regcl
 
 
 --
+-- Name: search_aliases id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY search_aliases ALTER COLUMN id SET DEFAULT nextval('search_aliases_id_seq'::regclass);
+
+
+--
 -- Name: sectors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -656,6 +693,14 @@ ALTER TABLE ONLY pages
 
 ALTER TABLE ONLY schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: search_aliases search_aliases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY search_aliases
+    ADD CONSTRAINT search_aliases_pkey PRIMARY KEY (id);
 
 
 --
@@ -971,6 +1016,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180519060859'),
 ('20180621082254'),
 ('20180625155843'),
-('20180625161431');
+('20180625161431'),
+('20180627105355');
 
 
