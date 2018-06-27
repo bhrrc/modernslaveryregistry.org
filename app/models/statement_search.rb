@@ -51,8 +51,7 @@ class StatementSearch
     return if @criteria[:company_name].blank?
     query = @criteria[:company_name].split.join(' & ')
     @company_join = @company_join.where(
-      'to_tsvector(companies.name) @@ to_tsquery(?) OR to_tsvector(companies.subsidiary_names) @@ to_tsquery(?)',
-      query, query
+      "to_tsvector(concat_ws(' ', companies.name, companies.subsidiary_names)) @@ to_tsquery(?)", query
     )
     @statements = @company_join
   end
