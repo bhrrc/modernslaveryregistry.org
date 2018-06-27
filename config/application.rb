@@ -29,5 +29,6 @@ module MsaRegistry
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
 
     config.active_job.queue_adapter = :sidekiq
+    config.active_record.schema_format = :sql
   end
 end
