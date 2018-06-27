@@ -16,13 +16,13 @@ class Snapshot < ApplicationRecord
   end
 
   def original_is_pdf?
-    content_type =~ /pdf/
+    original.content_type =~ /pdf/
   end
 
   private
 
   def original_is_html?
-    content_type =~ /html/
+    original.content_type =~ /html/
   end
 
   def original_is_not_html?
