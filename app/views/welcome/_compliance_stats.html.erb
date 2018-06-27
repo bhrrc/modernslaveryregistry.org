@@ -1,0 +1,95 @@
+<h2 class="title is-2 has-text-centered is-turquoise-text">UK Modern Slavery Act</h2>
+<h3 class="title is-3 has-text-centered is-turquoise-text">Compliance with minimum requirements</h3>
+
+<div class="columns">
+
+  <div class="column is-narrow">
+    <div class="compliance-stat">
+      <label class="donut-legend">
+        Statements published on the company's website with a link on the home page.
+      </label>
+      <div class="donut">
+        <div id="link_on_front_page_donut" class="donut-container">
+          <canvas width="105" height="105"></canvas>
+          <div class="donut-overlay">
+            <label class="donut-label" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="compliance-stat">
+      <label class="donut-legend">
+        Signed by director or equivalent.
+      </label>
+      <div class="donut">
+        <div id="signed_by_director_donut" class="donut-container">
+          <canvas width="105" height="105"></canvas>
+          <div class="donut-overlay">
+            <label class="donut-label" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="compliance-stat">
+      <label class="donut-legend">
+        Explicit approval by the board is included in the statement.
+      </label>
+      <div class="donut">
+        <div id="approved_by_board_donut" class="donut-container">
+          <canvas width="105" height="105"></canvas>
+          <div class="donut-overlay">
+            <label class="donut-label" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="column is-narrow compliance-curly-brace">}</div>
+
+  <div class="column">
+    <div class="compliance-stat fully-compliant-stat">
+      <div class="donut mega-donut">
+        <div id="fully_compliant_donut" class="donut-container">
+          <canvas width="340" height="340"></canvas>
+          <div class="donut-overlay">
+            <label class="donut-label" />
+          </div>
+        </div>
+      </div>
+      <label class="donut-legend">
+        Meet all minimum requirements set out in the UK Modern Slavery Act.
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+function renderDonut(containerId, percentage) {
+  var $container = $(document.getElementById(containerId))
+  var $canvas = $container.find('canvas')
+  new Chart($canvas[0].getContext("2d"), {
+    type: "doughnut",
+    data: {
+      datasets: [
+        {
+          data: [percentage, 100 - percentage],
+          backgroundColor: ["rgba(0,137,134,1)", "rgba(0,0,0,0)"],
+          borderColor: ["rgba(0,137,134,1)", "rgba(0,137,134,1)"]
+        }
+      ]
+    },
+    options: {
+      rotation: Math.PI,
+      cutoutPercentage: 75,
+      responsive: false
+    }
+  });
+  $container.find('.donut-label').text(percentage + '%')
+}
+
+renderDonut('link_on_front_page_donut', <%= @compliance_stats.percent_link_on_front_page %>)
+renderDonut('signed_by_director_donut', <%= @compliance_stats.percent_signed_by_director %>)
+renderDonut('approved_by_board_donut', <%= @compliance_stats.percent_approved_by_board %>)
+renderDonut('fully_compliant_donut', <%= @compliance_stats.percent_fully_compliant %>)
+</script>
