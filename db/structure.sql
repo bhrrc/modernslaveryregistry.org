@@ -133,7 +133,8 @@ CREATE TABLE companies (
     country_id integer,
     sector_id integer,
     subsidiary_names character varying,
-    industry_id integer
+    industry_id integer,
+    bhrrc_url character varying
 );
 
 
@@ -1014,6 +1015,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180625155843'),
 ('20180625161431'),
 ('20180627105355'),
-('20180627130240');
+('20180627130240'),
+('20180627172935');
 
 
