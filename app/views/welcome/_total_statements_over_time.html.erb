@@ -1,0 +1,32 @@
+<h3 class="title is-3 has-text-centered is-turquoise-text">Statements added over time</h3>
+<div class="columns">
+  <div id="total_statements_over_time" class="column">
+    <canvas width="340" height="140"></canvas>
+  </div>
+</div>
+
+<script>
+function renderTotalStatementsOverTime(totalByMonth) {
+  var $container = $(document.getElementById('total_statements_over_time'))
+  var $canvas = $container.find('canvas')
+  new Chart($canvas[0].getContext("2d"), {
+    type: "line",
+    data: {
+      "labels": totalByMonth.map(function(month) { return month.label }),
+      "datasets":[{
+        "label":"Statements",
+        "data": totalByMonth.map(function(month) { return month.statements }),
+        "fill":false,
+        "borderColor":"rgb(75, 192, 192)",
+        "lineTension": 0.1
+      }]
+    },
+    options: {
+      legend: { display: false }
+    }
+  });
+}
+
+renderTotalStatementsOverTime(<%= raw @statement_stats.total_statements_over_time.to_json %>)
+
+</script>
