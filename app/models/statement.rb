@@ -126,8 +126,8 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def build_snapshot_from_result(fetch_result)
     build_snapshot(
-      content_type: fetch_result.content_type,
-      content_data: fetch_result.content_data
+      content_type: 'content-type-placeholder',
+      content_data: 'content-data-placeholder'
     )
     snapshot.original.attach(
       io: StringIO.new(fetch_result.content_data),
@@ -143,8 +143,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     image_fetch_result = ScreenGrab.fetch(url)
     return if image_fetch_result.broken_url
 
-    snapshot.image_content_type = image_fetch_result.content_type
-    snapshot.image_content_data = image_fetch_result.content_data
     snapshot.screenshot.attach(
       io: StringIO.new(image_fetch_result.content_data),
       filename: 'screenshot.png',

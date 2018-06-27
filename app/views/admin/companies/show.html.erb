@@ -113,7 +113,7 @@
             </td>
             <td>
               <%= statement.snapshot.present? ?
-                content_type_tag(statement.snapshot.content_type)
+                content_type_tag(statement.snapshot.original.content_type)
                 :
                 content_type_tag(nil)
               %>
