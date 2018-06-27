@@ -138,7 +138,7 @@ RSpec.describe Statement, type: :model do
 
     it 'filters statements by company name' do
       expect(
-        Statement.search(include_unpublished: false, criteria: { company_name: 'cucum' }).statements
+        Statement.search(include_unpublished: false, criteria: { company_name: 'cucumber' }).statements
       ).to eq([cucumber_2016])
     end
 

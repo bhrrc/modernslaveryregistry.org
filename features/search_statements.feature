@@ -16,11 +16,6 @@ Feature: Search statements
     When Joe searches for "cucumber"
     Then Joe should only see "Cucumber Inc, Cucumber Ltd" in the search results
 
-  Scenario: Search by company name with misspelling
-    Given Joe is logged in
-    When Joe searches for "cucimber"
-    Then Joe should only see "Cucumber Inc, Cucumber Ltd" in the search results
-
   Scenario: Search by subsidiary name
     Given Joe is logged in
     When Joe searches for "cuke"

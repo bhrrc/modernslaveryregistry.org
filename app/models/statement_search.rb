@@ -49,10 +49,10 @@ class StatementSearch
 
   def filter_by_company_name
     return if @criteria[:company_name].blank?
-    like = "%#{@criteria[:company_name]}%"
+    query = @criteria[:company_name].split.join(' & ')
     @company_join = @company_join.where(
-      'companies.name % ? or companies.subsidiary_names % ?',
-      like, like
+      'to_tsvector(companies.name) @@ to_tsquery(?) OR to_tsvector(companies.subsidiary_names) @@ to_tsquery(?)',
+      query, query
     )
     @statements = @company_join
   end
