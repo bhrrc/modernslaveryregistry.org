@@ -1,6 +1,53 @@
 require 'rails_helper'
 
 RSpec.describe Statement, type: :model do
+  describe 'marking latest statement' do
+    it 'marks the statement seen most recently' do
+      company = Company.create!(name: 'company-name')
+      earliest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 2.days.ago,
+        url: 'http://example.com'
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 1.day.ago,
+        url: 'http://example.com'
+      )
+
+      expect(earliest_statement.reload).not_to be_latest
+      expect(latest_statement.reload).to be_latest
+    end
+  end
+
+  describe 'marking latest published statement' do
+    it 'marks the published statement seen most recently' do
+      company = Company.create!(name: 'company-name')
+      earliest_published_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 3.days.ago,
+        url: 'http://example.com',
+        published: true
+      )
+      latest_published_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 2.days.ago,
+        url: 'http://example.com',
+        published: true
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 1.day.ago,
+        url: 'http://example.com',
+        published: false
+      )
+
+      expect(earliest_published_statement.reload).not_to be_latest_published
+      expect(latest_statement.reload).not_to be_latest_published
+      expect(latest_published_statement.reload).to be_latest_published
+    end
+  end
+
   describe 'validation' do
     it 'disallows invalid URLs' do
       statement = Statement.new(url: '\\')
