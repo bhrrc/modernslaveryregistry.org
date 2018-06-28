@@ -13,7 +13,7 @@ class CompaniesController < ApplicationController
       send_submission_email
       redirect_to thanks_path
     else
-      # TODO: Fix rendering when there are errors
+      @company.statements.build if @company.statements.empty?
       render 'new'
     end
   end
