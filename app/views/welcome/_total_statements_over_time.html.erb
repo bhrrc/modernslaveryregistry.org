@@ -13,20 +13,51 @@ function renderTotalStatementsOverTime(totalByMonth) {
     type: "line",
     data: {
       "labels": totalByMonth.map(function(month) { return month.label }),
-      "datasets":[{
-        "label":"Statements",
-        "data": totalByMonth.map(function(month) { return month.statements }),
-        "fill":false,
-        "borderColor":"rgb(75, 192, 192)",
-        "lineTension": 0.1
-      }]
+      "datasets":[
+        {
+          "label":"Cumulative Total",
+          "data": totalByMonth.map(function(month) { return month.statements }),
+          "fill":false,
+          "borderColor":"rgb(255, 205, 0)",
+          "lineTension": 0.1,
+          "yAxisID": "y-axis-1"
+        },
+        {
+          "label":"UK Modern Slavery Act",
+          "data": totalByMonth.map(function(month) { return month.uk_act }),
+          "fill":false,
+          "borderColor":"rgb(75, 192, 192)",
+          "lineTension": 0.1,
+          "yAxisID": "y-axis-2"
+        },
+        {
+          "label":"California Transparency in Supply Chains Act",
+          "data": totalByMonth.map(function(month) { return month.us_act }),
+          "fill":false,
+          "borderColor":"rgb(75, 192, 192)",
+          "lineTension": 0.1,
+          "yAxisID": "y-axis-2"
+        }
+      ]
     },
     options: {
-      legend: { display: false }
+      legend: { display: false },
+      scales: {
+        yAxes: [
+          { type: 'linear',
+            display: true,
+            position: 'left',
+            id: 'y-axis-1' },
+          { type: 'linear',
+            display: true,
+            position: 'right',
+            id: 'y-axis-2',
+            gridLines: { drawOnChartArea: false },
+          }],
+      }
     }
-  });
-}
+  })
+};
 
 renderTotalStatementsOverTime(<%= raw @statement_stats.total_statements_over_time.to_json %>)
-
 </script>
