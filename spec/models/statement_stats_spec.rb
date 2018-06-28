@@ -127,4 +127,14 @@ RSpec.describe StatementStats do
   it 'counts industries of companies with published statements' do
     expect(stats.industries_count).to eq(2)
   end
+
+  it 'groups counts of statements by month' do
+    expect(stats.total_statements_over_time).to eq(
+      [
+        { label: 'May 2016', statements: 2 },
+        { label: 'May 2017', statements: 3 },
+        { label: 'June 2017', statements: 4 }
+      ]
+    )
+  end
 end
