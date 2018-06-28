@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export PATH=$PATH:/usr/local/bin
+bundle exec pumactl --pid tmp/puma.pid stop
+bundle exec sidekiqctl tmp/sidekiq.pid 20

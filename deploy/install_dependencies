@@ -1,0 +1,37 @@
+#!/bin/bash
+
+yum groupinstall -y 'Development Tools'
+yum install -y postgresql-devel ruby24-devel
+alternatives --set ruby /usr/bin/ruby2.4
+yum install -y zlib-devel gcc libxml2 libxml2-devel libxslt libxslt-devel
+yum install -y patch
+yum install -y graphviz
+
+yum-config-manager --enable epel
+yum install -y redis
+
+if ! type -P node > /dev/null
+then
+  curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
+  yum install -y  nodejs
+fi
+
+if [ ! -f /usr/local/bin/wkhtmltoimage ]; then
+	cd /tmp
+	wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+	unxz wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+	tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar
+	mv wkhtmltox/bin/* /usr/local/bin/
+	rm -rf /tmp/wkhtmltox
+	rm -f /tmp/wkhtmltox-0.12.4_linux-generic-amd64.tar
+fi
+
+cd /home/ec2-user/ruby-on-rails
+
+gem install rails
+gem install bundler
+gem install foreman
+
+chown -R ec2-user:ec2-user /home/ec2-user/ruby-on-rails
+
+service redis start
