@@ -22,11 +22,11 @@ RSpec.describe StatementStats do
   end
 
   let! :uk_legislation do
-    Legislation.create! name: 'UK Legislation', icon: 'uk'
+    Legislation.create! name: 'UK Modern Slavery Act', icon: 'uk'
   end
 
   let! :us_legislation do
-    Legislation.create! name: 'US Legislation', icon: 'us'
+    Legislation.create! name: 'California Transparency in Supply Chains Act', icon: 'us'
   end
 
   let! :cucumber do
@@ -144,9 +144,18 @@ RSpec.describe StatementStats do
   it 'groups counts of statements by month' do
     expect(stats.total_statements_over_time).to eq(
       [
-        { label: 'May 2016', statements: 2 },
-        { label: 'May 2017', statements: 3 },
-        { label: 'June 2017', statements: 4 }
+        { label: 'May 2016',
+          statements: 2,
+          uk_act: 2,
+          us_act: 0 },
+        { label: 'May 2017',
+          statements: 3,
+          uk_act: 1,
+          us_act: 1 },
+        { label: 'June 2017',
+          statements: 4,
+          uk_act: 1,
+          us_act: 0 }
       ]
     )
   end
