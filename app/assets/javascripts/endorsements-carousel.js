@@ -45,4 +45,6 @@ $(document).ready(function() {
 
   var endorsementsCarousel = document.querySelector('.Wallop');
   mountCarousel(endorsementsCarousel);
+  var statsCarousel = document.querySelector('#stats-carousel');
+  mountCarousel(statsCarousel);
 });

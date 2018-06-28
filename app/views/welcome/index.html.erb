@@ -93,13 +93,22 @@
 </section>
 
 <section class="section is-dark-navy">
-<% if admin? %>
-  <div class="stats-summary container">
-    <%= render partial: 'compliance_stats' %>
-  </div>
+  <h2 class="title is-2 has-text-centered is-turquoise-text">UK Modern Slavery Act</h2>
 
-  <div class="stats-summary container">
-    <%= render partial: 'total_statements_over_time' %>
+  <% if admin? %>
+  <div id="stats-carousel" class="Wallop Wallop--slide">
+    <div class="Wallop-list stats-summary container">
+      <div class="Wallop-item">
+        <%= render partial: 'compliance_stats' %>
+      </div>
+      <div class="Wallop-item">
+        <%= render partial: 'total_statements_over_time' %>
+      </div>
+    </div>
+    <div class="Wallop-pagination">
+      <button class="Wallop-dot Wallop-dot--current">Compliance</button>
+      <button class="Wallop-dot">Cumulative number of statements</button>
+    </div>
   </div>
 <% else %>
   <div class="stats-summary container">
