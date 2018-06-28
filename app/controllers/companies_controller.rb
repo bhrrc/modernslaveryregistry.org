@@ -22,7 +22,7 @@ class CompaniesController < ApplicationController
     @company = Company.find(params[:id])
     @statements = @company.published_statements
     @new_statement = Statement.new(company: @company)
-    @statement = @company.latest_statement
+    @statement = @company.latest_published_statement
   end
 
   private

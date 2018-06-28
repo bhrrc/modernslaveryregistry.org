@@ -14,6 +14,10 @@ class Company < ApplicationRecord
     statements.latest.first
   end
 
+  def latest_published_statement
+    published_statements.first
+  end
+
   def published_statements
     statements.published
   end
