@@ -109,6 +109,9 @@
               Content Type
             </th>
             <th>
+              Screenshot of statement?
+            </th>
+            <th>
               Snapshot
             </th>
           </tr>
@@ -127,6 +130,13 @@
                 :
                 content_type_tag(nil)
               %>
+            </td>
+            <td>
+              <% if statement.snapshot.present? && statement.snapshot.should_have_screenshot? %>
+                <%= yes_no(statement.snapshot.screenshot.attached?) %>
+              <% else %>
+                Only applies to HTML statements
+              <% end %>
             </td>
             <td>
               <%= statement.snapshot.present? ?

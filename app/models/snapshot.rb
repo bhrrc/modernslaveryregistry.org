@@ -17,6 +17,10 @@ class Snapshot < ApplicationRecord
     original.content_type =~ /html/
   end
 
+  def should_have_screenshot?
+    original_is_html?
+  end
+
   private
 
   def original_is_not_html?
