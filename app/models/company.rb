@@ -11,7 +11,7 @@ class Company < ApplicationRecord
     statements.latest.first
   end
 
-  def recent_published_statements
+  def published_statements
     statements.published.order('last_year_covered DESC, date_seen DESC')
   end
 
