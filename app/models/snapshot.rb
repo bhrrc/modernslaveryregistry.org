@@ -13,15 +13,11 @@ class Snapshot < ApplicationRecord
     (original_is_html? && screenshot.attached?) || original_is_not_html?
   end
 
-  def original_is_pdf?
-    original.content_type =~ /pdf/
-  end
-
-  private
-
   def original_is_html?
     original.content_type =~ /html/
   end
+
+  private
 
   def original_is_not_html?
     !original_is_html?

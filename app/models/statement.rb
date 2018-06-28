@@ -135,7 +135,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def attach_screenshot_to_snapshot(snapshot)
-    return if snapshot.original_is_pdf?
+    return unless snapshot.original_is_html?
 
     image_fetch_result = ScreenGrab.fetch(url)
     return if image_fetch_result.broken_url
