@@ -54,7 +54,9 @@
           BHRRC URL
         </div>
         <div class="column">
-          <%= link_to @company.bhrrc_url, @company.bhrrc_url %>
+          <% if @company.bhrrc_url.present? %>
+            <%= link_to @company.bhrrc_url, @company.bhrrc_url %>
+          <% end %>
         </div>
       </div>
     </div>
