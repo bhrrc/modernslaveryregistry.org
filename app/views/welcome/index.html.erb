@@ -93,156 +93,29 @@
 </section>
 
 <section class="section is-dark-navy">
-  <div class="stats-summary container">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+  <h2 class="title is-2 has-text-centered is-turquoise-text">UK Modern Slavery Act</h2>
 
-    <h2 class="title is-2 has-text-centered is-turquoise-text">UK Modern Slavery Act</h2>
-    <h3 class="title is-3 has-text-centered is-turquoise-text">Compliance with minimum requirements</h3>
-
-      <div class="columns">
-
-        <div class="column is-narrow">
-          <div class="compliance-stat">
-            <label class="donut-legend">
-              Statements published on the company's website with a link on the home page.
-            </label>
-            <div class="donut">
-              <div id="link_on_front_page_donut" class="donut-container">
-                <canvas width="105" height="105"></canvas>
-                <div class="donut-overlay">
-                  <label class="donut-label" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="compliance-stat">
-            <label class="donut-legend">
-              Signed by director or equivalent.
-            </label>
-            <div class="donut">
-              <div id="signed_by_director_donut" class="donut-container">
-                <canvas width="105" height="105"></canvas>
-                <div class="donut-overlay">
-                  <label class="donut-label" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="compliance-stat">
-            <label class="donut-legend">
-              Explicit approval by the board is included in the statement.
-            </label>
-            <div class="donut">
-              <div id="approved_by_board_donut" class="donut-container">
-                <canvas width="105" height="105"></canvas>
-                <div class="donut-overlay">
-                  <label class="donut-label" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="column is-narrow compliance-curly-brace">}</div>
-
-        <div class="column">
-          <div class="compliance-stat fully-compliant-stat">
-            <div class="donut mega-donut">
-              <div id="fully_compliant_donut" class="donut-container">
-                <canvas width="340" height="340"></canvas>
-                <div class="donut-overlay">
-                  <label class="donut-label" />
-                </div>
-              </div>
-            </div>
-            <label class="donut-legend">
-              Meet all minimum requirements set out in the UK Modern Slavery Act.
-            </label>
-          </div>
-        </div>
-
+  <% if admin? %>
+  <div id="stats-carousel" class="Wallop Wallop--slide">
+    <div class="Wallop-list stats-summary container">
+      <div class="Wallop-item">
+        <%= render partial: 'compliance_stats' %>
       </div>
-  </div>
-
-</section>
-
-<script>
-function renderDonut(containerId, percentage) {
-  var $container = $(document.getElementById(containerId))
-  var $canvas = $container.find('canvas')
-  new Chart($canvas[0].getContext("2d"), {
-    type: "doughnut",
-    data: {
-      datasets: [
-        {
-          data: [percentage, 100 - percentage],
-          backgroundColor: ["rgba(0,137,134,1)", "rgba(0,0,0,0)"],
-          borderColor: ["rgba(0,137,134,1)", "rgba(0,137,134,1)"]
-        }
-      ]
-    },
-    options: {
-      rotation: Math.PI,
-      cutoutPercentage: 75,
-      responsive: false
-    }
-  });
-  $container.find('.donut-label').text(percentage + '%')
-}
-
-renderDonut('link_on_front_page_donut', <%= @compliance_stats.percent_link_on_front_page %>)
-renderDonut('signed_by_director_donut', <%= @compliance_stats.percent_signed_by_director %>)
-renderDonut('approved_by_board_donut', <%= @compliance_stats.percent_approved_by_board %>)
-renderDonut('fully_compliant_donut', <%= @compliance_stats.percent_fully_compliant %>)
-
-</script>
-
-<% if admin? %>
-
-<section class="section is-dark-navy">
-  <div class="stats-summary container">
-    <h3 class="title is-3 has-text-centered is-turquoise-text">Statements added over time</h3>
-
-      <div class="columns">
-
-        <div id="total_statements_over_time" class="column">
-          <canvas width="340" height="140"></canvas>
-        </div>
-
+      <div class="Wallop-item">
+        <%= render partial: 'total_statements_over_time' %>
       </div>
+    </div>
+    <div class="Wallop-pagination">
+      <button class="Wallop-dot Wallop-dot--current">Compliance</button>
+      <button class="Wallop-dot">Cumulative number of statements</button>
+    </div>
   </div>
-
-</section>
-
-<script>
-function renderTotalStatementsOverTime(totalByMonth) {
-  var $container = $(document.getElementById('total_statements_over_time'))
-  var $canvas = $container.find('canvas')
-  new Chart($canvas[0].getContext("2d"), {
-    type: "line",
-    data: {
-      "labels": totalByMonth.map(function(month) { return month.label }),
-      "datasets":[{
-        "label":"Statements",
-        "data": totalByMonth.map(function(month) { return month.statements }),
-        "fill":false,
-        "borderColor":"rgb(75, 192, 192)",
-        "lineTension": 0.1
-      }]
-    },
-    options: {
-      legend: { display: false }
-    }
-  });
-}
-
-renderTotalStatementsOverTime(<%= raw @statement_stats.total_statements_over_time.to_json %>)
-
-</script>
-
+<% else %>
+  <div class="stats-summary container">
+    <%= render partial: 'compliance_stats' %>
+  </div>
 <% end %>
-
-
+</section>
 
 <section class="section media-endorsements">
   <div class="container">

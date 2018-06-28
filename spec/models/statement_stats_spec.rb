@@ -21,6 +21,14 @@ RSpec.describe StatementStats do
     Country.create! code: 'GB', name: 'United Kingdom'
   end
 
+  let! :uk_legislation do
+    Legislation.create! name: 'UK Modern Slavery Act', icon: 'uk'
+  end
+
+  let! :us_legislation do
+    Legislation.create! name: 'California Transparency in Supply Chains Act', icon: 'us'
+  end
+
   let! :cucumber do
     Company.create! name: 'Cucumber Ltd', country: gb, industry: software
   end
@@ -50,7 +58,8 @@ RSpec.describe StatementStats do
       link_on_front_page: true,
       date_seen: Date.parse('21 May 2016'),
       published: true,
-      contributor_email: 'someone@somewhere.com'
+      contributor_email: 'someone@somewhere.com',
+      legislations: [uk_legislation]
     )
   end
 
@@ -63,7 +72,8 @@ RSpec.describe StatementStats do
       link_on_front_page: true,
       date_seen: Date.parse('22 June 2017'),
       published: true,
-      contributor_email: 'someone@somewhere.com'
+      contributor_email: 'someone@somewhere.com',
+      legislations: [uk_legislation]
     )
   end
 
@@ -76,7 +86,8 @@ RSpec.describe StatementStats do
       link_on_front_page: true,
       date_seen: Date.parse('20 May 2016'),
       published: true,
-      contributor_email: 'someone@somewhere.com'
+      contributor_email: 'someone@somewhere.com',
+      legislations: [uk_legislation]
     )
   end
 
@@ -89,7 +100,8 @@ RSpec.describe StatementStats do
       link_on_front_page: true,
       date_seen: Date.parse('20 May 2017'),
       published: true,
-      contributor_email: 'someone@somewhere.com'
+      contributor_email: 'someone@somewhere.com',
+      legislations: [uk_legislation, us_legislation]
     )
   end
 
@@ -102,7 +114,8 @@ RSpec.describe StatementStats do
       link_on_front_page: true,
       date_seen: Date.parse('20 May 2020'),
       published: false,
-      contributor_email: 'someone@somewhere.com'
+      contributor_email: 'someone@somewhere.com',
+      legislations: [us_legislation]
     )
   end
 
@@ -126,5 +139,24 @@ RSpec.describe StatementStats do
 
   it 'counts industries of companies with published statements' do
     expect(stats.industries_count).to eq(2)
+  end
+
+  it 'groups counts of statements by month' do
+    expect(stats.total_statements_over_time).to eq(
+      [
+        { label: 'May 2016',
+          statements: 2,
+          uk_act: 2,
+          us_act: 0 },
+        { label: 'May 2017',
+          statements: 3,
+          uk_act: 1,
+          us_act: 1 },
+        { label: 'June 2017',
+          statements: 4,
+          uk_act: 1,
+          us_act: 0 }
+      ]
+    )
   end
 end

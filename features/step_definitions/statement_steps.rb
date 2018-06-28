@@ -140,7 +140,15 @@ Then('{actor} should see that the statement was not saved due to the following e
 end
 
 Then('{actor} sees the following statements added by month:') do |actor, table|
-  rendered_data = table.hashes.map { |hash| { label: hash['Month'], statements: hash['Statements'].to_i } }
+  rendered_data = table.hashes.map do |hash|
+    {
+      label: hash['label'],
+      statements: hash['statements'].to_i,
+      uk_act: hash['uk_act'].to_i,
+      us_act: hash['us_act'].to_i
+    }
+  end
+
   expect(actor.visible_statements_added_by_month_stats).to eq(rendered_data)
 end
 
