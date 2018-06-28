@@ -12,28 +12,45 @@ class StatementStats
   end
 
   def total_statements_over_time
-    published_statements_grouped_by_months_with_totals.map do |item|
-      { label: Date::MONTHNAMES[item[:month]] + ' ' + item[:year].to_s, statements: item[:total] }
+    published_statements_grouped_by_months_with_totals.map do |result|
+      year_number, month_number = result['year_month'].split('-')
+      {
+        label: [Date::MONTHNAMES[month_number.to_i], year_number].join(' '),
+        statements: result['statements'].to_i
+      }
     end
   end
 
   private
 
   def published_statements_grouped_by_months_with_totals
-    published_statements_grouped_by_months.each_with_object([]) do |item, array|
-      item[:total] = (array.last || { total: 0 })[:total] + item[:count]
-      array << item
-    end
-  end
+    query = <<-SQL
+with all_published_statements as (
+  select
+    statements.id as statement_id,
+    to_char(statements.date_seen, 'YYYY-MM') as year_month,
+    legislations.name
+  from legislation_statements
+  join statements on legislation_statements.statement_id = statements.id
+  join legislations on legislation_statements.legislation_id = legislations.id
+  where statements.published IS TRUE
+),
+unique_statements_published_per_month as (
+  select year_month, count(distinct(statement_id)) as unique_statements
+  from all_published_statements
+  group by year_month
+  order by year_month
+), cumulative_statements as (
+  select
+    year_month,
+    sum(unique_statements) over (order by year_month asc rows between unbounded preceding and current row) as statements
+  from unique_statements_published_per_month
+)
 
-  def published_statements_grouped_by_months
-    Statement.published.group("TO_CHAR(date_seen, 'YYYY-MM')").count.sort.map do |k, count|
-      {
-        year: k.split('-')[0].to_i,
-        month: k.split('-')[1].to_i,
-        count: count
-      }
-    end
+select * from cumulative_statements
+    SQL
+
+    ActiveRecord::Base.connection.execute(query)
   end
 
   def published_statements_with_companies
