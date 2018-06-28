@@ -150,13 +150,13 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # rubocop:disable Rails/SkipsModelValidations
   def mark_latest
     company.statements.update_all(latest: false)
-    company.statements.order(date_seen: :desc).limit(1).update_all(latest: true)
+    company.statements.limit(1).update_all(latest: true)
   end
 
   def mark_latest_published
     return unless published?
     company.statements.update_all(latest_published: false)
-    company.statements.published.order(date_seen: :desc).limit(1).update_all(latest_published: true)
+    company.statements.published.limit(1).update_all(latest_published: true)
   end
   # rubocop:enable Rails/SkipsModelValidations
 end

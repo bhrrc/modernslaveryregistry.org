@@ -1,5 +1,8 @@
 class Company < ApplicationRecord
-  has_many :statements, dependent: :destroy
+  has_many :statements,
+           -> { order(last_year_covered: :desc, date_seen: :desc) },
+           dependent: :destroy,
+           inverse_of: :company
   belongs_to :country, optional: true
   belongs_to :industry, optional: true
 
@@ -11,8 +14,12 @@ class Company < ApplicationRecord
     statements.latest.first
   end
 
-  def recent_published_statements
-    statements.published.order('last_year_covered DESC, date_seen DESC')
+  def latest_published_statement
+    published_statements.first
+  end
+
+  def published_statements
+    statements.published
   end
 
   def country_name
