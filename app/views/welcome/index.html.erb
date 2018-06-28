@@ -93,15 +93,19 @@
 </section>
 
 <section class="section is-dark-navy">
+<% if admin? %>
   <div class="stats-summary container">
     <%= render partial: 'compliance_stats' %>
   </div>
 
-  <% if admin? %>
   <div class="stats-summary container">
     <%= render partial: 'total_statements_over_time' %>
   </div>
-  <% end %>
+<% else %>
+  <div class="stats-summary container">
+    <%= render partial: 'compliance_stats' %>
+  </div>
+<% end %>
 </section>
 
 <section class="section media-endorsements">
