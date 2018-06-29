@@ -15,12 +15,13 @@ class StatementsController < ApplicationController
 
   def create
     @company = company_from_params
-    @statement = @company.statements.build(statement_params)
-    @statement.associate_with_user(current_user) if user_signed_in?
+    @new_statement = @company.statements.build(statement_params)
+    @new_statement.associate_with_user(current_user) if user_signed_in?
 
-    if @statement.save
+    if @new_statement.save
       redirect_to '/thanks'
     else
+      @statements = @company.published_statements
       render 'new'
     end
   end
