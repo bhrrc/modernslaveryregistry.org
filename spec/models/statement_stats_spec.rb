@@ -150,12 +150,12 @@ RSpec.describe StatementStats do
           us_act: 0 },
         { label: 'May 2017',
           statements: 3,
-          uk_act: 1,
+          uk_act: 3,
           us_act: 1 },
         { label: 'June 2017',
           statements: 4,
-          uk_act: 1,
-          us_act: 0 }
+          uk_act: 4,
+          us_act: 1 }
       ]
     )
   end

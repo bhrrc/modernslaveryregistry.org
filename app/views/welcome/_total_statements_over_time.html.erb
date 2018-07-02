@@ -2,7 +2,7 @@
 <h3 class="title is-3 has-text-centered is-turquoise-text">Under the UK and California legislation</h3>
 <div class="columns">
   <div id="total_statements_over_time" class="column">
-    <canvas width="340" height="120"></canvas>
+    <canvas width="340" height="105"></canvas>
   </div>
 </div>
 
@@ -10,6 +10,9 @@
 function renderTotalStatementsOverTime(totalByMonth) {
   var $container = $(document.getElementById('total_statements_over_time'))
   var $canvas = $container.find('canvas')
+
+  Chart.defaults.global.defaultFontColor = 'rgb(75, 192, 192)';
+
   new Chart($canvas[0].getContext("2d"), {
     type: "line",
     data: {
@@ -29,7 +32,7 @@ function renderTotalStatementsOverTime(totalByMonth) {
           "fill":false,
           "borderColor":"rgb(75, 192, 192)",
           "lineTension": 0.1,
-          "yAxisID": "y-axis-2"
+          "yAxisID": "y-axis-1"
         },
         {
           "label":"California Transparency in Supply Chains Act",
@@ -37,7 +40,7 @@ function renderTotalStatementsOverTime(totalByMonth) {
           "fill":false,
           "borderColor":"rgb(75, 192, 192)",
           "lineTension": 0.1,
-          "yAxisID": "y-axis-2"
+          "yAxisID": "y-axis-1"
         }
       ]
     },
@@ -48,13 +51,8 @@ function renderTotalStatementsOverTime(totalByMonth) {
           { type: 'linear',
             display: true,
             position: 'left',
-            id: 'y-axis-1' },
-          { type: 'linear',
-            display: true,
-            position: 'right',
-            id: 'y-axis-2',
-            gridLines: { drawOnChartArea: false },
-          }],
+            id: 'y-axis-1' }
+        ],
       }
     }
   })

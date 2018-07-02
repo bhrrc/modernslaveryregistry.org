@@ -63,27 +63,35 @@ class StatementStats
         group by year_month
         order by year_month
       ),
-      cumulative_statements as (
-        select
-          year_month,
-          sum(unique_statements) over (order by year_month asc rows between unbounded preceding and current row) as statements
-        from unique_statements_published_per_month
-      ),
       statements_under_uk_act as (
-        select year_month, count(*) as uk_act
+        select year_month, count(*) as uk_statements
         from all_published_statements
         where name = 'UK Modern Slavery Act'
         group by year_month
       ),
       statements_under_us_act as (
-        select year_month, count(*) as us_act
+        select year_month, count(*) as us_statements
         from all_published_statements
         where name = 'California Transparency in Supply Chains Act'
         group by year_month
+      ),
+      statements_table as (
+        select
+          unique_statements_published_per_month.year_month,
+          unique_statements_published_per_month.unique_statements,
+          case WHEN statements_under_uk_act.uk_statements is NULL then 0 ELSE statements_under_uk_act.uk_statements END AS uk_statements,
+          case WHEN statements_under_us_act.us_statements is NULL then 0 ELSE statements_under_us_act.us_statements END AS us_statements
+        from unique_statements_published_per_month
+        left join statements_under_us_act on unique_statements_published_per_month.year_month = statements_under_us_act.year_month
+        left join statements_under_uk_act on unique_statements_published_per_month.year_month = statements_under_uk_act.year_month
       )
-       select * from cumulative_statements
-      left join statements_under_us_act on cumulative_statements.year_month = statements_under_us_act.year_month
-      left join statements_under_uk_act on cumulative_statements.year_month = statements_under_uk_act.year_month
+
+      select
+        year_month,
+        sum(unique_statements) over (order by year_month asc rows between unbounded preceding and current row) as statements,
+        sum(uk_statements) over (order by year_month asc rows between unbounded preceding and current row) as uk_act,
+        sum(us_statements) over (order by year_month asc rows between unbounded preceding and current row) as us_act
+      from statements_table
     SQL
   end
 
