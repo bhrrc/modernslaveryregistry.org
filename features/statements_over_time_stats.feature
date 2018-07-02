@@ -17,4 +17,4 @@ Feature: Statements over time stats
     Then Joe sees the following statements added by month:
       | label         | statements | uk_act | us_act |
       | January 2018  |          1 | 1      | 0      |
-      | February 2018 |          3 | 2      | 0      |
+      | February 2018 |          3 | 3      | 0      |
