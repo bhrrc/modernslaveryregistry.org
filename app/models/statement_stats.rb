@@ -99,19 +99,15 @@ class StatementStats
     SQL
   end
 
-  def published_statements_with_companies
-    Statement.published.joins(:company)
-  end
-
-  def published_statements_with_companies_and_legislations
-    published_statements_with_companies.joins(:legislations)
+  def published_statements_with_companies_and_legislations_for(legislation_name)
+    Statement.published.joins(:company).joins(:legislations).where('legislations.name' => legislation_name)
   end
 
   def published_uk_statements
-    published_statements_with_companies_and_legislations.where('legislations.name' => Legislation::UK_NAME)
+    published_statements_with_companies_and_legislations_for(Legislation::UK_NAME)
   end
 
   def published_california_statements
-    published_statements_with_companies_and_legislations.where('legislations.name' => Legislation::CALIFORNIA_NAME)
+    published_statements_with_companies_and_legislations_for(Legislation::CALIFORNIA_NAME)
   end
 end
