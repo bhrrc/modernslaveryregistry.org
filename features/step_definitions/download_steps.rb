@@ -30,8 +30,8 @@ end
 
 module DownloadsStatements
   def attempts_to_download_all_statements
-    visit root_path
-    click_link 'Download statements'
+    visit explore_path
+    click_link 'Download CSV'
   end
 
   def visible_downloaded_statements

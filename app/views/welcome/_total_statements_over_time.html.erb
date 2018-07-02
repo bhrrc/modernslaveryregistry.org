@@ -27,7 +27,7 @@ function renderTotalStatementsOverTime(totalByMonth) {
           "yAxisID": "y-axis-1"
         },
         {
-          "label":"UK Modern Slavery Act",
+          "label":"<%= Legislation::UK_NAME %>",
           "data": totalByMonth.map(function(month) { return month.uk_act }),
           "fill":false,
           "borderColor":"rgb(75, 192, 192)",
@@ -35,7 +35,7 @@ function renderTotalStatementsOverTime(totalByMonth) {
           "yAxisID": "y-axis-1"
         },
         {
-          "label":"California Transparency in Supply Chains Act",
+          "label":"<%= Legislation::CALIFORNIA_NAME %>",
           "data": totalByMonth.map(function(month) { return month.us_act }),
           "fill":false,
           "borderColor":"rgb(75, 192, 192)",

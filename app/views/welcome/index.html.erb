@@ -47,30 +47,89 @@
 
 <section class="section">
   <div class="container">
-    <div class="columns has-text-centered" data-content="stats_counters">
-      <div class="column">
-        <p class="title is-1" data-content="statements"><%= @statement_stats.statements_count %></p>
-        <p class="subtitle is-3"><%= "statement".pluralize(@statement_stats.statements_count) %></p>
-        <% if numbers_explained_page %>
-          <p class="subtitle">
-            <%= link_to "more information", page_path(numbers_explained_page) %>
-          </p>
-        <% end %>
+    <div class="columns" data-content="stats_counters">
+
+      <div class="column is-3">
+        <div class="columns">
+          <div class="column is-one-quarter">
+            <%= image_tag 'icon-gb.svg', class: 'image' %>
+          </div>
+          <div class="column">
+            <h2 class="title is-4">
+              UK Modern Slavery Act
+            </h2>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-offset-3">
+            <p class="title is-5">
+              <span data-content="uk_statements">
+                <%= @statement_stats.uk_statements_count %>
+              </span>
+              <%= "statement".pluralize(@statement_stats.uk_statements_count) %>
+            </p>
+            <p class="title is-5">
+              <span data-content="uk_companies">
+                <%= @statement_stats.uk_companies_count %>
+              </span>
+              <%= "company".pluralize(@statement_stats.uk_companies_count) %>
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="column">
-        <p class="title is-1" data-content="industries"><%= @statement_stats.industries_count %></p>
-        <p class="subtitle is-3"><%= "industry".pluralize(@statement_stats.industries_count) %></p>
+
+      <div class="column is-3 is-offset-1">
+        <div class="columns">
+          <div class="column is-one-quarter">
+            <%= image_tag 'icon-us.svg', class: 'image' %>
+          </div>
+          <div class="column">
+            <h2 class="title is-4">
+              California TISCA
+            </h2>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-offset-3">
+            <p class="title is-5" >
+              <span data-content="us_statements">
+                <%= @statement_stats.california_statements_count %>
+              </span>
+              <%= "statement".pluralize(@statement_stats.california_statements_count) %>
+            </p>
+            <p class="title is-5">
+              <span data-content="us_companies">
+                <%= @statement_stats.california_companies_count %>
+              </span>
+              <%= "company".pluralize(@statement_stats.california_companies_count) %>
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="column">
-        <p class="title is-1" data-content="companies"><%= @statement_stats.companies_count %></p>
-        <p class="subtitle is-3"><%= "company".pluralize(@statement_stats.companies_count) %></p>
-        <% if numbers_explained_page %>
-          <p class="subtitle">
-            <%= link_to "more information", page_path(numbers_explained_page) %>
-          </p>
-        <% end %>
+
+      <div class="column is-3 is-offset-1">
+        <div class="columns">
+          <div class="column is-one-quarter">
+            <%= image_tag 'icon-au.svg', class: 'image' %>
+          </div>
+          <div class="column">
+            <h2 class="title is-4">
+              Australian Modern Slavery Act
+            </h2>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-offset-3">
+            <p class="title is-5">
+              <a href="https://www.business-humanrights.org/en/inquiry-into-establishment-of-a-modern-slavery-act-in-australia">
+                Coming soon...
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="columns has-text-centered">
       <div class="column"></div>
       <div class="column">
@@ -78,13 +137,9 @@
           class: 'button is-medium is-primary' %>
       </div>
       <div class="column">
-        <%= link_to modernslaveryregistry_path(format: :csv),
-          class: 'button is-medium is-primary' do
-        %>
-          <span class="icon">
-            <i class="fa fa-download"></i>
-          </span>
-          <span>Download statements</span>
+        <% if numbers_explained_page %>
+          <%= link_to "More information", page_path(numbers_explained_page),
+            class: 'button is-medium is-primary' %>
         <% end %>
       </div>
       <div class="column"></div>

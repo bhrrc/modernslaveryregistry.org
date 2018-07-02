@@ -22,11 +22,11 @@ RSpec.describe StatementStats do
   end
 
   let! :uk_legislation do
-    Legislation.create! name: 'UK Modern Slavery Act', icon: 'uk'
+    Legislation.create! name: Legislation::UK_NAME, icon: 'uk'
   end
 
   let! :us_legislation do
-    Legislation.create! name: 'California Transparency in Supply Chains Act', icon: 'us'
+    Legislation.create! name: Legislation::CALIFORNIA_NAME, icon: 'us'
   end
 
   let! :cucumber do
@@ -127,18 +127,20 @@ RSpec.describe StatementStats do
     StatementSearch.new(false, {})
   end
 
-  it 'counts published statements' do
-    expect(stats.statements_count).to eq(4)
-    # Verify that search count is consistent
-    expect(search.statements.size).to eq(4)
+  it 'counts published statements for UK legislation' do
+    expect(stats.uk_statements_count).to eq(4)
   end
 
-  it 'counts companies with published statements' do
-    expect(stats.companies_count).to eq(2)
+  it 'counts published statements for California legislation' do
+    expect(stats.california_statements_count).to eq(1)
   end
 
-  it 'counts industries of companies with published statements' do
-    expect(stats.industries_count).to eq(2)
+  it 'counts companies with published statements under UK legislation' do
+    expect(stats.uk_companies_count).to eq(2)
+  end
+
+  it 'counts companies with published statements under California legislation' do
+    expect(stats.california_companies_count).to eq(1)
   end
 
   it 'groups counts of statements by month' do

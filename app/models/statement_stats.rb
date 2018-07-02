@@ -1,14 +1,18 @@
 class StatementStats
-  def statements_count
-    @statements_count ||= published_statements_with_companies.count
+  def uk_statements_count
+    published_uk_statements.count
   end
 
-  def companies_count
-    @companies_count ||= published_statements_with_companies.select('companies.id').distinct.count
+  def california_statements_count
+    published_california_statements.count
   end
 
-  def industries_count
-    published_statements_with_companies.select('companies.industry_id').distinct.count
+  def uk_companies_count
+    published_uk_statements.select('companies.id').distinct.count
+  end
+
+  def california_companies_count
+    published_california_statements.select('companies.id').distinct.count
   end
 
   def total_statements_over_time
@@ -31,7 +35,7 @@ class StatementStats
     # is nil. A better fix would be to fix the SQL query so this is impossible,
     # and/or to introduce stricter validation of statements so they cannot
     # be saved without a year_month field.
-    return "UNKNOWN" if result.nil?
+    return 'UNKNOWN' if result.nil?
     year_number, month_number = result.split('-')
     [Date::MONTHNAMES[month_number.to_i], year_number].join(' ')
   end
@@ -41,8 +45,8 @@ class StatementStats
   end
 
   def calculatable_legislations_exist?
-    Legislation.where(name: 'California Transparency in Supply Chains Act').exists? &&
-      Legislation.where(name: 'UK Modern Slavery Act').exists?
+    Legislation.where(name: Legislation::CALIFORNIA_NAME).exists? &&
+      Legislation.where(name: Legislation::UK_NAME).exists?
   end
 
   def query
@@ -66,13 +70,13 @@ class StatementStats
       statements_under_uk_act as (
         select year_month, count(*) as uk_statements
         from all_published_statements
-        where name = 'UK Modern Slavery Act'
+        where name = '#{Legislation::UK_NAME}'
         group by year_month
       ),
       statements_under_us_act as (
         select year_month, count(*) as us_statements
         from all_published_statements
-        where name = 'California Transparency in Supply Chains Act'
+        where name = '#{Legislation::CALIFORNIA_NAME}'
         group by year_month
       ),
       statements_table as (
@@ -95,7 +99,15 @@ class StatementStats
     SQL
   end
 
-  def published_statements_with_companies
-    Statement.published.joins(:company)
+  def published_statements_with_companies_and_legislations_for(legislation_name)
+    Statement.published.joins(:company).joins(:legislations).where('legislations.name' => legislation_name)
+  end
+
+  def published_uk_statements
+    published_statements_with_companies_and_legislations_for(Legislation::UK_NAME)
+  end
+
+  def published_california_statements
+    published_statements_with_companies_and_legislations_for(Legislation::CALIFORNIA_NAME)
   end
 end
