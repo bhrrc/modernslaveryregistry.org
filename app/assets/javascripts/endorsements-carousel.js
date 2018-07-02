@@ -43,7 +43,7 @@ $(document).ready(function() {
     });
   };
 
-  var endorsementsCarousel = document.querySelector('.Wallop');
+  var endorsementsCarousel = document.querySelector('#endorsements-carousel');
   mountCarousel(endorsementsCarousel);
   var statsCarousel = document.querySelector('#stats-carousel');
   mountCarousel(statsCarousel);
