@@ -22,7 +22,7 @@ RSpec.describe StatementStats do
   end
 
   let! :uk_legislation do
-    Legislation.create! name: 'UK Modern Slavery Act', icon: 'uk'
+    Legislation.create! name: Legislation::UK_NAME, icon: 'uk'
   end
 
   let! :us_legislation do
