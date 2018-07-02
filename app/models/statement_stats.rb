@@ -3,8 +3,24 @@ class StatementStats
     @statements_count ||= published_statements_with_companies.count
   end
 
+  def uk_statements_count
+    published_uk_statements.count
+  end
+
+  def california_statements_count
+    published_california_statements.count
+  end
+
   def companies_count
     @companies_count ||= published_statements_with_companies.select('companies.id').distinct.count
+  end
+
+  def uk_companies_count
+    published_uk_statements.select('companies.id').distinct.count
+  end
+
+  def california_companies_count
+    published_california_statements.select('companies.id').distinct.count
   end
 
   def industries_count
@@ -97,5 +113,17 @@ class StatementStats
 
   def published_statements_with_companies
     Statement.published.joins(:company)
+  end
+
+  def published_statements_with_companies_and_legislations
+    published_statements_with_companies.joins(:legislations)
+  end
+
+  def published_uk_statements
+    published_statements_with_companies_and_legislations.where('legislations.name' => Legislation::UK_NAME)
+  end
+
+  def published_california_statements
+    published_statements_with_companies_and_legislations.where('legislations.name' => Legislation::CALIFORNIA_NAME)
   end
 end
