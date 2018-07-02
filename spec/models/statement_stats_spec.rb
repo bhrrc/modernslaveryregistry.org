@@ -127,12 +127,6 @@ RSpec.describe StatementStats do
     StatementSearch.new(false, {})
   end
 
-  it 'counts published statements' do
-    expect(stats.statements_count).to eq(4)
-    # Verify that search count is consistent
-    expect(search.statements.size).to eq(4)
-  end
-
   it 'counts published statements for UK legislation' do
     expect(stats.uk_statements_count).to eq(4)
   end
@@ -141,20 +135,12 @@ RSpec.describe StatementStats do
     expect(stats.california_statements_count).to eq(1)
   end
 
-  it 'counts companies with published statements' do
-    expect(stats.companies_count).to eq(2)
-  end
-
   it 'counts companies with published statements under UK legislation' do
     expect(stats.uk_companies_count).to eq(2)
   end
 
   it 'counts companies with published statements under California legislation' do
     expect(stats.california_companies_count).to eq(1)
-  end
-
-  it 'counts industries of companies with published statements' do
-    expect(stats.industries_count).to eq(2)
   end
 
   it 'groups counts of statements by month' do

@@ -1,8 +1,4 @@
 class StatementStats
-  def statements_count
-    @statements_count ||= published_statements_with_companies.count
-  end
-
   def uk_statements_count
     published_uk_statements.count
   end
@@ -11,20 +7,12 @@ class StatementStats
     published_california_statements.count
   end
 
-  def companies_count
-    @companies_count ||= published_statements_with_companies.select('companies.id').distinct.count
-  end
-
   def uk_companies_count
     published_uk_statements.select('companies.id').distinct.count
   end
 
   def california_companies_count
     published_california_statements.select('companies.id').distinct.count
-  end
-
-  def industries_count
-    published_statements_with_companies.select('companies.industry_id').distinct.count
   end
 
   def total_statements_over_time
