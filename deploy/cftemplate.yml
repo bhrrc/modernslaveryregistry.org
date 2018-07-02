@@ -32,7 +32,7 @@ Parameters:
     MinLength: 1
     Type: String
   InstanceType:
-    Default: t2.micro
+    Default: t2.medium
     Description: The Amazon EC2 instance type to use.
     Type: String
   KeyPairName:
@@ -534,7 +534,7 @@ Resources:
     Description: Creating Amazon EC2 instances
     Properties:
       IamInstanceProfile: !Ref WebAppInstanceProfile
-      ImageId: ami-f9dd458a
+      ImageId: ami-58d7e821
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyPairName
       NetworkInterfaces:
@@ -559,40 +559,30 @@ Resources:
           - ''
           - - |
               #!/bin/bash -ex
-            - >
-              wget -O /usr/local/bin/get_authorized_keys
-              https://s3-eu-west-1.amazonaws.com/awscodestar-remote-access-eu-west-1/get_authorized_keys
             - |
-              chmod 755 /usr/local/bin/get_authorized_keys
-            - >
-              sed -i '/AuthorizedKeysCommand /s/.*/AuthorizedKeysCommand
-              \/usr\/local\/bin\/get_authorized_keys/g' /etc/ssh/sshd_config
-            - >
-              sed -i '/AuthorizedKeysCommandUser /s/.*/AuthorizedKeysCommandUser
-              root/g' /etc/ssh/sshd_config
+              apt-get update
             - |
-              /etc/init.d/sshd restart
+              apt-get -y install ruby
             - |
-              yum update -y aws-cfn-bootstrap
-            - |
-              yum install -y aws-cli
+              apt-get -y install wget
             - |
               # Install the AWS CodeDeploy Agent.
             - |
-              cd /home/ec2-user/
+              cd /home/ubuntu/
             - 'wget https://aws-codedeploy-'
             - !Ref 'AWS::Region'
             - |
-              .s3.amazonaws.com/latest/codedeploy-agent.noarch.rpm
+              .s3.amazonaws.com/latest/install
             - |
-              yum -y install codedeploy-agent.noarch.rpm
+              chmod +x ./install 
             - |
-              # Install pip and python dev libraries.
+              ./install auto
             - |
-              yum install -y python27-devel python27-pip gcc
+              service codedeploy-agent start
             - |
-              pip install boto3
-            - pip install pycrypto
+              apt-get -y install python-pip 
+            - |
+              pip install awscli
     Type: 'AWS::EC2::Instance'
   WebAppInstanceProfile:
     Description: Creating Amazon EC2 instance profile for instances

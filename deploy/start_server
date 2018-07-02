@@ -5,38 +5,41 @@ function secret_key () {
   echo $password
 }
 
-cd /home/ec2-user/ruby-on-rails
+cd /home/ubuntu/ruby-on-rails
 
-export RAILS_ENV=production
+cat <<EOF > .env
+RAILS_ENV=production
 
-export LANG=en_US.UTF-8
+LANG=en_US.UTF-8
+PORT=3000
 
-export no_verify_statement_urls=1
-export RAILS_LOG_TO_STDOUT=enabled
-export RAILS_SERVE_STATIC_FILES=enabled
-export ROLLBAR_ENDPOINT=https://api.rollbar.com/api/1/item/
-export SEED_ADMIN_EMAIL=carrier@business-humanrights.org
+no_verify_statement_urls=1
+RAILS_LOG_TO_STDOUT=enabled
+RAILS_SERVE_STATIC_FILES=enabled
+ROLLBAR_ENDPOINT=https://api.rollbar.com/api/1/item/
+SEED_ADMIN_EMAIL=carrier@business-humanrights.org
 
-export DATABASE_URL=$( secret_key ms-db-url )
-export SECRET_KEY_BASE=$( secret_key ms-secret-key )
-export SENDGRID_USERNAME=$( secret_key ms-sendgrid-user )
-export SENDGRID_PASSWORD=$( secret_key ms-sendgrid-password )
-export ROLLBAR_ACCESS_TOKEN=$( secret_key ms-rollbar-access-token )
+DATABASE_URL=$( secret_key ms-db-url )
+SECRET_KEY_BASE=$( secret_key ms-secret-key )
+SENDGRID_USERNAME=$( secret_key ms-sendgrid-user )
+SENDGRID_PASSWORD=$( secret_key ms-sendgrid-password )
+ROLLBAR_ACCESS_TOKEN=$( secret_key ms-rollbar-access-token )
 
-# we need to avoid stomping on the environment of the deploy
-# user or we won't be able to access the secrets...
+AWS_ACCESS_KEY_ID=$( secret_key ms-aws-access-key-id )
+AWS_SECRET_ACCESS_KEY=$( secret_key ms-aws-secret-access-key )
 
-export TMP_AWS_ACCESS_KEY_ID=$( secret_key ms-aws-access-key-id )
-export TMP_AWS_SECRET_ACCESS_KEY=$( secret_key ms-aws-secret-access-key )
+EOF
 
-export AWS_ACCESS_KEY_ID=$TMP_AWS_ACCESS_KEY_ID
-export AWS_SECRET_ACCESS_KEY=$TMP_AWS_SECRET_ACCESS_KEY
-
+set -a # automatically export all variables
+source .env
+set +a
 export PATH=$PATH:/usr/local/bin
 
 bundle install --deployment
 bundle exec rake assets:precompile
 bundle exec rake db:migrate
 
-bundle exec puma -d -C config/puma.rb --pidfile tmp/puma.pid --redirect-stdout log/puma.out.log --redirect-stderr log/puma.err.log 
-bundle exec sidekiq -d -q default -q mailers -c 3 --pidfile tmp/sidekiq.pid -L log/sidekiq.log
+sudo foreman  export -e .env -a railsapp -u ubuntu -d /home/ubuntu/ruby-on-rails systemd /etc/systemd/system
+
+sudo systemctl start railsapp.target
+
