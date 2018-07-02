@@ -41,7 +41,7 @@ class StatementStats
   end
 
   def calculatable_legislations_exist?
-    Legislation.where(name: 'California Transparency in Supply Chains Act').exists? &&
+    Legislation.where(name: Legislation::CALIFORNIA_NAME).exists? &&
       Legislation.where(name: Legislation::UK_NAME).exists?
   end
 
@@ -72,7 +72,7 @@ class StatementStats
       statements_under_us_act as (
         select year_month, count(*) as us_statements
         from all_published_statements
-        where name = 'California Transparency in Supply Chains Act'
+        where name = '#{Legislation::CALIFORNIA_NAME}'
         group by year_month
       ),
       statements_table as (

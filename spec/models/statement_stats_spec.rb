@@ -26,7 +26,7 @@ RSpec.describe StatementStats do
   end
 
   let! :us_legislation do
-    Legislation.create! name: 'California Transparency in Supply Chains Act', icon: 'us'
+    Legislation.create! name: Legislation::CALIFORNIA_NAME, icon: 'us'
   end
 
   let! :cucumber do

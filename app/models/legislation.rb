@@ -5,6 +5,7 @@ class Legislation < ApplicationRecord
   scope(:included_in_compliance_stats, -> { where(include_in_compliance_stats: true) })
 
   UK_NAME = 'UK Modern Slavery Act'.freeze
+  CALIFORNIA_NAME = 'California Transparency in Supply Chains Act'.freeze
 
   def requires_statement_attribute?(attribute)
     requires_statement_attributes.split(',').map(&:strip).include?(attribute.to_s)
