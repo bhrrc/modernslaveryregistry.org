@@ -29,7 +29,7 @@ function renderTotalStatementsOverTime(totalByMonth) {
           "fill":false,
           "borderColor":"rgb(75, 192, 192)",
           "lineTension": 0.1,
-          "yAxisID": "y-axis-2"
+          "yAxisID": "y-axis-1"
         },
         {
           "label":"California Transparency in Supply Chains Act",
@@ -37,7 +37,7 @@ function renderTotalStatementsOverTime(totalByMonth) {
           "fill":false,
           "borderColor":"rgb(75, 192, 192)",
           "lineTension": 0.1,
-          "yAxisID": "y-axis-2"
+          "yAxisID": "y-axis-1"
         }
       ]
     },
@@ -48,13 +48,8 @@ function renderTotalStatementsOverTime(totalByMonth) {
           { type: 'linear',
             display: true,
             position: 'left',
-            id: 'y-axis-1' },
-          { type: 'linear',
-            display: true,
-            position: 'right',
-            id: 'y-axis-2',
-            gridLines: { drawOnChartArea: false },
-          }],
+            id: 'y-axis-1' }
+        ],
       }
     }
   })
