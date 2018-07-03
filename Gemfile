@@ -43,6 +43,10 @@ group :development do
   gem 'web-console', '>= 3.3.0'
 end
 
+group :docsplit do
+  gem 'docsplit'
+end
+
 group :test do
   gem 'capybara-email'
   gem 'cucumber-rails', require: false

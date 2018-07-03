@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+Bundler.require(:docsplit)
+
+OUTPUT_PATH = Rails.root.join('original-statements')
+OUTPUT_PATH.mkpath
+
+CONTENT_TYPES_VS_EXTENSIONS = {
+  "application/pdf" => "pdf",
+  "text/html" => "html",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document" => "docx",
+  "image/jpeg" => "jpg",
+  "application/rtf" => "rtf",
+  "application/msword" => "doc"
+}
+
+Statement.all.each.with_index do |statement, index|
+  next unless snapshot = statement.snapshot
+  next unless original = snapshot.original
+  next unless content_type = original.content_type rescue nil
+
+  company_name = statement.company.name.parameterize(preserve_case: true)
+  filename = "#{company_name} - #{statement.id}"
+  extension = CONTENT_TYPES_VS_EXTENSIONS[content_type]
+  path = OUTPUT_PATH.join("#{filename}.#{extension}")
+  puts "#{index}: #{path}"
+
+  File.open(path, 'wb') do |file|
+    file.write(original.download)
+  end
+end

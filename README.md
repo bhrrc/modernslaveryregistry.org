@@ -50,3 +50,37 @@ $ PORT=9292 foreman start
 # Optionally restore database backup from Heroku
 $ pg_restore --no-owner --clean --if-exists --dbname="msaregistry_development" ./tmp/modern-slavery-db.pgdump
 ```
+
+## Exporting original statements to local disk
+
+```
+$ bundle exec rails r script/export-statements-to-local-disk original-statements
+```
+
+## Extracting text from PDF statements
+
+You will need to install the following [`Docsplit` dependencies](http://documentcloud.github.io/docsplit/#installation):
+
+Linux:
+
+```
+apt-get install -y graphicsmagick
+apt-get install -y poppler-utils poppler-data
+apt-get install -y ghostscript
+apt-get install -y tesseract-ocr
+```
+
+MacOS:
+
+```
+brew install graphicsmagick
+brew install poppler
+brew install ghostscript
+brew install tesseract
+```
+
+To extract text from all PDF files in a directory:
+
+```
+$ find original-statements -name "*.pdf" -type f -print0 | xargs -I{} -0 docsplit text "{}"
+```
