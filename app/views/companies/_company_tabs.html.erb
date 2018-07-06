@@ -10,6 +10,11 @@
           <%= link_to 'Visit Company in Admin', admin_company_path(@company), class: 'button' %>
         <% end %>
       </div>
+      <div class="column is-narrow">
+        <% if @company.bhrrc_url? %>
+          <%= link_to 'Visit company in Business & Human Rights Resource Centre', @company.bhrrc_url, class: 'button' %>
+        <% end %>
+      </div>
     </div>
 
     <ul class="tags">
