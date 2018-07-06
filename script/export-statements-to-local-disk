@@ -17,7 +17,11 @@ CONTENT_TYPES_VS_EXTENSIONS = {
 Statement.all.each.with_index do |statement, index|
   next unless snapshot = statement.snapshot
   next unless original = snapshot.original
-  next unless content_type = original.content_type rescue nil
+  next unless content_type = begin
+                               original.content_type
+                             rescue
+                               nil
+                             end
 
   company_name = statement.company.name.parameterize(preserve_case: true)
   filename = "#{company_name} - #{statement.id}"
