@@ -6,12 +6,12 @@ OUTPUT_PATH = Rails.root.join('original-statements')
 OUTPUT_PATH.mkpath
 
 CONTENT_TYPES_VS_EXTENSIONS = {
-  "application/pdf" => "pdf",
-  "text/html" => "html",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document" => "docx",
-  "image/jpeg" => "jpg",
-  "application/rtf" => "rtf",
-  "application/msword" => "doc"
+  'application/pdf' => 'pdf',
+  'text/html' => 'html',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx',
+  'image/jpeg' => 'jpg',
+  'application/rtf' => 'rtf',
+  'application/msword' => 'doc'
 }
 
 Statement.all.each.with_index do |statement, index|
