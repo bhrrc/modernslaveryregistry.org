@@ -12,7 +12,7 @@ CONTENT_TYPES_VS_EXTENSIONS = {
   'image/jpeg' => 'jpg',
   'application/rtf' => 'rtf',
   'application/msword' => 'doc'
-}
+}.freeze
 
 Statement.all.each.with_index do |statement, index|
   next unless snapshot = statement.snapshot
