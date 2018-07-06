@@ -159,5 +159,11 @@ RSpec.describe Statement, type: :model do
         Statement.search(include_unpublished: false, criteria: { industries: [agriculture.id, software.id] }).statements
       ).to eq([cucumber_2016, potato_2016])
     end
+
+    it 'handles queries containing punctuation' do
+      expect(
+        Statement.search(include_unpublished: false, criteria: { company_name: 'cucumber &' }).statements
+      ).to eq([cucumber_2016])
+    end
   end
 end

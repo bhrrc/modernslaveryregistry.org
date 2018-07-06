@@ -57,7 +57,7 @@ class StatementSearch
   def company_search_query
     <<-SQL
       to_tsvector(concat_ws(' ', companies.name, companies.subsidiary_names)) @@
-      ts_rewrite(to_tsquery(?), 'SELECT target, substitute FROM search_aliases')
+      ts_rewrite(plainto_tsquery(?), 'SELECT target, substitute FROM search_aliases')
     SQL
   end
 
