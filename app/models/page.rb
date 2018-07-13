@@ -20,6 +20,10 @@ class Page < ApplicationRecord
     find_by!(slug: param)
   end
 
+  def self.last_changed
+    pluck(:updated_at).max
+  end
+
   def banner?
     # Banner page was used for "in memory of". Change this regexp to make other
     # pages show up as banner.

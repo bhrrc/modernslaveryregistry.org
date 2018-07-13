@@ -57,11 +57,32 @@ module ApplicationHelper
     request.referer.presence || root_path
   end
 
+  def cache_across_pages(name)
+    last_changed = Page.last_changed
+    Rails.cache.fetch("#{name}/#{last_changed.to_i}/#{admin?}", expires_in: 3.days) do
+      return yield
+    end
+  end
+
+  def nav_links
+    cache_across_pages('nav') do
+      all_pages.reject(&:banner?).map do |page|
+        [page.short_title, page_path(page)]
+      end
+    end
+  end
+
+  def all_pages
+    cache_across_pages('pages') do
+      Page.include_drafts(admin?).as_list.to_a
+    end
+  end
+
   def banner_page
-    Page.include_drafts(admin?).as_list.find(&:banner?)
+    all_pages.find(&:banner?)
   end
 
   def numbers_explained_page
-    Page.include_drafts(admin?).as_list.find(&:numbers_explained?)
+    all_pages.find(&:numbers_explained?)
   end
 end
