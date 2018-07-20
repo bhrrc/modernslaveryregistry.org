@@ -90,5 +90,5 @@ brew install tesseract
 To extract text from all PDF files in a directory:
 
 ```
-$ find original-statements -name "*.pdf" -type f -print0 | xargs -I{} -0 docsplit text "{}"
+$ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0 bundle exec docsplit text "{}"
 ```
