@@ -29,7 +29,13 @@ Statement.all.each.with_index do |statement, index|
   path = OUTPUT_PATH.join("#{filename}.#{extension}")
   puts "#{index}: #{path}"
 
-  File.open(path, 'wb') do |file|
-    file.write(original.download)
+  next if File.exist?(path)
+
+  begin
+    File.open(path, 'wb') do |file|
+      file.write(original.download)
+    end
+  rescue Aws::S3::Errors::NoSuchKey
+    puts "NoSuchKey for #{index}: #{path}"
   end
 end
