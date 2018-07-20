@@ -67,7 +67,7 @@ $ bundle exec rails r script/export-statements-to-local-disk original-statements
 
 ## Extracting text from PDF statements
 
-You will need to install the following [`Docsplit` dependencies](http://documentcloud.github.io/docsplit/#installation):
+If you are not using the Vagrant VM, you will need to install the following [`Docsplit` dependencies](http://documentcloud.github.io/docsplit/#installation):
 
 Linux:
 
