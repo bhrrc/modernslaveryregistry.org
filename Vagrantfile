@@ -109,6 +109,12 @@ Vagrant.configure('2') do |config|
     # JavaScript runtime for ExecJS
     apt-get install -y nodejs
 
+    # Docsplit dependencies
+    apt-get install -y graphicsmagick
+    apt-get install -y poppler-utils poppler-data
+    apt-get install -y ghostscript
+    apt-get install -y tesseract-ocr
+
     # Set environment variable to allow me to detect whether I'm in the dev-vm
     echo "export RUNNING_IN_VAGRANT=true" > /etc/profile.d/env-vars.sh
   SHELL
