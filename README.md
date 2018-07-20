@@ -53,6 +53,14 @@ $ pg_restore --no-owner --clean --if-exists --dbname="msaregistry_development" .
 
 ## Exporting original statements to local disk
 
+Modify `config/environments/development` to use Amazon S3 for storage
+
+```
+config.active_storage.service = :amazon
+```
+
+Make sure you have AWS keys set in your environment (see `config/storage.yml` for details) and then run
+
 ```
 $ bundle exec rails r script/export-statements-to-local-disk original-statements
 ```
