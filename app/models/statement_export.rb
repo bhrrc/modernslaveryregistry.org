@@ -20,7 +20,8 @@ class StatementExport
     url: 'URL',
     industry_name: 'Industry',
     country_name: 'HQ',
-    date_seen: 'Date Added'
+    date_seen: 'Date Added',
+    also_covers_companies: 'Also Covers Companies'
   }.freeze
 
   EXTRA_FIELDS = {

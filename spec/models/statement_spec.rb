@@ -236,6 +236,7 @@ RSpec.describe Statement, type: :model do
                                                 link_on_front_page: true,
                                                 verified_by: user,
                                                 date_seen: Date.parse('2017-03-22'),
+                                                also_covers_companies: 'one,two,three',
                                                 published: true)
 
         statement.fetch_snapshot
@@ -243,8 +244,8 @@ RSpec.describe Statement, type: :model do
         csv = Statement.to_csv(@company.statements.includes(company: %i[industry country]), false)
 
         expect(csv).to eq(<<~CSV
-          Company,URL,Industry,HQ,Date Added
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22
+          Company,URL,Industry,HQ,Date Added,Also Covers Companies
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,"one,two,three"
         CSV
                          )
       end
@@ -274,8 +275,8 @@ RSpec.describe Statement, type: :model do
         csv = Statement.to_csv(@company.statements.includes(company: %i[industry country]), true)
 
         expect(csv).to eq(<<~CSV
-          Company,URL,Industry,HQ,Date Added,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Company ID
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,#{statement.company_id}
+          Company,URL,Industry,HQ,Date Added,Also Covers Companies,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Company ID
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,#{statement.company_id}
         CSV
                          )
       end
