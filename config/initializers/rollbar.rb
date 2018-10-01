@@ -31,6 +31,7 @@ Rollbar.configure do |config|
   config.exception_level_filters.merge!(
     'AbstractController::ActionNotFound' => 'ignore',
     'ActionController::RoutingError' => 'ignore',
+    'ActionController::UnknownFormat' => 'ignore',
     'ActiveRecord::RecordNotFound' => 'ignore'
   )
 
