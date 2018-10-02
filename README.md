@@ -27,6 +27,38 @@ For production you should use:
 
     heroku run rails db:seed # the env vars are already set
 
+## Deploying
+
+### Install and configure the EB CLI
+
+We're currently using the [EB CLI][eb-cli] to deploy. Install and configure it as follows:
+
+```
+# Install using Homebrew
+$ brew install aws-elasticbeanstalk
+
+# Change to the directory containing the Rails app
+$ cd /path/to/modernslaveryregistry
+
+# Configure the EB CLI
+# NOTE. You'll need an access and secret key of an admin user that can create resources in AWS
+$ eb init --region eu-west-2 modern-slavery-registry
+You have not yet set up your credentials or your credentials are incorrect 
+You must provide your credentials.
+(aws-access-id): <enter-access-key>
+(aws-secret-key): <enter-secret-key>
+Note: Elastic Beanstalk now supports AWS CodeCommit; a fully-managed source control service. To learn more, see Docs: https://aws.amazon.com/codecommit/
+Do you wish to continue with CodeCommit? (y/N) (default is n): n
+```
+
+### Deploy the app
+
+```
+$ eb deploy
+```
+
+[eb-cli]: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html
+
 ## Developing using Vagrant
 
 ```
