@@ -29,7 +29,9 @@ For production you should use:
 
 ## Deploying
 
-### Install and configure the EB CLI
+The app is hosted on AWS.
+
+### Install and configure the Elastic Beanstalk CLI
 
 We're currently using the [EB CLI][eb-cli] to deploy. Install and configure it as follows:
 
@@ -58,6 +60,16 @@ $ eb deploy
 ```
 
 [eb-cli]: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html
+
+### SSH access to the EC2 instances
+
+NOTE. This should be a last resort and hopefully not required given all the logging provided by Elastic Beanstalk.
+
+Elastic Beanstalk adds the aws-eb key to the EC2 instances. You'll need the private part of this key in order to SSH into the boxes. The key is currently held by Go Free Range so contact them for access.
+
+```
+$ eb ssh
+```
 
 ## Developing using Vagrant
 
