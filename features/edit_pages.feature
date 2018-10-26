@@ -37,7 +37,7 @@ Feature: Amend pages
       | Page C |
     When Joe moves the page "Page A" down
     And Joe moves the page "Page C" up
-    Then Joe should see the following pages on the website:
+    Then Joe should see the following pages in the header navigation on the website:
       | Title  |
       | Page B |
       | Page C |
@@ -50,7 +50,7 @@ Feature: Amend pages
       | Page B | No        |
       | Page C | Yes       |
     When Vicky is logged in
-    Then Vicky should see the following pages on the website:
+    Then Vicky should see the following pages in the header navigation on the website:
       | Title  |
       | Page A |
       | Page C |

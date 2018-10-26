@@ -88,7 +88,7 @@ Then('{actor} should not see the deleted page on the website') do |actor|
   expect(actor.visible_header_navigation_menu.titles).to eq([])
 end
 
-Then('{actor} should see the following pages on the website:') do |actor, table|
+Then('{actor} should see the following pages in the header navigation on the website:') do |actor, table|
   expect(actor.visible_header_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 
