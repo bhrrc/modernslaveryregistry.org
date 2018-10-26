@@ -84,10 +84,6 @@ Then('{actor} should see the updated page on the website') do |actor|
   expect(actor.visible_page.page_html).to eq('New Body')
 end
 
-Then('{actor} should see the following menu on the website:') do |actor, table|
-  expect(actor.visible_header_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
-end
-
 Then('{actor} should not see the deleted page on the website') do |actor|
   expect(actor.visible_header_navigation_menu.titles).to eq([])
 end

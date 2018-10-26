@@ -37,7 +37,7 @@ Feature: Amend pages
       | Page C |
     When Joe moves the page "Page A" down
     And Joe moves the page "Page C" up
-    Then Joe should see the following menu on the website:
+    Then Joe should see the following pages on the website:
       | Title  |
       | Page B |
       | Page C |
