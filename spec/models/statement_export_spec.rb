@@ -28,7 +28,9 @@ RSpec.describe StatementExport do
                                date_seen: Date.parse('2017-03-22'),
                                also_covers_companies: 'one,two,three',
                                published: true,
-                               legislations: [uk_legislation])
+                               legislations: [uk_legislation],
+                               first_year_covered: 2018,
+                               last_year_covered: 2019)
   end
 
   before do
@@ -61,6 +63,7 @@ RSpec.describe StatementExport do
                              'Also Covers Companies',
                              Legislation::UK_NAME,
                              Legislation::CALIFORNIA_NAME,
+                             'Period Covered',
                              'Approved by Board',
                              'Approved by',
                              'Signed by Director',
@@ -80,6 +83,7 @@ RSpec.describe StatementExport do
                            'one,two,three',
                            'true',
                            'false',
+                           '2018-2019',
                            'Yes',
                            'Big Boss',
                            'false',
@@ -105,7 +109,8 @@ RSpec.describe StatementExport do
                              'HQ',
                              'Also Covers Companies',
                              Legislation::UK_NAME,
-                             Legislation::CALIFORNIA_NAME
+                             Legislation::CALIFORNIA_NAME,
+                             'Period Covered'
                            ])
     end
   end
