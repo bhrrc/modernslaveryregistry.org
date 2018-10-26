@@ -35,65 +35,62 @@ RSpec.describe StatementExport do
         content_data: 'image data!'
       )
     end
+
+    VCR.use_cassette('cucumber.io') do
+      statement.fetch_snapshot
+      statement.save!
+    end
   end
 
   describe 'to_csv' do
     it 'turns rows into CSV' do
-      VCR.use_cassette('cucumber.io') do
-        statement.fetch_snapshot
-        statement.save!
-        csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), false)
+      csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), false)
 
-        header, data = CSV.parse(csv)
+      header, data = CSV.parse(csv)
 
-        expect(header).to eq(['Company', 'URL', 'Industry', 'HQ', 'Also Covers Companies'])
-        expect(data).to eq(['Cucumber Ltd', 'https://cucumber.io/', 'Software', 'United Kingdom', 'one,two,three'])
-      end
+      expect(header).to eq(['Company', 'URL', 'Industry', 'HQ', 'Also Covers Companies'])
+      expect(data).to eq(['Cucumber Ltd', 'https://cucumber.io/', 'Software', 'United Kingdom', 'one,two,three'])
     end
 
     it 'turns rows into CSV with more columns for admins' do
-      VCR.use_cassette('cucumber.io') do
-        statement.fetch_snapshot
-        statement.save!
-        csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), true)
+      csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), true)
 
-        header, data = CSV.parse(csv)
+      header, data = CSV.parse(csv)
 
-        expect(header).to eq([
-                               'Company',
-                               'URL',
-                               'Industry',
-                               'HQ',
-                               'Also Covers Companies',
-                               'Approved by Board',
-                               'Approved by',
-                               'Signed by Director',
-                               'Signed by',
-                               'Link on Front Page',
-                               'Published',
-                               'Verified by',
-                               'Contributed by',
-                               'Broken URL',
-                               'Company ID'
-                             ])
-        expect(data).to eq([
-                             'Cucumber Ltd',
-                             'https://cucumber.io/',
-                             'Software',
-                             'United Kingdom',
-                             'one,two,three',
-                             'Yes',
-                             'Big Boss',
-                             'false',
-                             'Little Boss',
-                             'true',
-                             'true',
-                             'admin@somewhere.com',
-                             'contributor@somewhere.com',
-                             'false',
-                             statement.company_id.to_s
+      expect(header).to eq([
+                             'Company',
+                             'URL',
+                             'Industry',
+                             'HQ',
+                             'Also Covers Companies',
+                             'Approved by Board',
+                             'Approved by',
+                             'Signed by Director',
+                             'Signed by',
+                             'Link on Front Page',
+                             'Published',
+                             'Verified by',
+                             'Contributed by',
+                             'Broken URL',
+                             'Company ID'
                            ])
-      end
+      expect(data).to eq([
+                           'Cucumber Ltd',
+                           'https://cucumber.io/',
+                           'Software',
+                           'United Kingdom',
+                           'one,two,three',
+                           'Yes',
+                           'Big Boss',
+                           'false',
+                           'Little Boss',
+                           'true',
+                           'true',
+                           'admin@somewhere.com',
+                           'contributor@somewhere.com',
+                           'false',
+                           statement.company_id.to_s
+                         ])
     end
   end
 end
