@@ -12,6 +12,10 @@ RSpec.describe StatementExport do
                  admin: true)
   end
 
+  let(:uk_legislation) do
+    Legislation.create! name: Legislation::UK_NAME, icon: 'uk'
+  end
+
   let(:statement) do
     company.statements.create!(url: 'http://cucumber.io/',
                                approved_by: 'Big Boss',
@@ -23,7 +27,8 @@ RSpec.describe StatementExport do
                                contributor_email: 'contributor@somewhere.com',
                                date_seen: Date.parse('2017-03-22'),
                                also_covers_companies: 'one,two,three',
-                               published: true)
+                               published: true,
+                               legislations: [uk_legislation])
   end
 
   before do
@@ -48,8 +53,22 @@ RSpec.describe StatementExport do
 
       header, data = CSV.parse(csv)
 
-      expect(header).to eq(['Company', 'URL', 'Industry', 'HQ', 'Also Covers Companies'])
-      expect(data).to eq(['Cucumber Ltd', 'https://cucumber.io/', 'Software', 'United Kingdom', 'one,two,three'])
+      expect(header).to eq([
+                             'Company',
+                             'URL',
+                             'Industry',
+                             'HQ',
+                             'Also Covers Companies',
+                             Legislation::UK_NAME
+                           ])
+      expect(data).to eq([
+                           'Cucumber Ltd',
+                           'https://cucumber.io/',
+                           'Software',
+                           'United Kingdom',
+                           'one,two,three',
+                           'true'
+                         ])
     end
 
     it 'adds additional fields when extra parameter is true' do
@@ -63,6 +82,7 @@ RSpec.describe StatementExport do
                              'Industry',
                              'HQ',
                              'Also Covers Companies',
+                             Legislation::UK_NAME,
                              'Approved by Board',
                              'Approved by',
                              'Signed by Director',
@@ -80,6 +100,7 @@ RSpec.describe StatementExport do
                            'Software',
                            'United Kingdom',
                            'one,two,three',
+                           'true',
                            'Yes',
                            'Big Boss',
                            'false',

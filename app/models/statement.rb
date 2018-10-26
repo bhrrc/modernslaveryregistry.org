@@ -114,6 +114,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     self.last_year_covered = years[1]
   end
 
+  def uk_modern_slavery_act?
+    legislations.any? { |legislation| legislation.name == Legislation::UK_NAME }
+  end
+
   private
 
   def legislation_requires?(attribute)

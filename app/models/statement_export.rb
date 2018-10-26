@@ -20,7 +20,8 @@ class StatementExport
     url: 'URL',
     industry_name: 'Industry',
     country_name: 'HQ',
-    also_covers_companies: 'Also Covers Companies'
+    also_covers_companies: 'Also Covers Companies',
+    'uk_modern_slavery_act?' => Legislation::UK_NAME
   }.freeze
 
   EXTRA_FIELDS = {
