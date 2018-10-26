@@ -5,7 +5,7 @@
         <div class="nav-menu nav-center">
           <%= link_to 'Home', root_path, class: 'nav-item' %>
           <%= link_to 'Browse statements', explore_path, class: 'nav-item' %>
-          <% nav_links.each do |title, path| %>
+          <% footer_nav_links.each do |title, path| %>
             <%= link_to title, path, class: 'nav-item' %>
           <% end %>
         </div>

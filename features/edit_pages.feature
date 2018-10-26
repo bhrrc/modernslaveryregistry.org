@@ -62,3 +62,19 @@ Feature: Amend pages
     When Vicky is logged in
     And Vicky visits the page "Page A"
     Then Vicky should not see the page on the website
+
+  Scenario: Visitors can see different pages in header and footer navigation
+    Given the following pages exist:
+      | Title  | Published | Header | Footer |
+      | Page A | Yes       | Yes    | Yes    |
+      | Page B | Yes       | Yes    | No     |
+      | Page C | Yes       | No     | Yes    |
+    When Vicky is logged in
+    Then Vicky should see the following pages in the header navigation on the website:
+      | Title  |
+      | Page A |
+      | Page B |
+    And Vicky should see the following pages in the footer navigation on the website:
+      | Title  |
+      | Page A |
+      | Page C |

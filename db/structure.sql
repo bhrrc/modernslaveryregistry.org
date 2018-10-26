@@ -303,7 +303,9 @@ CREATE TABLE public.pages (
     "position" integer NOT NULL,
     published boolean,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    header boolean DEFAULT true,
+    footer boolean DEFAULT true
 );
 
 
@@ -1018,6 +1020,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180627105355'),
 ('20180627130240'),
 ('20180627172935'),
-('20180707135549');
-
-
+('20180707135549'),
+('20181026102647');

@@ -64,9 +64,17 @@ module ApplicationHelper
     end
   end
 
-  def nav_links
-    cache_across_pages('nav') do
-      all_pages.reject(&:banner?).map do |page|
+  def header_nav_links
+    cache_across_pages('header_nav') do
+      all_pages.reject(&:banner?).select(&:header?).map do |page|
+        [page.short_title, page_path(page)]
+      end
+    end
+  end
+
+  def footer_nav_links
+    cache_across_pages('footer_nav') do
+      all_pages.reject(&:banner?).select(&:footer?).map do |page|
         [page.short_title, page_path(page)]
       end
     end

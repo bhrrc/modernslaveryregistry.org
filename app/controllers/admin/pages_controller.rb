@@ -37,7 +37,7 @@ module Admin
     end
 
     def pages_params
-      params.require(:page).permit(:position, :slug, :title, :short_title, :published, :body_html)
+      params.require(:page).permit(:position, :slug, :title, :short_title, :published, :body_html, :header, :footer)
     end
   end
 end

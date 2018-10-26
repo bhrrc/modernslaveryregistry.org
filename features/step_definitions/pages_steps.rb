@@ -1,12 +1,16 @@
 Given('the following pages exist:') do |table|
   table.hashes.each do |props|
-    Page.create!(
+    attrs = {
       title: props['Title'],
       short_title: props['Title'],
       slug: props['Title'].downcase.delete(' '),
       body_html: "Body of #{props['Title']}",
-      published: props['Published'] == 'Yes'
-    )
+      published: props['Published'] == 'Yes',
+    }
+    attrs[:header] = props['Header'] == 'Yes' if props['Header'].present?
+    attrs[:footer] = props['Footer'] == 'Yes' if props['Footer'].present?
+
+    Page.create!(attrs)
   end
 end
 
@@ -92,6 +96,12 @@ Then('{actor} should see the following pages in the header navigation on the web
   expect(actor.visible_header_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 
+Then('{actor} should see the following pages in the footer navigation on the website:') do |actor, table|
+  default_menu_items = ['Home', 'Browse statements']
+  page_titles = default_menu_items + table.hashes.map { |props| props['Title'] }
+  expect(actor.visible_footer_navigation_menu.titles).to eq(page_titles)
+end
+
 module ManagesPages
   def attempts_to_create_page(slug:, title:, short_title:, body_html:)
     visit admin_pages_path
@@ -164,6 +174,11 @@ module SeesPages
   def visible_header_navigation_menu
     visit root_path
     NavMenu.with(titles: all('header .nav-menu .nav-item').map(&:text))
+  end
+
+  def visible_footer_navigation_menu
+    visit root_path
+    NavMenu.with(titles: all('footer .nav-menu .nav-item').map(&:text))
   end
 
   class NavMenu < Value.new(:titles)
