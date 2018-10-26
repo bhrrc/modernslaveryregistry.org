@@ -30,8 +30,10 @@ RSpec.describe StatementExport do
                                                approved_by: 'Big Boss',
                                                approved_by_board: 'Yes',
                                                signed_by_director: false,
+                                               signed_by: 'Little Boss',
                                                link_on_front_page: true,
                                                verified_by: user,
+                                               contributor_email: 'contributor@somewhere.com',
                                                date_seen: Date.parse('2017-03-22'),
                                                also_covers_companies: 'one,two,three',
                                                published: true)
@@ -58,6 +60,7 @@ RSpec.describe StatementExport do
                                                verified_by: user,
                                                contributor_email: 'contributor@somewhere.com',
                                                date_seen: Date.parse('2017-03-22'),
+                                               also_covers_companies: 'one,two,three',
                                                published: true)
 
         statement.fetch_snapshot
@@ -88,7 +91,7 @@ RSpec.describe StatementExport do
                              'https://cucumber.io/',
                              'Software',
                              'United Kingdom',
-                             nil,
+                             'one,two,three',
                              'Yes',
                              'Big Boss',
                              'false',
