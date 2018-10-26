@@ -39,8 +39,8 @@ RSpec.describe StatementExport do
         csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), false)
 
         expect(csv).to eq(<<~CSV
-          Company,URL,Industry,HQ,Date Added,Also Covers Companies
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,"one,two,three"
+          Company,URL,Industry,HQ,Also Covers Companies
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,"one,two,three"
         CSV
                          )
       end
@@ -70,8 +70,8 @@ RSpec.describe StatementExport do
         csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), true)
 
         expect(csv).to eq(<<~CSV
-          Company,URL,Industry,HQ,Date Added,Also Covers Companies,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Company ID
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,2017-03-22,,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,#{statement.company_id}
+          Company,URL,Industry,HQ,Also Covers Companies,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Company ID
+          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,#{statement.company_id}
         CSV
                          )
       end

@@ -8,8 +8,7 @@ Then('{actor} should see all the published statements') do |actor|
       company_name: statement.company.name,
       company_url: statement.url,
       industry_name: statement.company.industry.name,
-      country_name: statement.company.country.name,
-      date_seen: statement.date_seen.iso8601
+      country_name: statement.company.country.name
     )
   end
   expect(actor.visible_downloaded_statements).to match_array(expected_downloads)
@@ -21,8 +20,7 @@ Then('{actor} should see all the statements including drafts') do |actor|
       company_name: statement.company.name,
       company_url: statement.url,
       industry_name: statement.company.industry.name,
-      country_name: statement.company.country.name,
-      date_seen: statement.date_seen.iso8601
+      country_name: statement.company.country.name
     )
   end
   expect(actor.visible_downloaded_statements).to match_array(expected_downloads)
@@ -40,8 +38,7 @@ module DownloadsStatements
         company_name: row['Company'],
         company_url: row['URL'],
         industry_name: row['Industry'],
-        country_name: row['HQ'],
-        date_seen: row['Date Added']
+        country_name: row['HQ']
       )
     end
   end
@@ -55,7 +52,6 @@ class DownloadedStatement < Value.new(
   :company_name,
   :company_url,
   :industry_name,
-  :country_name,
-  :date_seen
+  :country_name
 )
 end
