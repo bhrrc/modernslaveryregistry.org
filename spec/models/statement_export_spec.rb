@@ -4,6 +4,13 @@ RSpec.describe StatementExport do
   let(:industry) { Industry.create! name: 'Software' }
   let(:country) { Country.create! code: 'GB', name: 'United Kingdom' }
   let(:company) { Company.create! name: 'Cucumber Ltd', country: country, industry: industry }
+  let(:user) do
+    User.create!(first_name: 'Super',
+                 last_name: 'Admin',
+                 email: 'admin@somewhere.com',
+                 password: 'whatevs',
+                 admin: true)
+  end
 
   before do
     allow(ScreenGrab).to receive(:fetch) do |url|
@@ -19,11 +26,6 @@ RSpec.describe StatementExport do
   describe 'to_csv' do
     it 'turns rows into CSV' do
       VCR.use_cassette('cucumber.io') do
-        user = User.create!(first_name: 'Someone',
-                            last_name: 'Smith',
-                            email: 'someone@somewhere.com',
-                            password: 'whatevs')
-
         statement = company.statements.create!(url: 'http://cucumber.io/',
                                                approved_by: 'Big Boss',
                                                approved_by_board: 'Yes',
@@ -48,12 +50,6 @@ RSpec.describe StatementExport do
 
     it 'turns rows into CSV with more columns for admins' do
       VCR.use_cassette('cucumber.io') do
-        user = User.create!(first_name: 'Super',
-                            last_name: 'Admin',
-                            email: 'admin@somewhere.com',
-                            password: 'whatevs',
-                            admin: true)
-
         statement = company.statements.create!(url: 'http://cucumber.io/',
                                                approved_by: 'Big Boss',
                                                approved_by_board: 'Yes',
