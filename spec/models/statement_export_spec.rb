@@ -12,6 +12,20 @@ RSpec.describe StatementExport do
                  admin: true)
   end
 
+  let(:statement) do
+    company.statements.create!(url: 'http://cucumber.io/',
+                               approved_by: 'Big Boss',
+                               approved_by_board: 'Yes',
+                               signed_by_director: false,
+                               signed_by: 'Little Boss',
+                               link_on_front_page: true,
+                               verified_by: user,
+                               contributor_email: 'contributor@somewhere.com',
+                               date_seen: Date.parse('2017-03-22'),
+                               also_covers_companies: 'one,two,three',
+                               published: true)
+  end
+
   before do
     allow(ScreenGrab).to receive(:fetch) do |url|
       FetchResult.with(
@@ -26,18 +40,6 @@ RSpec.describe StatementExport do
   describe 'to_csv' do
     it 'turns rows into CSV' do
       VCR.use_cassette('cucumber.io') do
-        statement = company.statements.create!(url: 'http://cucumber.io/',
-                                               approved_by: 'Big Boss',
-                                               approved_by_board: 'Yes',
-                                               signed_by_director: false,
-                                               signed_by: 'Little Boss',
-                                               link_on_front_page: true,
-                                               verified_by: user,
-                                               contributor_email: 'contributor@somewhere.com',
-                                               date_seen: Date.parse('2017-03-22'),
-                                               also_covers_companies: 'one,two,three',
-                                               published: true)
-
         statement.fetch_snapshot
         statement.save!
         csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), false)
@@ -51,18 +53,6 @@ RSpec.describe StatementExport do
 
     it 'turns rows into CSV with more columns for admins' do
       VCR.use_cassette('cucumber.io') do
-        statement = company.statements.create!(url: 'http://cucumber.io/',
-                                               approved_by: 'Big Boss',
-                                               approved_by_board: 'Yes',
-                                               signed_by_director: false,
-                                               signed_by: 'Little Boss',
-                                               link_on_front_page: true,
-                                               verified_by: user,
-                                               contributor_email: 'contributor@somewhere.com',
-                                               date_seen: Date.parse('2017-03-22'),
-                                               also_covers_companies: 'one,two,three',
-                                               published: true)
-
         statement.fetch_snapshot
         statement.save!
         csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), true)
