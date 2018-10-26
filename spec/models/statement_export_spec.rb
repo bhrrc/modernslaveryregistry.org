@@ -40,11 +40,10 @@ RSpec.describe StatementExport do
         statement.save!
         csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), false)
 
-        expect(csv).to eq(<<~CSV
-          Company,URL,Industry,HQ,Also Covers Companies
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,"one,two,three"
-        CSV
-                         )
+        header, data = CSV.parse(csv)
+
+        expect(header).to eq(['Company', 'URL', 'Industry', 'HQ', 'Also Covers Companies'])
+        expect(data).to eq(['Cucumber Ltd', 'https://cucumber.io/', 'Software', 'United Kingdom', 'one,two,three'])
       end
     end
 
@@ -65,11 +64,42 @@ RSpec.describe StatementExport do
         statement.save!
         csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), true)
 
-        expect(csv).to eq(<<~CSV
-          Company,URL,Industry,HQ,Also Covers Companies,Approved by Board,Approved by,Signed by Director,Signed by,Link on Front Page,Published,Verified by,Contributed by,Broken URL,Company ID
-          Cucumber Ltd,https://cucumber.io/,Software,United Kingdom,,Yes,Big Boss,false,Little Boss,true,true,admin@somewhere.com,contributor@somewhere.com,false,#{statement.company_id}
-        CSV
-                         )
+        header, data = CSV.parse(csv)
+
+        expect(header).to eq([
+                               'Company',
+                               'URL',
+                               'Industry',
+                               'HQ',
+                               'Also Covers Companies',
+                               'Approved by Board',
+                               'Approved by',
+                               'Signed by Director',
+                               'Signed by',
+                               'Link on Front Page',
+                               'Published',
+                               'Verified by',
+                               'Contributed by',
+                               'Broken URL',
+                               'Company ID'
+                             ])
+        expect(data).to eq([
+                             'Cucumber Ltd',
+                             'https://cucumber.io/',
+                             'Software',
+                             'United Kingdom',
+                             nil,
+                             'Yes',
+                             'Big Boss',
+                             'false',
+                             'Little Boss',
+                             'true',
+                             'true',
+                             'admin@somewhere.com',
+                             'contributor@somewhere.com',
+                             'false',
+                             statement.company_id.to_s
+                           ])
       end
     end
   end
