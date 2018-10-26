@@ -118,6 +118,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     legislations.any? { |legislation| legislation.name == Legislation::UK_NAME }
   end
 
+  def california_transparency_in_supply_chains_act?
+    legislations.any? { |legislation| legislation.name == Legislation::CALIFORNIA_NAME }
+  end
+
   private
 
   def legislation_requires?(attribute)

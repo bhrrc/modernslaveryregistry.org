@@ -59,7 +59,8 @@ RSpec.describe StatementExport do
                              'Industry',
                              'HQ',
                              'Also Covers Companies',
-                             Legislation::UK_NAME
+                             Legislation::UK_NAME,
+                             Legislation::CALIFORNIA_NAME
                            ])
       expect(data).to eq([
                            'Cucumber Ltd',
@@ -67,7 +68,8 @@ RSpec.describe StatementExport do
                            'Software',
                            'United Kingdom',
                            'one,two,three',
-                           'true'
+                           'true',
+                           'false'
                          ])
     end
 
@@ -83,6 +85,7 @@ RSpec.describe StatementExport do
                              'HQ',
                              'Also Covers Companies',
                              Legislation::UK_NAME,
+                             Legislation::CALIFORNIA_NAME,
                              'Approved by Board',
                              'Approved by',
                              'Signed by Director',
@@ -101,6 +104,7 @@ RSpec.describe StatementExport do
                            'United Kingdom',
                            'one,two,three',
                            'true',
+                           'false',
                            'Yes',
                            'Big Boss',
                            'false',

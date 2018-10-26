@@ -21,7 +21,8 @@ class StatementExport
     industry_name: 'Industry',
     country_name: 'HQ',
     also_covers_companies: 'Also Covers Companies',
-    'uk_modern_slavery_act?' => Legislation::UK_NAME
+    'uk_modern_slavery_act?' => Legislation::UK_NAME,
+    'california_transparency_in_supply_chains_act?' => Legislation::CALIFORNIA_NAME
   }.freeze
 
   EXTRA_FIELDS = {
