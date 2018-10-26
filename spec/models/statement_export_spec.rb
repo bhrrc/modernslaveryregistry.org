@@ -48,32 +48,7 @@ RSpec.describe StatementExport do
   end
 
   describe 'to_csv' do
-    it 'turns rows into CSV' do
-      csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), false)
-
-      header, data = CSV.parse(csv)
-
-      expect(header).to eq([
-                             'Company',
-                             'URL',
-                             'Industry',
-                             'HQ',
-                             'Also Covers Companies',
-                             Legislation::UK_NAME,
-                             Legislation::CALIFORNIA_NAME
-                           ])
-      expect(data).to eq([
-                           'Cucumber Ltd',
-                           'https://cucumber.io/',
-                           'Software',
-                           'United Kingdom',
-                           'one,two,three',
-                           'true',
-                           'false'
-                         ])
-    end
-
-    it 'adds additional fields when extra parameter is true' do
+    it 'returns data relevant for exporting in a CSV format' do
       csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), true)
 
       header, data = CSV.parse(csv)
@@ -116,6 +91,22 @@ RSpec.describe StatementExport do
                            'false',
                            statement.company_id.to_s
                          ])
+    end
+
+    it 'ommits admin-only information when the extra parameter is false' do
+      csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), false)
+
+      header, = CSV.parse(csv)
+
+      expect(header).to eq([
+                             'Company',
+                             'URL',
+                             'Industry',
+                             'HQ',
+                             'Also Covers Companies',
+                             Legislation::UK_NAME,
+                             Legislation::CALIFORNIA_NAME
+                           ])
     end
   end
 end
