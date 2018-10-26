@@ -85,15 +85,15 @@ Then('{actor} should see the updated page on the website') do |actor|
 end
 
 Then('{actor} should see the following menu on the website:') do |actor, table|
-  expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
+  expect(actor.visible_header_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 
 Then('{actor} should not see the deleted page on the website') do |actor|
-  expect(actor.visible_main_navigation_menu.titles).to eq([])
+  expect(actor.visible_header_navigation_menu.titles).to eq([])
 end
 
 Then('{actor} should see the following pages on the website:') do |actor, table|
-  expect(actor.visible_main_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
+  expect(actor.visible_header_navigation_menu.titles).to eq(table.hashes.map { |props| props['Title'] })
 end
 
 module ManagesPages
@@ -165,7 +165,7 @@ module SeesPages
   class RenderedPage < Value.new(:page_html)
   end
 
-  def visible_main_navigation_menu
+  def visible_header_navigation_menu
     visit root_path
     NavMenu.with(titles: all('header .nav-menu .nav-item').map(&:text))
   end
