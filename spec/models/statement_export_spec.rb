@@ -52,7 +52,7 @@ RSpec.describe StatementExport do
       expect(data).to eq(['Cucumber Ltd', 'https://cucumber.io/', 'Software', 'United Kingdom', 'one,two,three'])
     end
 
-    it 'turns rows into CSV with more columns for admins' do
+    it 'adds additional fields when extra parameter is true' do
       csv = Statement.to_csv(company.statements.includes(company: %i[industry country]), true)
 
       header, data = CSV.parse(csv)
