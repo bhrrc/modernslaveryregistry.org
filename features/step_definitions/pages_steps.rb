@@ -5,7 +5,7 @@ Given('the following pages exist:') do |table|
       short_title: props['Title'],
       slug: props['Title'].downcase.delete(' '),
       body_html: "Body of #{props['Title']}",
-      published: props['Published'] == 'Yes',
+      published: props['Published'] == 'Yes'
     }
     attrs[:header] = props['Header'] == 'Yes' if props['Header'].present?
     attrs[:footer] = props['Footer'] == 'Yes' if props['Footer'].present?
