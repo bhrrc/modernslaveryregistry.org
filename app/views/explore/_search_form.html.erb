@@ -103,9 +103,19 @@
       <!-- Left empty for spacing -->
     </div>
     <div class="field-body">
-      <div class="field">
+      <div class="field is-grouped">
         <div class="control">
           <%= submit_tag 'Search', name: '', enforce_utf8: false, class: "button is-primary search-button" %>
+        </div>
+        <div class="control">
+          <% if @statements.any? %>
+            <%= link_to @download_url, class: 'button is-primary is-expanded' do %>
+              <span class="icon">
+                <i class="fa fa-download"></i>
+              </span>
+              <span>Download statements</span>
+            <% end %>
+          <% end %>
         </div>
       </div>
     </div>
