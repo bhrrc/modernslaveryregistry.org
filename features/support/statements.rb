@@ -14,7 +14,7 @@ module Statements
     country = Country.find_by!(name: props.delete('Country') || 'United Kingdom')
     company = Company.find_or_create_by!(
       name: props.delete('Company name'),
-      subsidiary_names: props.delete('Subsidiary names'),
+      related_companies: props.delete('Related companies'),
       industry: industry,
       country: country
     )

@@ -51,7 +51,7 @@ module Admin
 
     COMPANY_ATTRIBUTES = %i[
       name
-      subsidiary_names
+      related_companies
       country_id
       industry_id
       bhrrc_url

@@ -125,13 +125,13 @@ CREATE TABLE public.ar_internal_metadata (
 --
 
 CREATE TABLE public.companies (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     country_id integer,
     sector_id integer,
-    subsidiary_names character varying,
+    related_companies character varying,
     industry_id integer,
     bhrrc_url character varying
 );
@@ -161,7 +161,7 @@ ALTER SEQUENCE public.companies_id_seq OWNED BY public.companies.id;
 --
 
 CREATE TABLE public.countries (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     code character varying NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -195,7 +195,7 @@ ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 --
 
 CREATE TABLE public.industries (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     sector_name character varying,
     sector_code integer,
     industry_group_name character varying,
@@ -229,7 +229,7 @@ ALTER SEQUENCE public.industries_id_seq OWNED BY public.industries.id;
 --
 
 CREATE TABLE public.legislation_statements (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     legislation_id integer NOT NULL,
     statement_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -261,7 +261,7 @@ ALTER SEQUENCE public.legislation_statements_id_seq OWNED BY public.legislation_
 --
 
 CREATE TABLE public.legislations (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     name character varying NOT NULL,
     icon character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -295,7 +295,7 @@ ALTER SEQUENCE public.legislations_id_seq OWNED BY public.legislations.id;
 --
 
 CREATE TABLE public.pages (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     title character varying NOT NULL,
     short_title character varying NOT NULL,
     slug character varying NOT NULL,
@@ -372,7 +372,7 @@ ALTER SEQUENCE public.search_aliases_id_seq OWNED BY public.search_aliases.id;
 --
 
 CREATE TABLE public.sectors (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -403,7 +403,7 @@ ALTER SEQUENCE public.sectors_id_seq OWNED BY public.sectors.id;
 --
 
 CREATE TABLE public.snapshots (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     statement_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -434,7 +434,7 @@ ALTER SEQUENCE public.snapshots_id_seq OWNED BY public.snapshots.id;
 --
 
 CREATE TABLE public.statements (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     company_id integer NOT NULL,
     url character varying NOT NULL,
     date_seen date NOT NULL,
@@ -482,7 +482,7 @@ ALTER SEQUENCE public.statements_id_seq OWNED BY public.statements.id;
 --
 
 CREATE TABLE public.users (
-    id bigint NOT NULL,
+    id integer NOT NULL,
     email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
     reset_password_token character varying,
@@ -778,17 +778,17 @@ CREATE INDEX index_companies_on_name ON public.companies USING gist (name public
 
 
 --
+-- Name: index_companies_on_related_companies; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_related_companies ON public.companies USING gist (related_companies public.gist_trgm_ops);
+
+
+--
 -- Name: index_companies_on_sector_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_companies_on_sector_id ON public.companies USING btree (sector_id);
-
-
---
--- Name: index_companies_on_subsidiary_names; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_companies_on_subsidiary_names ON public.companies USING gist (subsidiary_names public.gist_trgm_ops);
 
 
 --
@@ -1021,4 +1021,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20180627130240'),
 ('20180627172935'),
 ('20180707135549'),
-('20181026102647');
+('20181026102647'),
+('20181102142511');
+
+

@@ -6,10 +6,10 @@ Feature: Search statements
       | Act X |
       | Act Y |
     And the following statements have been submitted:
-      | Company name | Subsidiary names | Also covers companies | Statement URL          | Country        | Industry    | Verified by | Legislations | Published |
-      | Cucumber Ltd | Cuke Labs        | Aubergine Inc         | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    | Act X        | Yes       |
-      | Banana Ltd   |                  |                       | https://banana.io/s    | France         | Agriculture | Patricia    | Act X, Act Y | Yes       |
-      | Cucumber Inc |                  |                       | https://cucumber.inc/s | United States  | Retail      |             | Act Y        | No        |
+      | Company name | Related companies | Also covers companies | Statement URL          | Country        | Industry    | Verified by | Legislations | Published |
+      | Cucumber Ltd | Cuke Labs         | Aubergine Inc         | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    | Act X        | Yes       |
+      | Banana Ltd   |                   |                       | https://banana.io/s    | France         | Agriculture | Patricia    | Act X, Act Y | Yes       |
+      | Cucumber Inc |                   |                       | https://cucumber.inc/s | United States  | Retail      |             | Act Y        | No        |
 
   Scenario: Search by company name
     Given Joe is logged in
@@ -22,7 +22,7 @@ Feature: Search statements
     When Joe searches for "cucumber limited"
     Then Joe should only see "Cucumber Ltd" in the search results
 
-  Scenario: Search by subsidiary name
+  Scenario: Search by related company name
     Given Joe is logged in
     When Joe searches for "cuke"
     Then Joe should only see "Cucumber Ltd" in the search results
