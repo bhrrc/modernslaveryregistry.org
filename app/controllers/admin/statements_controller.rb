@@ -1,6 +1,6 @@
 module Admin
   class StatementsController < AdminController
-    before_action :find_company
+    before_action :find_company, except: [:unpublished]
 
     def edit
       @statement = @company.statements.find(params[:id])
@@ -8,6 +8,11 @@ module Admin
 
     def show
       @statement = @company.statements.find(params[:id])
+    end
+
+    def unpublished
+      compare = ->(a, b) { a.company.name <=> b.company.name }
+      @statements = Statement.where(published: false).includes(:company).order('created_at DESC').sort(&compare)
     end
 
     def new

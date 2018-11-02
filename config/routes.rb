@@ -26,6 +26,11 @@ Rails.application.routes.draw do
         post :snapshot, on: :member
       end
     end
+    resources :statements, only: [] do
+      collection do
+        get :unpublished
+      end
+    end
   end
 
   get 'pages/:id', to: 'pages#show', as: :page
