@@ -30,6 +30,7 @@ Rollbar.configure do |config|
   # config.exception_level_filters.merge!('MyCriticalException' => lambda { |e| 'critical' })
   config.exception_level_filters.merge!(
     'AbstractController::ActionNotFound' => 'ignore',
+    'ActionController::BadRequest' => 'ignore',
     'ActionController::RoutingError' => 'ignore',
     'ActionController::UnknownFormat' => 'ignore',
     'ActiveRecord::RecordNotFound' => 'ignore'
