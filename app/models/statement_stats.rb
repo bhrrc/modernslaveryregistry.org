@@ -8,11 +8,13 @@ class StatementStats
   end
 
   def uk_companies_count
-    published_uk_statements.select('companies.id').distinct.count
+    published_uk_statements.select('companies.id').distinct.count +
+      published_uk_statements.sum(:additional_companies_covered)
   end
 
   def california_companies_count
-    published_california_statements.select('companies.id').distinct.count
+    published_california_statements.select('companies.id').distinct.count +
+      published_uk_statements.sum(:additional_companies_covered)
   end
 
   def total_statements_over_time
