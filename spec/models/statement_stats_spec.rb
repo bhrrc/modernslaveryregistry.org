@@ -139,27 +139,6 @@ RSpec.describe StatementStats do
     expect(stats.uk_companies_count).to eq(2)
   end
 
-  context 'when a statement covers additional companies' do
-    before do
-      cucumber.statements.create!(
-        url: 'http://cucumber.io/2018',
-        approved_by: 'Aslak',
-        approved_by_board: 'Yes',
-        signed_by_director: false,
-        link_on_front_page: true,
-        date_seen: Date.parse('21 May 2018'),
-        published: true,
-        contributor_email: 'someone@somewhere.com',
-        also_covers_companies: 'carrot ltd, banana ltd',
-        legislations: [uk_legislation]
-      )
-    end
-
-    it 'adds the also_covers_companies to the total' do
-      expect(stats.uk_companies_count).to eq(4)
-    end
-  end
-
   it 'counts companies with published statements under California legislation' do
     expect(stats.california_companies_count).to eq(1)
   end
