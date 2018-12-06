@@ -27,9 +27,13 @@ Statement.all.each.with_index do |statement, index|
   filename = "#{company_name} - #{statement.id}"
   extension = CONTENT_TYPES_VS_EXTENSIONS[content_type]
   path = OUTPUT_PATH.join("#{filename}.#{extension}")
-  puts "#{index}: #{path}"
 
-  next if File.exist?(path)
+  if File.exist?(path)
+    puts "skip: #{path}"
+    next
+  else
+    puts "#{index}: #{path}"
+  end
 
   begin
     File.open(path, 'wb') do |file|
