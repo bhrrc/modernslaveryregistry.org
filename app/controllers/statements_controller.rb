@@ -1,6 +1,14 @@
 class StatementsController < ApplicationController
   include ApplicationHelper
 
+  def index
+    @statements = Statement.most_recently_published
+
+    respond_to do |format|
+      format.rss { render layout: false }
+    end
+  end
+
   def new
     @company = Company.find(params[:company_id])
     @statements = @company.published_statements

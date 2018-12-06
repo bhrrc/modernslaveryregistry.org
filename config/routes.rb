@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'modernslaveryregistry', to: 'explore#index'
   get 'thanks', to: 'cms#thanks'
 
+  resources :statements, only: :index
   resources :countries
   resources :companies do
     resources :statements do

@@ -24,6 +24,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:published, -> { where(published: true) })
   scope(:latest, -> { where(latest: true) })
   scope(:latest_published, -> { where(latest_published: true) })
+  scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
 
   delegate :country_name, :industry_name, to: :company
 
