@@ -18,6 +18,10 @@ Metrics/LineLength:
   Exclude:
     - 'features/step_definitions/*.rb'
 
+Metrics/ClassLength:
+  Exclude:
+    - 'app/models/statement_stats.rb'
+
 Rails:
   Enabled: true
 

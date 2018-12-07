@@ -59,7 +59,8 @@ RSpec.describe StatementStats do
       date_seen: Date.parse('21 May 2016'),
       published: true,
       contributor_email: 'someone@somewhere.com',
-      legislations: [uk_legislation]
+      legislations: [uk_legislation],
+      also_covers_companies: 'banana ltd, strawberry co'
     )
   end
 
@@ -73,7 +74,8 @@ RSpec.describe StatementStats do
       date_seen: Date.parse('22 June 2017'),
       published: true,
       contributor_email: 'someone@somewhere.com',
-      legislations: [uk_legislation]
+      legislations: [uk_legislation],
+      also_covers_companies: 'banana ltd, strawberry co'
     )
   end
 
@@ -141,6 +143,14 @@ RSpec.describe StatementStats do
 
   it 'counts companies with published statements under California legislation' do
     expect(stats.california_companies_count).to eq(1)
+  end
+
+  it 'counts unique also covered companies under UK legislation' do
+    expect(stats.uk_also_covered_companies_count).to eq(2)
+  end
+
+  it 'counts unique also covered companies under California legislation' do
+    expect(stats.california_also_covered_companies_count).to eq(0)
   end
 
   it 'groups counts of statements by month' do
