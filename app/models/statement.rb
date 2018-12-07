@@ -19,7 +19,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   after_commit :perform_snapshot_job
   after_save :mark_latest
   after_save :mark_latest_published
-  before_save :set_additional_companies_covered
 
   scope(:published, -> { where(published: true) })
   scope(:latest, -> { where(latest: true) })
@@ -122,10 +121,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def california_transparency_in_supply_chains_act?
     legislations.any? { |legislation| legislation.name == Legislation::CALIFORNIA_NAME }
-  end
-
-  def set_additional_companies_covered
-    self.additional_companies_covered = also_covers_companies.split(',').size if also_covers_companies
   end
 
   private

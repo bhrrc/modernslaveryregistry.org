@@ -88,25 +88,6 @@ RSpec.describe Statement, type: :model do
     end
   end
 
-  describe 'additional_companies_covered' do
-    let(:company) { Company.create!(name: 'company-name') }
-
-    it 'counts the number of comma seperated also_covers_companies' do
-      statement = company.statements.create!(also_covers_companies: 'company1,company2', url: 'http://example.com')
-      expect(statement.additional_companies_covered).to eq(2)
-    end
-
-    it 'is zero when also_covers_companies is null' do
-      statement = company.statements.create!(url: 'http://example.com')
-      expect(statement.additional_companies_covered).to eq(0)
-    end
-
-    it 'is zero when also_covers_companies is blank' do
-      statement = company.statements.create!(also_covers_companies: '', url: 'http://example.com')
-      expect(statement.additional_companies_covered).to eq(0)
-    end
-  end
-
   describe 'validation' do
     it 'disallows invalid URLs' do
       statement = Statement.new(url: '\\')
