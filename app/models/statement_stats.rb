@@ -8,19 +8,21 @@ class StatementStats
   end
 
   def uk_companies_count
-    published_uk_statements.select('companies.id').distinct.count
+    published_uk_statements.select('companies.id').distinct.count +
+      uk_also_covered_companies_count
   end
 
   def uk_also_covered_companies_count
     count_unique_also_covered_companies(published_uk_statements)
   end
 
-  def california_also_covered_companies_count
-    count_unique_also_covered_companies(published_california_statements)
+  def california_companies_count
+    published_california_statements.select('companies.id').distinct.count +
+      california_also_covered_companies_count
   end
 
-  def california_companies_count
-    published_california_statements.select('companies.id').distinct.count
+  def california_also_covered_companies_count
+    count_unique_also_covered_companies(published_california_statements)
   end
 
   def total_statements_over_time

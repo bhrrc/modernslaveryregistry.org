@@ -137,11 +137,11 @@ RSpec.describe StatementStats do
     expect(stats.california_statements_count).to eq(1)
   end
 
-  it 'counts companies with published statements under UK legislation' do
-    expect(stats.uk_companies_count).to eq(2)
+  it 'counts companies with published statements and also covered companies under UK legislation' do
+    expect(stats.uk_companies_count).to eq(4)
   end
 
-  it 'counts companies with published statements under California legislation' do
+  it 'counts companies with published statements and also covered companies under California legislation' do
     expect(stats.california_companies_count).to eq(1)
   end
 
