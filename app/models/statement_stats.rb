@@ -46,6 +46,7 @@ class StatementStats
       .not(also_covers_companies: nil)
       .pluck(:also_covers_companies)
       .flat_map { |companies| companies.split(',') }
+      .map(&:strip)
       .uniq
       .size
   end
