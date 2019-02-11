@@ -83,7 +83,7 @@ $ cd /vagrant/
 $ bundle install
 $ bundle exec rake db:create
 $ bin/rails db:environment:set RAILS_ENV=development
-$ bundle exec rake db:schema:load
+$ bundle exec rake db:structure:load
 
 # Run the tests
 $ bundle exec rake
