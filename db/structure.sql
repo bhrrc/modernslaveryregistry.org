@@ -157,6 +157,16 @@ ALTER SEQUENCE public.companies_id_seq OWNED BY public.companies.id;
 
 
 --
+-- Name: companies_statements; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.companies_statements (
+    company_id bigint NOT NULL,
+    statement_id bigint NOT NULL
+);
+
+
+--
 -- Name: countries; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -790,6 +800,20 @@ CREATE INDEX index_companies_on_sector_id ON public.companies USING btree (secto
 
 
 --
+-- Name: index_companies_statements_on_company_id_and_statement_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_statements_on_company_id_and_statement_id ON public.companies_statements USING btree (company_id, statement_id);
+
+
+--
+-- Name: index_companies_statements_on_statement_id_and_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_statements_on_statement_id_and_company_id ON public.companies_statements USING btree (statement_id, company_id);
+
+
+--
 -- Name: index_countries_on_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1009,6 +1033,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181102142511'),
 ('20181122133945'),
 ('20181207162629'),
+('20190211145234'),
 ('20190212105711'),
 ('20190212135333');
 
