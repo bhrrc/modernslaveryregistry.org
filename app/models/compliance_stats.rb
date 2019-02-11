@@ -15,12 +15,13 @@ class ComplianceStats
       ),
       published_statements AS (
         SELECT statements.*,
-               ROW_NUMBER() OVER(PARTITION BY statements.company_id
+               ROW_NUMBER() OVER(PARTITION BY companies_statements.company_id
                                  ORDER BY statements.last_year_covered DESC, statements.date_seen DESC) AS reverse_publication_order
         FROM statements_included_in_compliance_stats AS statements
+        INNER JOIN companies_statements ON statements.id = companies_statements.statement_id
         WHERE published IS TRUE )
 
-      SELECT id FROM published_statements
+      SELECT DISTINCT(id) FROM published_statements
       WHERE reverse_publication_order = 1
     SQL
 

@@ -1,8 +1,8 @@
 class Company < ApplicationRecord
-  has_many :statements,
-           -> { order(last_year_covered: :desc, date_seen: :desc) },
-           dependent: :destroy,
-           inverse_of: :company
+  has_and_belongs_to_many :statements,
+                          -> { order(last_year_covered: :desc, date_seen: :desc) },
+                          dependent: :destroy,
+                          inverse_of: :company
   belongs_to :country, optional: true
   belongs_to :industry, optional: true
 

@@ -5,7 +5,7 @@ class StatementSearch
   end
 
   def statements
-    @statements = Statement.includes(:verified_by, :legislations, company: %i[industry country industry])
+    @statements = Statement.includes(:verified_by, :legislations, companies: %i[industry country industry])
     filter_by_published
     filter_by_company
     filter_by_legislations
@@ -41,7 +41,7 @@ class StatementSearch
   end
 
   def filter_by_company
-    @company_join = @statements.joins(:company)
+    @company_join = @statements.joins(:companies)
     filter_by_company_name
     filter_by_company_industry
     filter_by_company_country

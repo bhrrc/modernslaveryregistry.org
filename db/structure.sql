@@ -445,7 +445,6 @@ ALTER SEQUENCE public.snapshots_id_seq OWNED BY public.snapshots.id;
 
 CREATE TABLE public.statements (
     id integer NOT NULL,
-    company_id integer NOT NULL,
     url character varying NOT NULL,
     date_seen date NOT NULL,
     approved_by_board character varying,
@@ -863,13 +862,6 @@ CREATE INDEX index_snapshots_on_statement_id ON public.snapshots USING btree (st
 
 
 --
--- Name: index_statements_on_company_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_statements_on_company_id ON public.statements USING btree (company_id);
-
-
---
 -- Name: index_statements_on_published; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -910,14 +902,6 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 ALTER TABLE ONLY public.legislation_statements
     ADD CONSTRAINT fk_rails_0ac00a9478 FOREIGN KEY (statement_id) REFERENCES public.statements(id);
-
-
---
--- Name: statements fk_rails_6379882950; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.statements
-    ADD CONSTRAINT fk_rails_6379882950 FOREIGN KEY (company_id) REFERENCES public.companies(id);
 
 
 --
@@ -1035,6 +1019,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181207162629'),
 ('20190211145234'),
 ('20190211145930'),
+('20190211151528'),
 ('20190212105711'),
 ('20190212135333');
 

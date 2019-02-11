@@ -3,7 +3,7 @@ require 'uri'
 class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
-  belongs_to :company, optional: true
+  has_and_belongs_to_many :companies, optional: true
   belongs_to :verified_by, class_name: 'User', optional: true
   has_one :snapshot, dependent: :destroy
   has_many :legislation_statements, dependent: :destroy
@@ -22,6 +22,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
 
   delegate :country_name, :industry_name, to: :company
+  delegate :id, to: :company, prefix: true
 
   attr_accessor :should_enqueue_snapshot
 
@@ -49,6 +50,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       e.message += "\nCompany Name: '#{company_name}', Statement URL: '#{statement_url}'"
       raise e
     end
+  end
+
+  def company
+    companies.first
   end
 
   def associate_with_user(user)

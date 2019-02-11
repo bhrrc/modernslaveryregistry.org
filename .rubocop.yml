@@ -25,6 +25,11 @@ Metrics/ClassLength:
 Rails:
   Enabled: true
 
+Rails/HasAndBelongsToMany:
+  Exclude:
+    - 'app/models/company.rb'
+    - 'app/models/statement.rb'
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
