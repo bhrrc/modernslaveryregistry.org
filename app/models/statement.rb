@@ -17,10 +17,8 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   before_create { self.date_seen ||= Time.zone.today }
   after_save :enqueue_snapshot unless ENV['no_fetch']
   after_commit :perform_snapshot_job
-  after_save :mark_latest_published
 
   scope(:published, -> { where(published: true) })
-  scope(:latest_published, -> { where(latest_published: true) })
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
 
   delegate :country_name, :industry_name, to: :company
@@ -157,12 +155,4 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       content_type: image_fetch_result.content_type
     )
   end
-
-  # rubocop:disable Rails/SkipsModelValidations
-  def mark_latest_published
-    return unless published?
-    company.statements.update_all(latest_published: false)
-    company.statements.published.limit(1).update_all(latest_published: true)
-  end
-  # rubocop:enable Rails/SkipsModelValidations
 end

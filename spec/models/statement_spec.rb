@@ -1,57 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Statement, type: :model do
-  describe 'marking latest published statement' do
-    it 'marks the published statement for the latest year covered' do
-      company = Company.create!(name: 'company-name')
-      latest_published_statement = company.statements.create!(
-        last_year_covered: 2016,
-        url: 'http://example.com',
-        published: true
-      )
-      earliest_published_statement = company.statements.create!(
-        last_year_covered: 2015,
-        url: 'http://example.com',
-        published: true
-      )
-      latest_statement = company.statements.create!(
-        last_year_covered: 2017,
-        url: 'http://example.com',
-        published: false
-      )
-
-      expect(earliest_published_statement.reload).not_to be_latest_published
-      expect(latest_statement.reload).not_to be_latest_published
-      expect(latest_published_statement.reload).to be_latest_published
-    end
-
-    it 'marks the published statement seen most recently' do
-      company = Company.create!(name: 'company-name')
-      earliest_published_statement = company.statements.create!(
-        last_year_covered: 2017,
-        date_seen: 3.days.ago,
-        url: 'http://example.com',
-        published: true
-      )
-      latest_published_statement = company.statements.create!(
-        last_year_covered: 2017,
-        date_seen: 2.days.ago,
-        url: 'http://example.com',
-        published: true
-      )
-      latest_statement = company.statements.create!(
-        last_year_covered: 2017,
-        date_seen: 1.day.ago,
-        url: 'http://example.com',
-        published: false
-      )
-
-      expect(earliest_published_statement.reload).not_to be_latest_published
-      expect(latest_statement.reload).not_to be_latest_published
-      expect(latest_published_statement.reload).to be_latest_published
-    end
-  end
-
   describe 'validation' do
     it 'disallows invalid URLs' do
       statement = Statement.new(url: '\\')
