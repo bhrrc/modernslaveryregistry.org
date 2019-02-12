@@ -7,7 +7,7 @@ class ComplianceStats
   def self.compile
     total = 0
     counts = { approved_by_board: 0, link_on_front_page?: 0, signed_by_director?: 0, fully_compliant?: 0 }
-    Statement.latest.joins(:legislations).merge(Legislation.included_in_compliance_stats).each do |statement|
+    Statement.latest_published.joins(:legislations).merge(Legislation.included_in_compliance_stats).each do |statement|
       counts.keys.each do |key|
         counts[key] += 1 if [true, 'Yes'].include? statement.send(key)
       end
