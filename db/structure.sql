@@ -449,7 +449,6 @@ CREATE TABLE public.statements (
     verified_by_id integer,
     published boolean DEFAULT false,
     contributor_email character varying,
-    latest boolean DEFAULT false,
     latest_published boolean DEFAULT false,
     marked_not_broken_url boolean DEFAULT false,
     first_year_covered integer,
@@ -848,13 +847,6 @@ CREATE INDEX index_statements_on_company_id ON public.statements USING btree (co
 
 
 --
--- Name: index_statements_on_latest; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_statements_on_latest ON public.statements USING btree (latest) WHERE latest;
-
-
---
 -- Name: index_statements_on_latest_published; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1024,6 +1016,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181026102647'),
 ('20181102142511'),
 ('20181122133945'),
-('20181207162629');
+('20181207162629'),
+('20190212105711');
 
 

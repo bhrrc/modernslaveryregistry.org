@@ -17,11 +17,9 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   before_create { self.date_seen ||= Time.zone.today }
   after_save :enqueue_snapshot unless ENV['no_fetch']
   after_commit :perform_snapshot_job
-  after_save :mark_latest
   after_save :mark_latest_published
 
   scope(:published, -> { where(published: true) })
-  scope(:latest, -> { where(latest: true) })
   scope(:latest_published, -> { where(latest_published: true) })
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
 
@@ -123,6 +121,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     legislations.any? { |legislation| legislation.name == Legislation::CALIFORNIA_NAME }
   end
 
+  def latest?
+    self == company.latest_statement
+  end
+
   private
 
   def legislation_requires?(attribute)
@@ -157,11 +159,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # rubocop:disable Rails/SkipsModelValidations
-  def mark_latest
-    company.statements.update_all(latest: false)
-    company.statements.limit(1).update_all(latest: true)
-  end
-
   def mark_latest_published
     return unless published?
     company.statements.update_all(latest_published: false)
