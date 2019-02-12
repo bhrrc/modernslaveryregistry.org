@@ -4,10 +4,34 @@ class ComplianceStats
     @total = total
   end
 
+  # rubocop:disable Metrics/MethodLength
+  def self.latest_published_statement_ids
+    sql = <<~SQL
+      WITH statements_included_in_compliance_stats AS (
+        SELECT statements.* FROM statements
+        INNER JOIN legislation_statements ON statements.id = legislation_statements.statement_id
+        INNER JOIN legislations ON legislations.id = legislation_statements.legislation_id
+        WHERE legislations.include_in_compliance_stats IS TRUE
+      ),
+      published_statements AS (
+        SELECT statements.*,
+               ROW_NUMBER() OVER(PARTITION BY statements.company_id
+                                 ORDER BY statements.last_year_covered DESC, statements.date_seen DESC) AS reverse_publication_order
+        FROM statements_included_in_compliance_stats AS statements
+        WHERE published IS TRUE )
+
+      SELECT id FROM published_statements
+      WHERE reverse_publication_order = 1
+    SQL
+
+    Statement.connection.select_values(sql)
+  end
+  # rubocop:enable Metrics/MethodLength
+
   def self.compile
     total = 0
     counts = { approved_by_board: 0, link_on_front_page?: 0, signed_by_director?: 0, fully_compliant?: 0 }
-    Statement.latest_published.joins(:legislations).merge(Legislation.included_in_compliance_stats).each do |statement|
+    Statement.where(id: latest_published_statement_ids).find_each do |statement|
       counts.keys.each do |key|
         counts[key] += 1 if [true, 'Yes'].include? statement.send(key)
       end
