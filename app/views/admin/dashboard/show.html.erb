@@ -41,7 +41,7 @@
   <div class="subsection">
     <div class="box">
       <h2 class="title is-2">Published Statement Compliance Stats</h2>
-      <table data-content="minimum_compliance_requirements_stats" class="table">
+      <table data-content="minimum_compliance_requirements_stats" class="table is-fullwidth">
         <tbody>
           <tr>
             <td>
@@ -84,7 +84,7 @@
     <div class="box">
       <h2 class="title is-2">New Statements (<%= @new_statements.count %>)</h2>
       <% if @new_statements.any? %>
-        <table data-content="new_statements" class="table">
+        <table data-content="new_statements" class="table is-fullwidth">
           <tbody>
             <% @new_statements.each do |statement| %>
               <tr>
@@ -105,7 +105,7 @@
     <div class="box">
       <h2 class="title is-2">Broken URLs (<%= @broken_urls.count %>)</h2>
       <% if @broken_urls.any? %>
-        <table data-content="broken_urls" class="table">
+        <table data-content="broken_urls" class="table is-fullwidth">
           <tbody>
             <% @broken_urls.each do |statement| %>
               <tr>

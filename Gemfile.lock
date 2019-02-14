@@ -67,7 +67,7 @@ GEM
     bcrypt (3.1.12)
     bindex (0.5.0)
     builder (3.2.3)
-    bulma-rails (0.4.3)
+    bulma-rails (0.5.1)
       sass (~> 3.2)
     byebug (10.0.2)
     capybara (3.2.1)
@@ -360,7 +360,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_list
   aws-sdk-s3
-  bulma-rails (= 0.4.3)
+  bulma-rails (= 0.5.1)
   byebug
   capybara-email
   chartjs-ror

@@ -8,7 +8,7 @@ end
 
 gem 'acts_as_list'
 gem 'aws-sdk-s3', require: false
-gem 'bulma-rails', '0.4.3'
+gem 'bulma-rails', '0.5.1'
 gem 'chartjs-ror'
 gem 'chosen-rails'
 gem 'coffee-rails', '~> 4.2'
