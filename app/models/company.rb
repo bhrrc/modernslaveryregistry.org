@@ -8,6 +8,8 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
+  before_destroy :delete_orphaned_statements
+
   def latest_statement
     statements.limit(1).first
   end
@@ -46,5 +48,13 @@ class Company < ApplicationRecord
 
   def to_param
     [id, name.parameterize].join('-')
+  end
+
+  private
+
+  def delete_orphaned_statements
+    statements.each do |statement|
+      statement.destroy if statement.companies == [self]
+    end
   end
 end
