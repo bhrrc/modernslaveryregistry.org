@@ -16,7 +16,7 @@ module Admin
       @page = Page.new
       @page.assign_attributes(pages_params)
       if @page.save
-        redirect_to %i[admin pages]
+        redirect_to admin_pages_path
       else
         render 'new'
       end
@@ -24,13 +24,13 @@ module Admin
 
     def destroy
       Page.from_param(params[:id]).delete
-      redirect_to %i[admin pages]
+      redirect_to admin_pages_path
     end
 
     def update
       @page = Page.from_param(params[:id])
       if @page.update(pages_params)
-        redirect_to %i[admin pages]
+        redirect_to admin_pages_path
       else
         render 'edit'
       end

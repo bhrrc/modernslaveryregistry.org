@@ -8,7 +8,7 @@ module Admin
       @user = User.new
       @user.assign_attributes(user_params)
       if @user.save
-        redirect_to %i[admin users]
+        redirect_to admin_users_path
       else
         render 'new'
       end
@@ -19,18 +19,18 @@ module Admin
     end
 
     def show
-      redirect_to [:edit, :admin, User.find(params[:id])]
+      redirect_to edit_admin_user_path(User.find(params[:id]))
     end
 
     def destroy
       User.find(params[:id]).delete
-      redirect_to %i[admin users]
+      redirect_to admin_users_path
     end
 
     def update
       @user = User.find(params[:id])
       if @user.update(user_params)
-        redirect_to %i[admin users]
+        redirect_to admin_users_path
       else
         render 'edit'
       end

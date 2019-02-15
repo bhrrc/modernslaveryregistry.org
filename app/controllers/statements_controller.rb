@@ -27,7 +27,7 @@ class StatementsController < ApplicationController
     @new_statement.associate_with_user(current_user) if user_signed_in?
 
     if @new_statement.save
-      redirect_to '/thanks'
+      redirect_to thanks_path
     else
       @statements = @company.published_statements
       render 'new'

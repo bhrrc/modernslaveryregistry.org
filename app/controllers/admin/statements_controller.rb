@@ -28,12 +28,12 @@ module Admin
       @statement = @company.statements.find(params[:id])
       @statement.fetch_snapshot
       @statement.save!
-      redirect_to [:admin, @company, @statement]
+      redirect_to admin_company_statement_path(@company, @statement)
     end
 
     def destroy
       @company.statements.destroy(params[:id])
-      redirect_to [:admin, @company]
+      redirect_to admin_company_path(@company)
     end
 
     def update
@@ -50,7 +50,7 @@ module Admin
     def mark_url_not_broken
       @statement = @company.statements.find(params[:id])
       @statement.update!(broken_url: false, marked_not_broken_url: true)
-      redirect_to [:admin, @company, @statement]
+      redirect_to admin_company_statement_path(@company, @statement)
     end
 
     private
