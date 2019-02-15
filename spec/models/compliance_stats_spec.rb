@@ -30,7 +30,7 @@ RSpec.describe ComplianceStats, type: :model do
       company1.statements << [old_statement, new_statement]
       company2.statements << old_statement
 
-      expect(ComplianceStats.latest_published_statement_ids).to eq([old_statement.id, new_statement.id])
+      expect(ComplianceStats.latest_published_statement_ids).to contain_exactly(old_statement.id, new_statement.id)
     end
   end
 end
