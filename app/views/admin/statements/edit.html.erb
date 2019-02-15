@@ -6,7 +6,7 @@
       <ul>
         <li><%= link_to 'Companies', admin_companies_path %></li>
         <li><%= link_to @statement.company.name, admin_company_path(@statement.company) %></li>
-        <li><%= link_to "Statement #{@statement.id}", admin_company_statement_path(@statement.company, @statement) %></li>
+        <li><%= link_to "Statement #{@statement.id}", admin_statement_path(@statement) %></li>
         <li class="is-active"><a href="#" aria-current="page">Edit</a></li>
       </ul>
     </nav>
@@ -18,14 +18,14 @@
         </h1>
       </div>
       <div class="column is-narrow">
-        <%= button_to "Delete Statement", admin_company_statement_path(@statement.company, @statement), method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
+        <%= button_to "Delete Statement", admin_statement_path(@statement), method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
       </div>
     </div>
 
     <%= render 'admin/statements/form', {
       company: nil,
       statement: @statement,
-      cancel_url: admin_company_statement_path(@statement.company, @statement)
+      cancel_url: admin_statement_path(@statement)
     } %>
   </div>
 </div>

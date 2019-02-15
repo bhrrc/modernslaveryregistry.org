@@ -295,7 +295,7 @@ end
 module UpdatesStatements
   def attempts_to_update_statement(company_name:, new_values:)
     company = Company.find_by!(name: company_name)
-    visit admin_company_statement_path(company, company.latest_statement)
+    visit admin_statement_path(company.latest_statement)
     click_link 'Edit Statement'
     fill_in_fields(new_values)
     click_button 'Update Statement'
@@ -303,7 +303,7 @@ module UpdatesStatements
 
   def attempts_to_mark_statement_url_as_not_broken(company_name:)
     company = Company.find_by!(name: company_name)
-    visit admin_company_statement_path(company, company.latest_statement)
+    visit admin_statement_path(company.latest_statement)
     click_on 'Mark URL not broken'
   end
 end
@@ -313,7 +313,7 @@ module DeletesStatements
 
   def attempts_to_delete_latest_statement_by_company(company_name:)
     company = Company.find_by(name: company_name)
-    visit admin_company_statement_path(company, company.latest_statement)
+    visit admin_statement_path(company.latest_statement)
     click_on 'Delete Statement'
   end
 end
@@ -327,7 +327,7 @@ module ViewsStatementsAsAdmin
   def visible_latest_statement_by_company(company_name:)
     company = Company.find_by!(name: company_name)
     raise "#{company.name} has no latest statement!" if company.latest_statement.nil?
-    visit admin_company_statement_path(company, company.latest_statement)
+    visit admin_statement_path(company.latest_statement)
     dom_struct(:statement, :url, :verified_by, :contributor_email,
                :published, :signed_by_director, :approved_by_board, :link_on_front_page,
                :legislations, :period_covered, :also_covers_companies)

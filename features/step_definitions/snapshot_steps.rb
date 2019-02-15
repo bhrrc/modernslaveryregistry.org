@@ -34,7 +34,7 @@ end
 module ViewsSnapshots
   def attempts_to_view_the_latest_snapshot(company_name:)
     company = Company.find_by(name: company_name)
-    visit(admin_company_statement_path(company, company.latest_statement))
+    visit(admin_statement_path(company.latest_statement))
     click_on 'Open Snapshot in new tab'
   end
 

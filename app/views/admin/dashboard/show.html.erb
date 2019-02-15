@@ -89,7 +89,7 @@
             <% @new_statements.each do |statement| %>
               <tr>
                 <td>
-                  <%= link_to statement.company.name, admin_company_statement_path(statement.company, statement) %>
+                  <%= link_to statement.company.name, admin_statement_path(statement) %>
                 </td>
               </tr>
             <% end %>
@@ -110,7 +110,7 @@
             <% @broken_urls.each do |statement| %>
               <tr>
                 <td>
-                  <%= link_to statement.company.name, admin_company_statement_path(statement.company, statement) %>
+                  <%= link_to statement.company.name, admin_statement_path(statement) %>
                 </td>
               </tr>
             <% end %>
