@@ -1,4 +1,6 @@
 class MigrateExistingCallToAction < ActiveRecord::Migration[5.2]
+  class CallToAction < ApplicationRecord; end
+
   def up
     new_cta.first_or_create
   end
