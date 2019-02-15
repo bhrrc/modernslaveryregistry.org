@@ -6,6 +6,17 @@ module Admin
       @statement = @company.statements.find(params[:id])
     end
 
+    def update
+      @statement = @company.statements.find(params[:id])
+      if @statement.update(statement_params)
+        @statement.associate_with_user(current_user)
+        @statement.save!
+        redirect_to admin_company_path(@company)
+      else
+        render :edit
+      end
+    end
+
     def show
       @statement = @company.statements.find(params[:id])
     end
@@ -34,17 +45,6 @@ module Admin
     def destroy
       @company.statements.destroy(params[:id])
       redirect_to admin_company_path(@company)
-    end
-
-    def update
-      @statement = @company.statements.find(params[:id])
-      if @statement.update(statement_params)
-        @statement.associate_with_user(current_user)
-        @statement.save!
-        redirect_to admin_company_path(@company)
-      else
-        render :edit
-      end
     end
 
     def mark_url_not_broken
