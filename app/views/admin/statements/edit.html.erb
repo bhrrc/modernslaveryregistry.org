@@ -25,7 +25,7 @@
     <%= render 'admin/statements/form', {
       company: @company,
       statement: @statement,
-      cancel_url: [:admin, @company, @statement]
+      cancel_url: admin_company_statement_path(@company, @statement)
     } %>
   </div>
 </div>
