@@ -1,0 +1,15 @@
+<% title 'New Call to Action' %>
+
+<div class="container">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Calls to Action', [:admin, :call_to_actions] %></li>
+        <li class="is-active"><a href="#" aria-current="cta">New Call to Action</a></li>
+      </ul>
+    </nav>
+
+    <h1 class="title is-1">New Call To Action</h1>
+    <%= render partial: 'form', locals: { call_to_action: @call_to_action } %>
+  </div>
+</div>

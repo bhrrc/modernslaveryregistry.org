@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   namespace :admin do
     root 'dashboard#show', as: :dashboard
     resources :pages
+    resources :call_to_actions
     resources :users
     resource :bulk_upload
     resources :companies do

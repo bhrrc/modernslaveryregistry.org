@@ -1,0 +1,54 @@
+<% title 'Admin: Call to Actions' %>
+
+<div class="container section">
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li class="is-active"><a href="#" aria-current="page">Calls to Action</a></li>
+    </ul>
+  </nav>
+
+  <div class="columns">
+    <div class="column">
+      <h1 class="title is-1">
+        Calls to Action
+      </h1>
+    </div>
+    <div class="column is-narrow">
+      <%= link_to 'New Call to Action', new_admin_call_to_action_path, class: 'button' %>
+    </div>
+  </div>
+
+  <div class="box">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Button Text</th>
+          <th>Url</th>
+          <th>Body</th>
+          <th style="width:1px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @call_to_actions.each do |cta| %>
+        <tr>
+          <td><%= link_to cta.title, edit_admin_call_to_action_path(cta) %></td>
+          <td><%= cta.button_text %></td>
+          <td><%= cta.url %></td>
+          <td><%= cta.body %></td>
+          <td>
+            <%= form_for [:admin, cta], method: 'delete' do |f| %>
+              <span class="icon">
+                <%= f.button '',
+                      title: "Delete '#{cta.title}'",
+                      class: 'fa fa-trash icon-button',
+                      data: { confirm: 'Are you sure?' } %>
+              </span>
+            <% end %>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

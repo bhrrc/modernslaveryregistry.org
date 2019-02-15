@@ -1,0 +1,21 @@
+<% title "Edit Page: #{@call_to_action.title}" %>
+
+<div class="container">
+  <div class="section">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+      <ul>
+        <li><%= link_to 'Calls to Action', [:admin, :call_to_actions] %></li>
+        <li class="is-active"><a href="#" aria-current="cta"><%= @call_to_action.title %></a></li>
+      </ul>
+    </nav>
+
+    <div class="columns">
+      <div class="column">
+        <h1 class="title is-1">
+          Edit Call to Action
+        </h1>
+      </div>
+    </div>
+    <%= render partial: 'form', locals: { call_to_action: @call_to_action } %>
+  </div>
+</div>
