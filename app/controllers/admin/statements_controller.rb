@@ -1,6 +1,6 @@
 module Admin
   class StatementsController < AdminController
-    before_action :find_company, except: %i[edit update show destroy mark_url_not_broken snapshot]
+    before_action :find_company, only: %i[new create]
 
     def edit
       @statement = Statement.find(params[:id])
