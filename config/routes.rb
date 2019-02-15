@@ -9,21 +9,21 @@ Rails.application.routes.draw do
   get 'thanks', to: 'cms#thanks'
 
   resources :statements, only: :index
-  resources :countries
-  resources :companies do
-    resources :statements do
+  resources :countries, only: :index
+  resources :companies, only: %i[new create show] do
+    resources :statements, only: %i[new create index show] do
       resource :snapshot, only: :show
     end
   end
 
   namespace :admin do
     root 'dashboard#show', as: :dashboard
-    resources :pages
-    resources :call_to_actions
-    resources :users
-    resource :bulk_upload
+    resources :pages, except: [:show]
+    resources :call_to_actions, except: [:show]
+    resources :users, except: [:new]
+    resource :bulk_upload, only: [:create]
     resources :companies do
-      resources :statements do
+      resources :statements, except: [:index] do
         post :mark_url_not_broken, on: :member
         post :snapshot, on: :member
       end
