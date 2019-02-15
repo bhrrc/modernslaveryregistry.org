@@ -22,7 +22,7 @@
             <%= link_to 'Edit Statement', edit_admin_statement_path(@statement), class: 'button' %>
           </div>
           <div class="control">
-            <%= button_to "Delete Statement", admin_company_statement_path(@statement.company, @statement), method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
+            <%= button_to "Delete Statement", admin_statement_path(@statement), method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
           </div>
         </div>
       </div>

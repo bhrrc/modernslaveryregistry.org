@@ -1,6 +1,6 @@
 module Admin
   class StatementsController < AdminController
-    before_action :find_company, except: %i[edit update show]
+    before_action :find_company, except: %i[edit update show destroy]
 
     def edit
       @statement = Statement.find(params[:id])
@@ -43,8 +43,11 @@ module Admin
     end
 
     def destroy
-      @company.statements.destroy(params[:id])
-      redirect_to admin_company_path(@company)
+      statement = Statement.find(params[:id])
+      company = statement.company
+      statement.destroy
+
+      redirect_to admin_company_path(company)
     end
 
     def mark_url_not_broken
