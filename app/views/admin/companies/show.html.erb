@@ -71,7 +71,7 @@
       </div>
       <div class="column is-narrow">
         <% if @company.latest_statement.present? %>
-          <%= link_to 'Edit Latest Statement', edit_admin_company_statement_path(@company, @company.latest_statement), class: 'button' %>
+          <%= link_to 'Edit Latest Statement', edit_admin_statement_path(@company.latest_statement), class: 'button' %>
         <% end %>
       </div>
     </div>

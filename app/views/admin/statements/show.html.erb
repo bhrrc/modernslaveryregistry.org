@@ -19,7 +19,7 @@
       <div class="column is-narrow">
         <div class="field is-grouped">
           <div class="control">
-            <%= link_to 'Edit Statement', edit_admin_company_statement_path(@statement.company, @statement), class: 'button' %>
+            <%= link_to 'Edit Statement', edit_admin_statement_path(@statement), class: 'button' %>
           </div>
           <div class="control">
             <%= button_to "Delete Statement", admin_company_statement_path(@statement.company, @statement), method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>

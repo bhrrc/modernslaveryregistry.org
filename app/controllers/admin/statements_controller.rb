@@ -1,17 +1,17 @@
 module Admin
   class StatementsController < AdminController
-    before_action :find_company
+    before_action :find_company, except: %i[edit update]
 
     def edit
-      @statement = @company.statements.find(params[:id])
+      @statement = Statement.find(params[:id])
     end
 
     def update
-      @statement = @company.statements.find(params[:id])
+      @statement = Statement.find(params[:id])
       if @statement.update(statement_params)
         @statement.associate_with_user(current_user)
         @statement.save!
-        redirect_to admin_company_path(@company)
+        redirect_to admin_company_path(@statement.company)
       else
         render :edit
       end

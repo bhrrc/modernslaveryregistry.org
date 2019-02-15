@@ -23,11 +23,12 @@ Rails.application.routes.draw do
     resources :users, except: [:new]
     resource :bulk_upload, only: [:create]
     resources :companies do
-      resources :statements, except: [:index] do
+      resources :statements, except: %i[index edit update] do
         post :mark_url_not_broken, on: :member
         post :snapshot, on: :member
       end
     end
+    resources :statements, only: %i[edit update]
   end
 
   get 'pages/:id', to: 'pages#show', as: :page
