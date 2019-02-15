@@ -45,25 +45,24 @@
   </div>
 </section>
 
+<% if @call_to_action %>
 <section class="section yellow-background">
   <div class="container">
     <div class="columns">
       <div class="column">
-        <h1 class="title is-3">FTSE 100 & the UK Modern Slavery Act:<br>
-          From Disclosure to Action</h1>
-        <%= link_to 'Download report', "https://www.business-humanrights.org/sites/default/files/FTSE%20100%20Briefing%202018.pdf",
+        <h1 class="title is-3"><%= @call_to_action.title %></h1>
+        <%= link_to @call_to_action.button_text, @call_to_action.url,
           class: 'button is-medium is-primary' %>
       </div>
       <div class="column">
         <h2 class="title is-4">
-          Read the third annual assessment of reporting under the Modern Slavery
-          Act by the UK’s largest companies. Find the highest and lowest scoring
-          companies, an analysis of trends, and examples of good practice.
+          <%= @call_to_action.body %>
         </h2>
       </div>
     </div>
   </div>
 </section>
+<% end %>
 
 <section class="section">
   <div class="container">
