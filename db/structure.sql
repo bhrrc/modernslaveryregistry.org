@@ -121,6 +121,38 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: call_to_actions; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.call_to_actions (
+    id bigint NOT NULL,
+    title character varying NOT NULL,
+    body text NOT NULL,
+    url character varying NOT NULL,
+    button_text character varying NOT NULL
+);
+
+
+--
+-- Name: call_to_actions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.call_to_actions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: call_to_actions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.call_to_actions_id_seq OWNED BY public.call_to_actions.id;
+
+
+--
 -- Name: companies; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -546,6 +578,13 @@ ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: call_to_actions id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.call_to_actions ALTER COLUMN id SET DEFAULT nextval('public.call_to_actions_id_seq'::regclass);
+
+
+--
 -- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -644,6 +683,14 @@ ALTER TABLE ONLY public.active_storage_blobs
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: call_to_actions call_to_actions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.call_to_actions
+    ADD CONSTRAINT call_to_actions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1021,6 +1068,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190211145930'),
 ('20190211151528'),
 ('20190212105711'),
-('20190212135333');
+('20190212135333'),
+('20190215100459'),
+('20190215102825');
 
 
