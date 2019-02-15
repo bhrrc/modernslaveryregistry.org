@@ -129,7 +129,8 @@ CREATE TABLE public.call_to_actions (
     title character varying NOT NULL,
     body text NOT NULL,
     url character varying NOT NULL,
-    button_text character varying NOT NULL
+    button_text character varying NOT NULL,
+    "position" integer DEFAULT 1
 );
 
 
@@ -1070,6 +1071,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190212105711'),
 ('20190212135333'),
 ('20190215100459'),
-('20190215102825');
+('20190215102825'),
+('20190215122136');
 
 

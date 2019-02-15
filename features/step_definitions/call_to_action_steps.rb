@@ -44,3 +44,26 @@ end
 Then('Joe should not see the deleted call to action on the homepage') do
   expect(page).not_to have_content('Existing call to action')
 end
+
+When('Joe changes the order of an existing call to action') do
+  CallToAction.create!(title: 'First call to action',
+                       button_text: 'button-text',
+                       url: 'http://example.com',
+                       body: 'body',
+                       position: 1)
+  CallToAction.create!(title: 'Second call to action',
+                       button_text: 'button-text',
+                       url: 'http://example.com',
+                       body: 'body',
+                       position: 2)
+
+  visit admin_call_to_actions_path
+  click_on "Move 'Second call to action' up"
+end
+
+Then('Joe should see the calls to action in the new order') do
+  within("//div[@id='cta-carousel']") do
+    titles = all('h1').map(&:text)
+    expect(titles).to eq(['Second call to action', 'First call to action'])
+  end
+end

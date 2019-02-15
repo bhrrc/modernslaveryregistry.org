@@ -16,3 +16,8 @@ Feature: Edit Calls to Action
     When Joe deletes an existing call to action
     And Joe visits the homepage
     Then Joe should not see the deleted call to action on the homepage
+
+  Scenario: Change the order of the calls to action
+    When Joe changes the order of an existing call to action
+    And Joe visits the homepage
+    Then Joe should see the calls to action in the new order

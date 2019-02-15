@@ -9,7 +9,7 @@ module Admin
     end
 
     def index
-      @call_to_actions = CallToAction.all
+      @call_to_actions = CallToAction.as_list
     end
 
     def create
@@ -37,7 +37,7 @@ module Admin
     end
 
     def call_to_actions_params
-      params.require(:call_to_action).permit(:title, :body, :url, :button_text)
+      params.require(:call_to_action).permit(:position, :title, :body, :url, :button_text)
     end
   end
 end

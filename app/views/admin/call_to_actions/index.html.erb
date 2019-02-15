@@ -27,20 +27,46 @@
           <th>Url</th>
           <th>Body</th>
           <th style="width:1px"></th>
+          <th style="width:1px"></th>
+          <th style="width:1px"></th>
         </tr>
       </thead>
       <tbody>
-        <% @call_to_actions.each do |cta| %>
+        <% @call_to_actions.each do |call_to_action| %>
         <tr>
-          <td><%= link_to cta.title, edit_admin_call_to_action_path(cta) %></td>
-          <td><%= cta.button_text %></td>
-          <td><%= cta.url %></td>
-          <td><%= cta.body %></td>
+          <td><%= link_to call_to_action.title, edit_admin_call_to_action_path(call_to_action) %></td>
+          <td><%= call_to_action.button_text %></td>
+          <td><%= call_to_action.url %></td>
+          <td><%= call_to_action.body %></td>
           <td>
-            <%= form_for [:admin, cta], method: 'delete' do |f| %>
+            <% unless call_to_action.first? %>
+              <%= form_for [:admin, call_to_action] do |f| %>
+                <span class="icon">
+                  <%= f.button '', name: 'call_to_action[position]',
+                        value: call_to_action.position - 1,
+                        title: "Move '#{call_to_action.title}' up",
+                        class: 'fa fa-arrow-up icon-button' %>
+                </span>
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <% unless call_to_action.last? %>
+              <%= form_for [:admin, call_to_action] do |f| %>
+                <span class="icon">
+                  <%= f.button '', name: 'call_to_action[position]',
+                        value: call_to_action.position + 1,
+                        title: "Move '#{call_to_action.title}' down",
+                        class: 'fa fa-arrow-down icon-button' %>
+                </span>
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <%= form_for [:admin, call_to_action], method: 'delete' do |f| %>
               <span class="icon">
                 <%= f.button '',
-                      title: "Delete '#{cta.title}'",
+                      title: "Delete '#{call_to_action.title}'",
                       class: 'fa fa-trash icon-button',
                       data: { confirm: 'Are you sure?' } %>
               </span>
