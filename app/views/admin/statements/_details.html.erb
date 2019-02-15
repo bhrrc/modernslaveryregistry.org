@@ -41,7 +41,7 @@
         <span class="label is-warning">Broken URL</span>
       </div>
       <div class="column">
-        <%= button_to 'Mark URL not broken', [:mark_url_not_broken, :admin, statement.company, statement], class: 'button' %>
+        <%= button_to 'Mark URL not broken', mark_url_not_broken_admin_company_statement_path(statement.company, statement), class: 'button' %>
       </div>
     </div>
   <% end %>
@@ -154,7 +154,7 @@
           </div>
         <% end %>
         <div class="control">
-          <%= button_to 'Fetch new Snapshot now', [:snapshot, :admin, statement.company, statement], class: 'button' %>
+          <%= button_to 'Fetch new Snapshot now', snapshot_admin_company_statement_path(statement.company, statement), class: 'button' %>
         </div>
       </div>
     </div>

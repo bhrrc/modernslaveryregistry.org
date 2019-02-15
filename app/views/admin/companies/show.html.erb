@@ -18,7 +18,7 @@
       <div class="column is-narrow">
         <%= link_to 'Edit Company', edit_admin_company_path(@company), class: 'button' %>
         &nbsp;
-        <%= button_to "Delete Company", [:admin, @company], method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
+        <%= button_to "Delete Company", admin_company_path(@company), method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
         &nbsp;
         <%= link_to 'Visit Company on Website', company_path(@company), class: 'button' %>
       </div>

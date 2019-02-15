@@ -18,7 +18,7 @@
         </h1>
       </div>
       <div class="column is-narrow">
-        <%= button_to "Delete Statement", [:admin, @statement.company, @statement], method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
+        <%= button_to "Delete Statement", admin_company_statement_path(@statement.company, @statement), method: :delete, class: 'button', data: { confirm: 'Are you sure?' } %>
       </div>
     </div>
 
