@@ -1,6 +1,6 @@
 module Admin
   class StatementsController < AdminController
-    before_action :find_company, except: %i[edit update show destroy mark_url_not_broken]
+    before_action :find_company, except: %i[edit update show destroy mark_url_not_broken snapshot]
 
     def edit
       @statement = Statement.find(params[:id])
@@ -36,7 +36,7 @@ module Admin
     end
 
     def snapshot
-      @statement = @company.statements.find(params[:id])
+      @statement = Statement.find(params[:id])
       @statement.fetch_snapshot
       @statement.save!
       redirect_to admin_statement_path(@statement)
