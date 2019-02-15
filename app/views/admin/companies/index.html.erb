@@ -42,7 +42,7 @@
         <tbody>
           <% @companies.each do |company| %>
           <tr>
-            <td><%= link_to company.name, [:admin, company] %></td>
+            <td><%= link_to company.name, admin_company_path(company) %></td>
             <td>
               <%= industry_tag(company.industry) %>
             </td>

@@ -55,7 +55,11 @@
       <%= f.submit class: 'button is-primary' %>
     </div>
     <div class="control">
-      <%= link_to 'Cancel', [:admin, company], class: 'button' %>
+      <% if company.persisted? %>
+        <%= link_to 'Cancel', admin_company_path(company), class: 'button' %>
+      <% else %>
+        <%= link_to 'Cancel', admin_companies_path, class: 'button' %>
+      <% end %>
     </div>
   </div>
 

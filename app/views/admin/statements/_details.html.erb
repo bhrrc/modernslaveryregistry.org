@@ -61,7 +61,7 @@
     </div>
     <% if statement.verified_by.present? %>
       <div class="column" data-content="verified_by">
-        <%= link_to(statement.verified_by.name, [:admin, statement.verified_by]) %>
+        <%= link_to(statement.verified_by.name, admin_user_path(statement.verified_by)) %>
       </div>
     <% else %>
       <div class="column" data-content="publish_status">
@@ -150,7 +150,7 @@
       <div class="field is-grouped">
         <% if statement.snapshot %>
           <div class="control">
-            <%= link_to 'Open Snapshot in new tab', [statement.company, statement, :snapshot], class: 'button', target: '_blank' %>
+            <%= link_to 'Open Snapshot in new tab', company_statement_snapshot_path(statement.company, statement), class: 'button', target: '_blank' %>
           </div>
         <% end %>
         <div class="control">

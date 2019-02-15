@@ -4,9 +4,9 @@
   <div class="section">
     <nav class="breadcrumb" aria-label="breadcrumbs">
       <ul>
-        <li><%= link_to 'Companies', [:admin, :companies] %></li>
-        <li><%= link_to @statement.company.name, [:admin, @statement.company] %></li>
-        <li><%= link_to "Statement #{@statement.id}", [:admin, @statement.company, @statement] %></li>
+        <li><%= link_to 'Companies', admin_companies_path %></li>
+        <li><%= link_to @statement.company.name, admin_company_path(@statement.company) %></li>
+        <li><%= link_to "Statement #{@statement.id}", admin_company_statement_path(@statement.company, @statement) %></li>
         <li class="is-active"><a href="#" aria-current="page">Edit</a></li>
       </ul>
     </nav>
