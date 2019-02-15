@@ -45,23 +45,53 @@
   </div>
 </section>
 
-<% if @call_to_action %>
+<% unless @call_to_actions.empty? %>
+<% if @call_to_actions.size == 1 %>
 <section class="section yellow-background">
   <div class="container">
     <div class="columns">
       <div class="column">
-        <h1 class="title is-3"><%= @call_to_action.title %></h1>
-        <%= link_to @call_to_action.button_text, @call_to_action.url,
-          class: 'button is-medium is-primary' %>
+        <h1 class="title is-3"><%= @call_to_actions.first.title %></h1>
+        <%= link_to @call_to_actions.first.button_text, @call_to_actions.first.url,
+            class: 'button is-medium is-primary' %>
       </div>
       <div class="column">
         <h2 class="title is-4">
-          <%= @call_to_action.body %>
+          <%= @call_to_actions.first.body %>
         </h2>
       </div>
     </div>
   </div>
 </section>
+<% else %>
+<section class="section yellow-background">
+  <div id="cta-carousel" class="Wallop Wallop--slide">
+    <div class="Wallop-list container">
+      <% @call_to_actions.each do |cta| %>
+      <div class="Wallop-item">
+        <div class="columns">
+          <div class="column">
+            <h1 class="title is-3"><%= cta.title %></h1>
+            <%= link_to cta.button_text, cta.url,
+                class: 'button is-medium is-primary' %>
+          </div>
+          <div class="column">
+            <h2 class="title is-4">
+              <%= cta.body %>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    <div class="Wallop-pagination">
+      <% @call_to_actions.each_with_index do |cta, idx| %>
+      <button class="Wallop-dot <%= idx == 0 ? 'Wallop-dot--current' : '' %>"><%= cta.title %></button>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
 <% end %>
 
 <section class="section">

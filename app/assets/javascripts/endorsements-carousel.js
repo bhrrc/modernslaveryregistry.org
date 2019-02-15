@@ -47,4 +47,6 @@ $(document).ready(function() {
   mountCarousel(endorsementsCarousel);
   var statsCarousel = document.querySelector('#stats-carousel');
   mountCarousel(statsCarousel);
+  var ctaCarousel = document.querySelector('#cta-carousel');
+  mountCarousel(ctaCarousel);
 });

@@ -2,7 +2,7 @@ class WelcomeController < ApplicationController
   include ApplicationHelper
 
   def index
-    @call_to_action = CallToAction.first
+    @call_to_actions = CallToAction.all
     @statement_stats = StatementStats.new
     @compliance_stats = ComplianceStats.compile
   end
