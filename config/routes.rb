@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     resources :call_to_actions, except: [:show]
     resources :users, except: [:new]
     resource :bulk_upload, only: [:create]
+    resources :stats, only: [:index]
     resources :companies do
       resources :statements, except: [:index], shallow: true do
         post :mark_url_not_broken, on: :member
