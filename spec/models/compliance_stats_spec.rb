@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ComplianceStats, type: :model do
+  let(:subject) { ComplianceStats.new }
+
   describe 'latest_published_statement_ids' do
     it 'only includes statements associated with legislations that have been marked for inclusion in these compliance stats' do
       included_legislation = Legislation.create!(include_in_compliance_stats: true,
@@ -16,7 +18,7 @@ RSpec.describe ComplianceStats, type: :model do
                                                        url: 'http://example.com')
       company2.statements.create!(legislations: [excluded_legislation], published: true, url: 'http://example.com')
 
-      expect(ComplianceStats.latest_published_statement_ids).to contain_exactly(included_statement.id)
+      expect(subject.latest_published_statement_ids).to contain_exactly(included_statement.id)
     end
 
     it 'only includes published statements' do
@@ -30,7 +32,7 @@ RSpec.describe ComplianceStats, type: :model do
                                                         legislations: [included_legislation],
                                                         url: 'http://example.com')
 
-      expect(ComplianceStats.latest_published_statement_ids).to contain_exactly(published_statement.id)
+      expect(subject.latest_published_statement_ids).to contain_exactly(published_statement.id)
     end
 
     it 'includes the latest statement for a company by ordering statements by last_year_covered where present' do
@@ -47,7 +49,7 @@ RSpec.describe ComplianceStats, type: :model do
                                                      legislations: [included_legislation],
                                                      url: 'http://example.com')
 
-      expect(ComplianceStats.latest_published_statement_ids).to contain_exactly(latest_statement.id)
+      expect(subject.latest_published_statement_ids).to contain_exactly(latest_statement.id)
     end
 
     it 'includes the latest statement for a company by additionally ordering statements by date_seen to differentiate statements with the same last_year_covered value' do
@@ -66,7 +68,7 @@ RSpec.describe ComplianceStats, type: :model do
                                                             legislations: [included_legislation],
                                                             url: 'http://example.com')
 
-      expect(ComplianceStats.latest_published_statement_ids).to contain_exactly(recently_seen_statement.id)
+      expect(subject.latest_published_statement_ids).to contain_exactly(recently_seen_statement.id)
     end
   end
 end
