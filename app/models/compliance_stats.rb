@@ -19,7 +19,7 @@ class ComplianceStats
     statements.where(signed_by_director: true).count
   end
 
-  def fully_compliant?
+  def fully_compliant_count
     statements
       .where(approved_by_board: 'Yes')
       .where(link_on_front_page: true)
@@ -39,7 +39,7 @@ class ComplianceStats
   end
 
   def percent_fully_compliant
-    percent_for_stat(fully_compliant?)
+    percent_for_stat(fully_compliant_count)
   end
 
   # rubocop:disable Metrics/MethodLength
