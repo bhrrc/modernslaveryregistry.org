@@ -15,7 +15,7 @@ class ComplianceStats
     statements.where(link_on_front_page: true).count
   end
 
-  def signed_by_director?
+  def signed_by_director_count
     statements.where(signed_by_director: true).count
   end
 
@@ -35,7 +35,7 @@ class ComplianceStats
   end
 
   def percent_signed_by_director
-    percent_for_stat(signed_by_director?)
+    percent_for_stat(signed_by_director_count)
   end
 
   def percent_fully_compliant
