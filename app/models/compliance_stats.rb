@@ -11,7 +11,7 @@ class ComplianceStats
     statements.where(approved_by_board: 'Yes').count
   end
 
-  def link_on_front_page?
+  def link_on_front_page_count
     statements.where(link_on_front_page: true).count
   end
 
@@ -31,7 +31,7 @@ class ComplianceStats
   end
 
   def percent_link_on_front_page
-    percent_for_stat(link_on_front_page?)
+    percent_for_stat(link_on_front_page_count)
   end
 
   def percent_signed_by_director
