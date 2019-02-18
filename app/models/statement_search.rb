@@ -49,6 +49,7 @@ class StatementSearch
 
   def filter_by_company_name
     return if @criteria[:company_name].blank?
+
     query = @criteria[:company_name].split.join(' & ')
     @company_join = @company_join.where(company_search_query, query)
     @statements = @company_join
@@ -63,12 +64,14 @@ class StatementSearch
 
   def filter_by_company_industry
     return if @criteria[:industries].blank?
+
     @company_join = @company_join.where(companies: { industry_id: @criteria[:industries] })
     @statements = @company_join
   end
 
   def filter_by_company_country
     return if @criteria[:countries].blank?
+
     @company_join = @company_join.where(companies: { country_id: @criteria[:countries] })
     @statements = @company_join
   end
@@ -78,6 +81,7 @@ class StatementSearch
       @criteria[:legislation_names].blank? ||
       @criteria[:legislation_names].empty? ||
       @criteria[:legislation_names].size == Legislation.count
+
     @statements = @statements.joins(:legislations).where('legislations.name' => @criteria[:legislation_names])
   end
 end

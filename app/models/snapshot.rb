@@ -6,6 +6,7 @@ class Snapshot < ApplicationRecord
 
   def screenshot_or_original
     return screenshot if screenshot.attached?
+
     original
   end
 

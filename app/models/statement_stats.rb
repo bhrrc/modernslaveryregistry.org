@@ -57,6 +57,7 @@ class StatementStats
     # and/or to introduce stricter validation of statements so they cannot
     # be saved without a year_month field.
     return 'UNKNOWN' if result.nil?
+
     year_number, month_number = result.split('-')
     [Date::MONTHNAMES[month_number.to_i], year_number].join(' ')
   end

@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   def after_confirmation
     return unless admin.nil?
+
     admin = email =~ /business-humanrights\.org$/
     update_attribute(:admin, admin) # rubocop:disable Rails/SkipsModelValidations
   end

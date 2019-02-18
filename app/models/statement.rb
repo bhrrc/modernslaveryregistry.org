@@ -33,6 +33,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     uri = URI(url)
     uri.scheme = 'https'
     return true if exists?(url: uri.to_s)
+
     uri.scheme = 'http'
     exists?(url: uri.to_s)
   end
@@ -78,6 +79,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def perform_snapshot_job
     return unless @should_enqueue_snapshot
+
     FetchStatementSnapshotJob.perform_later(id)
     @should_enqueue_snapshot = false
   end

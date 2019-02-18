@@ -38,6 +38,7 @@ module DomStruct
     structs = dom_structs(struct_name, *field_names)
     raise "No structs found for #{selector(struct_name)}" if structs.empty?
     raise "Expected a single struct for #{selector(struct_name)}, found #{structs.length}" if structs.length > 1
+
     structs[0]
   end
 

@@ -19,8 +19,8 @@ Statement.all.each.with_index do |statement, index|
   next unless (original = snapshot.original)
   next unless (content_type = begin
                                original.content_type
-                             rescue StandardError
-                               nil
+                              rescue StandardError
+                                nil
                              end)
 
   company_name = statement.company.name.parameterize(preserve_case: true)

@@ -24,6 +24,7 @@ module Statements
   def find_or_create_verifier(props)
     name = props.delete('Verified by')
     return nil if name.nil?
+
     User.where(first_name: name, email: "#{name}@host.com").first_or_create(password: 'whatevs')
   end
 
@@ -51,6 +52,7 @@ module Statements
   def attribute_value(string)
     return true if string == 'Yes'
     return false if string == 'No'
+
     string
   end
 

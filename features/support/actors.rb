@@ -8,9 +8,9 @@ require_relative './dom_struct'
 
 Before do
   @actors = {
-    'Joe'      => Administrator.named('Joe'),
+    'Joe' => Administrator.named('Joe'),
     'Patricia' => Administrator.named('Patricia'),
-    'Vicky'    => Visitor.new('Vicky')
+    'Vicky' => Visitor.new('Vicky')
   }
 end
 

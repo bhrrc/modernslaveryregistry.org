@@ -173,24 +173,28 @@ module FillsInForms
 
   def try_filling_text_field(option, value)
     return false unless text_fields.include?(option)
+
     fill_in(option, with: value)
     true
   end
 
   def try_filling_drop_down(option, value)
     return false unless drop_downs.include?(option)
+
     select(value, from: option)
     true
   end
 
   def try_filling_check_box(option, value)
     return false unless check_boxes.include?(option)
+
     /yes|true/i.match?(value) ? check(option) : uncheck(option)
     true
   end
 
   def try_filling_radio(option, value)
     return false unless radios.include?(option)
+
     within("*[data-content='#{option}']") do
       choose(value)
     end
@@ -199,6 +203,7 @@ module FillsInForms
 
   def try_filling_check_box_list(option, value)
     return false unless check_box_lists.include?(option)
+
     within("*[data-content='#{option}']") do
       value.split(', ').each do |label|
         check(label)
@@ -209,6 +214,7 @@ module FillsInForms
 
   def try_filling_period_covered(option, value)
     return false unless option == 'Period covered'
+
     enter_period_covered(value)
   end
 
@@ -327,6 +333,7 @@ module ViewsStatementsAsAdmin
   def visible_latest_statement_by_company(company_name:)
     company = Company.find_by!(name: company_name)
     raise "#{company.name} has no latest statement!" if company.latest_statement.nil?
+
     visit admin_statement_path(company.latest_statement)
     dom_struct(:statement, :url, :verified_by, :contributor_email,
                :published, :signed_by_director, :approved_by_board, :link_on_front_page,

@@ -16,7 +16,7 @@ module ApplicationHelper
 
     css_classes_by_text = {
       'Yes' => 'is-success',
-      'No'  => 'is-danger',
+      'No' => 'is-danger',
       'Not explicit' => 'is-warning'
     }
     text = 'No' unless css_classes_by_text.key?(text)
