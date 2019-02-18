@@ -2,6 +2,9 @@ class Legislation < ApplicationRecord
   has_many :legislation_statements, dependent: :restrict_with_exception
   has_many :statements, through: :legislation_statements
 
+  validates :name, presence: true
+  validates :icon, presence: true
+
   scope(:included_in_compliance_stats, -> { where(include_in_compliance_stats: true) })
 
   UK_NAME = 'UK Modern Slavery Act'.freeze
