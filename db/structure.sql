@@ -494,7 +494,8 @@ CREATE TABLE public.statements (
     marked_not_broken_url boolean DEFAULT false,
     first_year_covered integer,
     last_year_covered integer,
-    also_covers_companies character varying
+    also_covers_companies character varying,
+    company_id bigint
 );
 
 
@@ -910,6 +911,13 @@ CREATE INDEX index_snapshots_on_statement_id ON public.snapshots USING btree (st
 
 
 --
+-- Name: index_statements_on_company_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_statements_on_company_id ON public.statements USING btree (company_id);
+
+
+--
 -- Name: index_statements_on_published; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1072,6 +1080,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190212135333'),
 ('20190215100459'),
 ('20190215102825'),
-('20190215122136');
+('20190215122136'),
+('20190218110536');
 
 
