@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe ComplianceStats, type: :model do
-  let(:subject) { ComplianceStats.new }
-
   describe 'statistics' do
+    let(:subject) { ComplianceStats.new }
+
     let(:legislation) do
       Legislation.create!(include_in_compliance_stats: true,
                           name: 'included-legislation',
@@ -19,8 +19,7 @@ RSpec.describe ComplianceStats, type: :model do
                                   url: 'http://example.com',
                                   approved_by_board: 'Yes',
                                   link_on_front_page: true,
-                                  signed_by_director: true
-                                 )
+                                  signed_by_director: true)
     end
 
     let!(:fully_incompliant_statement) do
@@ -29,8 +28,7 @@ RSpec.describe ComplianceStats, type: :model do
                                   url: 'http://example.com',
                                   approved_by_board: 'No',
                                   link_on_front_page: false,
-                                  signed_by_director: false
-                                 )
+                                  signed_by_director: false)
     end
 
     it 'includes both statements in the total' do
@@ -70,7 +68,48 @@ RSpec.describe ComplianceStats, type: :model do
     end
   end
 
+  describe '#statements' do
+    let(:software) { Industry.create! name: 'Software' }
+    let(:software_company) { Company.create!(name: 'company-1', industry: software) }
+    let(:other_company) { Company.create!(name: 'company-2') }
+    let(:legislation) do
+      Legislation.create!(include_in_compliance_stats: true,
+                          name: 'included-legislation',
+                          icon: 'icon')
+    end
+    let!(:software_company_statement) do
+      software_company.statements.create!(legislations: [legislation],
+                                          published: true,
+                                          url: 'http://example.com',
+                                          approved_by_board: 'Yes',
+                                          link_on_front_page: true,
+                                          signed_by_director: true)
+    end
+    let!(:other_company_statement) do
+      other_company.statements.create!(legislations: [legislation],
+                                       published: true,
+                                       url: 'http://example.com',
+                                       approved_by_board: 'No',
+                                       link_on_front_page: false,
+                                       signed_by_director: false)
+    end
+
+    it 'includes all statements' do
+      expect(subject.statements).to contain_exactly(software_company_statement, other_company_statement)
+    end
+
+    context 'when an industry is provided' do
+      let(:subject) { ComplianceStats.new(industry: software) }
+
+      it 'includes only statements from companies in that industry' do
+        expect(subject.statements).to contain_exactly(software_company_statement)
+      end
+    end
+  end
+
   describe 'latest_published_statement_ids' do
+    let(:subject) { ComplianceStats.new }
+
     it 'only includes statements associated with legislations that have been marked for inclusion in these compliance stats' do
       included_legislation = Legislation.create!(include_in_compliance_stats: true,
                                                  name: 'included-legislation',

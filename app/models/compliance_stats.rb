@@ -1,6 +1,14 @@
 class ComplianceStats
+  def initialize(industry: false)
+    @industry = industry
+  end
+
   def statements
-    Statement.where(id: latest_published_statement_ids)
+    if @industry
+      Statement.joins(:company).where(id: latest_published_statement_ids).where('companies.industry_id': @industry.id)
+    else
+      Statement.where(id: latest_published_statement_ids)
+    end
   end
 
   def total
