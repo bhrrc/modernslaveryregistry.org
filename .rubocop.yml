@@ -17,6 +17,8 @@ Metrics/LineLength:
   Max: 120
   Exclude:
     - 'features/step_definitions/*.rb'
+  IgnoredPatterns:
+    - 'it .* do'
 
 Metrics/ClassLength:
   Exclude:
