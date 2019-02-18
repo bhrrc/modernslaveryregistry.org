@@ -27,19 +27,22 @@ class ComplianceStats
 
     Statement.connection.select_values(sql)
   end
-  # rubocop:enable Metrics/MethodLength
 
   def self.compile
-    total = 0
-    counts = { approved_by_board: 0, link_on_front_page?: 0, signed_by_director?: 0, fully_compliant?: 0 }
-    Statement.where(id: latest_published_statement_ids).find_each do |statement|
-      counts.keys.each do |key|
-        counts[key] += 1 if [true, 'Yes'].include? statement.send(key)
-      end
-      total += 1
-    end
+    statements = Statement.where(id: latest_published_statement_ids)
+    total = statements.count
+    counts = {
+      approved_by_board: statements.where(approved_by_board: 'Yes').count,
+      link_on_front_page?: statements.where(link_on_front_page: true).count,
+      signed_by_director?: statements.where(signed_by_director: true).count,
+      fully_compliant?: statements
+             .where(approved_by_board: 'Yes')
+             .where(link_on_front_page: true)
+             .where(signed_by_director: true).count
+    }
     ComplianceStats.new(counts, total)
   end
+  # rubocop:enable Metrics/MethodLength
 
   def percent_approved_by_board
     percent_for_stat :approved_by_board
