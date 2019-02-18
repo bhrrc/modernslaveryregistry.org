@@ -7,7 +7,7 @@ class ComplianceStats
     statements.count
   end
 
-  def approved_by_board
+  def approved_by_board_count
     statements.where(approved_by_board: 'Yes').count
   end
 
@@ -27,7 +27,7 @@ class ComplianceStats
   end
 
   def percent_approved_by_board
-    percent_for_stat(approved_by_board)
+    percent_for_stat(approved_by_board_count)
   end
 
   def percent_link_on_front_page
