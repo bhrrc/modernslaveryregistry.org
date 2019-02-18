@@ -1,14 +1,14 @@
 class Company < ApplicationRecord
-  has_and_belongs_to_many :statements,
-                          -> { order(last_year_covered: :desc, date_seen: :desc) }
+  has_many :statements,
+           -> { order(last_year_covered: :desc, date_seen: :desc) },
+           dependent: :destroy,
+           inverse_of: :company
   belongs_to :country, optional: true
   belongs_to :industry, optional: true
 
   validates :name, presence: true, uniqueness: true
 
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
-
-  before_destroy :delete_orphaned_statements
 
   def latest_statement
     statements.limit(1).first
@@ -48,13 +48,5 @@ class Company < ApplicationRecord
 
   def to_param
     [id, name.parameterize].join('-')
-  end
-
-  private
-
-  def delete_orphaned_statements
-    statements.each do |statement|
-      statement.destroy if statement.companies == [self]
-    end
   end
 end

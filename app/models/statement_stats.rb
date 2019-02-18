@@ -121,7 +121,7 @@ class StatementStats
   end
 
   def published_statements_with_companies_and_legislations_for(legislation_name)
-    Statement.published.joins(:companies).joins(:legislations).where('legislations.name' => legislation_name)
+    Statement.published.joins(:company).joins(:legislations).where('legislations.name' => legislation_name)
   end
 
   def published_uk_statements

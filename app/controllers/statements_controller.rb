@@ -12,7 +12,7 @@ class StatementsController < ApplicationController
   def new
     @company = Company.find(params[:company_id])
     @statements = @company.published_statements
-    @new_statement = Statement.new(companies: [@company])
+    @new_statement = Statement.new(company: @company)
   end
 
   def show
@@ -23,7 +23,7 @@ class StatementsController < ApplicationController
 
   def create
     @company = company_from_params
-    @new_statement = Statement.new(statement_params.merge(companies: [@company]))
+    @new_statement = @company.statements.build(statement_params)
     @new_statement.associate_with_user(current_user) if user_signed_in?
 
     if @new_statement.save

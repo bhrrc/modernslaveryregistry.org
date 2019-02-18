@@ -21,7 +21,7 @@ class CompaniesController < ApplicationController
   def show
     @company = Company.find(params[:id])
     @statements = @company.published_statements
-    @new_statement = Statement.new(companies: [@company])
+    @new_statement = Statement.new(company: @company)
     @statement = @company.latest_published_statement
   end
 

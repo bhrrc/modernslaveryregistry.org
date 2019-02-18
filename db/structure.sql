@@ -495,7 +495,7 @@ CREATE TABLE public.statements (
     first_year_covered integer,
     last_year_covered integer,
     also_covers_companies character varying,
-    company_id bigint
+    company_id bigint NOT NULL
 );
 
 
@@ -1081,6 +1081,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190215100459'),
 ('20190215102825'),
 ('20190215122136'),
-('20190218110536');
+('20190218110536'),
+('20190218124957');
 
 

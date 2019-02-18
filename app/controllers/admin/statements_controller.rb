@@ -26,7 +26,7 @@ module Admin
     end
 
     def create
-      @statement = Statement.new(statement_params.merge(companies: [@company]))
+      @statement = @company.statements.build(statement_params)
 
       if @statement.save
         redirect_to admin_company_path(@company)
