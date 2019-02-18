@@ -1,5 +1,7 @@
 module Admin
   class StatsController < AdminController
-    def index; end
+    def index
+      @compliance_stats = ComplianceStats.compile
+    end
   end
 end

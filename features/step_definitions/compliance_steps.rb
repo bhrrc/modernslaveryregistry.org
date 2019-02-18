@@ -8,7 +8,7 @@ end
 
 module ViewsMinimumComplianceStats
   def attempts_to_view_minimum_compliance_requirements_stats
-    visit(admin_dashboard_path)
+    visit(admin_stats_path)
   end
 
   def visible_minimum_compliance_requirements_stats

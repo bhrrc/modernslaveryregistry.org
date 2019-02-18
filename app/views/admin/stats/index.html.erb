@@ -16,4 +16,46 @@
       </div>
     </div>
   </div>
+
+  <div class="subsection">
+    <div class="box">
+      <h2 class="title is-2">Published Statement Compliance Stats</h2>
+      <table data-content="minimum_compliance_requirements_stats" class="table is-fullwidth">
+        <tbody>
+          <tr>
+            <td>
+              Link on front page
+            </td>
+            <td data-content="Percent link on front page">
+              <%= @compliance_stats.percent_link_on_front_page %>%
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Signed by director
+            </td>
+            <td data-content="Percent signed by director">
+              <%= @compliance_stats.percent_signed_by_director %>%
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Approved by board
+            </td>
+            <td data-content="Percent approved by board">
+              <%= @compliance_stats.percent_approved_by_board %>%
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Yes to all minimum compliance questions
+            </td>
+            <td data-content="Percent fully compliant">
+              <%= @compliance_stats.percent_fully_compliant %>%
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

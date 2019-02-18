@@ -12,5 +12,10 @@ RSpec.describe Admin::StatsController, type: :controller do
       get :index
       expect(response).to be_successful
     end
+
+    it 'assigns compliance_stats to the view' do
+      get :index
+      expect(assigns(:compliance_stats))
+    end
   end
 end
