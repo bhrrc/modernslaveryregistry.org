@@ -197,26 +197,9 @@
 </section>
 
 <section class="section is-dark-navy">
-  <% if admin? %>
-  <div id="stats-carousel" class="Wallop Wallop--slide">
-    <div class="Wallop-list stats-summary container">
-      <div class="Wallop-item">
-        <%= render partial: 'compliance_stats' %>
-      </div>
-      <div class="Wallop-item">
-        <%= render partial: 'total_statements_over_time' %>
-      </div>
-    </div>
-    <div class="Wallop-pagination">
-      <button class="Wallop-dot Wallop-dot--current">Compliance</button>
-      <button class="Wallop-dot">Cumulative number of statements</button>
-    </div>
-  </div>
-<% else %>
   <div class="stats-summary container">
     <%= render partial: 'compliance_stats' %>
   </div>
-<% end %>
 </section>
 
 <section class="section yellow-background">

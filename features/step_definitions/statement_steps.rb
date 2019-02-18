@@ -386,7 +386,7 @@ end
 
 module ViewsStatementsAddedByMonth
   def attempts_to_view_statements_added_by_month
-    visit root_path
+    visit admin_stats_path
   end
 
   def visible_statements_added_by_month_stats

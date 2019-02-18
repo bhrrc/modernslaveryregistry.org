@@ -58,4 +58,70 @@
       </table>
     </div>
   </div>
+
+  <div class="subsection">
+    <div class="box">
+      <h2 class="title is-2">Statements Added over time</h2>
+      <h3 class="title is-3">Under the UK and California legislation</h3>
+
+      <div id="total_statements_over_time">
+        <canvas width="340" height="105"></canvas>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+function renderTotalStatementsOverTime(totalByMonth) {
+  var $container = $(document.getElementById('total_statements_over_time'))
+  var $canvas = $container.find('canvas')
+
+  Chart.defaults.global.defaultFontColor = 'rgb(75, 192, 192)';
+
+  new Chart($canvas[0].getContext("2d"), {
+    type: "line",
+    data: {
+      "labels": totalByMonth.map(function(month) { return month.label }),
+      "datasets":[
+        {
+          "label":"Cumulative Total",
+          "data": totalByMonth.map(function(month) { return month.statements }),
+          "fill":false,
+          "borderColor":"rgb(255, 205, 0)",
+          "lineTension": 0.1,
+          "yAxisID": "y-axis-1"
+        },
+        {
+          "label":"<%= Legislation::UK_NAME %>",
+          "data": totalByMonth.map(function(month) { return month.uk_act }),
+          "fill":false,
+          "borderColor":"rgb(75, 192, 192)",
+          "lineTension": 0.1,
+          "yAxisID": "y-axis-1"
+        },
+        {
+          "label":"<%= Legislation::CALIFORNIA_NAME %>",
+          "data": totalByMonth.map(function(month) { return month.us_act }),
+          "fill":false,
+          "borderColor":"rgb(75, 192, 192)",
+          "lineTension": 0.1,
+          "yAxisID": "y-axis-1"
+        }
+      ]
+    },
+    options: {
+      legend: { display: false },
+      scales: {
+        yAxes: [
+          { type: 'linear',
+            display: true,
+            position: 'left',
+            id: 'y-axis-1' }
+        ],
+      }
+    }
+  })
+};
+
+renderTotalStatementsOverTime(<%= raw @statement_stats.total_statements_over_time.to_json %>)
+</script>
