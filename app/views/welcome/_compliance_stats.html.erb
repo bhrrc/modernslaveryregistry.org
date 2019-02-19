@@ -80,6 +80,12 @@
   </div>
 </div>
 
+<div class="columns is-centered">
+  <div class="column is-narrow">
+    <p><%= compliance_stats_explanation(@compliance_stats, params[:industry]) %></p>
+  </div>
+</div>
+
 <script>
 function renderDonut(containerId, percentage) {
   var $container = $(document.getElementById(containerId))
