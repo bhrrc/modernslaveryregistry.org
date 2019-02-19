@@ -7,6 +7,11 @@ class WelcomeController < ApplicationController
     @compliance_stats = ComplianceStats.new(industry: industry_filter)
   end
 
+  def filter
+    industry_id = params[:industry][:id]
+    redirect_to action: :index, industry: industry_id
+  end
+
   private
 
   def industry_filter

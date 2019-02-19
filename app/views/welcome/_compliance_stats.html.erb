@@ -1,8 +1,24 @@
 <h2 class="title is-2 has-text-centered is-turquoise-text">UK Modern Slavery Act</h2>
 <h3 class="title is-3 has-text-centered is-turquoise-text">Compliance with minimum requirements</h3>
 
-<div class="columns">
+<div class="columns is-centered">
+  <div class="column is-narrow">
+    <%= form_tag(controller: 'welcome', action: 'filter') do %>
+    <div class="field has-addons">
+      <div class="control">
+        <div class="select">
+          <%= select('industry', 'id', options_from_collection_for_select(Industry.all, :id, :name, params[:industry]), { include_blank: 'Filter by industry' }) %>
+        </div>
+      </div>
+      <div class="control">
+        <%= submit_tag('Filter', class: 'button is-primary') %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
 
+<div class="columns">
   <div class="column is-narrow">
     <div class="compliance-stat">
       <label class="donut-legend">
