@@ -1,6 +1,7 @@
 <h2 class="title is-2 has-text-centered is-turquoise-text">UK Modern Slavery Act</h2>
 <h3 class="title is-3 has-text-centered is-turquoise-text">Compliance with minimum requirements</h3>
 
+<% if admin? %>
 <div class="columns is-centered">
   <div class="column is-narrow">
     <%= form_tag(controller: 'welcome', action: 'filter') do %>
@@ -17,6 +18,7 @@
     <% end %>
   </div>
 </div>
+<% end %>
 
 <div class="columns">
   <div class="column is-narrow">
