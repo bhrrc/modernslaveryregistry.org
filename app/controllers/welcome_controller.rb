@@ -9,7 +9,7 @@ class WelcomeController < ApplicationController
 
   def filter
     industry_id = params[:industry][:id]
-    redirect_to action: :index, industry: industry_id
+    redirect_to action: :index, industry: industry_id, anchor: 'compliance'
   end
 
   private

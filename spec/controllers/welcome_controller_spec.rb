@@ -52,7 +52,7 @@ RSpec.describe WelcomeController, type: :controller do
     it 'redirects to the index action with the industry ID appended' do
       post :filter, params: { industry: { id: 1 } }
 
-      assert_redirected_to controller: 'welcome', action: 'index', params: { industry: 1 }
+      assert_redirected_to controller: 'welcome', action: 'index', params: { industry: 1 }, anchor: 'compliance'
     end
   end
 end

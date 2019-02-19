@@ -15,7 +15,6 @@
               <p class="control is-expanded">
                 <%= text_field_tag :company_name, params[:company_name],
                     class: 'input is-medium is-hero',
-                    autofocus: true,
                     placeholder: 'Company' %>
               </p>
               <p class="control">
@@ -196,7 +195,7 @@
   </div>
 </section>
 
-<section class="section is-dark-navy">
+<section class="section is-dark-navy" id="compliance">
   <div class="stats-summary container">
     <%= render partial: 'compliance_stats' %>
   </div>
