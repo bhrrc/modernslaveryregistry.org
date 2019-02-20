@@ -1,4 +1,6 @@
 class ComplianceStats
+  attr_reader :industry
+
   def initialize(industry: false)
     @industry = industry
   end
