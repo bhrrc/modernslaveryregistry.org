@@ -1,17 +1,54 @@
 require 'rails_helper'
 
 RSpec.describe ComplianceStats, type: :model do
-  describe 'statistics' do
-    let(:subject) { ComplianceStats.new }
+  let(:subject) { ComplianceStats.new }
 
+  let(:company1) { Company.create!(name: 'company-1') }
+  let(:company2) { Company.create!(name: 'company-2') }
+
+  context 'when legislation is not included in stats' do
+    let(:legislation) do
+      Legislation.create!(include_in_compliance_stats: false,
+                          name: 'excluded-legislation',
+                          icon: 'icon')
+    end
+
+    let!(:statement_against_excluded_legislation) do
+      company1.statements.create!(legislations: [legislation],
+                                  published: true,
+                                  url: 'http://example.com',
+                                  approved_by_board: 'Yes',
+                                  link_on_front_page: true,
+                                  signed_by_director: true)
+    end
+
+    it 'calculates total as 0' do
+      expect(subject.total).to eq(0)
+    end
+
+    it 'calculates approved_by_board_count as 0' do
+      expect(subject.approved_by_board_count).to eq(0)
+    end
+
+    it 'calculates link_on_front_page_count as 0' do
+      expect(subject.link_on_front_page_count).to eq(0)
+    end
+
+    it 'calculates signed_by_director_count as 0' do
+      expect(subject.signed_by_director_count).to eq(0)
+    end
+
+    it 'calculates fully_compliant_count as 0' do
+      expect(subject.fully_compliant_count).to eq(0)
+    end
+  end
+
+  context 'when legislation is included in stats' do
     let(:legislation) do
       Legislation.create!(include_in_compliance_stats: true,
                           name: 'included-legislation',
                           icon: 'icon')
     end
-
-    let(:company1) { Company.create!(name: 'company-1') }
-    let(:company2) { Company.create!(name: 'company-2') }
 
     let!(:fully_compliant_statement) do
       company1.statements.create!(legislations: [legislation],
