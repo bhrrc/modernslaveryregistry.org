@@ -23,7 +23,11 @@ class ComplianceStats
   end
 
   def link_on_front_page_count
-    statements.where(link_on_front_page: true).count
+    if @industry
+      latest_published_statements_link_on_front_page_count_for(@industry)
+    else
+      latest_published_statements_link_on_front_page_count
+    end
   end
 
   def signed_by_director_count
@@ -149,6 +153,58 @@ class ComplianceStats
       WHERE reverse_publication_order = 1
       AND companies.industry_id = #{industry.id}
       AND approved_by_board = 'Yes'
+    SQL
+
+    Statement.connection.select_value(sql)
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # rubocop:disable Metrics/MethodLength
+  def latest_published_statements_link_on_front_page_count
+    sql = <<~SQL
+      WITH statements_included_in_compliance_stats AS (
+        SELECT statements.* FROM statements
+        INNER JOIN legislation_statements ON statements.id = legislation_statements.statement_id
+        INNER JOIN legislations ON legislations.id = legislation_statements.legislation_id
+        WHERE legislations.include_in_compliance_stats IS TRUE
+      ),
+      published_statements AS (
+        SELECT statements.*,
+               ROW_NUMBER() OVER(PARTITION BY statements.company_id
+                                 ORDER BY statements.last_year_covered DESC, statements.date_seen DESC) AS reverse_publication_order
+        FROM statements_included_in_compliance_stats AS statements
+        WHERE published IS TRUE )
+
+      SELECT COUNT(id) FROM published_statements
+      WHERE reverse_publication_order = 1
+      AND link_on_front_page = true
+    SQL
+
+    Statement.connection.select_value(sql)
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # rubocop:disable Metrics/MethodLength
+  def latest_published_statements_link_on_front_page_count_for(industry)
+    sql = <<~SQL
+      WITH statements_included_in_compliance_stats AS (
+        SELECT statements.* FROM statements
+        INNER JOIN legislation_statements ON statements.id = legislation_statements.statement_id
+        INNER JOIN legislations ON legislations.id = legislation_statements.legislation_id
+        WHERE legislations.include_in_compliance_stats IS TRUE
+      ),
+      published_statements AS (
+        SELECT statements.*,
+               ROW_NUMBER() OVER(PARTITION BY statements.company_id
+                                 ORDER BY statements.last_year_covered DESC, statements.date_seen DESC) AS reverse_publication_order
+        FROM statements_included_in_compliance_stats AS statements
+        WHERE published IS TRUE )
+
+      SELECT COUNT(published_statements.id) FROM published_statements
+      INNER JOIN companies ON published_statements.company_id = companies.id
+      WHERE reverse_publication_order = 1
+      AND companies.industry_id = #{industry.id}
+      AND link_on_front_page = true
     SQL
 
     Statement.connection.select_value(sql)
