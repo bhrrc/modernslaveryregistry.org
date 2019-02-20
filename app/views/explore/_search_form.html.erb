@@ -72,26 +72,28 @@
 
   <div class="field is-horizontal">
     <div class="field-label is-normal">
-      <label class="label">Legislation</label>
+      <label class="label">Legislations</label>
     </div>
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <% Legislation.all.order(:id).each do |legislation| %>
-            <div class="control">
-              <label for="legislation_<%= legislation.id %>">
-                <input
-                  id="legislation_<%= legislation.id %>"
-                  type="checkbox"
-                  name="legislations[]"
-                  value="<%= legislation.id %>"
-                  class="js-auto-submit"
-                  <%= params[:legislations] && params[:legislations].include?(legislation.id) ? '' : 'checked="checked"' %>
-                  />
-                <%= legislation.name %>
-              </label>
-            </div>
-          <% end %>
+          <%=
+          select_tag(
+            'legislations[]',
+            options_from_collection_for_select(
+              Legislation.all.order(:id),
+              :id,
+              :name,
+              params[:legislations]
+            ),
+            {
+              include_blank: true,
+              multiple: true,
+              class: 'chosen-select js-auto-submit',
+              'data-placeholder': ' '
+            }
+          )
+          %>
         </div>
       </div>
     </div>
