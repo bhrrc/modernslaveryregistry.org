@@ -77,11 +77,8 @@ class StatementSearch
   end
 
   def filter_by_legislations
-    return if
-      @criteria[:legislation_names].blank? ||
-      @criteria[:legislation_names].empty? ||
-      @criteria[:legislation_names].size == Legislation.count
+    return if @criteria[:legislations].blank?
 
-    @statements = @statements.joins(:legislations).where('legislations.name' => @criteria[:legislation_names])
+    @statements = @statements.joins(:legislations).where(legislations: { id: @criteria[:legislations] })
   end
 end

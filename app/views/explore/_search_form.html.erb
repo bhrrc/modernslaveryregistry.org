@@ -77,17 +77,16 @@
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <% all_legislations = params.to_unsafe_hash.none? { |key,_| key =~ /^legislation_/ } %>
           <% Legislation.all.order(:id).each do |legislation| %>
             <div class="control">
               <label for="legislation_<%= legislation.id %>">
                 <input
                   id="legislation_<%= legislation.id %>"
                   type="checkbox"
-                  name="legislation_<%= legislation.name %>"
-                  value="yes"
+                  name="legislations[]"
+                  value="<%= legislation.id %>"
                   class="js-auto-submit"
-                  <%= params['legislation_' + legislation.name] == 'yes' || all_legislations ? 'checked="checked"' : '' %>
+                  <%= params[:legislations] && params[:legislations].include?(legislation.id) ? '' : 'checked="checked"' %>
                   />
                 <%= legislation.name %>
               </label>
