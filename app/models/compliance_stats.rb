@@ -326,38 +326,6 @@ class ComplianceStats
 
   private
 
-  def statements
-    if @industry
-      Statement.joins(:company).where(id: latest_published_statement_ids).where('companies.industry_id': @industry.id)
-    else
-      Statement.where(id: latest_published_statement_ids)
-    end
-  end
-
-  # rubocop:disable Metrics/MethodLength
-  def latest_published_statement_ids
-    sql = <<~SQL
-      WITH statements_included_in_compliance_stats AS (
-        SELECT statements.* FROM statements
-        INNER JOIN legislation_statements ON statements.id = legislation_statements.statement_id
-        INNER JOIN legislations ON legislations.id = legislation_statements.legislation_id
-        WHERE legislations.include_in_compliance_stats IS TRUE
-      ),
-      published_statements AS (
-        SELECT statements.*,
-               ROW_NUMBER() OVER(PARTITION BY statements.company_id
-                                 ORDER BY statements.last_year_covered DESC, statements.date_seen DESC) AS reverse_publication_order
-        FROM statements_included_in_compliance_stats AS statements
-        WHERE published IS TRUE )
-
-      SELECT id FROM published_statements
-      WHERE reverse_publication_order = 1
-    SQL
-
-    Statement.connection.select_values(sql)
-  end
-  # rubocop:enable Metrics/MethodLength
-
   def percent_for_stat(stat)
     total.positive? ? ((stat.to_f / total.to_f) * 100).to_i : 0
   end
