@@ -5,14 +5,6 @@ class ComplianceStats
     @industry = industry
   end
 
-  def statements
-    if @industry
-      Statement.joins(:company).where(id: latest_published_statement_ids).where('companies.industry_id': @industry.id)
-    else
-      Statement.where(id: latest_published_statement_ids)
-    end
-  end
-
   def total
     statements.count
   end
@@ -52,6 +44,16 @@ class ComplianceStats
     percent_for_stat(fully_compliant_count)
   end
 
+  private
+
+  def statements
+    if @industry
+      Statement.joins(:company).where(id: latest_published_statement_ids).where('companies.industry_id': @industry.id)
+    else
+      Statement.where(id: latest_published_statement_ids)
+    end
+  end
+
   # rubocop:disable Metrics/MethodLength
   def latest_published_statement_ids
     sql = <<~SQL
@@ -75,8 +77,6 @@ class ComplianceStats
     Statement.connection.select_values(sql)
   end
   # rubocop:enable Metrics/MethodLength
-
-  private
 
   def percent_for_stat(stat)
     total.positive? ? ((stat.to_f / total.to_f) * 100).to_i : 0
