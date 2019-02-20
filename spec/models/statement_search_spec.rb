@@ -89,7 +89,7 @@ RSpec.describe Statement, type: :model do
 
   it 'finds latest published statements ordered by company name' do
     search = Statement.search(criteria: {})
-    expect(search.statements).to eq([cucumber_2016, potato_2016])
+    expect(search.results).to eq([cucumber_2016, potato_2016])
   end
 
   it 'counts the statements' do
@@ -114,25 +114,25 @@ RSpec.describe Statement, type: :model do
 
   it 'filters statements by company name' do
     expect(
-      Statement.search(criteria: { company_name: 'cucumber' }).statements
+      Statement.search(criteria: { company_name: 'cucumber' }).results
     ).to eq([cucumber_2016])
   end
 
   it 'filters statements by countries' do
     expect(
-      Statement.search(criteria: { countries: [gb.id, no.id] }).statements
+      Statement.search(criteria: { countries: [gb.id, no.id] }).results
     ).to eq([cucumber_2016, potato_2016])
   end
 
   it 'filters statements by company industries' do
     expect(
-      Statement.search(criteria: { industries: [agriculture.id, software.id] }).statements
+      Statement.search(criteria: { industries: [agriculture.id, software.id] }).results
     ).to eq([cucumber_2016, potato_2016])
   end
 
   it 'handles queries containing punctuation' do
     expect(
-      Statement.search(criteria: { company_name: 'cucumber &' }).statements
+      Statement.search(criteria: { company_name: 'cucumber &' }).results
     ).to eq([cucumber_2016])
   end
 end

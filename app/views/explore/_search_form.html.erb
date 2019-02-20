@@ -109,7 +109,7 @@
           <%= submit_tag 'Search', name: '', enforce_utf8: false, class: "button is-primary search-button" %>
         </div>
         <div class="control">
-          <% if @statements.any? %>
+          <% if @results.any? %>
             <%= link_to @download_url, class: 'button is-primary is-expanded' do %>
               <span class="icon">
                 <i class="fa fa-download"></i>

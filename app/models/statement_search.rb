@@ -3,19 +3,19 @@ class StatementSearch
     @criteria = criteria
   end
 
-  def statements
-    @statements = Statement.includes(:verified_by, :legislations, company: %i[industry country industry])
+  def results
+    @results = Statement.includes(:legislations, company: %i[industry country])
     filter_by_published
     filter_by_company
     filter_by_legislations
-    @statements.order('companies.name', 'date_seen DESC')
+    @results.order('companies.name', 'date_seen DESC')
   end
 
   def stats
     {
-      statements: statements.size,
-      industries: statements.select('companies.industry_id').distinct.count,
-      countries: statements.select('companies.country_id').distinct.count
+      statements: results.size,
+      industries: results.select('companies.industry_id').distinct.count,
+      countries: results.select('companies.country_id').distinct.count
     }
   end
 
@@ -30,17 +30,17 @@ class StatementSearch
   private
 
   def count_by_company_attribute(attribute)
-    statements.select("companies.#{attribute}").pluck(attribute).each_with_object(Hash.new(0)) do |id, count|
+    results.select("companies.#{attribute}").pluck(attribute).each_with_object(Hash.new(0)) do |id, count|
       count[id] += 1
     end
   end
 
   def filter_by_published
-    @statements = @statements.published
+    @results = @results.published
   end
 
   def filter_by_company
-    @company_join = @statements.joins(:company)
+    @company_join = @results.joins(:company)
     filter_by_company_name
     filter_by_company_industry
     filter_by_company_country
@@ -51,7 +51,7 @@ class StatementSearch
 
     query = @criteria[:company_name].split.join(' & ')
     @company_join = @company_join.where(company_search_query, query)
-    @statements = @company_join
+    @results = @company_join
   end
 
   def company_search_query
@@ -65,19 +65,19 @@ class StatementSearch
     return if @criteria[:industries].blank?
 
     @company_join = @company_join.where(companies: { industry_id: @criteria[:industries] })
-    @statements = @company_join
+    @results = @company_join
   end
 
   def filter_by_company_country
     return if @criteria[:countries].blank?
 
     @company_join = @company_join.where(companies: { country_id: @criteria[:countries] })
-    @statements = @company_join
+    @results = @company_join
   end
 
   def filter_by_legislations
     return if @criteria[:legislations].blank?
 
-    @statements = @statements.joins(:legislations).where(legislations: { id: @criteria[:legislations] })
+    @results = @results.joins(:legislations).where(legislations: { id: @criteria[:legislations] })
   end
 end
