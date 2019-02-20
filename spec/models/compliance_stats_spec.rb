@@ -233,6 +233,78 @@ RSpec.describe ComplianceStats, type: :model do
     end
   end
 
+  context 'when requesting stats for a single industry' do
+    let(:subject) { ComplianceStats.new(industry: industry1) }
+
+    let(:legislation) do
+      Legislation.create!(include_in_compliance_stats: true,
+                          name: 'included-legislation',
+                          icon: 'icon')
+    end
+
+    let(:industry1) { Industry.create! }
+    let(:industry2) { Industry.create! }
+
+    before do
+      company1.update(industry: industry1)
+      company2.update(industry: industry2)
+    end
+
+    let!(:industry1_statement) do
+      company1.statements.create!(legislations: [legislation],
+                                  published: true,
+                                  url: 'http://example.com',
+                                  approved_by_board: 'Yes',
+                                  link_on_front_page: true,
+                                  signed_by_director: true)
+    end
+
+    let!(:industry2_statement) do
+      company1.statements.create!(legislations: [legislation],
+                                  published: true,
+                                  url: 'http://example.com',
+                                  approved_by_board: 'No',
+                                  link_on_front_page: false,
+                                  signed_by_director: false)
+    end
+
+    it 'includes a single statement in the total' do
+      expect(subject.total).to eq(1)
+    end
+
+    it 'includes the industry 1 statement in the approved_by_board_count' do
+      expect(subject.approved_by_board_count).to eq(1)
+    end
+
+    it 'includes the industry 1 statement in the link_on_front_page_count' do
+      expect(subject.link_on_front_page_count).to eq(1)
+    end
+
+    it 'includes the industry 1 statement in the signed_by_director_count' do
+      expect(subject.signed_by_director_count).to eq(1)
+    end
+
+    it 'includes the industry 1 statement in the fully_compliant_count' do
+      expect(subject.fully_compliant_count).to eq(1)
+    end
+
+    it 'calculates the percent_approved_by_board correctly' do
+      expect(subject.percent_approved_by_board).to eq(100)
+    end
+
+    it 'calculates the percent_link_on_front_page' do
+      expect(subject.percent_link_on_front_page).to eq(100)
+    end
+
+    it 'calculates the percent_signed_by_director' do
+      expect(subject.percent_signed_by_director).to eq(100)
+    end
+
+    it 'calculates the percent_fully_compliant' do
+      expect(subject.percent_fully_compliant).to eq(100)
+    end
+  end
+
   describe '#statements' do
     let(:software) { Industry.create! name: 'Software' }
     let(:software_company) { Company.create!(name: 'company-1', industry: software) }
