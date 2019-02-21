@@ -63,158 +63,86 @@ class ComplianceStats
   end
 
   def latest_published_statement_count
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(id) FROM published_statements
-      WHERE reverse_publication_order = 1
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .count
   end
 
   def latest_published_statement_count_for(industry)
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(published_statements.id) FROM published_statements
-      INNER JOIN companies ON published_statements.company_id = companies.id
-      WHERE reverse_publication_order = 1
-      AND companies.industry_id = #{industry.id}
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where('companies.industry_id = ?', industry.id)
+      .count
   end
 
   def latest_published_statements_approved_by_board_count
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(id) FROM published_statements
-      WHERE reverse_publication_order = 1
-      AND approved_by_board = 'Yes'
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where(approved_by_board: 'Yes')
+      .count
   end
 
   def latest_published_statements_approved_by_board_count_for(industry)
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(published_statements.id) FROM published_statements
-      INNER JOIN companies ON published_statements.company_id = companies.id
-      WHERE reverse_publication_order = 1
-      AND companies.industry_id = #{industry.id}
-      AND approved_by_board = 'Yes'
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where('companies.industry_id = ?', industry.id)
+      .where(approved_by_board: 'Yes')
+      .count
   end
 
   def latest_published_statements_link_on_front_page_count
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(id) FROM published_statements
-      WHERE reverse_publication_order = 1
-      AND link_on_front_page = true
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where(link_on_front_page: true)
+      .count
   end
 
   def latest_published_statements_link_on_front_page_count_for(industry)
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(published_statements.id) FROM published_statements
-      INNER JOIN companies ON published_statements.company_id = companies.id
-      WHERE reverse_publication_order = 1
-      AND companies.industry_id = #{industry.id}
-      AND link_on_front_page = true
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where('companies.industry_id = ?', industry.id)
+      .where(link_on_front_page: true)
+      .count
   end
 
   def latest_published_statements_signed_by_director_count
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(id) FROM published_statements
-      WHERE reverse_publication_order = 1
-      AND signed_by_director = true
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where(signed_by_director: true)
+      .count
   end
 
   def latest_published_statements_signed_by_director_count_for(industry)
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(published_statements.id) FROM published_statements
-      INNER JOIN companies ON published_statements.company_id = companies.id
-      WHERE reverse_publication_order = 1
-      AND companies.industry_id = #{industry.id}
-      AND signed_by_director = true
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where('companies.industry_id = ?', industry.id)
+      .where(signed_by_director: true)
+      .count
   end
 
   def latest_published_statements_fully_compliant_count
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(id) FROM published_statements
-      WHERE reverse_publication_order = 1
-      AND approved_by_board = 'Yes'
-      AND link_on_front_page IS TRUE
-      AND signed_by_director IS TRUE
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where(approved_by_board: 'Yes')
+      .where(link_on_front_page: true)
+      .where(signed_by_director: true)
+      .count
   end
 
   def latest_published_statements_fully_compliant_count_for(industry)
-    sql = <<~SQL
-      #{with_ordered_published_statements_sql_fragment}
-
-      SELECT COUNT(published_statements.id) FROM published_statements
-      INNER JOIN companies ON published_statements.company_id = companies.id
-      WHERE reverse_publication_order = 1
-      AND companies.industry_id = #{industry.id}
-      AND approved_by_board = 'Yes'
-      AND link_on_front_page IS TRUE
-      AND signed_by_director IS TRUE
-    SQL
-
-    Statement.connection.select_value(sql)
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+      .where('companies.industry_id = ?', industry.id)
+      .where(approved_by_board: 'Yes')
+      .where(link_on_front_page: true)
+      .where(signed_by_director: true)
+      .count
   end
 
   private
 
   def percent_for_stat(stat)
     total.positive? ? ((stat.to_f / total.to_f) * 100).to_i : 0
-  end
-
-  def with_ordered_published_statements_sql_fragment
-    <<~SQL
-      WITH statements_included_in_compliance_stats AS (
-        SELECT statements.* FROM statements
-        INNER JOIN legislation_statements ON statements.id = legislation_statements.statement_id
-        INNER JOIN legislations ON legislations.id = legislation_statements.legislation_id
-        WHERE legislations.include_in_compliance_stats IS TRUE
-      ),
-      published_statements AS (
-        SELECT statements.*,
-               ROW_NUMBER() OVER(PARTITION BY statements.company_id
-                                 ORDER BY statements.last_year_covered DESC, statements.date_seen DESC) AS reverse_publication_order
-        FROM statements_included_in_compliance_stats AS statements
-        WHERE published IS TRUE )
-    SQL
   end
 end
 # rubocop:enable Metrics/ClassLength
