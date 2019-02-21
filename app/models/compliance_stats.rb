@@ -2,72 +2,38 @@ class ComplianceStats
   attr_reader :industry
 
   def initialize(industry: false)
-    @industry = industry
     @statements = Statement
                   .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    @statements = @statements.merge(Company.where('companies.industry_id = ?', industry.id)) if industry
   end
 
   def total
-    if @industry
-      @statements
-        .where('companies.industry_id = ?', industry.id)
-        .count
-    else
-      @statements
-        .count
-    end
+    @statements
+      .count
   end
 
   def approved_by_board_count
-    if @industry
-      @statements
-        .where('companies.industry_id = ?', industry.id)
-        .approved_by_board
-        .count
-    else
-      @statements
-        .approved_by_board
-        .count
-    end
+    @statements
+      .approved_by_board
+      .count
   end
 
   def link_on_front_page_count
-    if @industry
-      @statements
-        .where('companies.industry_id = ?', industry.id)
-        .link_on_front_page
-        .count
-    else
-      @statements
-        .link_on_front_page
-        .count
-    end
+    @statements
+      .link_on_front_page
+      .count
   end
 
   def signed_by_director_count
-    if @industry
-      @statements
-        .where('companies.industry_id = ?', industry.id)
-        .signed_by_director
-        .count
-    else
-      @statements
-        .signed_by_director
-        .count
-    end
+    @statements
+      .signed_by_director
+      .count
   end
 
   def fully_compliant_count
-    if @industry
-      @statements
-        .where('companies.industry_id = ?', industry.id)
-        .fully_compliant
-        .count
-    else
-      @statements
-        .fully_compliant
-        .count
-    end
+    @statements
+      .fully_compliant
+      .count
   end
 
   def percent_approved_by_board
