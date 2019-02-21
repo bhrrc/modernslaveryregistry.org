@@ -40,6 +40,14 @@ Feature: Search statements
     When Joe selects country "France"
     Then Joe should only see "Banana Ltd" in the search results
 
+  Scenario: Filter by legislation
+    When Joe selects legislation "Act X"
+    Then Joe should see the following search results:
+      | name         | country        | industry    | link_text        |
+      | Banana Ltd   | France         | Agriculture | 1 statement      |
+      | Cucumber Inc | United States  | Retail      | Submit statement |
+      | Cucumber Ltd | United Kingdom | Software    | 1 statement      |
+
   Scenario: Download statements when not logged in as admin
     When Patricia downloads all statements
     Then Patricia should see all the published statements

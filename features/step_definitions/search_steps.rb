@@ -25,6 +25,10 @@ Given('a search alias from {string} to {string} exists') do |target, substitutio
   ActiveRecord::Base.connection.execute(query)
 end
 
+Then('{actor} should see the following search results:') do |actor, table|
+  expect(actor.visible_search_results).to eq(table.hashes)
+end
+
 module ExploresStatements
   def attempts_to_search_for(query)
     visit explore_path
@@ -56,6 +60,17 @@ module ExploresStatements
       select legislation, from: 'legislations_'
     end
     click_button 'Search'
+  end
+
+  def visible_search_results
+    all('[data-content="company"]').map do |company_div|
+      {
+        'name' => company_div.find('[data-content="name"]').text,
+        'country' => company_div.find('[data-content="country"]').text,
+        'industry' => company_div.find('[data-content="industry"]').text,
+        'link_text' => company_div.find('[data-content="statements"]').text
+      }
+    end
   end
 
   def visible_statement_search_results_summary
