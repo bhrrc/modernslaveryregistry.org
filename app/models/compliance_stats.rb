@@ -8,23 +8,23 @@ class ComplianceStats
   end
 
   def total
-    @statements.count
+    @total ||= @statements.count
   end
 
   def approved_by_board_count
-    @statements.approved_by_board.count
+    @approved_by_board_count ||= @statements.approved_by_board.count
   end
 
   def link_on_front_page_count
-    @statements.link_on_front_page.count
+    @link_on_front_page_count ||= @statements.link_on_front_page.count
   end
 
   def signed_by_director_count
-    @statements.signed_by_director.count
+    @signed_by_director_count ||= @statements.signed_by_director.count
   end
 
   def fully_compliant_count
-    @statements.fully_compliant.count
+    @fully_compliant_count ||= @statements.fully_compliant.count
   end
 
   def percent_approved_by_board
