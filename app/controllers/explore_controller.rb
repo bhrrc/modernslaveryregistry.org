@@ -22,11 +22,12 @@ class ExploreController < ApplicationController
   end
 
   def search
-    Statement.search(criteria: criteria_params)
+    CompanySearch.new(criteria_params)
   end
 
   def send_csv
-    send_data Statement.to_csv(search.results, admin?), filename: csv_filename
+    results = StatementSearch.new(criteria_params).results
+    send_data Statement.to_csv(results, admin?), filename: csv_filename
   end
 
   def criteria_params

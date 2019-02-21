@@ -11,9 +11,9 @@ Feature: Search statements
       | Banana Ltd   |                   | https://banana.io/s    | France         | Agriculture | Patricia    | Act X, Act Y | Yes       |
       | Cucumber Inc |                   | https://cucumber.inc/s | United States  | Retail      |             | Act Y        | No        |
 
-  Scenario: Search by company name
+  Scenario: Search by exact company name
     Given Joe is logged in
-    When Joe searches for "cucumber"
+    When Joe searches for "cucumber ltd"
     Then Joe should only see "Cucumber Ltd" in the search results
 
   Scenario: Search by company name with 'limited' instead of 'ltd'
@@ -27,19 +27,18 @@ Feature: Search statements
     When Joe searches for "cuke"
     Then Joe should only see "Cucumber Ltd" in the search results
 
+  Scenario: Search for company with no published statements
+    Given Joe is logged in
+    When Joe searches for "cucumber inc"
+    Then Joe should only see "Cucumber Inc" in the search results
+
   Scenario: Filter by industry
     When Joe selects industry "Agriculture"
     Then Joe should only see "Banana Ltd" in the search results
 
-  Scenario: Filter by legislations
-    When Joe selects legislation "Act Y"
+  Scenario: Filter by country
+    When Joe selects country "France"
     Then Joe should only see "Banana Ltd" in the search results
-    When Joe selects legislation "Act X, Act Y"
-    Then Joe should only see "Banana Ltd, Cucumber Ltd" in the search results
-
-  Scenario: Only admins can see draft statements
-    When Joe searches for "cucumber"
-    Then Joe should only see "Cucumber Ltd" in the search results
 
   Scenario: Download statements when not logged in as admin
     When Patricia downloads all statements

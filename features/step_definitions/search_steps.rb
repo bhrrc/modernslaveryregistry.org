@@ -6,6 +6,10 @@ When('{actor} selects industry {string}') do |actor, industry|
   actor.attempts_to_filter_by_industry(industry)
 end
 
+When('{actor} selects country {string}') do |actor, country|
+  actor.attempts_to_filter_by_country(country)
+end
+
 When('{actor} selects legislation {string}') do |actor, legislation|
   legislations = legislation.split(',').map(&:strip)
   actor.attempts_to_filter_by_legislation(legislations)
@@ -37,6 +41,12 @@ module ExploresStatements
   def attempts_to_filter_by_industry(industry)
     visit explore_path
     select industry, from: 'industries_'
+    click_button 'Search'
+  end
+
+  def attempts_to_filter_by_country(country)
+    visit explore_path
+    select country, from: 'countries_'
     click_button 'Search'
   end
 

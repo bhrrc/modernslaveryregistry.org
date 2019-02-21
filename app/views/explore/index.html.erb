@@ -9,7 +9,7 @@
         </div>
         <div class="box" data-content="company_search_results">
           <% if @results.any? %>
-            <%= render partial: 'statements/list', locals: { statements: @results } %>
+            <%= render partial: 'results', locals: { results: @results, search: @search } %>
           <% else %>
             <h2 class="title is-2">No statements found</h2>
             <p>
@@ -31,7 +31,7 @@
             <div id="world-map"></div>
             <div data-content="statements-search-sidebar">
               <div style="padding: 5px; padding-top: 10px; padding-bottom: 0">
-                <strong><%= pluralize @results.total_count, 'statement' %></strong>
+                <strong><%= pluralize @results.total_count, 'company' %></strong>
                 <% if @results.any? %>
                   <%= link_to 'Download CSV', @download_url, class: 'is-pulled-right' %>
                 <% end %>
