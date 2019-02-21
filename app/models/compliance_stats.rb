@@ -63,66 +63,57 @@ class ComplianceStats
   end
 
   def latest_published_statement_count
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .count
   end
 
   def latest_published_statement_count_for(industry)
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where('companies.industry_id = ?', industry.id)
       .count
   end
 
   def latest_published_statements_approved_by_board_count
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where(approved_by_board: 'Yes')
       .count
   end
 
   def latest_published_statements_approved_by_board_count_for(industry)
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where('companies.industry_id = ?', industry.id)
       .where(approved_by_board: 'Yes')
       .count
   end
 
   def latest_published_statements_link_on_front_page_count
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where(link_on_front_page: true)
       .count
   end
 
   def latest_published_statements_link_on_front_page_count_for(industry)
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where('companies.industry_id = ?', industry.id)
       .where(link_on_front_page: true)
       .count
   end
 
   def latest_published_statements_signed_by_director_count
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where(signed_by_director: true)
       .count
   end
 
   def latest_published_statements_signed_by_director_count_for(industry)
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where('companies.industry_id = ?', industry.id)
       .where(signed_by_director: true)
       .count
   end
 
   def latest_published_statements_fully_compliant_count
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where(approved_by_board: 'Yes')
       .where(link_on_front_page: true)
       .where(signed_by_director: true)
@@ -130,8 +121,7 @@ class ComplianceStats
   end
 
   def latest_published_statements_fully_compliant_count_for(industry)
-    Statement
-      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+    statements
       .where('companies.industry_id = ?', industry.id)
       .where(approved_by_board: 'Yes')
       .where(link_on_front_page: true)
@@ -140,6 +130,11 @@ class ComplianceStats
   end
 
   private
+
+  def statements
+    Statement
+      .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+  end
 
   def percent_for_stat(stat)
     total.positive? ? ((stat.to_f / total.to_f) * 100).to_i : 0
