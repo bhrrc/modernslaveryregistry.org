@@ -114,18 +114,14 @@ class ComplianceStats
 
   def latest_published_statements_fully_compliant_count
     statements
-      .approved_by_board
-      .link_on_front_page
-      .signed_by_director
+      .fully_compliant
       .count
   end
 
   def latest_published_statements_fully_compliant_count_for(industry)
     statements
       .where('companies.industry_id = ?', industry.id)
-      .approved_by_board
-      .link_on_front_page
-      .signed_by_director
+      .fully_compliant
       .count
   end
 
