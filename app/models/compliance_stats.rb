@@ -88,14 +88,14 @@ class ComplianceStats
 
   def latest_published_statements_link_on_front_page_count
     statements
-      .where(link_on_front_page: true)
+      .link_on_front_page
       .count
   end
 
   def latest_published_statements_link_on_front_page_count_for(industry)
     statements
       .where('companies.industry_id = ?', industry.id)
-      .where(link_on_front_page: true)
+      .link_on_front_page
       .count
   end
 
@@ -115,7 +115,7 @@ class ComplianceStats
   def latest_published_statements_fully_compliant_count
     statements
       .approved_by_board
-      .where(link_on_front_page: true)
+      .link_on_front_page
       .where(signed_by_director: true)
       .count
   end
@@ -124,7 +124,7 @@ class ComplianceStats
     statements
       .where('companies.industry_id = ?', industry.id)
       .approved_by_board
-      .where(link_on_front_page: true)
+      .link_on_front_page
       .where(signed_by_director: true)
       .count
   end
