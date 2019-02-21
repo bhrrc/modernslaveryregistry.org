@@ -1,8 +1,8 @@
 require 'csv'
 
 class StatementExport
-  def self.to_csv(statements, extra)
-    fields = BASIC_FIELDS.merge(extra ? EXTRA_FIELDS : {})
+  def self.to_csv(statements, admin)
+    fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
     CSV.generate do |csv|
       csv << fields.map { |_, heading| heading }
       statements.each do |statement|
