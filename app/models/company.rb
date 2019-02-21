@@ -5,6 +5,7 @@ class Company < ApplicationRecord
            inverse_of: :company
   belongs_to :country, optional: true
   belongs_to :industry, optional: true
+  belongs_to :latest_statement_for_compliance_stats, class_name: 'Statement', optional: true
 
   validates :name, presence: true, uniqueness: true
 

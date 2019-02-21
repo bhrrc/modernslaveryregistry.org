@@ -115,4 +115,93 @@ RSpec.describe Company, type: :model do
       expect(company.latest_published_statement).to eq(more_recently_seen_published_statement)
     end
   end
+
+  describe '#latest_statement_for_compliance_stats' do
+    let(:company) { Company.create!(name: 'company-name') }
+    let(:legislation) do
+      Legislation.create!(name: 'legislation-name', include_in_compliance_stats: true, icon: 'icon')
+    end
+
+    it 'does not include non-published statements' do
+      company.statements.create!(url: 'http://example.com',
+                                 published: false,
+                                 legislations: [legislation])
+
+      expect(company.reload.latest_statement_for_compliance_stats).to be_nil
+    end
+
+    it 'does not include published statements in excluded legislation' do
+      excluded_legislation = Legislation.create!(name: 'legislation-name',
+                                                 include_in_compliance_stats: false,
+                                                 icon: 'icon')
+      company.statements.create!(url: 'http://example.com',
+                                 published: false,
+                                 legislations: [excluded_legislation])
+
+      expect(company.reload.latest_statement_for_compliance_stats).to be_nil
+    end
+
+    it 'should cache the statement as the latest statement for the company' do
+      statement = company.statements.create!(url: 'http://example.com',
+                                             published: true,
+                                             legislations: [legislation])
+
+      expect(company.reload.latest_statement_for_compliance_stats).to eq(statement)
+    end
+
+    it "should cache the company's latest statement based on last_year_covered" do
+      _older_statement = company.statements.create!(published: true,
+                                                    last_year_covered: 2018,
+                                                    url: 'http://example.com',
+                                                    legislations: [legislation])
+      newer_statement = company.statements.create!(published: true,
+                                                   last_year_covered: 2019,
+                                                   url: 'http://example.com',
+                                                   legislations: [legislation])
+
+      expect(company.reload.latest_statement_for_compliance_stats).to eq(newer_statement)
+    end
+
+    it "should cache the company's latest published statement based on last_year_covered and ignore null values" do
+      statement = company.statements.create!(published: true,
+                                             last_year_covered: 2018,
+                                             url: 'http://example.com',
+                                             legislations: [legislation])
+      _other_statement = company.statements.create!(published: true,
+                                                    last_year_covered: nil,
+                                                    url: 'http://example.com',
+                                                    legislations: [legislation])
+
+      expect(company.reload.latest_statement_for_compliance_stats).to eq(statement)
+    end
+
+    it "should cache the company's latest published statement based on date_seen after first ordering by last_year_covered" do
+      _older_statement = company.statements.create!(published: true,
+                                                    last_year_covered: 2019,
+                                                    date_seen: Date.parse('1 Jan 2019'),
+                                                    url: 'http://example.com',
+                                                    legislations: [legislation])
+      newer_statement = company.statements.create!(published: true,
+                                                   last_year_covered: 2019,
+                                                   date_seen: Date.parse('1 Feb 2019'),
+                                                   url: 'http://example.com',
+                                                   legislations: [legislation])
+
+      expect(company.reload.latest_statement_for_compliance_stats).to eq(newer_statement)
+    end
+
+    it 'should update the cache if the latest published statement is deleted' do
+      older_statement = company.statements.create!(published: true,
+                                                   last_year_covered: 2018,
+                                                   url: 'http://example.com',
+                                                   legislations: [legislation])
+      newer_statement = company.statements.create!(published: true,
+                                                   last_year_covered: 2019,
+                                                   url: 'http://example.com',
+                                                   legislations: [legislation])
+      newer_statement.destroy
+
+      expect(company.reload.latest_statement_for_compliance_stats).to eq(older_statement)
+    end
+  end
 end

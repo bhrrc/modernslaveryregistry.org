@@ -18,6 +18,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   after_save :enqueue_snapshot unless ENV['no_fetch']
   after_commit :perform_snapshot_job
 
+  after_save :update_latest_statement_for_compliance_stats
+  after_destroy :update_latest_statement_for_compliance_stats
+
+  scope(:included_in_compliance_stats, -> { joins(:legislations).merge(Legislation.included_in_compliance_stats) })
   scope(:published, -> { where(published: true) })
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
 
@@ -156,5 +160,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       filename: 'screenshot.png',
       content_type: image_fetch_result.content_type
     )
+  end
+
+  def update_latest_statement_for_compliance_stats
+    latest_statement_for_compliance_stats = company.published_statements.included_in_compliance_stats.first
+    company.update(latest_statement_for_compliance_stats: latest_statement_for_compliance_stats)
   end
 end
