@@ -4,7 +4,7 @@ class ComplianceStats
   def initialize(industry: false)
     @statements = Statement
                   .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
-    @statements = @statements.merge(Company.where('companies.industry_id = ?', industry.id)) if industry
+    @statements = @statements.merge(Company.where(industry: industry)) if industry
   end
 
   def total
