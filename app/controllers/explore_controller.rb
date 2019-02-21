@@ -27,7 +27,7 @@ class ExploreController < ApplicationController
 
   def send_csv
     results = StatementSearch.new(criteria_params).results
-    send_data Statement.to_csv(results, admin?), filename: csv_filename
+    send_data StatementExport.to_csv(results, admin?), filename: csv_filename
   end
 
   def criteria_params
