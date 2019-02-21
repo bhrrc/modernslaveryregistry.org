@@ -101,14 +101,14 @@ class ComplianceStats
 
   def latest_published_statements_signed_by_director_count
     statements
-      .where(signed_by_director: true)
+      .signed_by_director
       .count
   end
 
   def latest_published_statements_signed_by_director_count_for(industry)
     statements
       .where('companies.industry_id = ?', industry.id)
-      .where(signed_by_director: true)
+      .signed_by_director
       .count
   end
 
@@ -116,7 +116,7 @@ class ComplianceStats
     statements
       .approved_by_board
       .link_on_front_page
-      .where(signed_by_director: true)
+      .signed_by_director
       .count
   end
 
@@ -125,7 +125,7 @@ class ComplianceStats
       .where('companies.industry_id = ?', industry.id)
       .approved_by_board
       .link_on_front_page
-      .where(signed_by_director: true)
+      .signed_by_director
       .count
   end
 

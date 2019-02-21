@@ -26,6 +26,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
   scope(:approved_by_board, -> { where(approved_by_board: 'Yes') })
   scope(:link_on_front_page, -> { where(link_on_front_page: true) })
+  scope(:signed_by_director, -> { where(signed_by_director: true) })
 
   delegate :country_name, :industry_name, to: :company
 
