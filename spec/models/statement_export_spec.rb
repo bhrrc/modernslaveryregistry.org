@@ -51,7 +51,7 @@ RSpec.describe StatementExport do
 
   describe 'to_csv' do
     it 'returns data relevant for exporting in a CSV format' do
-      csv = StatementExport.to_csv([company], true)
+      csv = StatementExport.to_csv(Company.all, true)
 
       header, data = CSV.parse(csv)
 
@@ -98,7 +98,7 @@ RSpec.describe StatementExport do
     end
 
     it 'ommits admin-only information when the extra parameter is false' do
-      csv = StatementExport.to_csv([company], false)
+      csv = StatementExport.to_csv(Company.all, false)
 
       header, = CSV.parse(csv)
 
