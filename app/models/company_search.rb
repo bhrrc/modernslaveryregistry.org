@@ -21,7 +21,15 @@ class CompanySearch
   end
 
   def industry_stats
-    []
+    counts = results.pluck(:industry_id).each_with_object(Hash.new(0)) do |id, count|
+      count[id] += 1
+    end
+
+    groups = Industry.where(id: counts.keys).each_with_object([]) do |industry, array|
+      array << GroupCount.with(group: industry, count: counts[industry.id])
+    end
+
+    groups.sort_by(&:count).reverse
   end
 
   def statement_count_for(company)
