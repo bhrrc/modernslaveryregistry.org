@@ -1,12 +1,14 @@
 require 'csv'
 
 class StatementExport
-  def self.to_csv(statements, admin)
+  def self.to_csv(companies, admin)
     fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
     CSV.generate do |csv|
       csv << fields.map { |_, heading| heading }
-      statements.each do |statement|
-        csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
+      companies.each do |company|
+        company.statements.each do |statement|
+          csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
+        end
       end
     end
   end
