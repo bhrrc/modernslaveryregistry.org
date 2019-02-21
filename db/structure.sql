@@ -166,7 +166,8 @@ CREATE TABLE public.companies (
     sector_id integer,
     related_companies character varying,
     industry_id integer,
-    bhrrc_url character varying
+    bhrrc_url character varying,
+    latest_statement_for_compliance_stats_id bigint
 );
 
 
@@ -827,6 +828,13 @@ CREATE INDEX index_companies_on_industry_id ON public.companies USING btree (ind
 
 
 --
+-- Name: index_companies_on_latest_statement_for_compliance_stats_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_companies_on_latest_statement_for_compliance_stats_id ON public.companies USING btree (latest_statement_for_compliance_stats_id);
+
+
+--
 -- Name: index_companies_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1083,6 +1091,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190215122136'),
 ('20190218110536'),
 ('20190218124957'),
-('20190220121940');
+('20190220121940'),
+('20190221165142');
 
 
