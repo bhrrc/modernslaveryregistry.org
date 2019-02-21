@@ -24,6 +24,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:included_in_compliance_stats, -> { joins(:legislations).merge(Legislation.included_in_compliance_stats) })
   scope(:published, -> { where(published: true) })
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
+  scope(:approved_by_board, -> { where(approved_by_board: 'Yes') })
 
   delegate :country_name, :industry_name, to: :company
 

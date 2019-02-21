@@ -75,14 +75,14 @@ class ComplianceStats
 
   def latest_published_statements_approved_by_board_count
     statements
-      .where(approved_by_board: 'Yes')
+      .approved_by_board
       .count
   end
 
   def latest_published_statements_approved_by_board_count_for(industry)
     statements
       .where('companies.industry_id = ?', industry.id)
-      .where(approved_by_board: 'Yes')
+      .approved_by_board
       .count
   end
 
@@ -114,7 +114,7 @@ class ComplianceStats
 
   def latest_published_statements_fully_compliant_count
     statements
-      .where(approved_by_board: 'Yes')
+      .approved_by_board
       .where(link_on_front_page: true)
       .where(signed_by_director: true)
       .count
@@ -123,7 +123,7 @@ class ComplianceStats
   def latest_published_statements_fully_compliant_count_for(industry)
     statements
       .where('companies.industry_id = ?', industry.id)
-      .where(approved_by_board: 'Yes')
+      .approved_by_board
       .where(link_on_front_page: true)
       .where(signed_by_director: true)
       .count
