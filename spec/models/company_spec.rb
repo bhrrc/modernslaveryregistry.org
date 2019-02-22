@@ -104,6 +104,18 @@ RSpec.describe Company, type: :model do
       expect(company.latest_published_statement).to eq(newer_published_statement)
     end
 
+    it 'handles nil values in last_year_covered when determining the latest statement' do
+      company = Company.create!(name: 'company-name')
+      _published_statement_for_unknown_period = company.statements.create!(published: true,
+                                                                           last_year_covered: nil,
+                                                                           url: 'http://example.com')
+      published_statement = company.statements.create!(published: true,
+                                                       last_year_covered: 2018,
+                                                       url: 'http://example.com')
+
+      expect(company.latest_published_statement).to eq(published_statement)
+    end
+
     it 'uses date_seen to determine the latest published statement when last_year_covered is identical' do
       last_year_covered = 2018
       company = Company.create!(name: 'company-name')
