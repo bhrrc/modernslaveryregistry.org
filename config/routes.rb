@@ -39,7 +39,5 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  get 'health', to: 'health#show', as: :health_check
-
   get 'wp-login.php', to: proc { [404, {}, ['']] }
 end
