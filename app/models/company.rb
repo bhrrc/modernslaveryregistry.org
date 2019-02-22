@@ -12,7 +12,7 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
   def latest_statement
-    statements.limit(1).first
+    statements.first
   end
 
   def latest_published_statement
