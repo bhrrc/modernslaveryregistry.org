@@ -260,7 +260,7 @@ RSpec.describe ComplianceStats, type: :model do
     end
 
     let!(:industry2_statement) do
-      company1.statements.create!(legislations: [legislation],
+      company2.statements.create!(legislations: [legislation],
                                   published: true,
                                   url: 'http://example.com',
                                   approved_by_board: 'No',
