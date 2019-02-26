@@ -317,6 +317,66 @@ RSpec.describe ComplianceStats, type: :model do
     end
   end
 
+  context 'when a single statement is associated with multiple companies' do
+    let(:subject) { ComplianceStats.new }
+
+    let(:legislation) do
+      Legislation.create!(include_in_compliance_stats: true,
+                          name: 'included-legislation',
+                          icon: 'icon')
+    end
+
+    let!(:statement) do
+      company1.statements.create!(legislations: [legislation],
+                                  published: true,
+                                  url: 'http://example.com',
+                                  approved_by_board: 'Yes',
+                                  link_on_front_page: true,
+                                  signed_by_director: true)
+    end
+
+    before do
+      statement.additional_companies_covered << company2
+      statement.save
+    end
+
+    it 'counts the statement once in the total' do
+      expect(subject.total).to eq(1)
+    end
+
+    it 'counts the statement once in the approved_by_board_count' do
+      expect(subject.approved_by_board_count).to eq(1)
+    end
+
+    it 'counts the statement once in the link_on_front_page_count' do
+      expect(subject.link_on_front_page_count).to eq(1)
+    end
+
+    it 'counts the statement once in the signed_by_director_count' do
+      expect(subject.signed_by_director_count).to eq(1)
+    end
+
+    it 'counts the statement once in the fully_compliant_count' do
+      expect(subject.fully_compliant_count).to eq(1)
+    end
+
+    it 'calculates the percent_approved_by_board correctly' do
+      expect(subject.percent_approved_by_board).to eq(100)
+    end
+
+    it 'calculates the percent_link_on_front_page' do
+      expect(subject.percent_link_on_front_page).to eq(100)
+    end
+
+    it 'calculates the percent_signed_by_director' do
+      expect(subject.percent_signed_by_director).to eq(100)
+    end
+
+    it 'calculates the percent_fully_compliant' do
+      expect(subject.percent_fully_compliant).to eq(100)
+    end
+  end
+
   context 'when a statement is associated with multiple companies in different industries' do
     let(:legislation) do
       Legislation.create!(include_in_compliance_stats: true,

@@ -5,6 +5,7 @@ class ComplianceStats
     @industry = industry
     @statements = Statement
                   .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
+                  .distinct
     @statements = @statements.merge(Company.where(industry: industry)) if industry
   end
 
