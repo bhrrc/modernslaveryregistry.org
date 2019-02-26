@@ -16,15 +16,16 @@
   </div>
 
   <div class="column">
-    <% unless statement.also_covers_companies.blank? %>
+    <% if statement.additional_companies_covered.any? %>
       <p>
         This statement also covers the following companies:
         <br />
-        <span data-content="also_covers_companies"><%= statement.also_covers_companies %></span>
+        <%= statement.additional_companies_covered.map do |company| %>
+          <% link_to company.name, company_statement_path(company, statement) %>
+        <% end.join(', ').html_safe %>
       </p>
     <% end %>
   </div>
-
 </div>
 
 <% if statement.previewable_snapshot? %>
