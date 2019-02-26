@@ -14,8 +14,12 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
+  def all_statements
+    Statement.produced_by_or_associated_with(self).order('last_year_covered DESC NULLS LAST', date_seen: :desc)
+  end
+
   def latest_statement
-    statements.first
+    all_statements.first
   end
 
   def latest_published_statement

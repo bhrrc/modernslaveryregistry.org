@@ -109,3 +109,14 @@ Feature: Submit statement
       | Link on front page can't be blank |
       | Approved by board can't be blank  |
       | Signed by director can't be blank |
+
+  Scenario: Administrator associates statement with additional companies
+    Given Patricia is logged in
+    And the company "Parent Company" has been submitted
+    And the company "Child Company" has been submitted
+    And Patricia submits the following statement for "Parent Company":
+      | Statement URL | https://example.com |
+    When Patricia updates the statement for "Parent Company" to:
+      | Additional companies covered | Child Company |
+    Then Patricia should see 1 statement for "Child Company" with:
+      | Statement URL | https://example.com |

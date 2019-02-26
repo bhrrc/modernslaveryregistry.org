@@ -116,7 +116,7 @@
             </th>
           </tr>
         </thead>
-        <% @company.statements.each do |statement| %>
+        <% @company.all_statements.each do |statement| %>
           <tr data-content="company_statement">
             <td>
               <%= link_to l(statement.date_seen), admin_statement_path(statement) %><%= statement.latest? ? ' (Latest)' : '' %>

@@ -32,6 +32,12 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:signed_by_director, -> { where(signed_by_director: true) })
   scope(:fully_compliant, -> { approved_by_board.link_on_front_page.signed_by_director })
 
+  scope :produced_by_or_associated_with, lambda { |company|
+    left_outer_joins(:additional_companies_covered)
+      .where('statements.company_id = ? OR companies_statements.company_id = ?', company.id, company.id)
+      .distinct
+  }
+
   delegate :country_name, :industry_name, to: :company
 
   attr_accessor :should_enqueue_snapshot

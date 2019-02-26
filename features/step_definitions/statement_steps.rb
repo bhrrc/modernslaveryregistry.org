@@ -231,7 +231,7 @@ module FillsInForms
   end
 
   def drop_downs
-    ['Country']
+    ['Country', 'Additional companies covered']
   end
 
   def check_boxes

@@ -86,6 +86,16 @@ RSpec.describe Company, type: :model do
 
       expect(company.latest_statement).to eq(newer_statement)
     end
+
+    it 'includes statements produced by other companies when returning the latest statement' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+      _company1_statement = company1.statements.create!(url: 'http://example.com/c1', last_year_covered: 2018)
+      company2_statement = company2.statements.create!(url: 'http://example.com/c2', last_year_covered: 2019)
+      company1.statements_from_other_companies << company2_statement
+
+      expect(company1.latest_statement).to eq(company2_statement)
+    end
   end
 
   describe '#latest_published_statements' do
@@ -233,6 +243,73 @@ RSpec.describe Company, type: :model do
       company1_statement.additional_companies_covered << company2
 
       expect(company2.statements_from_other_companies).to include(company1_statement)
+    end
+  end
+
+  describe '#all_statements' do
+    it 'orders statements by the last year covered' do
+      company = Company.create!(name: 'company-name')
+      earliest_statement = company.statements.create!(
+        last_year_covered: 2014,
+        url: 'http://example.com'
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        url: 'http://example.com'
+      )
+
+      expect(company.all_statements).to eq([latest_statement, earliest_statement])
+    end
+
+    it 'handles null when ordering statements by the last year covered' do
+      company = Company.create!(name: 'company-name')
+      statement_without_last_year_covered = company.statements.create!(
+        last_year_covered: nil,
+        url: 'http://example.com'
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        url: 'http://example.com'
+      )
+
+      expect(company.all_statements).to eq([latest_statement, statement_without_last_year_covered])
+    end
+
+    it 'orders statements by the date seen if last year covered is the same' do
+      company = Company.create!(name: 'company-name')
+      earliest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 2.days.ago,
+        url: 'http://example.com'
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 1.day.ago,
+        url: 'http://example.com'
+      )
+
+      expect(company.all_statements).to eq([latest_statement, earliest_statement])
+    end
+
+    it 'returns all statements associated with this company' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+      company1_statement = company1.statements.create!(url: 'http://example.com/c1')
+      company2_statement = company2.statements.create!(url: 'http://example.com/c2')
+      company1.statements_from_other_companies << company2_statement
+
+      expect(company1.all_statements).to contain_exactly(company1_statement, company2_statement)
+    end
+
+    it 'avoids duplicating statements when associated with multiple other companies' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+      company3 = Company.create!(name: 'company-3')
+      company1_statement = company1.statements.create!(url: 'http://example.com/c1')
+      company2.statements_from_other_companies << company1_statement
+      company3.statements_from_other_companies << company1_statement
+
+      expect(company1.all_statements).to contain_exactly(company1_statement)
     end
   end
 end

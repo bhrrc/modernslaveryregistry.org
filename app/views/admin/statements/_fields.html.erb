@@ -38,6 +38,16 @@
     </p>
   </div>
 
+  <div class="select is-multiple">
+    <%= f.label :additional_companies_covered_ids, 'Additional companies covered', class: 'label' %>
+    <p class="control">
+      <%= f.select :additional_companies_covered_ids,
+                   Company.order(:name).all.collect { |c| [c.name, c.id] },
+                   { include_blank: true },
+                   { multiple: true, size: '4' } %>
+    </p>
+  </div>
+
   <div class="field" data-content="Legislations">
     <%= f.label :legislations, class: 'label' %>
     <%= f.collection_check_boxes :legislation_ids, Legislation.all.order(:id), :id, :name do |m| %>

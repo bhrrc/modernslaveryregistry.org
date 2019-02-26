@@ -78,6 +78,6 @@ module Admin
       published
       contributor_email
       also_covers_companies
-    ] + [{ legislation_ids: [], year_covered: [] }]).freeze
+    ] + [{ legislation_ids: [], year_covered: [], additional_companies_covered_ids: [] }]).freeze
   end
 end
