@@ -16,6 +16,14 @@
   </div>
 
   <div class="column">
+    <% unless statement.published_by?(company) %>
+      <p>
+        This statement was published by
+        <%= link_to statement.company.name, company_statement_path(statement.company, statement) %>.
+      </p>
+      <br/>
+    <% end %>
+
     <% if statement.additional_companies_covered_excluding(company).any? %>
       <p>
         This statement also covers the following companies:

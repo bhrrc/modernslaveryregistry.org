@@ -73,6 +73,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def published_by?(company)
+    self.company == company
+  end
+
   def additional_companies_covered_excluding(company)
     additional_companies_covered - [company]
   end

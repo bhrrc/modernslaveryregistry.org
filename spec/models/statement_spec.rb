@@ -155,4 +155,21 @@ RSpec.describe Statement, type: :model do
       expect(statement.additional_companies_covered_excluding(company2)).to be_empty
     end
   end
+
+  describe '#published_by?' do
+    it 'returns true if the company matches the publishing company' do
+      publishing_company = Company.create!(name: 'publishing-company')
+      statement = publishing_company.statements.create!(url: 'http://example.com')
+
+      expect(statement.published_by?(publishing_company)).to be(true)
+    end
+
+    it 'returns false if the company does not match the publishing company' do
+      publishing_company = Company.create!(name: 'publishing-company')
+      other_company = Company.create!(name: 'other-company')
+      statement = publishing_company.statements.create!(url: 'http://example.com')
+
+      expect(statement.published_by?(other_company)).to be(false)
+    end
+  end
 end
