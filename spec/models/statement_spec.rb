@@ -154,6 +154,18 @@ RSpec.describe Statement, type: :model do
 
       expect(statement.additional_companies_covered_excluding(company2)).to be_empty
     end
+
+    it 'sorts the companies alphabetically' do
+      company1 = Company.create!(name: 'company1')
+      company_z = Company.create!(name: 'company-z')
+      company_a = Company.create!(name: 'company-a')
+      statement = company1.statements.create!(url: 'http://example.com')
+      statement.additional_companies_covered << company_z
+      statement.additional_companies_covered << company_a
+
+      companies = statement.additional_companies_covered_excluding(Company.new)
+      expect(companies).to eq([company_a, company_z])
+    end
   end
 
   describe '#published_by?' do

@@ -78,7 +78,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def additional_companies_covered_excluding(company)
-    additional_companies_covered - [company]
+    additional_companies_covered.order(:name) - [company]
   end
 
   def associate_with_user(user)

@@ -13,7 +13,7 @@ RSpec.describe 'admin/statements/_details.html.erb', type: :view do
 
   it 'links to additional companies covered by this statement' do
     another_company = stub_model(Company, name: 'another-company')
-    statement.additional_companies_covered << another_company
+    allow(statement).to receive(:additional_companies_covered_excluding).with(company).and_return([another_company])
 
     render partial: 'details', locals: { company: company, statement: statement }
 
