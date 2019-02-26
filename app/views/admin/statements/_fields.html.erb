@@ -37,7 +37,7 @@
       <%= f.select :additional_companies_covered_ids,
                    Company.order(:name).all.collect { |c| [c.name, c.id] },
                    { include_blank: true },
-                   { multiple: true, size: '4' } %>
+                   { multiple: true, size: '4', class: 'chosen-select' } %>
     </p>
   </div>
 
@@ -114,3 +114,11 @@
     </div>
   </div>
 </div>
+
+<script>
+$('.chosen-select').chosen({
+  inherit_select_classes: true,
+  no_results_text: 'No companies matching',
+  width: '100%'
+})
+</script>
