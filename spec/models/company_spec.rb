@@ -146,6 +146,21 @@ RSpec.describe Company, type: :model do
     end
   end
 
+  describe '#published_statements' do
+    it 'includes statements produced by other companies' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+
+      company1_statement = company1.statements.create!(published: true,
+                                                       url: 'http://example.com')
+      company2_statement = company2.statements.create!(published: true,
+                                                       url: 'http://example.com')
+      company1.statements_from_other_companies << company2_statement
+
+      expect(company1.published_statements).to contain_exactly(company1_statement, company2_statement)
+    end
+  end
+
   describe '#latest_statement_for_compliance_stats' do
     let(:company) { Company.create!(name: 'company-name') }
     let(:legislation) do

@@ -27,7 +27,7 @@ class Company < ApplicationRecord
   end
 
   def published_statements
-    statements.published
+    all_statements.published
   end
 
   def country_name
