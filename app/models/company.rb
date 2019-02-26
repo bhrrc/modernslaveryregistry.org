@@ -23,7 +23,7 @@ class Company < ApplicationRecord
   end
 
   def latest_published_statement
-    published_statements.first
+    published_statements.reverse_chronological_order.first
   end
 
   def published_statements
