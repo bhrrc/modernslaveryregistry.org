@@ -24,6 +24,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   after_save :update_latest_statement_for_compliance_stats
   after_destroy :update_latest_statement_for_compliance_stats
 
+  scope(:reverse_chronological_order, -> { order('last_year_covered DESC NULLS LAST', date_seen: :desc) })
   scope(:included_in_compliance_stats, -> { joins(:legislations).merge(Legislation.included_in_compliance_stats) })
   scope(:published, -> { where(published: true) })
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })

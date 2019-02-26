@@ -1,6 +1,6 @@
 class Company < ApplicationRecord
   has_many :statements,
-           -> { order('last_year_covered DESC NULLS LAST', date_seen: :desc) },
+           -> { Statement.reverse_chronological_order },
            dependent: :destroy,
            inverse_of: :company
   # rubocop:disable Rails/HasAndBelongsToMany
@@ -15,7 +15,7 @@ class Company < ApplicationRecord
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
   def all_statements
-    Statement.produced_by_or_associated_with(self).order('last_year_covered DESC NULLS LAST', date_seen: :desc)
+    Statement.produced_by_or_associated_with(self).reverse_chronological_order
   end
 
   def latest_statement
