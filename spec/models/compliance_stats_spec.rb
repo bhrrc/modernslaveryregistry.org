@@ -316,4 +316,54 @@ RSpec.describe ComplianceStats, type: :model do
       expect(subject.percent_fully_compliant).to eq(100)
     end
   end
+
+  context 'when a statement is associated with multiple companies in different industries' do
+    let(:legislation) do
+      Legislation.create!(include_in_compliance_stats: true,
+                          name: 'included-legislation',
+                          icon: 'icon')
+    end
+
+    let(:industry1) { Industry.create! }
+    let(:industry2) { Industry.create! }
+
+    let!(:statement) do
+      company1.statements.create!(legislations: [legislation],
+                                  published: true,
+                                  url: 'http://example.com',
+                                  approved_by_board: 'Yes',
+                                  link_on_front_page: true,
+                                  signed_by_director: true)
+    end
+
+    before do
+      company1.update(industry: industry1)
+      company2.update(industry: industry2)
+      statement.additional_companies_covered << company2
+    end
+
+    context 'and generating stats for industry1' do
+      let(:subject) { ComplianceStats.new(industry: industry1) }
+
+      it 'includes a single statement in the total' do
+        expect(subject.total).to eq(1)
+      end
+
+      it 'calculates the percent_fully_compliant' do
+        expect(subject.percent_fully_compliant).to eq(100)
+      end
+    end
+
+    context 'and generating stats for industry2' do
+      let(:subject) { ComplianceStats.new(industry: industry2) }
+
+      it 'includes a single statement in the total' do
+        expect(subject.total).to eq(1)
+      end
+
+      it 'calculates the percent_fully_compliant' do
+        expect(subject.percent_fully_compliant).to eq(100)
+      end
+    end
+  end
 end

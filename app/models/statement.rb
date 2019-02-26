@@ -9,7 +9,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :legislation_statements, dependent: :destroy
   has_many :legislations, through: :legislation_statements
   # rubocop:disable Rails/HasAndBelongsToMany
-  has_and_belongs_to_many :additional_companies_covered, class_name: 'Company'
+  has_and_belongs_to_many :additional_companies_covered,
+                          class_name: 'Company',
+                          after_add: :update_latest_statement_for_compliance_stats_for_other_company,
+                          after_remove: :update_latest_statement_for_compliance_stats_for_other_company
   # rubocop:enable Rails/HasAndBelongsToMany
 
   validates :url, presence: true, url_format: true
@@ -174,6 +177,11 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       filename: 'screenshot.png',
       content_type: image_fetch_result.content_type
     )
+  end
+
+  def update_latest_statement_for_compliance_stats_for_other_company(other_company = nil)
+    latest_statement_for_compliance_stats = other_company.published_statements.included_in_compliance_stats.first
+    other_company.update(latest_statement_for_compliance_stats: latest_statement_for_compliance_stats)
   end
 
   def update_latest_statement_for_compliance_stats

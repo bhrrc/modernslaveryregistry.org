@@ -263,6 +263,27 @@ RSpec.describe Company, type: :model do
 
       expect(company.reload.latest_statement_for_compliance_stats).to eq(older_statement)
     end
+
+    it 'updates cache when a statement is associated with this company' do
+      other_company = Company.create!(name: 'other-company')
+      statement_from_other_company = other_company.statements.create!(published: true,
+                                                                      url: 'http://example.com',
+                                                                      legislations: [legislation])
+      statement_from_other_company.additional_companies_covered << company
+
+      expect(company.reload.latest_statement_for_compliance_stats).to eq(statement_from_other_company)
+    end
+
+    it 'updates cache when a statement is unassociated with this company' do
+      other_company = Company.create!(name: 'other-company')
+      statement_from_other_company = other_company.statements.create!(published: true,
+                                                                      url: 'http://example.com',
+                                                                      legislations: [legislation])
+      statement_from_other_company.additional_companies_covered << company
+      statement_from_other_company.additional_companies_covered.destroy(company)
+
+      expect(company.reload.latest_statement_for_compliance_stats).to be_nil
+    end
   end
 
   describe '#all_statements' do
