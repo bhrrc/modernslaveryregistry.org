@@ -10,6 +10,17 @@
 
   <div class="columns">
     <div class="column is-one-quarter">
+      <span class="label">Additional companies covered</span>
+    </div>
+    <div class="column" data-content="additional_companies">
+      <%= statement.additional_companies_covered.map do |company| %>
+        <% link_to company.name, admin_company_path(company), class: 'is-url' %>
+      <% end.join(', ').html_safe %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
       <span class="label">URL</span>
     </div>
     <div class="column">
