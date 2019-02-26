@@ -139,7 +139,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     legislations.any? { |legislation| legislation.name == Legislation::CALIFORNIA_NAME }
   end
 
-  def latest?
+  def latest_for?(company)
     self == company.latest_statement
   end
 

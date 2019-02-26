@@ -119,7 +119,7 @@
         <% @company.all_statements.each do |statement| %>
           <tr data-content="company_statement">
             <td>
-              <%= link_to l(statement.date_seen), admin_statement_path(statement) %><%= statement.latest? ? ' (Latest)' : '' %>
+              <%= link_to l(statement.date_seen), admin_statement_path(statement) %><%= statement.latest_for?(@company) ? ' (Latest)' : '' %>
             </td>
             <td data-content="period_covered">
               <%= statement.period_covered %>
