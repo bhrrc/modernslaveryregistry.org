@@ -8,6 +8,9 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :snapshot, dependent: :destroy
   has_many :legislation_statements, dependent: :destroy
   has_many :legislations, through: :legislation_statements
+  # rubocop:disable Rails/HasAndBelongsToMany
+  has_and_belongs_to_many :additional_companies_covered, class_name: 'Company'
+  # rubocop:enable Rails/HasAndBelongsToMany
 
   validates :url, presence: true, url_format: true
   validates :link_on_front_page, boolean: true, if: -> { legislation_requires?(:link_on_front_page) }

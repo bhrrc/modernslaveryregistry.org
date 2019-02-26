@@ -224,4 +224,15 @@ RSpec.describe Company, type: :model do
       expect(company.reload.latest_statement_for_compliance_stats).to eq(older_statement)
     end
   end
+
+  describe '#statements_from_other_companies' do
+    it 'can be associated with statements produced by other companies' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+      company1_statement = company1.statements.create!(url: 'http://example.com')
+      company1_statement.additional_companies_covered << company2
+
+      expect(company2.statements_from_other_companies).to include(company1_statement)
+    end
+  end
 end

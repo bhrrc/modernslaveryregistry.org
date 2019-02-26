@@ -135,4 +135,13 @@ RSpec.describe Statement, type: :model do
       end
     end
   end
+
+  it 'can apply to other companies' do
+    company1 = Company.create!(name: 'company-1')
+    company2 = Company.create!(name: 'company-2')
+    company1_statement = company1.statements.create!(url: 'http://example.com')
+    company2.statements_from_other_companies << company1_statement
+
+    expect(company1_statement.additional_companies_covered).to include(company2)
+  end
 end
