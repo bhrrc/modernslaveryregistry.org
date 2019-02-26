@@ -16,14 +16,12 @@ Feature: Submit statement
       | Link on front page    | No                                         |
       | Legislations          | Green Edibles Act, Vegetables Act          |
       | Published             | Yes                                        |
-      | Also covers companies | Gherkin Holdings                           |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL         | https://cucumber.io/anti-slavery-statement |
       | Signed by director    | Yes                                        |
       | Approved by board     | Not explicit                               |
       | Link on front page    | No                                         |
       | Legislations          | Green Edibles Act, Vegetables Act          |
-      | Also covers companies | Gherkin Holdings                           |
 
   Scenario: Administrator submits statement for existing company
     Given the company "Cucumber Ltd" has been submitted
@@ -66,7 +64,6 @@ Feature: Submit statement
       | Signed by director    | No                                         |
       | Approved by board     | Yes                                        |
       | Link on front page    | Yes                                        |
-      | Also covers companies | Gherkin Holdings                           |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL         | https://cucumber.io/updated-statement      |
       | Signed by director    | No                                         |
