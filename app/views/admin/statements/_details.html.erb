@@ -1,6 +1,15 @@
 <div data-content="statement">
   <div class="columns">
     <div class="column is-one-quarter">
+      <span class="label">Publishing company</span>
+    </div>
+    <div class="column" data-content="company_name">
+      <%= link_to statement.company.name, admin_company_path(statement.company) %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
       <span class="label">URL</span>
     </div>
     <div class="column">

@@ -263,6 +263,10 @@ GEM
       netrc (~> 0.8)
     rollbar (2.16.2)
       multi_json
+    rspec-activemodel-mocks (1.1.0)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      rspec-mocks (>= 2.99, < 4.0)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
@@ -386,6 +390,7 @@ DEPENDENCIES
   rails-erd
   rest-client
   rollbar
+  rspec-activemodel-mocks
   rspec-rails
   rubocop
   sass-rails (~> 5.0)
