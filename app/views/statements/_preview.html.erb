@@ -16,11 +16,11 @@
   </div>
 
   <div class="column">
-    <% if statement.additional_companies_covered.any? %>
+    <% if statement.additional_companies_covered_excluding(company).any? %>
       <p>
         This statement also covers the following companies:
         <br />
-        <%= statement.additional_companies_covered.map do |company| %>
+        <%= statement.additional_companies_covered_excluding(company).map do |company| %>
           <% link_to company.name, company_statement_path(company, statement) %>
         <% end.join(', ').html_safe %>
       </p>

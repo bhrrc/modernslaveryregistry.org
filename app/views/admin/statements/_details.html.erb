@@ -13,7 +13,7 @@
       <span class="label">Additional companies covered</span>
     </div>
     <div class="column" data-content="additional_companies">
-      <%= statement.additional_companies_covered.map do |company| %>
+      <%= statement.additional_companies_covered_excluding(company).map do |company| %>
         <% link_to company.name, admin_company_path(company), class: 'is-url' %>
       <% end.join(', ').html_safe %>
     </div>

@@ -144,4 +144,15 @@ RSpec.describe Statement, type: :model do
 
     expect(company1_statement.additional_companies_covered).to include(company2)
   end
+
+  describe '#additional_companies_covered_excluding' do
+    it 'excludes the company passed to the method' do
+      company1 = Company.create!(name: 'company1')
+      company2 = Company.create!(name: 'company2')
+      statement = company1.statements.create!(url: 'http://example.com')
+      statement.additional_companies_covered << company2
+
+      expect(statement.additional_companies_covered_excluding(company2)).to be_empty
+    end
+  end
 end

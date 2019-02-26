@@ -73,6 +73,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def additional_companies_covered_excluding(company)
+    additional_companies_covered - [company]
+  end
+
   def associate_with_user(user)
     self.verified_by ||= user if user.admin? && published?
     self.contributor_email = user && user.email if contributor_email.blank?

@@ -77,7 +77,7 @@
     </div>
     <div class="box">
       <% if @company.latest_statement.present? %>
-        <%= render partial: 'admin/statements/details', locals: { statement: @company.latest_statement } %>
+        <%= render partial: 'admin/statements/details', locals: { company: @company, statement: @company.latest_statement } %>
       <% else %>
         <%= @company.name %> has no statements. <%= link_to 'Add one', new_admin_company_statement_path(@company) %>.
       <% end %>
