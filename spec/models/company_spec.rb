@@ -92,7 +92,7 @@ RSpec.describe Company, type: :model do
       company2 = Company.create!(name: 'company-2')
       _company1_statement = company1.statements.create!(url: 'http://example.com/c1', last_year_covered: 2018)
       company2_statement = company2.statements.create!(url: 'http://example.com/c2', last_year_covered: 2019)
-      company1.statements_from_other_companies << company2_statement
+      company2_statement.additional_companies_covered << company1
 
       expect(company1.latest_statement).to eq(company2_statement)
     end
@@ -155,7 +155,7 @@ RSpec.describe Company, type: :model do
       company2_statement = company2.statements.create!(published: true,
                                                        last_year_covered: 2019,
                                                        url: 'http://example.com')
-      company1.statements_from_other_companies << company2_statement
+      company2_statement.additional_companies_covered << company1
 
       expect(company1.latest_published_statement).to eq(company2_statement)
     end
@@ -170,7 +170,7 @@ RSpec.describe Company, type: :model do
                                                        url: 'http://example.com')
       company2_statement = company2.statements.create!(published: true,
                                                        url: 'http://example.com')
-      company1.statements_from_other_companies << company2_statement
+      company2_statement.additional_companies_covered << company1
 
       expect(company1.published_statements).to contain_exactly(company1_statement, company2_statement)
     end
@@ -265,17 +265,6 @@ RSpec.describe Company, type: :model do
     end
   end
 
-  describe '#statements_from_other_companies' do
-    it 'can be associated with statements produced by other companies' do
-      company1 = Company.create!(name: 'company-1')
-      company2 = Company.create!(name: 'company-2')
-      company1_statement = company1.statements.create!(url: 'http://example.com')
-      company1_statement.additional_companies_covered << company2
-
-      expect(company2.statements_from_other_companies).to include(company1_statement)
-    end
-  end
-
   describe '#all_statements' do
     it 'orders statements by the last year covered' do
       company = Company.create!(name: 'company-name')
@@ -326,7 +315,7 @@ RSpec.describe Company, type: :model do
       company2 = Company.create!(name: 'company-2')
       company1_statement = company1.statements.create!(url: 'http://example.com/c1')
       company2_statement = company2.statements.create!(url: 'http://example.com/c2')
-      company1.statements_from_other_companies << company2_statement
+      company2_statement.additional_companies_covered << company1
 
       expect(company1.all_statements).to contain_exactly(company1_statement, company2_statement)
     end
@@ -336,8 +325,8 @@ RSpec.describe Company, type: :model do
       company2 = Company.create!(name: 'company-2')
       company3 = Company.create!(name: 'company-3')
       company1_statement = company1.statements.create!(url: 'http://example.com/c1')
-      company2.statements_from_other_companies << company1_statement
-      company3.statements_from_other_companies << company1_statement
+      company1_statement.additional_companies_covered << company2
+      company1_statement.additional_companies_covered << company3
 
       expect(company1.all_statements).to contain_exactly(company1_statement)
     end

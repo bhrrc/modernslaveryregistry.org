@@ -3,9 +3,6 @@ class Company < ApplicationRecord
            -> { Statement.reverse_chronological_order },
            dependent: :destroy,
            inverse_of: :company
-  # rubocop:disable Rails/HasAndBelongsToMany
-  has_and_belongs_to_many :statements_from_other_companies, class_name: 'Statement'
-  # rubocop:enable Rails/HasAndBelongsToMany
   belongs_to :country, optional: true
   belongs_to :industry, optional: true
   belongs_to :latest_statement_for_compliance_stats, class_name: 'Statement', optional: true
