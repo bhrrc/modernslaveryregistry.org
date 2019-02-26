@@ -352,4 +352,49 @@ RSpec.describe Company, type: :model do
       expect(company1.all_statements).to contain_exactly(company1_statement)
     end
   end
+
+  describe '.with_associated_published_statements_in_legislation' do
+    let(:legislation) { Legislation.create!(name: 'legislation', icon: 'icon') }
+    let(:company1) { Company.create!(name: 'company-1') }
+    let(:company2) { Company.create!(name: 'company-2') }
+    let(:statement) do
+      company2.statements.create!(url: 'http://example.com',
+                                  legislations: [legislation],
+                                  published: true)
+    end
+
+    before do
+      statement.additional_companies_covered << company1
+    end
+
+    it 'includes companies with associated statements under the legislation' do
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to contain_exactly(company1)
+    end
+
+    it 'excludes non-published statements' do
+      statement.update(published: false)
+
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to be_empty
+    end
+
+    it 'excludes statements outside the legislation' do
+      other_legislation = Legislation.create!(name: 'other-legislation', icon: 'icon')
+      statement.update(legislations: [other_legislation])
+
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to be_empty
+    end
+
+    it 'does not duplicate companies' do
+      another_statement = company2.statements.create!(url: 'http://example.com',
+                                                      legislations: [legislation],
+                                                      published: true)
+      another_statement.additional_companies_covered << company1
+
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to contain_exactly(company1)
+    end
+  end
 end

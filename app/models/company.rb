@@ -11,6 +11,16 @@ class Company < ApplicationRecord
 
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
+  scope :with_associated_published_statements_in_legislation, lambda { |legislation_name|
+    joins('INNER JOIN companies_statements ON companies_statements.company_id = companies.id')
+      .joins('INNER JOIN statements ON statements.id = companies_statements.statement_id')
+      .joins('INNER JOIN legislation_statements ON legislation_statements.statement_id = statements.id')
+      .joins('INNER JOIN legislations ON legislations.id = legislation_statements.legislation_id')
+      .merge(Statement.published)
+      .where('legislations.name = ?', legislation_name)
+      .distinct
+  }
+
   def all_statements
     Statement.produced_by_or_associated_with(self).reverse_chronological_order
   end

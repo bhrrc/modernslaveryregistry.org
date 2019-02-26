@@ -49,6 +49,14 @@ RSpec.describe StatementStats do
     Company.create! name: 'Pixar', country: gb, industry: movies
   end
 
+  let! :banana do
+    Company.create! name: 'banana ltd'
+  end
+
+  let! :strawberry do
+    Company.create! name: 'strawberry co'
+  end
+
   let! :cucumber_2016 do
     cucumber.statements.create!(
       url: 'http://cucumber.io/2016',
@@ -60,7 +68,7 @@ RSpec.describe StatementStats do
       published: true,
       contributor_email: 'someone@somewhere.com',
       legislations: [uk_legislation],
-      also_covers_companies: 'banana ltd, strawberry co'
+      additional_companies_covered: [banana, strawberry]
     )
   end
 
@@ -75,7 +83,7 @@ RSpec.describe StatementStats do
       published: true,
       contributor_email: 'someone@somewhere.com',
       legislations: [uk_legislation],
-      also_covers_companies: 'banana ltd, strawberry co'
+      additional_companies_covered: [banana, strawberry]
     )
   end
 
