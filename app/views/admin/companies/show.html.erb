@@ -77,7 +77,7 @@
     </div>
     <div class="box">
       <% if @company.latest_statement.present? %>
-        <%= render partial: 'admin/statements/details', locals: { statement: @company.latest_statement } %>
+        <%= render partial: 'admin/statements/details', locals: { company: @company, statement: @company.latest_statement } %>
       <% else %>
         <%= @company.name %> has no statements. <%= link_to 'Add one', new_admin_company_statement_path(@company) %>.
       <% end %>
@@ -116,10 +116,10 @@
             </th>
           </tr>
         </thead>
-        <% @company.statements.each do |statement| %>
+        <% @company.all_statements.each do |statement| %>
           <tr data-content="company_statement">
             <td>
-              <%= link_to l(statement.date_seen), admin_statement_path(statement) %><%= statement.latest? ? ' (Latest)' : '' %>
+              <%= link_to l(statement.date_seen), admin_statement_path(statement) %><%= statement.latest_for?(@company) ? ' (Latest)' : '' %>
             </td>
             <td data-content="period_covered">
               <%= statement.period_covered %>

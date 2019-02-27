@@ -1,6 +1,26 @@
 <div data-content="statement">
   <div class="columns">
     <div class="column is-one-quarter">
+      <span class="label">Publishing company</span>
+    </div>
+    <div class="column" data-content="company_name">
+      <%= link_to statement.company.name, admin_company_path(statement.company) %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
+      <span class="label">Additional companies covered</span>
+    </div>
+    <div class="column" data-content="additional_companies">
+      <%= statement.additional_companies_covered_excluding(company).map do |company| %>
+        <% link_to company.name, admin_company_path(company), class: 'is-url' %>
+      <% end.join(', ').html_safe %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
       <span class="label">URL</span>
     </div>
     <div class="column">
@@ -23,15 +43,6 @@
     </div>
     <div class="column" data-content="legislations">
       <%= statement.legislations.map(&:name).join(', ') %>
-    </div>
-  </div>
-
-  <div class="columns">
-    <div class="column is-one-quarter">
-      <span class="label">Also covers companies</span>
-    </div>
-    <div class="column" data-content="also_covers_companies">
-      <%= statement.also_covers_companies %>
     </div>
   </div>
 

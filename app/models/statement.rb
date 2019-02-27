@@ -8,6 +8,12 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :snapshot, dependent: :destroy
   has_many :legislation_statements, dependent: :destroy
   has_many :legislations, through: :legislation_statements
+  # rubocop:disable Rails/HasAndBelongsToMany
+  has_and_belongs_to_many :additional_companies_covered,
+                          class_name: 'Company',
+                          after_add: :update_latest_statement_for_compliance_stats_for_other_company,
+                          after_remove: :update_latest_statement_for_compliance_stats_for_other_company
+  # rubocop:enable Rails/HasAndBelongsToMany
 
   validates :url, presence: true, url_format: true
   validates :link_on_front_page, boolean: true, if: -> { legislation_requires?(:link_on_front_page) }
@@ -21,6 +27,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   after_save :update_latest_statement_for_compliance_stats
   after_destroy :update_latest_statement_for_compliance_stats
 
+  scope(:reverse_chronological_order, -> { order('last_year_covered DESC NULLS LAST', date_seen: :desc) })
   scope(:included_in_compliance_stats, -> { joins(:legislations).merge(Legislation.included_in_compliance_stats) })
   scope(:published, -> { where(published: true) })
   scope(:most_recently_published, -> { published.order('created_at DESC').limit(20) })
@@ -28,6 +35,12 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:link_on_front_page, -> { where(link_on_front_page: true) })
   scope(:signed_by_director, -> { where(signed_by_director: true) })
   scope(:fully_compliant, -> { approved_by_board.link_on_front_page.signed_by_director })
+
+  scope :produced_by_or_associated_with, lambda { |company|
+    left_outer_joins(:additional_companies_covered)
+      .where('statements.company_id = ? OR companies_statements.company_id = ?', company.id, company.id)
+      .distinct
+  }
 
   delegate :country_name, :industry_name, to: :company
 
@@ -58,6 +71,14 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       e.message += "\nCompany Name: '#{company_name}', Statement URL: '#{statement_url}'"
       raise e
     end
+  end
+
+  def published_by?(company)
+    self.company == company
+  end
+
+  def additional_companies_covered_excluding(company)
+    additional_companies_covered.order(:name) - [company]
   end
 
   def associate_with_user(user)
@@ -129,7 +150,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     legislations.any? { |legislation| legislation.name == Legislation::CALIFORNIA_NAME }
   end
 
-  def latest?
+  def latest_for?(company)
     self == company.latest_statement
   end
 
@@ -164,6 +185,11 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       filename: 'screenshot.png',
       content_type: image_fetch_result.content_type
     )
+  end
+
+  def update_latest_statement_for_compliance_stats_for_other_company(other_company = nil)
+    latest_statement_for_compliance_stats = other_company.published_statements.included_in_compliance_stats.first
+    other_company.update(latest_statement_for_compliance_stats: latest_statement_for_compliance_stats)
   end
 
   def update_latest_statement_for_compliance_stats

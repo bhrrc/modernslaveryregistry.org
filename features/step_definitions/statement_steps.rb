@@ -227,11 +227,11 @@ module FillsInForms
   end
 
   def text_fields
-    ['Company name', 'Related companies', 'Statement URL', 'Also covers companies']
+    ['Company name', 'Related companies', 'Statement URL']
   end
 
   def drop_downs
-    ['Country']
+    ['Country', 'Additional companies covered']
   end
 
   def check_boxes
@@ -337,7 +337,7 @@ module ViewsStatementsAsAdmin
     visit admin_statement_path(company.latest_statement)
     dom_struct(:statement, :url, :verified_by, :contributor_email,
                :published, :signed_by_director, :approved_by_board, :link_on_front_page,
-               :legislations, :period_covered, :also_covers_companies)
+               :legislations, :period_covered)
   end
 end
 

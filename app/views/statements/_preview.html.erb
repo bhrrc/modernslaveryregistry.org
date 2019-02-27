@@ -16,15 +16,24 @@
   </div>
 
   <div class="column">
-    <% unless statement.also_covers_companies.blank? %>
+    <% unless statement.published_by?(company) %>
+      <p>
+        This statement was published by
+        <%= link_to statement.company.name, company_statement_path(statement.company, statement) %>.
+      </p>
+      <br/>
+    <% end %>
+
+    <% if statement.additional_companies_covered_excluding(company).any? %>
       <p>
         This statement also covers the following companies:
         <br />
-        <span data-content="also_covers_companies"><%= statement.also_covers_companies %></span>
+        <%= statement.additional_companies_covered_excluding(company).map do |company| %>
+          <% link_to company.name, company_statement_path(company, statement) %>
+        <% end.join(', ').html_safe %>
       </p>
     <% end %>
   </div>
-
 </div>
 
 <% if statement.previewable_snapshot? %>

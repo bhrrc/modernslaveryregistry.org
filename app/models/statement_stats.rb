@@ -13,7 +13,7 @@ class StatementStats
   end
 
   def uk_also_covered_companies_count
-    count_unique_also_covered_companies(published_uk_statements)
+    Company.with_associated_published_statements_in_legislation(Legislation::UK_NAME).count
   end
 
   def california_companies_count
@@ -22,7 +22,7 @@ class StatementStats
   end
 
   def california_also_covered_companies_count
-    count_unique_also_covered_companies(published_california_statements)
+    Company.with_associated_published_statements_in_legislation(Legislation::CALIFORNIA_NAME).count
   end
 
   def total_statements_over_time
@@ -39,17 +39,6 @@ class StatementStats
   end
 
   private
-
-  def count_unique_also_covered_companies(scope)
-    scope
-      .where
-      .not(also_covers_companies: nil)
-      .pluck(:also_covers_companies)
-      .flat_map { |companies| companies.split(',') }
-      .map(&:strip)
-      .uniq
-      .size
-  end
 
   def format_label(result)
     # Temporary hack to work around a bug where result['year_month']

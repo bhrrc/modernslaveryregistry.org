@@ -86,6 +86,16 @@ RSpec.describe Company, type: :model do
 
       expect(company.latest_statement).to eq(newer_statement)
     end
+
+    it 'includes statements produced by other companies when returning the latest statement' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+      _company1_statement = company1.statements.create!(url: 'http://example.com/c1', last_year_covered: 2018)
+      company2_statement = company2.statements.create!(url: 'http://example.com/c2', last_year_covered: 2019)
+      company2_statement.additional_companies_covered << company1
+
+      expect(company1.latest_statement).to eq(company2_statement)
+    end
   end
 
   describe '#latest_published_statements' do
@@ -133,6 +143,36 @@ RSpec.describe Company, type: :model do
                                                                           url: 'http://example.com')
 
       expect(company.latest_published_statement).to eq(more_recently_seen_published_statement)
+    end
+
+    it 'includes statements produced by other companies when returning the latest statement' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+
+      _company1_statement = company1.statements.create!(published: true,
+                                                        last_year_covered: 2018,
+                                                        url: 'http://example.com')
+      company2_statement = company2.statements.create!(published: true,
+                                                       last_year_covered: 2019,
+                                                       url: 'http://example.com')
+      company2_statement.additional_companies_covered << company1
+
+      expect(company1.latest_published_statement).to eq(company2_statement)
+    end
+  end
+
+  describe '#published_statements' do
+    it 'includes statements produced by other companies' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+
+      company1_statement = company1.statements.create!(published: true,
+                                                       url: 'http://example.com')
+      company2_statement = company2.statements.create!(published: true,
+                                                       url: 'http://example.com')
+      company2_statement.additional_companies_covered << company1
+
+      expect(company1.published_statements).to contain_exactly(company1_statement, company2_statement)
     end
   end
 
@@ -222,6 +262,139 @@ RSpec.describe Company, type: :model do
       newer_statement.destroy
 
       expect(company.reload.latest_statement_for_compliance_stats).to eq(older_statement)
+    end
+
+    it 'updates cache when a statement is associated with this company' do
+      other_company = Company.create!(name: 'other-company')
+      statement_from_other_company = other_company.statements.create!(published: true,
+                                                                      url: 'http://example.com',
+                                                                      legislations: [legislation])
+      statement_from_other_company.additional_companies_covered << company
+
+      expect(company.reload.latest_statement_for_compliance_stats).to eq(statement_from_other_company)
+    end
+
+    it 'updates cache when a statement is unassociated with this company' do
+      other_company = Company.create!(name: 'other-company')
+      statement_from_other_company = other_company.statements.create!(published: true,
+                                                                      url: 'http://example.com',
+                                                                      legislations: [legislation])
+      statement_from_other_company.additional_companies_covered << company
+      statement_from_other_company.additional_companies_covered.destroy(company)
+
+      expect(company.reload.latest_statement_for_compliance_stats).to be_nil
+    end
+  end
+
+  describe '#all_statements' do
+    it 'orders statements by the last year covered' do
+      company = Company.create!(name: 'company-name')
+      earliest_statement = company.statements.create!(
+        last_year_covered: 2014,
+        url: 'http://example.com'
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        url: 'http://example.com'
+      )
+
+      expect(company.all_statements).to eq([latest_statement, earliest_statement])
+    end
+
+    it 'handles null when ordering statements by the last year covered' do
+      company = Company.create!(name: 'company-name')
+      statement_without_last_year_covered = company.statements.create!(
+        last_year_covered: nil,
+        url: 'http://example.com'
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        url: 'http://example.com'
+      )
+
+      expect(company.all_statements).to eq([latest_statement, statement_without_last_year_covered])
+    end
+
+    it 'orders statements by the date seen if last year covered is the same' do
+      company = Company.create!(name: 'company-name')
+      earliest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 2.days.ago,
+        url: 'http://example.com'
+      )
+      latest_statement = company.statements.create!(
+        last_year_covered: 2017,
+        date_seen: 1.day.ago,
+        url: 'http://example.com'
+      )
+
+      expect(company.all_statements).to eq([latest_statement, earliest_statement])
+    end
+
+    it 'returns all statements associated with this company' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+      company1_statement = company1.statements.create!(url: 'http://example.com/c1')
+      company2_statement = company2.statements.create!(url: 'http://example.com/c2')
+      company2_statement.additional_companies_covered << company1
+
+      expect(company1.all_statements).to contain_exactly(company1_statement, company2_statement)
+    end
+
+    it 'avoids duplicating statements when associated with multiple other companies' do
+      company1 = Company.create!(name: 'company-1')
+      company2 = Company.create!(name: 'company-2')
+      company3 = Company.create!(name: 'company-3')
+      company1_statement = company1.statements.create!(url: 'http://example.com/c1')
+      company1_statement.additional_companies_covered << company2
+      company1_statement.additional_companies_covered << company3
+
+      expect(company1.all_statements).to contain_exactly(company1_statement)
+    end
+  end
+
+  describe '.with_associated_published_statements_in_legislation' do
+    let(:legislation) { Legislation.create!(name: 'legislation', icon: 'icon') }
+    let(:company1) { Company.create!(name: 'company-1') }
+    let(:company2) { Company.create!(name: 'company-2') }
+    let(:statement) do
+      company2.statements.create!(url: 'http://example.com',
+                                  legislations: [legislation],
+                                  published: true)
+    end
+
+    before do
+      statement.additional_companies_covered << company1
+    end
+
+    it 'includes companies with associated statements under the legislation' do
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to contain_exactly(company1)
+    end
+
+    it 'excludes non-published statements' do
+      statement.update(published: false)
+
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to be_empty
+    end
+
+    it 'excludes statements outside the legislation' do
+      other_legislation = Legislation.create!(name: 'other-legislation', icon: 'icon')
+      statement.update(legislations: [other_legislation])
+
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to be_empty
+    end
+
+    it 'does not duplicate companies' do
+      another_statement = company2.statements.create!(url: 'http://example.com',
+                                                      legislations: [legislation],
+                                                      published: true)
+      another_statement.additional_companies_covered << company1
+
+      companies = Company.with_associated_published_statements_in_legislation(legislation.name)
+      expect(companies).to contain_exactly(company1)
     end
   end
 end

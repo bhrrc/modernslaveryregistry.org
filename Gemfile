@@ -53,6 +53,7 @@ group :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'rails-controller-testing'
+  gem 'rspec-activemodel-mocks'
   gem 'rspec-rails'
   gem 'selenium-webdriver' # brew install geckodriver
   gem 'vcr'

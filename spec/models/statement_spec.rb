@@ -135,4 +135,53 @@ RSpec.describe Statement, type: :model do
       end
     end
   end
+
+  it 'can apply to other companies' do
+    company1 = Company.create!(name: 'company-1')
+    company2 = Company.create!(name: 'company-2')
+    company1_statement = company1.statements.create!(url: 'http://example.com')
+    company1_statement.additional_companies_covered << company2
+
+    expect(company1_statement.additional_companies_covered).to include(company2)
+  end
+
+  describe '#additional_companies_covered_excluding' do
+    it 'excludes the company passed to the method' do
+      company1 = Company.create!(name: 'company1')
+      company2 = Company.create!(name: 'company2')
+      statement = company1.statements.create!(url: 'http://example.com')
+      statement.additional_companies_covered << company2
+
+      expect(statement.additional_companies_covered_excluding(company2)).to be_empty
+    end
+
+    it 'sorts the companies alphabetically' do
+      company1 = Company.create!(name: 'company1')
+      company_z = Company.create!(name: 'company-z')
+      company_a = Company.create!(name: 'company-a')
+      statement = company1.statements.create!(url: 'http://example.com')
+      statement.additional_companies_covered << company_z
+      statement.additional_companies_covered << company_a
+
+      companies = statement.additional_companies_covered_excluding(Company.new)
+      expect(companies).to eq([company_a, company_z])
+    end
+  end
+
+  describe '#published_by?' do
+    it 'returns true if the company matches the publishing company' do
+      publishing_company = Company.create!(name: 'publishing-company')
+      statement = publishing_company.statements.create!(url: 'http://example.com')
+
+      expect(statement.published_by?(publishing_company)).to be(true)
+    end
+
+    it 'returns false if the company does not match the publishing company' do
+      publishing_company = Company.create!(name: 'publishing-company')
+      other_company = Company.create!(name: 'other-company')
+      statement = publishing_company.statements.create!(url: 'http://example.com')
+
+      expect(statement.published_by?(other_company)).to be(false)
+    end
+  end
 end

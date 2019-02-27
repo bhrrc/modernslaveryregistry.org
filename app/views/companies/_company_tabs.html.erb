@@ -48,7 +48,7 @@
           <% if active_statement.nil? || active_statement.new_record? %>
             <%= render partial: 'statements/new_statement_form', locals: { statement: @new_statement } %>
           <% else %>
-            <%= render 'statements/preview', statement: active_statement %>
+            <%= render 'statements/preview', company: @company, statement: active_statement %>
           <% end %>
         </div>
       </div>
