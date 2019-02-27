@@ -7,7 +7,8 @@ When('{actor} selects industry {string}') do |actor, industry|
 end
 
 When('{actor} selects legislation {string}') do |actor, legislation|
-  actor.attempts_to_filter_by_legislation(legislation)
+  legislations = legislation.split(',').map(&:strip)
+  actor.attempts_to_filter_by_legislation(legislations)
 end
 
 Then('{actor} should find no company called {string} exists') do |actor, company_name|
@@ -33,15 +34,10 @@ module ExploresStatements
     click_button 'Search'
   end
 
-  def attempts_to_filter_by_legislation(legislation)
+  def attempts_to_filter_by_legislation(legislations)
     visit explore_path
-    legislations_to_check = legislation.split(',').map(&:strip)
-    Legislation.all.map(&:name).each do |legislation_name|
-      if legislations_to_check.include? legislation_name
-        check legislation_name
-      else
-        uncheck legislation_name
-      end
+    legislations.each do |legislation|
+      select legislation, from: 'legislations_'
     end
     click_button 'Search'
   end
