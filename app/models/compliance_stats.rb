@@ -2,6 +2,7 @@ class ComplianceStats
   attr_reader :industry
 
   def initialize(industry: false)
+    @industry = industry
     @statements = Statement
                   .joins('INNER JOIN companies ON statements.id = companies.latest_statement_for_compliance_stats_id')
     @statements = @statements.merge(Company.where(industry: industry)) if industry

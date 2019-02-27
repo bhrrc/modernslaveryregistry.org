@@ -6,6 +6,18 @@ RSpec.describe ComplianceStats, type: :model do
   let(:company1) { Company.create!(name: 'company-1') }
   let(:company2) { Company.create!(name: 'company-2') }
 
+  describe '#industry' do
+    it 'returns false if no industry is passed into the constructor' do
+      expect(subject.industry).to be_falsey
+    end
+
+    it 'returns the industry passed into the constructor' do
+      industry = Industry.new
+      stats = ComplianceStats.new(industry: industry)
+      expect(stats.industry).to eq(industry)
+    end
+  end
+
   context 'when legislation is not included in stats' do
     let(:legislation) do
       Legislation.create!(include_in_compliance_stats: false,
