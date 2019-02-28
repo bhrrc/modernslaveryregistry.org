@@ -52,6 +52,17 @@ Then('{actor} should find company {string}') do |actor, company_name|
   expect(actor.visible_company_name).to eq(company_name)
 end
 
+Then('{actor} should find company {string} in the admin interface with:') do |actor, company_name, table|
+  actor.attempts_to_search_in_admin_for company_name
+  expect(actor.visible_company_name).to eq(company_name)
+  expect(actor.visible_company_industry).to eq(table.rows_hash['Industry'])
+end
+
+Then('{actor} should find company {string} in the admin interface') do |actor, company_name|
+  actor.attempts_to_search_in_admin_for company_name
+  expect(actor.visible_company_name).to eq(company_name)
+end
+
 Then('{actor} should find company {string} with:') do |actor, company_name, table|
   actor.attempts_to_search_for company_name
   expect(actor.visible_company_name).to eq(company_name)
@@ -115,6 +126,10 @@ module SeesACompanyOnThePage
 
   def visible_company_name
     find('[data-content="company"] [data-content="name"]').text
+  end
+
+  def visible_company_industry
+    find('[data-content="company"] [data-content="industry"]').text
   end
 end
 

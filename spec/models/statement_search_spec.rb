@@ -77,93 +77,62 @@ RSpec.describe Statement, type: :model do
     )
   end
 
-  describe '.search' do
-    context 'when the searcher is an admin' do
-      it 'finds all statements ordered by company name and descending publish date' do
-        search = Statement.search(include_unpublished: true, criteria: {})
-        expect(search.statements).to eq([cucumber_2017, cucumber_2016, potato_2017, potato_2016])
-      end
+  it 'groups the statements by company industry' do
+    search = Statement.search(criteria: {})
+    expect(search.industry_stats).to eq(
+      [
+        GroupCount.with(group: agriculture, count: 1),
+        GroupCount.with(group: software, count: 1)
+      ]
+    )
+  end
 
-      it 'counts the statements' do
-        expect(Statement.search(include_unpublished: true, criteria: {}).stats).to eq(
-          statements: 4,
-          industries: 2,
-          countries: 2
-        )
-        potato_2016.delete
-        expect(Statement.search(include_unpublished: true, criteria: {}).stats).to eq(
-          statements: 3,
-          industries: 2,
-          countries: 2
-        )
-      end
+  it 'finds latest published statements ordered by company name' do
+    search = Statement.search(criteria: {})
+    expect(search.statements).to eq([cucumber_2016, potato_2016])
+  end
 
-      it 'groups the statements by company industry' do
-        search = Statement.search(include_unpublished: true, criteria: {})
-        expect(search.industry_stats).to eq(
-          [
-            GroupCount.with(group: agriculture, count: 2),
-            GroupCount.with(group: software, count: 2)
-          ]
-        )
-      end
-    end
+  it 'counts the statements' do
+    expect(Statement.search(criteria: {}).stats).to eq(
+      statements: 2,
+      industries: 2,
+      countries: 2
+    )
+    potato.update!(industry: software)
+    expect(Statement.search(criteria: {}).stats).to eq(
+      statements: 2,
+      industries: 1,
+      countries: 2
+    )
+    potato_2016.delete
+    expect(Statement.search(criteria: {}).stats).to eq(
+      statements: 1,
+      industries: 1,
+      countries: 1
+    )
+  end
 
-    context 'when the searcher is not an admin' do
-      it 'finds latest published statements ordered by company name' do
-        search = Statement.search(include_unpublished: false, criteria: {})
-        expect(search.statements).to eq([cucumber_2016, potato_2016])
-      end
+  it 'filters statements by company name' do
+    expect(
+      Statement.search(criteria: { company_name: 'cucumber' }).statements
+    ).to eq([cucumber_2016])
+  end
 
-      it 'counts the statements' do
-        expect(Statement.search(include_unpublished: false, criteria: {}).stats).to eq(
-          statements: 2,
-          industries: 2,
-          countries: 2
-        )
-        potato.update!(industry: software)
-        expect(Statement.search(include_unpublished: false, criteria: {}).stats).to eq(
-          statements: 2,
-          industries: 1,
-          countries: 2
-        )
-        potato_2016.delete
-        expect(Statement.search(include_unpublished: false, criteria: {}).stats).to eq(
-          statements: 1,
-          industries: 1,
-          countries: 1
-        )
-      end
-    end
+  it 'filters statements by countries' do
+    expect(
+      Statement.search(criteria: { countries: [gb.id, no.id] }).statements
+    ).to eq([cucumber_2016, potato_2016])
+  end
 
-    it 'filters statements by company name' do
-      expect(
-        Statement.search(include_unpublished: false, criteria: { company_name: 'cucumber' }).statements
-      ).to eq([cucumber_2016])
-    end
+  it 'filters statements by company industries' do
+    expect(
+      Statement.search(criteria: { industries: [agriculture.id, software.id] }).statements
+    ).to eq([cucumber_2016, potato_2016])
+  end
 
-    it 'filters statements by countries' do
-      expect(
-        Statement.search(include_unpublished: true, criteria: { countries: [no.id] }).statements
-      ).to eq([potato_2017, potato_2016])
-      expect(
-        Statement.search(include_unpublished: false, criteria: { countries: [gb.id, no.id] }).statements
-      ).to eq([cucumber_2016, potato_2016])
-    end
-
-    it 'filters statements by company industries' do
-      expect(
-        Statement.search(include_unpublished: true, criteria: { industries: [agriculture.id] }).statements
-      ).to eq([potato_2017, potato_2016])
-      expect(
-        Statement.search(include_unpublished: false, criteria: { industries: [agriculture.id, software.id] }).statements
-      ).to eq([cucumber_2016, potato_2016])
-    end
-
-    it 'handles queries containing punctuation' do
-      expect(
-        Statement.search(include_unpublished: false, criteria: { company_name: 'cucumber &' }).statements
-      ).to eq([cucumber_2016])
-    end
+  it 'handles queries containing punctuation' do
+    expect(
+      Statement.search(criteria: { company_name: 'cucumber &' }).statements
+    ).to eq([cucumber_2016])
   end
 end

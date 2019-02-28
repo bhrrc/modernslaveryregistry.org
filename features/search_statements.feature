@@ -14,7 +14,7 @@ Feature: Search statements
   Scenario: Search by company name
     Given Joe is logged in
     When Joe searches for "cucumber"
-    Then Joe should only see "Cucumber Inc, Cucumber Ltd" in the search results
+    Then Joe should only see "Cucumber Ltd" in the search results
 
   Scenario: Search by company name with 'limited' instead of 'ltd'
     Given Joe is logged in
@@ -44,8 +44,3 @@ Feature: Search statements
   Scenario: Download statements when not logged in as admin
     When Patricia downloads all statements
     Then Patricia should see all the published statements
-
-  Scenario: Download statements when logged in as admin
-    Given Patricia is logged in
-    When Patricia downloads all statements
-    Then Patricia should see all the statements including drafts

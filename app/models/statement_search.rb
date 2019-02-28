@@ -1,6 +1,5 @@
 class StatementSearch
-  def initialize(include_unpublished, criteria)
-    @include_unpublished = include_unpublished
+  def initialize(criteria)
     @criteria = criteria
   end
 
@@ -37,7 +36,7 @@ class StatementSearch
   end
 
   def filter_by_published
-    @statements = @include_unpublished ? @statements : @statements.published
+    @statements = @statements.published
   end
 
   def filter_by_company

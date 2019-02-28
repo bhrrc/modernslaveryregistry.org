@@ -22,7 +22,7 @@ class ExploreController < ApplicationController
   end
 
   def search
-    Statement.search(include_unpublished: admin?, criteria: criteria_params)
+    Statement.search(criteria: criteria_params)
   end
 
   def send_csv

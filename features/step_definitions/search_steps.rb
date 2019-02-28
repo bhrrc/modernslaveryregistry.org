@@ -28,6 +28,12 @@ module ExploresStatements
     click_button 'Search'
   end
 
+  def attempts_to_search_in_admin_for(query)
+    visit admin_companies_path
+    fill_in 'query', with: query
+    click_button 'Search'
+  end
+
   def attempts_to_filter_by_industry(industry)
     visit explore_path
     select industry, from: 'industries_'

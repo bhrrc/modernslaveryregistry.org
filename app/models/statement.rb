@@ -46,8 +46,8 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   attr_accessor :should_enqueue_snapshot
 
-  def self.search(include_unpublished:, criteria:)
-    StatementSearch.new(include_unpublished, criteria)
+  def self.search(criteria:)
+    StatementSearch.new(criteria)
   end
 
   def self.url_exists?(url)

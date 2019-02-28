@@ -18,8 +18,7 @@ Feature: Submit company
       | Industry       | Software                         |
       | Statement URL  | http://cucumber.io/msa-statement |
       | Period Covered | 2016-2017                        |
-    Then Patricia should find company "Cucumber Ltd" with:
-      | Company HQ    | United Kingdom                   |
+    Then Patricia should find company "Cucumber Ltd" in the admin interface with:
       | Industry      | Software                         |
     And Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL      | http://cucumber.io/msa-statement |
@@ -41,5 +40,5 @@ Feature: Submit company
       | Statement URL | http://cucumber.io/msa-statement |
       | Your email    | vicky@somewhere.com              |
     And Patricia is logged in
-    Then Patricia should find company "Cucumber Ltd"
+    Then Patricia should find company "Cucumber Ltd" in the admin interface
     And "vicky@somewhere.com" should receive a thank you for submitting email

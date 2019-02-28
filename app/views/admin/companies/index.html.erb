@@ -41,9 +41,9 @@
         </thead>
         <tbody>
           <% @companies.each do |company| %>
-          <tr>
-            <td><%= link_to company.name, admin_company_path(company) %></td>
-            <td>
+          <tr data-content="company">
+            <td><%= link_to company.name, admin_company_path(company), {'data-content': 'name'} %></td>
+            <td data-content="industry">
               <%= industry_tag(company.industry) %>
             </td>
           </tr>
