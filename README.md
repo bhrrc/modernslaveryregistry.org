@@ -114,6 +114,34 @@ $ eb terminate $MSR_OLD_ENVIRONMENT
 
 [eb-cli]: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html
 
+## Debugging production problems
+
+### View EC2 instance health
+
+See the [Instance Metrics documentation](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-metrics.html) for help understanding the output of this command.
+
+```
+$ eb health
+```
+
+### View Rails application logs
+
+#### For a single active instance.
+
+```
+$ eb ssh
+$ cd /var/app/current/
+$ less log/production.log
+```
+
+#### For all instances in all environments.
+
+The production logs from the Rails app are uploaded to S3 hourly.
+
+The logs are available at /resources/environments/logs/publish/<elastic-beanstalk-environment-id>/<ec2-instance-id> in a bucket named "elasticbeanstalk-eu-west-2-<aws-account-id>".
+
+Find the current Elastic Beanstalk environment ID by running `eb status` and find the individual EC2 instance IDs by running `eb health`.
+
 ### SSH access to the EC2 instances
 
 NOTE. This should be a last resort and hopefully not required given all the logging provided by Elastic Beanstalk.
