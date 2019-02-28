@@ -85,6 +85,33 @@ $ eb status
 $ eb deploy
 ```
 
+### Deploy the app using blue/green deployment
+
+This deploys the app to a clone of the production environment (staging) to allow it to be tested before making it live.
+
+```
+$ export MSR_OLD_ENVIRONMENT=msr-production-green
+$ export MSR_NEW_ENVIRONMENT=msr-production-blue
+
+# Clone the environment
+$ eb clone $MSR_OLD_ENVIRONMENT --clone_name $MSR_NEW_ENVIRONMENT --cname msr-staging
+
+# Tell `eb` to use the new environment
+$ eb use $MSR_NEW_ENVIRONMENT
+
+# Deploy the latest version of the app
+$ eb deploy
+
+# Check that the site's working as expected
+$ eb open
+
+# Swap CNAMEs so that the live site points to the new environment
+$ eb swap $MSR_OLD_ENVIRONMENT --destination_name $MSR_NEW_ENVIRONMENT
+
+# Terminate old environment once enough time has passed to ensure DNS propagation
+$ eb terminate $MSR_OLD_ENVIRONMENT
+```
+
 [eb-cli]: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html
 
 ### SSH access to the EC2 instances
