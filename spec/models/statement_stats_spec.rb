@@ -133,10 +133,6 @@ RSpec.describe StatementStats do
     StatementStats.new
   end
 
-  let :search do
-    StatementSearch.new(false, {})
-  end
-
   it 'counts published statements for UK legislation' do
     expect(stats.uk_statements_count).to eq(4)
   end
