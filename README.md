@@ -30,28 +30,53 @@ $ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
 
 ## Deploying
 
-The app is hosted on AWS.
+We're using Elastic Beanstalk to host the app on AWS.
 
-### Install and configure the Elastic Beanstalk CLI
+### Configure Elastic Beanstalk CLI
 
-We're currently using the [EB CLI][eb-cli] to deploy. Install and configure it as follows:
+#### Prerequisites
+
+1. AWS CLI (`brew install awscli`)
+2. Elastic Beanstalk CLI (`brew install aws-elasticbeanstalk`)
+3. Credentials (access and secret key) of an IAM user with admin permissions
+
+#### Create an AWS profile
+
+This creates a profile named "msr" that we'll use to configure the Elastic Beanstalk CLI.
 
 ```
-# Install using Homebrew
-$ brew install aws-elasticbeanstalk
+$ aws configure --profile msr
+AWS Access Key ID [None]: <your-access-key>
+AWS Secret Access Key [None]: <your-secret-key>
+Default region name [None]: eu-west-2
+Default output format [None]:
+```
 
-# Change to the directory containing the Rails app
-$ cd /path/to/modernslaveryregistry
+#### Configure Elastic Beanstalk CLI
 
-# Configure the EB CLI
-# NOTE. You'll need an access and secret key of an admin user that can create resources in AWS
-$ eb init --region eu-west-2 modern-slavery-registry
-You have not yet set up your credentials or your credentials are incorrect
-You must provide your credentials.
-(aws-access-id): <enter-access-key>
-(aws-secret-key): <enter-secret-key>
+```
+$ eb init \
+  modern-slavery-registry \
+  --profile="msr" \
+  --region="eu-west-2" \
+  --keyname="aws-eb"
 Note: Elastic Beanstalk now supports AWS CodeCommit; a fully-managed source control service. To learn more, see Docs: https://aws.amazon.com/codecommit/
 Do you wish to continue with CodeCommit? (y/N) (default is n): n
+```
+
+Where:
+
+* `modern-slavery-registry` is the name of the application we have configured in Elastic Beanstalk.
+* `profile="msr"` matches the name of the profile created above.
+* `region="eu-west-2"` identifies the region the app has been deployed in.
+* `keyname="aws-eb"` specifies the key pair to use when configuring the EC2 instances. Available key pairs can be found in the AWS web console > EC2  > Network & Security > Key Pairs.
+
+#### Check that everything is working
+
+This will show details about the current environment.
+
+```
+$ eb status
 ```
 
 ### Deploy the app
