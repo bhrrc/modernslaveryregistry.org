@@ -29,12 +29,6 @@ set `no_verify_statement_urls=true`:
 $ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
 ```
 
-For production you should use:
-
-```
-$ heroku run rails db:seed # the env vars are already set
-```
-
 ## Deploying
 
 The app is hosted on AWS.
