@@ -262,3 +262,19 @@ To extract text from all PDF files in a directory:
 ```
 $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0 bundle exec docsplit text "{}"
 ```
+
+## Production infrastructure
+
+* AWS Elastic Beanstalk to host Rails app
+
+* AWS RDS PostgreSQL database
+
+* AWS S3 for statement snapshots
+
+* AWS ElastiCache Redis for Sidekiq
+
+* AWS Certificate Manager for SSL certificate
+
+* Sendgrid for sending emails
+
+* Rollbar for catching exceptions
