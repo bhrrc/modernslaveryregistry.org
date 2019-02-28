@@ -97,7 +97,7 @@ Then('{actor} should see the following pages in the header navigation on the web
 end
 
 Then('{actor} should see the following pages in the footer navigation on the website:') do |actor, table|
-  default_menu_items = ['Home', 'Browse statements']
+  default_menu_items = ['Home', 'Browse companies']
   page_titles = default_menu_items + table.hashes.map { |props| props['Title'] }
   expect(actor.visible_footer_navigation_menu.titles).to eq(page_titles)
 end
