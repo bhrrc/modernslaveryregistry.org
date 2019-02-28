@@ -21,7 +21,7 @@ end
 
 Then('{actor} should find no company called {string} exists') do |actor, company_name|
   actor.attempts_to_search_for(company_name)
-  expect(actor.visible_statement_search_results_summary).to eq('No statements found')
+  expect(actor.visible_statement_search_results_summary).to eq('No companies found')
 end
 
 Given('a search alias from {string} to {string} exists') do |target, substitution|

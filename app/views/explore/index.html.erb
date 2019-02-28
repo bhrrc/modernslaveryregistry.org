@@ -11,9 +11,9 @@
           <% if @results.any? %>
             <%= render partial: 'results', locals: { results: @results, search: @search } %>
           <% else %>
-            <h2 class="title is-2">No statements found</h2>
+            <h2 class="title is-2">No companies found</h2>
             <p>
-              We couldn't find a company or statement matching your search.
+              We couldn't find a company matching your search.
               If you think the registry is missing a statement for a company,
               you can help by submitting a link to the statement.
             </p>
