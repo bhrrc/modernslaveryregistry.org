@@ -59,7 +59,7 @@ $ eb init \
   modern-slavery-registry \
   --profile="msr" \
   --region="eu-west-2" \
-  --keyname="aws-eb"
+  --keyname="modern-slavery-registry"
 Note: Elastic Beanstalk now supports AWS CodeCommit; a fully-managed source control service. To learn more, see Docs: https://aws.amazon.com/codecommit/
 Do you wish to continue with CodeCommit? (y/N) (default is n): n
 ```
@@ -69,7 +69,7 @@ Where:
 * `modern-slavery-registry` is the name of the application we have configured in Elastic Beanstalk.
 * `profile="msr"` matches the name of the profile created above.
 * `region="eu-west-2"` identifies the region the app has been deployed in.
-* `keyname="aws-eb"` specifies the key pair to use when configuring the EC2 instances. Available key pairs can be found in the AWS web console > EC2  > Network & Security > Key Pairs.
+* `keyname="modern-slavery-registry"` specifies the key pair to use when configuring the EC2 instances. Available key pairs can be found in the AWS web console > EC2  > Network & Security > Key Pairs.
 
 #### Check that everything is working
 
@@ -91,7 +91,7 @@ $ eb deploy
 
 NOTE. This should be a last resort and hopefully not required given all the logging provided by Elastic Beanstalk.
 
-Elastic Beanstalk adds the aws-eb key to the EC2 instances. You'll need the private part of this key in order to SSH into the boxes. The key is currently held by Go Free Range so contact them for access.
+Elastic Beanstalk adds the "modern-slavery-registry" key to the EC2 instances. You'll need the private part of this key from MSR in order to SSH into the boxes.
 
 ```
 $ eb ssh
