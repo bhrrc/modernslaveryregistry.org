@@ -1,15 +1,26 @@
 require 'csv'
 
 class StatementExport
-  def self.to_csv(statements, extra)
-    fields = BASIC_FIELDS.merge(extra ? EXTRA_FIELDS : {})
+  # rubocop:disable Metrics/MethodLength
+  def self.to_csv(companies, admin)
+    fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
     CSV.generate do |csv|
       csv << fields.map { |_, heading| heading }
-      statements.each do |statement|
-        csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
+      companies.includes(
+        { statements: :legislations },
+        { statements: :verified_by },
+        :country,
+        :industry
+      ).find_each do |company|
+        company.statements.each do |statement|
+          next unless statement.published || admin
+
+          csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
+        end
       end
     end
   end
+  # rubocop:enable Metrics/MethodLength
 
   def self.format_for_csv(value)
     value.respond_to?(:iso8601) ? value.iso8601 : value

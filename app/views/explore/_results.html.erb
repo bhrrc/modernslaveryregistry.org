@@ -1,0 +1,23 @@
+<div class="explore_companies_results">
+  <% results.each do |result| %>
+    <div class="columns" data-content="company">
+      <div class="column">
+        <%= link_to(result.name, company_path(result), {'data-content': 'name'}) %>
+      </div>
+      <div class="column" data-content="country">
+        <%= result.country_name %>
+      </div>
+      <div class="column" data-content="industry">
+        <%= result.industry_name %>
+      </div>
+      <div class="column" data-content="statements">
+        <% if result.all_statements.empty? %>
+        <%= link_to 'Submit statement', new_company_statement_path(result) %>
+        <% else %>
+        <%= link_to pluralize(search.statement_count_for(result), 'statement'), company_path(result)  %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <%= paginate results %>
+</div>

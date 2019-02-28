@@ -98,10 +98,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     contributor_email.presence || verified_by_email
   end
 
-  def self.to_csv(statements, extra)
-    StatementExport.to_csv(statements, extra)
-  end
-
   def enqueue_snapshot
     @should_enqueue_snapshot = true if saved_change_to_url? || saved_change_to_marked_not_broken_url?
   end
