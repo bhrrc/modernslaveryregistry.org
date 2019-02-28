@@ -22,8 +22,7 @@ $ user.admin = true
 $ user.save
 ```
 
-Then seed the database. To disable (slow) verification of statement URLs,
-set `no_verify_statement_urls=true`:
+Then seed the database:
 
 ```
 $ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
