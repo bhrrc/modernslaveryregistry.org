@@ -12,14 +12,6 @@ class CompanySearch
       .merge(filter_by_industries)
   end
 
-  def stats
-    {
-      statements: 0,
-      industries: 0,
-      countries: 0
-    }
-  end
-
   def industry_stats
     counts = results.pluck(:industry_id).each_with_object(Hash.new(0)) do |id, count|
       count[id] += 1
