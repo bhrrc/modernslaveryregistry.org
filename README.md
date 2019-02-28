@@ -152,6 +152,54 @@ Elastic Beanstalk adds the "modern-slavery-registry" key to the EC2 instances. Y
 $ eb ssh
 ```
 
+## Using production data in development
+
+NOTE. The version of the PostgreSQL client on the EC2 instances (9.2) doesn't match the version of PostgreSQL on RDS (9.6) so we need to upgrade the client tools before we can create a backup.
+
+### Update PostgreSQL client on EC2 instances
+
+Run `psql --version` on the EC2 instance to print the current version. If it's not 9.6 you need to upgrade them.
+
+```
+# Search for installed postgresql tools
+$ rpm --query --all | grep postgresql
+postgresql92-devel-9.2.24-2.66.amzn1.x86_64
+postgresql92-libs-9.2.24-2.66.amzn1.x86_64
+postgresql92-9.2.24-2.66.amzn1.x86_64
+
+# Remove postgresql 9.2
+$ sudo rpm --erase postgresql92-devel postgresql92-libs postgresql92
+
+# Install postgresql 9.6
+$ sudo yum install postgresql96
+```
+
+### Download and import production data
+
+```
+# SSH to EC2 instance
+development$ eb ssh
+
+# Print database details (these are in the format postgres://<username>:<password>@<host>/<dbname>)
+ec2$ echo $DATABASE_URL
+
+# Create database backup
+ec2$ export MSR_DB_DUMP_FILENAME="`date -u "+%Y%m%dT%H%M%SZ"`-msr.sql"
+ec2$ pg_dump --host="<host>" --username="<username>" --dbname="<dbname>" > ~/$MSR_DB_DUMP_FILENAME
+ec2$ echo "File written to ~/$MSR_DB_DUMP_FILENAME"
+
+# Make a note of the SSH connection options from when the session first opened
+# INFO: SSH port 22 open.
+# INFO: Running ssh -i /path/to/modern-slavery-registry.pem ec2-user@<ec2-ip-address>
+
+# Download database backup
+development$ scp -i /path/to/modern-slavery-registry.pem ec2-user@<ec2-ip-address>:<msr-db-dump-filename> ./tmp
+
+# Restore database backup
+development$ rake db:drop db:create
+development$ psql --dbname="msaregistry_development" --file=./tmp/<msr-db-dump-filename>
+```
+
 ## Developing using Vagrant
 
 ```
