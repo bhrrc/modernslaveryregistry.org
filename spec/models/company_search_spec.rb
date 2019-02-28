@@ -275,6 +275,37 @@ RSpec.describe CompanySearch, type: :model do
     end
   end
 
+  describe '#industry_stats' do
+    let(:stats) { CompanySearch.new.industry_stats }
+
+    context 'when the company has an industry' do
+      let(:industry) { Industry.create!(name: 'Software') }
+
+      before do
+        company.industry = industry
+        company.save
+      end
+
+      it 'has a group for the industry' do
+        expect(stats.first.group.name).to eq(industry.name)
+      end
+
+      it 'has a count for the industry' do
+        expect(stats.first.count).to eq(1)
+      end
+    end
+
+    context 'when the company has no industry' do
+      it 'has a group for the industry' do
+        expect(stats.first.group.name).to eq('Industry unknown')
+      end
+
+      it 'has a count for the unknown industry' do
+        expect(stats.first.count).to eq(1)
+      end
+    end
+  end
+
   private
 
   def create_search_alias(target, substitution)
