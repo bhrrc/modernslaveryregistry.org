@@ -252,6 +252,29 @@ RSpec.describe CompanySearch, type: :model do
     end
   end
 
+  context 'with a statement published by another company' do
+    let(:other_company) do
+      Company.create! name: 'other-company'
+    end
+
+    let(:statement) do
+      other_company.statements.create!(
+        url: 'http://example.com'
+      )
+    end
+
+    before do
+      statement.additional_companies_covered << company
+    end
+
+    describe '#statement_count_for' do
+      it 'returns a count of the statements that cover this company' do
+        search = CompanySearch.new(company_name: 'Go Free Range Limited')
+        expect(search.statement_count_for(search.results.first)).to eq(1)
+      end
+    end
+  end
+
   private
 
   def create_search_alias(target, substitution)

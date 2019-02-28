@@ -5,11 +5,12 @@ Feature: Search statements
       | Name  |
       | Act X |
       | Act Y |
-    And the following statements have been submitted:
+    Given the following statements have been submitted:
       | Company name | Related companies | Statement URL          | Country        | Industry    | Verified by | Legislations | Published |
       | Cucumber Ltd | Cuke Labs         | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    | Act X        | Yes       |
       | Banana Ltd   |                   | https://banana.io/s    | France         | Agriculture | Patricia    | Act X, Act Y | Yes       |
       | Cucumber Inc |                   | https://cucumber.inc/s | United States  | Retail      |             | Act Y        | No        |
+    And the company "Strawberries Ltd" has been submitted
 
   Scenario: Search by exact company name
     Given Joe is logged in
@@ -40,13 +41,23 @@ Feature: Search statements
     When Joe selects country "France"
     Then Joe should only see "Banana Ltd" in the search results
 
+  Scenario: Submit statement links appear when a company has no statements
+    When Joe visits the explore page
+    Then Joe should see the following search results:
+      | name             | country        | industry         | link_text        |
+      | Banana Ltd       | France         | Agriculture      | 1 statement      |
+      | Cucumber Inc     | United States  | Retail           | 1 statement      |
+      | Cucumber Ltd     | United Kingdom | Software         | 1 statement      |
+      | Strawberries Ltd | United Kingdom | Industry unknown | Submit statement |
+
   Scenario: Filter by legislation
     When Joe selects legislation "Act X"
     Then Joe should see the following search results:
-      | name         | country        | industry    | link_text        |
-      | Banana Ltd   | France         | Agriculture | 1 statement      |
-      | Cucumber Inc | United States  | Retail      | Submit statement |
-      | Cucumber Ltd | United Kingdom | Software    | 1 statement      |
+      | name             | country        | industry         | link_text        |
+      | Banana Ltd       | France         | Agriculture      | 1 statement      |
+      | Cucumber Inc     | United States  | Retail           | 0 statements     |
+      | Cucumber Ltd     | United Kingdom | Software         | 1 statement      |
+      | Strawberries Ltd | United Kingdom | Industry unknown | Submit statement |
 
   Scenario: Download statements when not logged in as admin
     When Patricia downloads all statements

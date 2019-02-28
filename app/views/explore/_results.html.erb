@@ -11,11 +11,10 @@
         <%= result.industry_name %>
       </div>
       <div class="column" data-content="statements">
-        <% count = search.statement_count_for(result) %>
-        <% if count > 0 %>
-        <%= link_to pluralize(count, 'statement'), company_path(result)  %>
-        <% else %>
+        <% if result.all_statements.empty? %>
         <%= link_to 'Submit statement', new_company_statement_path(result) %>
+        <% else %>
+        <%= link_to pluralize(search.statement_count_for(result), 'statement'), company_path(result)  %>
         <% end %>
       </div>
     </div>

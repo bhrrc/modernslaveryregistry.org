@@ -1,3 +1,7 @@
+When('{actor} visits the explore page') do |_actor|
+  visit explore_path
+end
+
 When('{actor} searches for {string}') do |actor, query|
   actor.attempts_to_search_for(query)
 end
