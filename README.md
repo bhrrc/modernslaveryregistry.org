@@ -278,3 +278,32 @@ $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0
 * Sendgrid for sending emails
 
 * Rollbar for catching exceptions
+
+## Environment variables
+
+* `DATABASE_URL`
+  - Manually set using credentials used to create the RDS instance, and using values from the RDS web interface (in the format "postgres://<username>:<password>@<endpoint>/<database-name>")
+
+* `RAILS_MAX_THREADS`
+  - Manually set to 32 to match the maximum number of threads set in the Elastic Beanstalk Puma config (in /opt/elasticbeanstalk/support/conf/pumaconf.rb)
+
+* `ACTIVE_STORAGE_S3_BUCKET_NAME` and `ACTIVE_STORAGE_S3_BUCKET_REGION`
+  - Manually set to the S3 bucket name and region used for storing and serving statement snapshots
+
+* `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+  - Manually set to the AWS credentials of an IAM user with access to read/write objects in the S3 bucket above
+
+* `SENDGRID_USERNAME` and `SENDGRID_PASSWORD`
+  - Manually set to the username and password of our Sendgrid account
+
+* `ROLLBAR_ACCESS_TOKEN`
+  - Manually set to the value of the `post_server_item` token in the Rollbar web interface
+
+* `REDIS_URL`
+  - Manually set using the endpoint and port in the ElastiCache web console (in the format "redis://<redis-url>:6379")
+
+* `SECRET_KEY_BASE`
+  - Manually set to the output of running `rails secret`
+
+* `BUNDLE_WITHOUT`, `RACK_ENV`, `RAILS_SKIP_ASSET_COMPILATION` and `RAILS_SKIP_MIGRATIONS`
+  - Set by default in the Elastic Beanstalk Ruby platform
