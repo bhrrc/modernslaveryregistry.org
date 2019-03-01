@@ -136,7 +136,7 @@ $ eb terminate $MSR_OLD_ENVIRONMENT
 
 ---
 
-## Debugging production problems
+## Debugging production problems
 
 ### View EC2 instance health
 
