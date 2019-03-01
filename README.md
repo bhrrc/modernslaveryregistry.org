@@ -2,6 +2,8 @@
 
 This is the Rails app behind the [Modern Slavery Registry](https://www.modernslaveryregistry.org/).
 
+---
+
 ## Running locally
 
 ```
@@ -10,6 +12,8 @@ $ rails db:create
 $ rails db:migrate
 $ rails server
 ```
+
+---
 
 ## Seeding the database
 
@@ -29,6 +33,8 @@ Then seed the database:
 ```
 $ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
 ```
+
+---
 
 ## Deploying
 
@@ -116,6 +122,8 @@ $ eb terminate $MSR_OLD_ENVIRONMENT
 
 [eb-cli]: https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3.html
 
+---
+
 ## Debugging production problems
 
 ### View EC2 instance health
@@ -153,6 +161,8 @@ Elastic Beanstalk adds the "modern-slavery-registry" key to the EC2 instances. Y
 ```
 $ eb ssh
 ```
+
+---
 
 ## Using production data in development
 
@@ -202,6 +212,8 @@ development$ rake db:drop db:create
 development$ psql --dbname="msaregistry_development" --file=./tmp/<msr-db-dump-filename>
 ```
 
+---
+
 ## Developing using Vagrant
 
 ```
@@ -223,6 +235,8 @@ $ bundle exec rake
 $ PORT=9292 foreman start
 ```
 
+---
+
 ## Exporting original statements to local disk
 
 Modify `config/environments/development` to use Amazon S3 for storage
@@ -236,6 +250,8 @@ Make sure you have AWS keys set in your environment (see `config/storage.yml` fo
 ```
 $ bundle exec rails r script/export-statements-to-local-disk original-statements
 ```
+
+---
 
 ## Extracting text from PDF statements
 
@@ -265,6 +281,8 @@ To extract text from all PDF files in a directory:
 $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0 bundle exec docsplit text "{}"
 ```
 
+---
+
 ## Production infrastructure
 
 * AWS Elastic Beanstalk to host Rails app
@@ -280,6 +298,8 @@ $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0
 * Sendgrid for sending emails
 
 * Rollbar for catching exceptions
+
+---
 
 ## Environment variables
 
