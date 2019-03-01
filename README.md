@@ -8,7 +8,7 @@ This is the Rails app behind the [Modern Slavery Registry](https://www.modernsla
 
 The easiest way to start developing is to use the [Vagrant](https://www.vagrantup.com/) virtual machine. This includes everything required to get the app running locally.
 
-```
+```shell
 # On the host machine
 $ vagrant up
 $ vagrant ssh
@@ -33,16 +33,16 @@ Before you can seed the database, there must be an admin user in the database.
 Sign up using the sign-up form (`/signup`). Then use the console to make the user
 an admin:
 
-```
+```ruby
 $ rails console
-$ user = User.find_by_email('someone@somewhere.com')
-$ user.admin = true
-$ user.save
+> user = User.find_by_email('someone@somewhere.com')
+> user.admin = true
+> user.save
 ```
 
 Then seed the database:
 
-```
+```shell
 $ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
 ```
 
@@ -64,7 +64,7 @@ We're using Elastic Beanstalk to manage the app on AWS.
 
 This creates a profile named "msr" that we'll use to configure the Elastic Beanstalk CLI.
 
-```
+```shell
 $ aws configure --profile msr
 AWS Access Key ID [None]: <your-access-key>
 AWS Secret Access Key [None]: <your-secret-key>
@@ -74,7 +74,7 @@ Default output format [None]:
 
 #### Configure Elastic Beanstalk CLI
 
-```
+```shell
 $ eb init \
   modern-slavery-registry \
   --profile="msr" \
@@ -95,13 +95,13 @@ Where:
 
 This will show details about the current environment.
 
-```
+```shell
 $ eb status
 ```
 
 ### Deploy the app
 
-```
+```shell
 $ eb deploy
 ```
 
@@ -109,7 +109,7 @@ $ eb deploy
 
 This deploys the app to a clone of the production environment (staging) to allow it to be tested before making it live.
 
-```
+```shell
 $ export MSR_OLD_ENVIRONMENT=msr-production-green
 $ export MSR_NEW_ENVIRONMENT=msr-production-blue
 
@@ -142,7 +142,7 @@ $ eb terminate $MSR_OLD_ENVIRONMENT
 
 See the [Instance Metrics documentation](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-metrics.html) for help understanding the output of this command.
 
-```
+```shell
 $ eb health
 ```
 
@@ -150,7 +150,7 @@ $ eb health
 
 #### For a single active instance.
 
-```
+```shell
 $ eb ssh
 $ cd /var/app/current/
 $ less log/production.log
@@ -170,7 +170,7 @@ NOTE. This should be a last resort and hopefully not required given all the logg
 
 Elastic Beanstalk adds the "modern-slavery-registry" key to the EC2 instances. You'll need the private part of this key from MSR in order to SSH into the boxes.
 
-```
+```shell
 $ eb ssh
 ```
 
@@ -184,7 +184,7 @@ NOTE. The version of the PostgreSQL client on the EC2 instances (9.2) doesn't ma
 
 Run `psql --version` on the EC2 instance to print the current version. If it's not 9.6 you need to upgrade it.
 
-```
+```shell
 # Search for installed postgresql tools
 $ rpm --query --all | grep postgresql
 postgresql92-devel-9.2.24-2.66.amzn1.x86_64
@@ -200,7 +200,7 @@ $ sudo yum install postgresql96
 
 ### Download and import production data
 
-```
+```shell
 # SSH to EC2 instance
 development$ eb ssh
 
@@ -230,13 +230,13 @@ development$ psql --dbname="msaregistry_development" --file=./tmp/<msr-db-dump-f
 
 Modify `config/environments/development` to use Amazon S3 for storage
 
-```
+```ruby
 config.active_storage.service = :amazon
 ```
 
 Make sure you have AWS keys set in your environment (see `config/storage.yml` for details) and then run
 
-```
+```shell
 $ bundle exec rails r script/export-statements-to-local-disk original-statements
 ```
 
@@ -248,25 +248,25 @@ If you are not using the Vagrant VM, you will need to install the following [`Do
 
 Linux:
 
-```
-apt-get install -y graphicsmagick
-apt-get install -y poppler-utils poppler-data
-apt-get install -y ghostscript
-apt-get install -y tesseract-ocr
+```shell
+$ apt-get install -y graphicsmagick
+$ apt-get install -y poppler-utils poppler-data
+$ apt-get install -y ghostscript
+$ apt-get install -y tesseract-ocr
 ```
 
 MacOS:
 
-```
-brew install graphicsmagick
-brew install poppler
-brew install ghostscript
-brew install tesseract
+```shell
+$ brew install graphicsmagick
+$ brew install poppler
+$ brew install ghostscript
+$ brew install tesseract
 ```
 
 To extract text from all PDF files in a directory:
 
-```
+```shell
 $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0 bundle exec docsplit text "{}"
 ```
 
