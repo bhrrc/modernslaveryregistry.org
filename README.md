@@ -4,18 +4,30 @@ This is the Rails app behind the [Modern Slavery Registry](https://www.modernsla
 
 ---
 
-## Running locally
+## Developing
+
+The easiest way to start developing is to use the [Vagrant](https://www.vagrantup.com/) virtual machine. This includes everything required to get the app running locally.
 
 ```
-$ bundle
-$ rails db:create
-$ rails db:migrate
-$ rails server
+# On the host machine
+$ vagrant up
+$ vagrant ssh
+
+# On the Vagrant VM
+$ cd /vagrant/
+$ bundle install
+$ bundle exec rake db:create
+$ bin/rails db:environment:set RAILS_ENV=development
+$ bundle exec rake db:structure:load
+
+# Run the tests
+$ bundle exec rake
+
+# Make the site accessible from laptop on http://localhost:9292
+$ PORT=9292 foreman start
 ```
 
----
-
-## Seeding the database
+### Seeding the database
 
 Before you can seed the database, there must be an admin user in the database.
 Sign up using the sign-up form (`/signup`). Then use the console to make the user
@@ -210,29 +222,6 @@ development$ scp -i /path/to/modern-slavery-registry.pem ec2-user@<ec2-ip-addres
 # Restore database backup
 development$ rake db:drop db:create
 development$ psql --dbname="msaregistry_development" --file=./tmp/<msr-db-dump-filename>
-```
-
----
-
-## Developing using Vagrant
-
-```
-# On the host machine
-$ vagrant up
-$ vagrant ssh
-
-# On the Vagrant VM
-$ cd /vagrant/
-$ bundle install
-$ bundle exec rake db:create
-$ bin/rails db:environment:set RAILS_ENV=development
-$ bundle exec rake db:structure:load
-
-# Run the tests
-$ bundle exec rake
-
-# Make the site accessible from laptop on http://localhost:9292
-$ PORT=9292 foreman start
 ```
 
 ---
