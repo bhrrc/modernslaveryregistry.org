@@ -50,7 +50,7 @@ $ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
 
 ## Deploying
 
-We're using Elastic Beanstalk to host the app on AWS.
+We're using Elastic Beanstalk to manage the app on AWS.
 
 ### Configure Elastic Beanstalk CLI
 
