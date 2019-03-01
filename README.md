@@ -272,7 +272,9 @@ $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0
 
 ---
 
-## Production infrastructure
+## Production environment
+
+### Infrastructure
 
 * AWS Elastic Beanstalk to host Rails app
 
@@ -288,9 +290,7 @@ $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0
 
 * Rollbar for catching exceptions
 
----
-
-## Environment variables
+### Environment variables
 
 * `DATABASE_URL`
   - Manually set using credentials used to create the RDS instance, and using values from the RDS web interface (in the format "postgres://<username>:<password>@<endpoint>/<database-name>")
