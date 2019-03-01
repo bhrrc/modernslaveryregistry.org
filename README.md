@@ -182,7 +182,7 @@ NOTE. The version of the PostgreSQL client on the EC2 instances (9.2) doesn't ma
 
 ### Update PostgreSQL client on EC2 instances
 
-Run `psql --version` on the EC2 instance to print the current version. If it's not 9.6 you need to upgrade them.
+Run `psql --version` on the EC2 instance to print the current version. If it's not 9.6 you need to upgrade it.
 
 ```
 # Search for installed postgresql tools
