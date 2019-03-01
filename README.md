@@ -1,5 +1,7 @@
 # README
 
+This is the Rails app behind the [Modern Slavery Registry](https://www.modernslaveryregistry.org/).
+
 ## Running locally
 
 ```
