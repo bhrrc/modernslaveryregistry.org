@@ -1,5 +1,0 @@
-#!/bin/bash
-
-export PATH=$PATH:/usr/local/bin
-cd /home/ubuntu/ruby-on-rails
-sudo systemctl stop railsapp.target
