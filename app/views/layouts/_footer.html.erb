@@ -1,14 +1,12 @@
 <footer class="footer">
   <div class="container">
     <div class="content has-text-centered">
-      <p>
-        <div class="nav-menu nav-center">
-          <%= link_to 'Home', root_path, class: 'nav-item' %>
-          <%= link_to 'Browse companies', explore_path, class: 'nav-item' %>
-          <% footer_nav_links.each do |title, path| %>
-            <%= link_to title, path, class: 'nav-item' %>
-          <% end %>
-        </div>
+      <p class="nav-menu nav-center">
+        <%= link_to 'Home', root_path, class: 'nav-item' %>
+        <%= link_to 'Browse companies', explore_path, class: 'nav-item' %>
+        <% footer_nav_links.each do |title, path| %>
+          <%= link_to title, path, class: 'nav-item' %>
+        <% end %>
       </p>
       <p>
         <strong>Modern Slavery Registry</strong> by <a href="https://business-humanrights.org/">Business &amp; Human Rights Resource Centre</a>
