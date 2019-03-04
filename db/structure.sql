@@ -495,7 +495,6 @@ CREATE TABLE public.statements (
     marked_not_broken_url boolean DEFAULT false,
     first_year_covered integer,
     last_year_covered integer,
-    also_covers_companies character varying,
     company_id bigint NOT NULL
 );
 
@@ -1094,6 +1093,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190218152317'),
 ('20190220121940'),
 ('20190221165142'),
-('20190225171707');
+('20190225171707'),
+('20190304105224');
 
 
