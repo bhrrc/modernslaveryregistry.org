@@ -97,9 +97,9 @@ Then('{actor} should see the following pages in the header navigation on the web
 end
 
 Then('{actor} should see the following pages in the footer navigation on the website:') do |actor, table|
-  default_menu_items = ['Home', 'Browse companies']
+  default_menu_items = ['Home', 'Browse companies', 'Log out']
   page_titles = default_menu_items + table.hashes.map { |props| props['Title'] }
-  expect(actor.visible_footer_navigation_menu.titles).to eq(page_titles)
+  expect(actor.visible_footer_navigation_menu.titles).to contain_exactly(*page_titles)
 end
 
 module ManagesPages
@@ -178,7 +178,7 @@ module SeesPages
 
   def visible_footer_navigation_menu
     visit root_path
-    NavMenu.with(titles: all('footer .nav-menu .nav-item').map(&:text))
+    NavMenu.with(titles: all('footer .nav-links a').map(&:text))
   end
 
   class NavMenu < Value.new(:titles)

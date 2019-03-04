@@ -1,26 +1,30 @@
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
-      <p class="nav-menu nav-center">
-        <%= link_to 'Home', root_path, class: 'nav-item' %>
-        <%= link_to 'Browse companies', explore_path, class: 'nav-item' %>
-        <% footer_nav_links.each do |title, path| %>
-          <%= link_to title, path, class: 'nav-item' %>
-        <% end %>
-      </p>
-      <p>
-        <strong>Modern Slavery Registry</strong> by <a href="https://business-humanrights.org/">Business &amp; Human Rights Resource Centre</a>
-      </p>
-      <p>
-        <% if user_signed_in? %>
-          <% if admin? %>
-            <%= link_to 'Admin', admin_dashboard_path %>&nbsp;&nbsp;&nbsp;
+    <div class="columns">
+      <div class="column has-text-centered-mobile nav-links">
+        <ul>
+          <li><%= link_to 'Home', root_path %></li>
+          <li><%= link_to 'Browse companies', explore_path %></li>
+          <% footer_nav_links.each do |title, path| %>
+            <li><%= link_to title, path %></li>
           <% end %>
-          <%= link_to('Log out', destroy_user_session_path, method: 'delete') %>
-        <% else %>
-          <%= link_to('Login', new_user_session_path) %>
-        <% end %>
-      </p>
+          <li>
+            <% if user_signed_in? %>
+              <% if admin? %>
+                <%= link_to 'Admin', admin_dashboard_path %>&nbsp;&nbsp;&nbsp;
+              <% end %>
+              <%= link_to('Log out', destroy_user_session_path, method: 'delete') %>
+            <% else %>
+              <%= link_to('Login', new_user_session_path) %>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+      <div class="column has-text-right-desktop has-text-centered-mobile">
+        <p>
+          <strong>Modern Slavery Registry</strong> by <a href="https://business-humanrights.org/">Business &amp; Human Rights Resource Centre</a>
+        </p>
+      </div>
     </div>
   </div>
 </footer>
