@@ -7,7 +7,7 @@
     <div class="field has-addons">
       <div class="control">
         <div class="select">
-          <%= select('industry', 'id', options_from_collection_for_select(Industry.all, :id, :name, params[:industry]), { include_blank: 'Filter by industry' }) %>
+          <%= select('industry', 'id', options_from_collection_for_select(Industry.all, :id, :name, params[:industry]), { include_blank: 'Filter by industry' }, { style: 'width: 100%'} ) %>
         </div>
       </div>
       <div class="control">
