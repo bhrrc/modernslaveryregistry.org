@@ -85,7 +85,7 @@
 <div class="columns is-centered">
   <div class="column is-half">
     <% if @compliance_stats.industry %>
-    <p>These figures are based on the most recent <%= link_to "#{@compliance_stats.total} statements", explore_path(industries: [@compliance_stats.industry]) %> published by companies under the UK Modern Slavery Act in the <span class="is-turquoise-text"><%= @compliance_stats.industry.name %></span> sector in our register.</p>
+    <p>These figures are based on the most recent <%= link_to "#{@compliance_stats.total} statements", explore_path(industries: [@compliance_stats.industry]) %> from all companies in the <span class="is-turquoise-text"><%= @compliance_stats.industry.name %></span> industry publishing under the UK Modern Slavery Act in our register.</p>
     <% else %>
     <p>These figures are based on the most recent <%= link_to "#{@compliance_stats.total} statements", explore_path %> from all companies publishing under the UK Modern Slavery Act in our register.</p>
     <% end %>
