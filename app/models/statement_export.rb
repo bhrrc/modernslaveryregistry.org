@@ -23,7 +23,13 @@ class StatementExport
   # rubocop:enable Metrics/MethodLength
 
   def self.format_for_csv(value)
-    value.respond_to?(:iso8601) ? value.iso8601 : value
+    if value.respond_to?(:iso8601)
+      value.iso8601
+    elsif value.is_a?(Array)
+      value.join(',')
+    else
+      value
+    end
   end
 
   BASIC_FIELDS = {

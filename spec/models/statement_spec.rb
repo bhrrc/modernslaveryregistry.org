@@ -184,4 +184,29 @@ RSpec.describe Statement, type: :model do
       expect(statement.published_by?(other_company)).to be(false)
     end
   end
+
+  describe '#also_covers_companies' do
+    let(:company) { Company.create!(name: 'company') }
+    let(:statement) { company.statements.create!(url: 'http://example.com') }
+
+    context 'when the statement is not associated with other companies' do
+      it 'returns an empty array' do
+        expect(statement.also_covers_companies).to eq([])
+      end
+    end
+
+    context 'when the statement covers other companies' do
+      let(:other_company1) { Company.create!(name: 'other-company-1') }
+      let(:other_company2) { Company.create!(name: 'other-company-2') }
+
+      before do
+        statement.additional_companies_covered << other_company1
+        statement.additional_companies_covered << other_company2
+      end
+
+      it 'returns an array of the names of companies also associated with this statement' do
+        expect(statement.also_covers_companies).to contain_exactly('other-company-1', 'other-company-2')
+      end
+    end
+  end
 end

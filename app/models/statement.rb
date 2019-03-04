@@ -150,6 +150,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     self == company.latest_statement
   end
 
+  def also_covers_companies
+    additional_companies_covered.map(&:name)
+  end
+
   private
 
   def legislation_requires?(attribute)

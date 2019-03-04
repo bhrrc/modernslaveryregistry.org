@@ -4,6 +4,8 @@ RSpec.describe StatementExport do
   let(:industry) { Industry.create! name: 'Software' }
   let(:country) { Country.create! code: 'GB', name: 'United Kingdom' }
   let(:company) { Company.create! name: 'Cucumber Ltd', country: country, industry: industry }
+  let(:company1) { Company.create! name: 'company-1' }
+  let(:company2) { Company.create! name: 'company-2' }
   let(:user) do
     User.create!(first_name: 'Super',
                  last_name: 'Admin',
@@ -26,7 +28,6 @@ RSpec.describe StatementExport do
                                verified_by: user,
                                contributor_email: 'contributor@somewhere.com',
                                date_seen: Date.parse('2017-03-22'),
-                               also_covers_companies: 'one,two,three',
                                published: true,
                                legislations: [uk_legislation],
                                first_year_covered: 2018,
@@ -47,6 +48,9 @@ RSpec.describe StatementExport do
       statement.fetch_snapshot
       statement.save!
     end
+
+    statement.additional_companies_covered << company1
+    statement.additional_companies_covered << company2
   end
 
   describe 'to_csv' do
@@ -80,7 +84,7 @@ RSpec.describe StatementExport do
                            'https://cucumber.io/',
                            'Software',
                            'United Kingdom',
-                           'one,two,three',
+                           'company-1,company-2',
                            'true',
                            'false',
                            '2018-2019',
