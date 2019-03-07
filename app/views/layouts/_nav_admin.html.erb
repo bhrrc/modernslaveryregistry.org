@@ -1,27 +1,28 @@
-<header class="is-dark-grey">
+<header class="is-dark-navy">
   <div class="container">
-    <nav class="nav is-dark-grey">
-      <div class="nav-left">
-        <div class="nav-item">
-          <a href="/admin">
-            <%= image_tag 'logo-admin.png', alt: "Modern Slavery Registry" %>
-          </a>
+    <nav class="navbar is-dark-navy">
+      <div class="navbar-brand">
+        <a href="/admin" class="navbar-item">
+          <%= image_tag 'logo-admin.png', alt: "Modern Slavery Registry" %>
+        </a>
+
+        <div class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
       </div>
 
-      <span class="nav-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-
-      <div class="nav-right nav-menu">
-        <%= link_to "Companies", admin_companies_path, class: 'nav-item' %>
-        <%= link_to "Pages", admin_pages_path, class: 'nav-item' %>
-        <%= link_to "Calls to Action", admin_call_to_actions_path, class: 'nav-item' %>
-        <%= link_to "Users", admin_users_path, class: 'nav-item' %>
-        <%= link_to "Stats", admin_stats_path, class: 'nav-item' %>
-        <%= link_to('Log out', destroy_user_session_path, method: 'delete', class: 'nav-item') %>
+      <div class="navbar-menu">
+        <div class="navbar-start"></div>
+        <div class="navbar-end">
+          <%= link_to "Companies", admin_companies_path, class: 'navbar-item' %>
+          <%= link_to "Pages", admin_pages_path, class: 'navbar-item' %>
+          <%= link_to "Calls to Action", admin_call_to_actions_path, class: 'navbar-item' %>
+          <%= link_to "Users", admin_users_path, class: 'navbar-item' %>
+          <%= link_to "Stats", admin_stats_path, class: 'navbar-item' %>
+          <%= link_to('Log out', destroy_user_session_path, method: 'delete', class: 'navbar-item') %>
+        </div>
       </div>
     </nav>
 

@@ -173,7 +173,7 @@ module SeesPages
 
   def visible_header_navigation_menu
     visit root_path
-    NavMenu.with(titles: all('header .nav-menu .nav-item').map(&:text))
+    NavMenu.with(titles: all('header .navbar-menu .navbar-item').map(&:text))
   end
 
   def visible_footer_navigation_menu

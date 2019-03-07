@@ -153,13 +153,16 @@ $size-large: $size-4 !default
 
 $sizes: $size-1 $size-2 $size-3 $size-4 $size-5 $size-6 !default
 
-$nav-height: 6.25rem !default
+$navbar-height: 6.25rem !default
+$navbar-item-hover-background-color: $dark-navy
+$navbar-item-hover-color: $yellow
+$navbar-item-color: #C1C6C8
 
-.nav-item
+.navbar-item
   img
     max-height: 4.75rem !important
 
-.nav-toggle
+.navbar-burger
   span
     background-color: $yellow !important
   &:hover
@@ -167,16 +170,16 @@ $nav-height: 6.25rem !default
     span
       background-color: $turquoise !important
 
-.nav-menu.is-active
-  .nav-item
+.navbar-menu.is-active
+  .navbar-item
     background: $dark-navy !important
 
 header
-  .nav-right
+  .navbar-end
     margin-right: 18px
 
 .footer
-  .nav-item
+  .navbar-item
     color: darken($grey, 25%)
 
 .hero-body
@@ -196,7 +199,7 @@ header
   color: $white
   background-color: #333
 
-  .nav-item a, a.nav-item
+  .navbar-item a, a.navbar-item
     color: white
     &:hover
       color: $yellow
@@ -228,7 +231,7 @@ header
   white-space: normal
 
 .breadcrumb
-  margin-top: -50px
+  margin-top: -3rem
   background: #efefef
   a
     color: $turquoise

@@ -1,24 +1,25 @@
 <header class="is-dark-navy">
   <div class="container">
-    <nav class="nav is-dark-navy">
-      <div class="nav-left">
-        <div class="nav-item">
-          <a href="/">
-            <%= image_tag 'logo.png', alt: "Modern Slavery Registry" %>
-          </a>
+    <nav class="navbar is-dark-navy">
+      <div class="navbar-brand">
+        <a href="/" class="navbar-item">
+          <%= image_tag 'logo.png', alt: "Modern Slavery Registry" %>
+        </a>
+
+        <div class="navbar-burger">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
       </div>
 
-      <span class="nav-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
-      </span>
-
-      <div class="nav-right nav-menu">
-        <% header_nav_links.each do |title, path| %>
-           <%= link_to title, path, class: 'nav-item' %>
-        <% end %>
+      <div class="navbar-menu">
+        <div class="navbar-start"></div>
+        <div class="navbar-end">
+          <% header_nav_links.each do |title, path| %>
+             <%= link_to title, path, class: 'navbar-item' %>
+          <% end %>
+        </div>
       </div>
 
     </nav>
