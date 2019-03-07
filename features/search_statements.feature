@@ -46,7 +46,7 @@ Feature: Search statements
     Then Joe should see the following search results:
       | name             | country        | industry         | link_text        |
       | Banana Ltd       | France         | Agriculture      | 1 statement      |
-      | Cucumber Inc     | United States  | Retail           | 1 statement      |
+      | Cucumber Inc     | United States  | Retail           | 0 statements     |
       | Cucumber Ltd     | United Kingdom | Software         | 1 statement      |
       | Strawberries Ltd | United Kingdom | Industry unknown | Submit statement |
 

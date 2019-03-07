@@ -17,9 +17,9 @@ class CompanySearch
   end
 
   def statement_count_for(company)
-    return company.all_statements.count if @legislations.blank?
+    return company.published_statements.count if @legislations.blank?
 
-    company.statements.joins(:legislations).where(legislations: { id: @legislations }).count
+    company.statements.published.joins(:legislations).where(legislations: { id: @legislations }).count
   end
 
   private

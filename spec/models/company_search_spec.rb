@@ -143,7 +143,8 @@ RSpec.describe CompanySearch, type: :model do
     let!(:uk_statement) do
       company.statements.create!(
         url: 'http://example.com',
-        legislations: [uk_legislation]
+        legislations: [uk_legislation],
+        published: true
       )
     end
 
@@ -151,7 +152,8 @@ RSpec.describe CompanySearch, type: :model do
       let!(:second_uk_statement) do
         company.statements.create!(
           url: 'http://example.com',
-          legislations: [uk_legislation]
+          legislations: [uk_legislation],
+          published: true
         )
       end
 
@@ -240,13 +242,49 @@ RSpec.describe CompanySearch, type: :model do
   context 'with a single statement' do
     let!(:statement) do
       company.statements.create!(
-        url: 'http://example.com'
+        url: 'http://example.com',
+        published: true
       )
     end
 
     describe '#statement_count_for' do
       it 'returns a count of the statements for a company' do
         search = CompanySearch.new(company_name: 'Go Free Range Limited')
+        expect(search.statement_count_for(search.results.first)).to eq(1)
+      end
+    end
+  end
+
+  context 'with an unpublished statement' do
+    let(:uk_legislation) { Legislation.create! name: Legislation::UK_NAME, icon: 'uk' }
+
+    let!(:statement) do
+      company.statements.create!(
+        url: 'http://example.com',
+        legislations: [uk_legislation],
+        published: true
+      )
+    end
+
+    let!(:unpublished_statement) do
+      company.statements.create!(
+        url: 'http://example.com',
+        legislations: [uk_legislation],
+        published: false
+      )
+    end
+
+    describe '#statement_count_for' do
+      it 'returns a count of the published statements for a company' do
+        search = CompanySearch.new(company_name: 'Go Free Range Limited')
+        expect(search.statement_count_for(search.results.first)).to eq(1)
+      end
+
+      it 'excludes unpublished statements from legislation-filtered searches' do
+        search = CompanySearch.new(
+          company_name: 'Go Free Range Limited',
+          legislations: [uk_legislation.id]
+        )
         expect(search.statement_count_for(search.results.first)).to eq(1)
       end
     end
@@ -259,7 +297,8 @@ RSpec.describe CompanySearch, type: :model do
 
     let(:statement) do
       other_company.statements.create!(
-        url: 'http://example.com'
+        url: 'http://example.com',
+        published: true
       )
     end
 
