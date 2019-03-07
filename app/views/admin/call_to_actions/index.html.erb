@@ -36,7 +36,7 @@
         <tr>
           <td><%= link_to call_to_action.title, edit_admin_call_to_action_path(call_to_action) %></td>
           <td><%= call_to_action.button_text %></td>
-          <td><%= call_to_action.url %></td>
+          <td class="is-url"><%= call_to_action.url %></td>
           <td><%= call_to_action.body %></td>
           <td>
             <% unless call_to_action.first? %>
