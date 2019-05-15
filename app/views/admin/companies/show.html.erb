@@ -59,6 +59,14 @@
           <% end %>
         </div>
       </div>
+      <div class="columns">
+        <div class="column label is-one-quarter">
+          Company Number
+        </div>
+        <div class="column">
+          <%= @company.company_number.present? ? @company.company_number : 'N/A' %>
+        </div>
+      </div>
     </div>
   </div>
 

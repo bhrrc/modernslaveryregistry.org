@@ -55,6 +55,7 @@ module Admin
       country_id
       industry_id
       bhrrc_url
+      company_number
     ].freeze
 
     STATEMENTS_ATTRIBUTES = (%i[
