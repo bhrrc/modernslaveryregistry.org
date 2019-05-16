@@ -64,7 +64,7 @@
           Company Number
         </div>
         <div class="column">
-          <%= @company.company_number.present? ? @company.company_number : 'N/A' %>
+          <%= @company.company_number.presence || 'N/A' %>
         </div>
       </div>
     </div>
