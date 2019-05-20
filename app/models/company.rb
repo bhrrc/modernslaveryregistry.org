@@ -8,8 +8,10 @@ class Company < ApplicationRecord
   belongs_to :latest_statement_for_compliance_stats, class_name: 'Statement', optional: true
 
   validates :name, presence: true, uniqueness: true
-  validates :company_number, presence: true, uniqueness: true
-
+  validates :company_number, uniqueness: true, allow_blank: true
+  validates :company_number, presence: { message: "can't be blank for United Kingdom", 
+                                         :if => :required_country? }
+  
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
   scope :with_associated_published_statements_in_legislation, lambda { |legislation_name|
@@ -65,4 +67,11 @@ class Company < ApplicationRecord
   def to_param
     [id, name.parameterize].join('-')
   end
+
+  private
+
+  def required_country?
+    self.country.name == "United Kingdom" ? true : false
+  end
+
 end
