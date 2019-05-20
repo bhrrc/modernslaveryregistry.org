@@ -8,6 +8,7 @@ class Company < ApplicationRecord
   belongs_to :latest_statement_for_compliance_stats, class_name: 'Statement', optional: true
 
   validates :name, presence: true, uniqueness: true
+  validates :company_number, presence: true, uniqueness: true
 
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
