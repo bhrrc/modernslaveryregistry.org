@@ -14,7 +14,6 @@ class StatementExport
       ).find_each do |company|
         company.statements.each do |statement|
           next unless statement.published || admin
-
           csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
         end
       end
@@ -35,6 +34,7 @@ class StatementExport
   BASIC_FIELDS = {
     company_name: 'Company',
     url: 'URL',
+    company_number: 'Company Number',
     industry_name: 'Industry',
     country_name: 'HQ',
     also_covers_companies: 'Also Covers Companies',

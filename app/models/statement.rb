@@ -164,6 +164,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     company.name
   end
 
+  def company_number
+    company.company_number
+  end
+
   def build_snapshot_from_result(fetch_result)
     build_snapshot
     snapshot.original.attach(
