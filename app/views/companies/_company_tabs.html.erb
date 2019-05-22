@@ -20,6 +20,7 @@
     <ul class="tags">
       <li class="tag is-dark-navy" data_content="country"><%= @company.country_name %></li>
       <li class="tag is-dark-navy" data_content="industry"><%= @company.industry_name %></li>
+      <li class="tag is-dark-navy" data_content="number"><%= @company.company_number.presence ? @company.company_number : 'Company Number Unknown' %> ?</li>
     </ul>
 
     <div class="tabs is-boxed statements-tabs">

@@ -71,7 +71,11 @@ class Company < ApplicationRecord
   private
 
   def required_country?
-    self.country.name == "United Kingdom" ? true : false
+    if self.country.name == "United Kingdom" && self.industry.name != "Charity/Non-Profit" && self.industry.name != "Public Entities"
+      true
+    else
+      false
+    end
   end
 
 end

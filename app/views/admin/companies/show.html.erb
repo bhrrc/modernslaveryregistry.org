@@ -51,20 +51,20 @@
       </div>
       <div class="columns">
         <div class="column label is-one-quarter">
+          Company Number
+        </div>
+        <div class="column">
+          <%= @company.company_number.presence || 'Company Number Unknown' %>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column label is-one-quarter">
           BHRRC URL
         </div>
         <div class="column">
           <% if @company.bhrrc_url.present? %>
             <%= link_to @company.bhrrc_url, @company.bhrrc_url %>
           <% end %>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column label is-one-quarter">
-          Company Number
-        </div>
-        <div class="column">
-          <%= @company.company_number.presence || 'N/A' %>
         </div>
       </div>
     </div>
