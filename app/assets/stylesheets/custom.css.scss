@@ -5,9 +5,46 @@
   margin: 0 0 0 5px;
   color: black;
   position: relative;
-  p {
+  .tooltip {
     position: absolute;
     top: 0;
     right: 5px;
   }
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 7px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 0;
+  margin-left: -95px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 18%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
 }
