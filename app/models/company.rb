@@ -67,9 +67,7 @@ class Company < ApplicationRecord
   def to_param
     [id, name.parameterize].join('-')
   end
-
-  private
-
+  
   def required_country?
     if self.country.name == "United Kingdom" && self.industry.name != "Charity/Non-Profit" && self.industry.name != "Public Entities"
       true
