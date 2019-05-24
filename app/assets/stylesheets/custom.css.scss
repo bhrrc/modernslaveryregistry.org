@@ -1,14 +1,14 @@
 .c-mark {
-  padding: 3px 2px 14px 15px;
+  padding: 3px 2px 3px 19px;
   background-color: white;
   border-radius: 43px;
   margin: 0 0 0 5px;
   color: black;
   position: relative;
-  .tooltip {
+  p {
     position: absolute;
     top: 1px;
-    right: 5px;
+    right: 7px;
   }
 }
 .tooltip {
@@ -18,19 +18,24 @@
 }
 
 .tooltip .tooltiptext {
-  visibility: hidden;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 7px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%;
-  left: 0;
-  margin-left: -95px;
-  opacity: 0;
-  transition: opacity 0.3s;
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 7px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    width: 234px;
+    left: 0;
+    margin-left: -18px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    word-wrap: break-word;
+    text-align: left;
+    white-space: pre-line;
+    padding: 12px 22px 14px 26px;
 }
 
 .tooltip .tooltiptext::after {
@@ -38,7 +43,7 @@
   position: absolute;
   top: 100%;
   left: 18%;
-  margin-left: -5px;
+  margin-left: -19px;
   border-width: 5px;
   border-style: solid;
   border-color: #555 transparent transparent transparent;
