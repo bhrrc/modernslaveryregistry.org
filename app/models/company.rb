@@ -9,8 +9,7 @@ class Company < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates :company_number, uniqueness: true, allow_blank: true
-  validates :company_number, presence: { message: "can't be blank for United Kingdom", 
-                                         :if => :required_country? }
+  validates :company_number, presence: true, if: :required_country?
   
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
@@ -69,7 +68,7 @@ class Company < ApplicationRecord
   end
   
   def required_country?
-    if self.country.name == "United Kingdom" && self.industry.name != "Charity/Non-Profit" && self.industry.name != "Public Entities"
+    if self.country&.name == "United Kingdom" && self.industry&.name != "Charity/Non-Profit" && self.industry&.name != "Public Entities"
       true
     else
       false
