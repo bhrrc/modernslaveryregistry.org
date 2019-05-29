@@ -22,7 +22,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   before_create { self.date_seen ||= Time.zone.today }
   after_save :enqueue_snapshot unless ENV['no_fetch']
-  #after_commit :perform_snapshot_job
+  after_commit :perform_snapshot_job
 
   after_save :update_latest_statement_for_compliance_stats
   after_destroy :update_latest_statement_for_compliance_stats
