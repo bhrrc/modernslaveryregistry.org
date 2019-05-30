@@ -7,9 +7,9 @@ namespace :import_company_data do
       data.shift
       data.map do |row|
         company = Company.find_by_id(row[0])
+        raise ActiveRecord::Rollback if company.blank?
         company.update!(company_number: row[1])
         puts "#{company.id} => #{row[1]} company_number Updated"
-        raise ActiveRecord::Rollback if company.blank?
       end
     end
   end
