@@ -41,7 +41,7 @@ class CompaniesController < ApplicationController
     industry_id
   ].freeze
 
-  STATEMENTS_ATTRIBUTES = %i[voc
+  STATEMENTS_ATTRIBUTES = %i[
     url
     contributor_email
   ].freeze

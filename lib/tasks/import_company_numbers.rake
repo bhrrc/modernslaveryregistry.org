@@ -2,14 +2,15 @@ require 'csv'
 namespace :import_company_data do
   desc 'Import Company numbers to company'
   task :add_company_numbers => :environment do
-  	CSV.foreach('public/companies_house_numbers_upload_v1.csv').map do |row|
-  	 	company = Company.find_by_id(row[0])
-  	 	if company.present?
-  	 		company.update(company_number: row[1]) if row[1].present?
-  	 		puts "#{company.id} => #{row[1]} company_number Updated"
-  	 	else
-  	 		puts "#{company&.id} => #{row[1]} Company not present"
-  	 	end
-  	 end
+    ActiveRecord::Base.transaction do
+      data = CSV.read('public/companies_house_numbers_upload_v1.csv')
+      data.shift
+      data.map do |row|
+        company = Company.find_by_id(row[0])
+        company.update!(company_number: row[1])
+        puts "#{company.id} => #{row[1]} company_number Updated"
+        raise ActiveRecord::Rollback if company.blank?
+      end
+    end
   end
 end
