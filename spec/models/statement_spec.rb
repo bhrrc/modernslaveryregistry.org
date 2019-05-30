@@ -36,7 +36,7 @@ RSpec.describe Statement, type: :model do
       @sw = Industry.create! name: 'Software'
       @vegetables = Industry.create!(name: 'Vegetables')
       @gb = Country.create! code: 'GB', name: 'United Kingdom'
-      @company = Company.create! name: 'Cucumber Ltd', country: @gb, industry: @sw
+      @company = Company.create! name: 'Cucumber Ltd', country: @gb, industry: @sw, company_number: '332211'
     end
 
     it 'uses active storage to save a screenshot of the statement' do
