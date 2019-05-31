@@ -22,14 +22,14 @@ RSpec.describe Country, type: :model do
   end
 
   specify 'Check Company number Presence only if Country name should be United Kingdom and Industry name not equl to Charity/Non-Profit OR Public Entities ' do
-    country = Country.find_by_code('GB')
+    country = Country.find_by(code: 'GB')
     industry = Industry.create!(name: 'Energy Equipment & Services')
     company = Company.new(name: 'company-name', industry_id: industry.id, country_id: country.id)
     assert company.required_country?
   end
 
   specify 'Not Required Company Number Only if Country name not equal to United Kingdom and Industry name equl to Charity/Non-Profit OR Public Entities ' do
-    country = Country.find_by_code('NO')
+    country = Country.find_by(code: 'NO')
     industry = Industry.create!(name: 'Charity/Non-Profit')
     company = Company.new(name: 'company-name', country_id: country.id, industry_id: industry.id)
     assert !company.required_country?

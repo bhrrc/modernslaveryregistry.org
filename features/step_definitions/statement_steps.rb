@@ -227,7 +227,7 @@ module FillsInForms
   end
 
   def text_fields
-    ['Company name', 'Related companies', 'Statement URL']
+    ['Company name', 'Related companies', 'Statement URL', 'Company number']
   end
 
   def drop_downs
@@ -353,7 +353,7 @@ module ViewsStatements
 
   def visible_listed_companies_from_search
     within "*[data-content='company_search_results']" do
-      dom_structs(:company, :name, :industry, :country)
+      dom_structs(:company, :name, :industry, :country, :company_number)
     end
   end
 

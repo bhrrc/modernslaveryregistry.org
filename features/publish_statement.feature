@@ -15,6 +15,7 @@ Feature: Publish statement
       | Approved by board  | No                                         |
       | Link on front page | No                                         |
       | Published          | Yes                                        |
+      | Company number     | 00123                                      |
     Then Patricia should see that the latest statement for "Cucumber Ltd" was verified by herself
     And Patricia should see that the latest statement for "Cucumber Ltd" was contributed by herself
 
@@ -28,6 +29,7 @@ Feature: Publish statement
       | Approved by board  | No                                         |
       | Link on front page | No                                         |
       | Published          | No                                         |
+      | Company number     | 03123                                      |
     Then Patricia should see that the latest statement for "Cucumber Ltd" is not published
     And Patricia should see that the latest statement for "Cucumber Ltd" was not verified
     And Patricia should see that the latest statement for "Cucumber Ltd" was contributed by herself

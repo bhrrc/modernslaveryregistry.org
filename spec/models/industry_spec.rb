@@ -10,7 +10,8 @@ RSpec.describe Industry, type: :model do
   end
 
   it 'reports number of industries with companies' do
-    Company.find_or_create_by(industry_id: @agriculture.id, name: 'Cucumber Ltd', country_id: @gb.id, company_number: '112233')
+    Company.find_or_create_by(industry_id: @agriculture.id, name: 'Cucumber Ltd', country_id: @gb.id,
+                              company_number: '112233')
     expect(Industry.with_companies.all.length).to eq(1)
   end
 

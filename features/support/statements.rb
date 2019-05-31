@@ -1,9 +1,10 @@
 module Statements
   def submit_statement(props)
-    props['Company name'] = SecureRandom.uuid unless props.include?('Company name')
-    props['Statement URL'] = 'https://' + SecureRandom.uuid unless props.include?('Statement URL')
-    verifier = find_or_create_verifier(props)
-    company = find_or_create_company(props)
+    props['Company number'] = SecureRandom.hex(3) unless props.include?('Company number')
+    props['Company name']    = SecureRandom.uuid unless props.include?('Company name')
+    props['Statement URL']   = 'https://' + SecureRandom.uuid unless props.include?('Statement URL')
+    verifier                 = find_or_create_verifier(props)
+    company                  = find_or_create_company(props)
     create_statement(company, verifier, props)
   end
 
@@ -12,13 +13,19 @@ module Statements
   def find_or_create_company(props)
     industry = Industry.find_by!(name: props.delete('Industry') || 'Software')
     country = Country.find_by!(name: props.delete('Country') || 'United Kingdom')
-    company = Company.find_or_create_by!(
-      name: props.delete('Company name'),
-      related_companies: props.delete('Related companies'),
-      industry: industry,
-      country: country
+    company = Company.find_by(name: props['Company name']) || Company.find_or_create_by!(
+      name: props['Company name'], related_companies: props['Related companies'],
+      industry: industry, country: country,
+      company_number: props['Company number']
     )
+    delete_unnecessary(props)
     company
+  end
+
+  def delete_unnecessary(props)
+    props.delete('Company name')
+    props.delete('Related companies')
+    props.delete('Company number')
   end
 
   def find_or_create_verifier(props)

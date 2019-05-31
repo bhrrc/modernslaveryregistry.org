@@ -10,7 +10,7 @@ class Company < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :company_number, uniqueness: true, allow_blank: true
   validates :company_number, presence: true, if: :required_country?
-  
+
   accepts_nested_attributes_for :statements, reject_if: :all_blank, allow_destroy: true
 
   scope :with_associated_published_statements_in_legislation, lambda { |legislation_name|
@@ -66,13 +66,12 @@ class Company < ApplicationRecord
   def to_param
     [id, name.parameterize].join('-')
   end
-  
+
   def required_country?
-    if self.country&.name == "United Kingdom" && self.industry&.name != "Charity/Non-Profit" && self.industry&.name != "Public Entities"
+    if country&.name == 'United Kingdom' && ['Public Entities', 'Charity/Non-Profit'].exclude?(industry&.name)
       true
     else
       false
     end
   end
-
 end

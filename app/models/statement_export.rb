@@ -14,6 +14,7 @@ class StatementExport
       ).find_each do |company|
         company.statements.each do |statement|
           next unless statement.published || admin
+
           csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
         end
       end

@@ -6,10 +6,10 @@ Feature: Search statements
       | Act X |
       | Act Y |
     Given the following statements have been submitted:
-      | Company name | Related companies | Statement URL          | Country        | Industry    | Verified by | Legislations | Published |
-      | Cucumber Ltd | Cuke Labs         | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    | Act X        | Yes       |
-      | Banana Ltd   |                   | https://banana.io/s    | France         | Agriculture | Patricia    | Act X, Act Y | Yes       |
-      | Cucumber Inc |                   | https://cucumber.inc/s | United States  | Retail      |             | Act Y        | No        |
+      | Company name | Related companies | Statement URL          | Country        | Industry    | Verified by | Legislations | Published | Company number |
+      | Cucumber Ltd | Cuke Labs         | https://cucumber.ltd/s | United Kingdom | Software    | Patricia    | Act X        | Yes       | 767574 |
+      | Banana Ltd   |                   | https://banana.io/s    | France         | Agriculture | Patricia    | Act X, Act Y | Yes       | 769574 |
+      | Cucumber Inc |                   | https://cucumber.inc/s | United States  | Retail      |             | Act Y        | No        | 967574 |
     And the company "Strawberries Ltd" has been submitted
 
   Scenario: Search by exact company name

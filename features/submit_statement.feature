@@ -16,6 +16,7 @@ Feature: Submit statement
       | Link on front page    | No                                         |
       | Legislations          | Green Edibles Act, Vegetables Act          |
       | Published             | Yes                                        |
+      | Company number        | 54365                                      |
     Then Patricia should see 1 statement for "Cucumber Ltd" with:
       | Statement URL         | https://cucumber.io/anti-slavery-statement |
       | Signed by director    | Yes                                        |
