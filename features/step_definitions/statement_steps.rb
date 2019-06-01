@@ -23,7 +23,8 @@ Given('a statement was submitted for {string} that responds with a 404') do |com
   )
   submit_statement(
     'Statement URL' => statement_url,
-    'Company name' => company_name
+    'Company name' => company_name,
+    'Company number' => '00123'
   )
 end
 

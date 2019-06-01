@@ -19,7 +19,7 @@ Given('a statement was submitted for {string} that responds with {mime_type}') d
       )
     )
   end
-  submit_statement('Statement URL' => statement_url, 'Company name' => company_name)
+  submit_statement('Statement URL' => statement_url, 'Company name' => company_name, 'Company number' => '00123')
   expect(StatementUrl).to have_received(:fetch).with(statement_url)
 end
 

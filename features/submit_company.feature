@@ -18,7 +18,7 @@ Feature: Submit company
       | Industry       | Software                         |
       | Statement URL  | http://cucumber.io/msa-statement |
       | Period Covered | 2016-2017                        |
-      | Company number | 12323ed                          |
+      | Company number | 00123                            |
 
     Then Patricia should find company "Cucumber Ltd" in the admin interface with:
       | Industry      | Software                         |
@@ -35,7 +35,7 @@ Feature: Submit company
       | Industry       | Software                         |
       | Statement URL  | http://cucumber.io/msa-statement |
       | Period Covered | 2016-2017                        |
-      | Company number | 05123                            |
+      | Company number | 00123                            |
 
   Scenario: Visitor submits a new company
     When Vicky submits the following company:
