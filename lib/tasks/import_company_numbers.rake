@@ -5,12 +5,13 @@ namespace :import_company_data do
     ActiveRecord::Base.transaction do
       data = CSV.read('public/companies_house_numbers_upload_v1.csv')
       data.shift
-      data.map do |row|
+      data.each do |row|
         company = Company.find_by(id: row[0])
-        raise ActiveRecord::Rollback if company.blank?
-
-        company.update!(company_number: row[1])
-        puts "#{company.id} => #{row[1]} company_number Updated"
+        if company
+          company.update!(company_number: row[1])
+        else
+          STDERR.puts "No such company id: #{row[0]} - ignoring"
+        end
       end
     end
   end
