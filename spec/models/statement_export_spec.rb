@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe StatementExport do
   let(:industry) { Industry.create! name: 'Software' }
   let(:country) { Country.create! code: 'GB', name: 'United Kingdom' }
-  let(:company) { Company.create! name: 'Cucumber Ltd', country: country, industry: industry }
+  let(:company) { Company.create! name: 'Cucumber Ltd', country: country, industry: industry, company_number: '332211' }
   let(:company1) { Company.create! name: 'company-1' }
   let(:company2) { Company.create! name: 'company-2' }
   let(:user) do
@@ -56,12 +56,11 @@ RSpec.describe StatementExport do
   describe 'to_csv' do
     it 'returns data relevant for exporting in a CSV format' do
       csv = StatementExport.to_csv(Company.all, true)
-
       header, data = CSV.parse(csv)
-
       expect(header).to eq([
                              'Company',
                              'URL',
+                             'Company Number',
                              'Industry',
                              'HQ',
                              'Also Covers Companies',
@@ -82,6 +81,7 @@ RSpec.describe StatementExport do
       expect(data).to eq([
                            'Cucumber Ltd',
                            'https://cucumber.io/',
+                           '332211',
                            'Software',
                            'United Kingdom',
                            'company-1,company-2',
@@ -109,6 +109,7 @@ RSpec.describe StatementExport do
       expect(header).to eq([
                              'Company',
                              'URL',
+                             'Company Number',
                              'Industry',
                              'HQ',
                              'Also Covers Companies',

@@ -30,23 +30,23 @@ RSpec.describe StatementStats do
   end
 
   let! :cucumber do
-    Company.create! name: 'Cucumber Ltd', country: gb, industry: software
+    Company.create! name: 'Cucumber Ltd', country: gb, industry: software, company_number: '332211'
   end
 
   let! :bbc do
-    Company.create! name: 'BBC Ltd', country: gb, industry: broadcasting
+    Company.create! name: 'BBC Ltd', country: gb, industry: broadcasting, company_number: '332711'
   end
 
   let! :itv do
-    Company.create! name: 'ITV Ltd', country: gb, industry: broadcasting
+    Company.create! name: 'ITV Ltd', country: gb, industry: broadcasting, company_number: '339211'
   end
 
   let! :tesco do
-    Company.create! name: 'Tesco Plc', country: gb, industry: retail
+    Company.create! name: 'Tesco Plc', country: gb, industry: retail, company_number: '338211'
   end
 
   let! :pixar do
-    Company.create! name: 'Pixar', country: gb, industry: movies
+    Company.create! name: 'Pixar', country: gb, industry: movies, company_number: '336611'
   end
 
   let! :banana do

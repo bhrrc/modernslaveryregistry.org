@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -167,7 +168,8 @@ CREATE TABLE public.companies (
     related_companies character varying,
     industry_id integer,
     bhrrc_url character varying,
-    latest_statement_for_compliance_stats_id bigint
+    latest_statement_for_compliance_stats_id bigint,
+    company_number character varying
 );
 
 
@@ -176,6 +178,7 @@ CREATE TABLE public.companies (
 --
 
 CREATE SEQUENCE public.companies_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -220,6 +223,7 @@ CREATE TABLE public.countries (
 --
 
 CREATE SEQUENCE public.countries_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -254,6 +258,7 @@ CREATE TABLE public.industries (
 --
 
 CREATE SEQUENCE public.industries_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -286,6 +291,7 @@ CREATE TABLE public.legislation_statements (
 --
 
 CREATE SEQUENCE public.legislation_statements_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -320,6 +326,7 @@ CREATE TABLE public.legislations (
 --
 
 CREATE SEQUENCE public.legislations_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -358,6 +365,7 @@ CREATE TABLE public.pages (
 --
 
 CREATE SEQUENCE public.pages_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -428,6 +436,7 @@ CREATE TABLE public.sectors (
 --
 
 CREATE SEQUENCE public.sectors_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -459,6 +468,7 @@ CREATE TABLE public.snapshots (
 --
 
 CREATE SEQUENCE public.snapshots_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -504,6 +514,7 @@ CREATE TABLE public.statements (
 --
 
 CREATE SEQUENCE public.statements_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -551,6 +562,7 @@ CREATE TABLE public.users (
 --
 
 CREATE SEQUENCE public.users_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1094,6 +1106,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190220121940'),
 ('20190221165142'),
 ('20190225171707'),
-('20190304105224');
+('20190304105224'),
+('20190515183222');
 
 

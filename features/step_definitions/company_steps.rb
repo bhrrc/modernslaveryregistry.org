@@ -1,7 +1,7 @@
 Given('the company {string} has been submitted') do |company_name|
   Company.create!(
     name: company_name,
-    country: Country.find_or_create_by!(code: 'GB', name: 'United Kingdom')
+    country: Country.find_or_create_by!(code: 'GB', name: 'United Kingdom'), company_number: SecureRandom.hex(3)
   )
 end
 
@@ -75,6 +75,7 @@ module AttemptsToCreateCompany
   def attempts_to_create_company(name:)
     visit new_admin_company_path
     fill_in 'Company name', with: name
+    fill_in 'Company number', with: '53232'
     select 'United Kingdom', from: 'Country'
     select 'Software', from: 'Industry'
     fill_in 'Related companies', with: "#{name} Labs, #{name} Express"
@@ -84,6 +85,7 @@ module AttemptsToCreateCompany
   def attempts_to_submit_company_with_statement(name:, country:, industry:, statement_url:, period_covered:)
     visit new_admin_company_path
     fill_in 'Company name', with: name
+    fill_in 'Company number', with: 'dsw324'
     select country, from: 'Country'
     select industry, from: 'Industry'
     fill_in 'Statement URL', with: statement_url

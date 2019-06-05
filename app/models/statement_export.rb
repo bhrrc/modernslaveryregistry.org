@@ -35,6 +35,7 @@ class StatementExport
   BASIC_FIELDS = {
     company_name: 'Company',
     url: 'URL',
+    company_number: 'Company Number',
     industry_name: 'Industry',
     country_name: 'HQ',
     also_covers_companies: 'Also Covers Companies',

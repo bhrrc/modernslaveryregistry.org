@@ -1,9 +1,9 @@
 module Statements
   def submit_statement(props)
-    props['Company name'] = SecureRandom.uuid unless props.include?('Company name')
-    props['Statement URL'] = 'https://' + SecureRandom.uuid unless props.include?('Statement URL')
-    verifier = find_or_create_verifier(props)
-    company = find_or_create_company(props)
+    props['Company name']    = SecureRandom.uuid unless props.include?('Company name')
+    props['Statement URL']   = 'https://' + SecureRandom.uuid unless props.include?('Statement URL')
+    verifier                 = find_or_create_verifier(props)
+    company                  = find_or_create_company(props)
     create_statement(company, verifier, props)
   end
 
@@ -13,10 +13,9 @@ module Statements
     industry = Industry.find_by!(name: props.delete('Industry') || 'Software')
     country = Country.find_by!(name: props.delete('Country') || 'United Kingdom')
     company = Company.find_or_create_by!(
-      name: props.delete('Company name'),
-      related_companies: props.delete('Related companies'),
-      industry: industry,
-      country: country
+      name: props.delete('Company name'), related_companies: props.delete('Related companies'),
+      industry: industry, country: country,
+      company_number: props.delete('Company number')
     )
     company
   end

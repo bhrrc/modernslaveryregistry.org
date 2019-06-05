@@ -1,0 +1,55 @@
+.c-mark {
+  padding: 3px 2px 3px 19px;
+  background-color: white;
+  border-radius: 43px;
+  margin: 0 0 0 5px;
+  color: black;
+  position: relative;
+  p {
+    position: absolute;
+    top: 1px;
+    right: 7px;
+  }
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 7px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    width: 234px;
+    left: 0;
+    margin-left: -18px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    word-wrap: break-word;
+    text-align: left;
+    white-space: pre-line;
+    padding: 12px 22px 14px 26px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 18%;
+  margin-left: -19px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe CompanySearch, type: :model do
-  let!(:company) { Company.create! name: 'Go Free Range Ltd', related_companies: 'Badgers Inc' }
+  let!(:company) { Company.find_or_create_by name: 'Go Free Range Ltd', related_companies: 'Badgers Inc' }
 
   before do
     create_search_alias('Limited', 'Ltd')
@@ -50,6 +50,7 @@ RSpec.describe CompanySearch, type: :model do
 
     before do
       company.country = country
+      company.company_number = '123456'
       company.save
     end
 
