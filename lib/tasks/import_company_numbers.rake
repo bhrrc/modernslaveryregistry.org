@@ -10,7 +10,7 @@ namespace :import_company_data do
         if company
           company.update!(company_number: row[1])
         else
-          STDERR.puts "No such company id: #{row[0]} - ignoring"
+          puts "No such company id: #{row[0]} - ignoring"
         end
       end
     end
