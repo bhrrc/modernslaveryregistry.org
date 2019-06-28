@@ -12,10 +12,50 @@ class StatementExport
         :country,
         :industry
       ).find_each do |company|
+
         company.statements.each do |statement|
           next unless statement.published || admin
 
-          csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
+          csv << fields.map do |name, _| 
+            # REFACTOR:  try introspection to detect if the
+            # method takes args and therefore needs the new context of a child
+            # company
+            #
+            # if statement.method(name).parameters
+            #   byebug # method and it takes arguments
+            # end
+            if name == :published_by?
+              format_for_csv(statement.send(name, company)) 
+            else
+              format_for_csv(statement.send(name)) 
+            end
+          end
+
+          # Create a row for each associated company (child)
+          statement.additional_companies_covered_excluding(company).each do |company|
+            csv << fields.map do |name, _| 
+
+              case name
+              when :published_by?
+                format_for_csv(statement.send(name, company)) 
+              when :company_name
+                format_for_csv(statement.send(name, company))
+              when :company_number
+                format_for_csv(statement.send(name, company))
+              when :company_id
+                format_for_csv(company.id)
+              when :country_name
+                format_for_csv(company.country_name)
+              when :industry_name
+                format_for_csv(company.industry_name)
+              when :also_covers_companies
+                format_for_csv(statement.send(:also_covers_companies_excluding, company))
+              else
+                format_for_csv(statement.send(name)) 
+              end
+
+            end
+          end
         end
       end
     end
@@ -34,13 +74,17 @@ class StatementExport
 
   BASIC_FIELDS = {
     company_name: 'Company',
+    published_by?: 'Is Publisher',
+    id: 'Statement ID',
     url: 'URL',
     company_number: 'Company Number',
     industry_name: 'Industry',
     country_name: 'HQ',
     also_covers_companies: 'Also Covers Companies',
+    also_covered?: 'Is Also Covered',
     'uk_modern_slavery_act?' => Legislation::UK_NAME,
     'california_transparency_in_supply_chains_act?' => Legislation::CALIFORNIA_NAME,
+    # TODO - this might not be correct for the child companies
     period_covered: 'Period Covered'
   }.freeze
 
