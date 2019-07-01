@@ -2,62 +2,36 @@ require 'csv'
 
 class StatementExport
   # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def self.to_csv(companies, admin)
     fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
     CSV.generate do |csv|
       csv << fields.map { |_, heading| heading }
-      companies.includes(
+      companies = companies.includes(
         { statements: :legislations },
         { statements: :verified_by },
         :country,
         :industry
-      ).find_each do |company|
+      )
+      companies.find_each do |company|
         company.statements.each do |statement|
           next unless statement.published || admin
 
           csv << fields.map do |name, _|
-            # REFACTOR:  try introspection to detect if the
-            # method takes args and therefore needs the new context of a child
-            # company
-            #
-            # if statement.method(name).parameters
-            #   byebug # method and it takes arguments
-            # end
-            if name == :published_by?
+            if send_company_context?(name)
               format_for_csv(statement.send(name, company))
             else
               format_for_csv(statement.send(name))
             end
           end
 
-          # Create a row for each associated company (child)
-          statement.additional_companies_covered_excluding(company).each do |assoc_company|
-            csv << fields.map do |name, _|
-              case name
-              when :published_by?
-                format_for_csv(statement.send(name, assoc_company))
-              when :company_name
-                format_for_csv(statement.send(name, assoc_company))
-              when :company_number
-                format_for_csv(statement.send(name, assoc_company))
-              when :company_id
-                format_for_csv(assoc_company.id)
-              when :country_name
-                format_for_csv(assoc_company.country_name)
-              when :industry_name
-                format_for_csv(assoc_company.industry_name)
-              when :also_covers_companies
-                format_for_csv(statement.send(:also_covers_companies_excluding, assoc_company))
-              else
-                format_for_csv(statement.send(name))
-              end
-            end
-          end
+          csv_for_additional_companies(csv, fields, company, statement)
         end
       end
     end
   end
   # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   def self.format_for_csv(value)
     if value.respond_to?(:iso8601)
@@ -67,6 +41,37 @@ class StatementExport
     else
       value
     end
+  end
+
+  # rubocop:disable Metrics/MethodLength
+  def self.csv_for_additional_companies(csv, fields, company, statement)
+    # A lookup hash to substitute a different message to send to Statement
+    #  in special cases
+    substitute_message_for = {
+      company_id: 'id',
+      country_name: 'country_name',
+      industry_name: 'industry_name'
+    }
+
+    statement.additional_companies_covered_excluding(company).each do |assoc_company|
+      csv << fields.map do |name, _|
+        if send_company_context?(name)
+          format_for_csv(statement.send(name, assoc_company))
+        elsif substitute_message_for[name]
+          value = assoc_company.send(substitute_message_for[name])
+          format_for_csv(value)
+        else
+          format_for_csv(statement.send(name))
+        end
+      end
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  def self.send_company_context?(name)
+    return false if Statement.new.method(name).parameters.empty?
+
+    Statement.new.method(name).parameters[0][1] == :company
   end
 
   BASIC_FIELDS = {

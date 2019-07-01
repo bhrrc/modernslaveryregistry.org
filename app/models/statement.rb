@@ -154,10 +154,6 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     additional_companies_covered.map(&:name)
   end
 
-  def also_covers_companies_excluding(company)
-    additional_companies_covered.order(:name).map(&:name) - [company.name]
-  end
-
   def also_covered?
     !additional_companies_covered.empty?
   end
