@@ -20,3 +20,5 @@ Feature: CSV additional companies
     And Patricia clicks on "Download search results"
     Then a CSV file should be downloaded 
     And the filename should be "modernslaveryregistry-#{Time.zone.today}.csv"
+
+  Scenario: Administrator exports to CSV with additional companies
