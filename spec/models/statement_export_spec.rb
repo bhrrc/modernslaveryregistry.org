@@ -57,48 +57,54 @@ RSpec.describe StatementExport do
     it 'returns data relevant for exporting in a CSV format' do
       csv = StatementExport.to_csv(Company.all, true)
       header, data = CSV.parse(csv)
-      expect(header).to eq([
-                             'Company',
-                             'URL',
-                             'Company Number',
-                             'Industry',
-                             'HQ',
-                             'Also Covers Companies',
-                             Legislation::UK_NAME,
-                             Legislation::CALIFORNIA_NAME,
-                             'Period Covered',
-                             'Approved by Board',
-                             'Approved by',
-                             'Signed by Director',
-                             'Signed by',
-                             'Link on Front Page',
-                             'Published',
-                             'Verified by',
-                             'Contributed by',
-                             'Broken URL',
-                             'Company ID'
-                           ])
-      expect(data).to eq([
-                           'Cucumber Ltd',
-                           'https://cucumber.io/',
-                           '332211',
-                           'Software',
-                           'United Kingdom',
-                           'company-1,company-2',
-                           'true',
-                           'false',
-                           '2018-2019',
-                           'Yes',
-                           'Big Boss',
-                           'false',
-                           'Little Boss',
-                           'true',
-                           'true',
-                           'admin@somewhere.com',
-                           'contributor@somewhere.com',
-                           'false',
-                           statement.company_id.to_s
-                         ])
+      expect(header).to match_array([
+                                      'Company',
+                                      'Is Publisher',
+                                      'Statement ID',
+                                      'URL',
+                                      'Company Number',
+                                      'Industry',
+                                      'HQ',
+                                      'Also Covers Companies',
+                                      'Is Also Covered',
+                                      Legislation::UK_NAME,
+                                      Legislation::CALIFORNIA_NAME,
+                                      'Period Covered',
+                                      'Approved by Board',
+                                      'Approved by',
+                                      'Signed by Director',
+                                      'Signed by',
+                                      'Link on Front Page',
+                                      'Published',
+                                      'Verified by',
+                                      'Contributed by',
+                                      'Broken URL',
+                                      'Company ID'
+                                    ])
+      expect(data).to match_array([
+                                    'Cucumber Ltd',
+                                    'true',
+                                    statement.id.to_s,
+                                    'https://cucumber.io/',
+                                    '332211',
+                                    'Software',
+                                    'United Kingdom',
+                                    'company-1,company-2',
+                                    'true',
+                                    'true',
+                                    'false',
+                                    '2018-2019',
+                                    'Yes',
+                                    'Big Boss',
+                                    'false',
+                                    'Little Boss',
+                                    'true',
+                                    'true',
+                                    'admin@somewhere.com',
+                                    'contributor@somewhere.com',
+                                    'false',
+                                    statement.company_id.to_s
+                                  ])
     end
 
     it 'ommits admin-only information when the extra parameter is false' do
@@ -106,17 +112,50 @@ RSpec.describe StatementExport do
 
       header, = CSV.parse(csv)
 
-      expect(header).to eq([
-                             'Company',
-                             'URL',
-                             'Company Number',
-                             'Industry',
-                             'HQ',
-                             'Also Covers Companies',
-                             Legislation::UK_NAME,
-                             Legislation::CALIFORNIA_NAME,
-                             'Period Covered'
-                           ])
+      expect(header).to match_array([
+                                      'Company',
+                                      'Is Publisher',
+                                      'Statement ID',
+                                      'URL',
+                                      'Company Number',
+                                      'Industry',
+                                      'HQ',
+                                      'Also Covers Companies',
+                                      'Is Also Covered',
+                                      Legislation::UK_NAME,
+                                      Legislation::CALIFORNIA_NAME,
+                                      'Period Covered'
+                                    ])
+    end
+
+    it 'includes additional companies' do
+      csv = StatementExport.to_csv(Company.where(id: company.id), true)
+      data = CSV.parse(csv)
+      expect(data[2]).to_not be_nil
+      expect(data[2]).to match_array([
+                                       'company-1',
+                                       'false',
+                                       statement.id.to_s,
+                                       'https://cucumber.io/',
+                                       nil,
+                                       'Industry unknown',
+                                       'Country unknown',
+                                       'company-1,company-2',
+                                       'true',
+                                       'true',
+                                       'false',
+                                       '2018-2019',
+                                       'Yes',
+                                       'Big Boss',
+                                       'false',
+                                       'Little Boss',
+                                       'true',
+                                       'true',
+                                       'admin@somewhere.com',
+                                       'contributor@somewhere.com',
+                                       'false',
+                                       company1.id.to_s
+                                     ])
     end
   end
 end
