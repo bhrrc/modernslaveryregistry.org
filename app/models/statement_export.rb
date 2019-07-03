@@ -83,7 +83,7 @@ class StatementExport
     company_number: 'Companies House Numbers',
     industry_name: 'Industry',
     country_name: 'HQ',
-    also_covered?: 'Is Also Covered',
+    also_covered_and_published_by?: 'Is Also Covered',
     'uk_modern_slavery_act?' => Legislation::UK_NAME,
     'california_transparency_in_supply_chains_act?' => Legislation::CALIFORNIA_NAME,
     period_covered: 'Period Covered'

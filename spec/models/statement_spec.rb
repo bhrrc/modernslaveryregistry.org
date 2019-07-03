@@ -235,4 +235,59 @@ RSpec.describe Statement, type: :model do
       end
     end
   end
+
+  describe '#also_covered_and_published_by?"' do
+    let(:company) { Company.create!(name: 'company') }
+    let(:statement) { company.statements.create!(url: 'http://example.com') }
+
+    context 'when company is the publisher' do
+      context 'and the statement is not associated with other companies (aka additional_companies is empty)' do
+        it 'returns false' do
+          actual = statement.also_covered_and_published_by?(company)
+          expect(actual).to be false
+        end
+      end
+
+      context 'and the statement covers other companies' do
+        let(:other_company1) { Company.create!(name: 'other-company-1') }
+        let(:other_company2) { Company.create!(name: 'other-company-2') }
+
+        before do
+          statement.additional_companies_covered << other_company1
+          statement.additional_companies_covered << other_company2
+        end
+
+        it 'returns false' do
+          actual = statement.also_covered_and_published_by?(company)
+          expect(actual).to be false
+        end
+      end
+    end
+
+    context 'when company is not the publisher' do
+      let(:company1) { Company.create!(name: 'company-1') }
+
+      context 'and the statement is not associated with other companies' do
+        it 'returns false' do
+          actual = statement.also_covered_and_published_by?(company1)
+          expect(actual).to be false
+        end
+      end
+
+      context 'and the statement covers other companies' do
+        let(:other_company1) { Company.create!(name: 'other-company-1') }
+        let(:other_company2) { Company.create!(name: 'other-company-2') }
+
+        before do
+          statement.additional_companies_covered << other_company1
+          statement.additional_companies_covered << other_company2
+        end
+
+        it 'returns true' do
+          actual = statement.also_covered_and_published_by?(company1)
+          expect(actual).to be true
+        end
+      end
+    end
+  end
 end

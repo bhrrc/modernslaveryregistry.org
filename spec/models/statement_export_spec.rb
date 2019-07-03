@@ -89,7 +89,7 @@ RSpec.describe StatementExport do
                                     '332211',
                                     'Software',
                                     'United Kingdom',
-                                    'true',
+                                    'false',
                                     'true',
                                     'false',
                                     '2018-2019',
