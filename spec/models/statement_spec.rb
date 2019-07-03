@@ -209,4 +209,30 @@ RSpec.describe Statement, type: :model do
       end
     end
   end
+
+  describe '#also_covered?"' do
+    let(:company) { Company.create!(name: 'company') }
+    let(:statement) { company.statements.create!(url: 'http://example.com') }
+
+    context 'when the statement is not associated with other companies' do
+      it 'returns false' do
+        actual = statement.also_covered?
+        expect(actual).to be false
+      end
+    end
+
+    context 'when the statement covers other companies' do
+      let(:other_company1) { Company.create!(name: 'other-company-1') }
+      let(:other_company2) { Company.create!(name: 'other-company-2') }
+
+      before do
+        statement.additional_companies_covered << other_company1
+        statement.additional_companies_covered << other_company2
+      end
+      it 'returns true' do
+        actual = statement.also_covered?
+        expect(actual).to be true
+      end
+    end
+  end
 end
