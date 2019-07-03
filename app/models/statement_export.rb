@@ -80,7 +80,7 @@ class StatementExport
     published_by?: 'Is Publisher',
     id: 'Statement ID',
     url: 'URL',
-    company_number: 'Companies House Numbers',
+    company_number: 'Companies House Number',
     industry_name: 'Industry',
     country_name: 'HQ',
     also_covered_and_published_by?: 'Is Also Covered',
