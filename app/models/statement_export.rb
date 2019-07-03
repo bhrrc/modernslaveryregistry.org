@@ -75,11 +75,12 @@ class StatementExport
   end
 
   BASIC_FIELDS = {
+    company_id: 'Company ID',
     company_name: 'Company',
     published_by?: 'Is Publisher',
     id: 'Statement ID',
     url: 'URL',
-    company_number: 'Company Number',
+    company_number: 'Companies House Numbers',
     industry_name: 'Industry',
     country_name: 'HQ',
     also_covered?: 'Is Also Covered',
@@ -97,7 +98,6 @@ class StatementExport
     published: 'Published',
     verified_by_email: 'Verified by',
     contributor_email: 'Contributed by',
-    broken_url: 'Broken URL',
-    company_id: 'Company ID'
+    broken_url: 'Broken URL'
   }.freeze
 end

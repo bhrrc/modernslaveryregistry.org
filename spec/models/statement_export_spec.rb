@@ -58,11 +58,12 @@ RSpec.describe StatementExport do
       csv = StatementExport.to_csv(Company.all, true)
       header, data = CSV.parse(csv)
       expect(header).to match_array([
+                                      'Company ID',
                                       'Company',
                                       'Is Publisher',
                                       'Statement ID',
                                       'URL',
-                                      'Company Number',
+                                      'Companies House Numbers',
                                       'Industry',
                                       'HQ',
                                       'Is Also Covered',
@@ -77,10 +78,10 @@ RSpec.describe StatementExport do
                                       'Published',
                                       'Verified by',
                                       'Contributed by',
-                                      'Broken URL',
-                                      'Company ID'
+                                      'Broken URL'
                                     ])
       expect(data).to match_array([
+                                    statement.company_id.to_s,
                                     'Cucumber Ltd',
                                     'true',
                                     statement.id.to_s,
@@ -100,8 +101,7 @@ RSpec.describe StatementExport do
                                     'true',
                                     'admin@somewhere.com',
                                     'contributor@somewhere.com',
-                                    'false',
-                                    statement.company_id.to_s
+                                    'false'
                                   ])
     end
 
@@ -111,11 +111,12 @@ RSpec.describe StatementExport do
       header, = CSV.parse(csv)
 
       expect(header).to match_array([
+                                      'Company ID',
                                       'Company',
                                       'Is Publisher',
                                       'Statement ID',
                                       'URL',
-                                      'Company Number',
+                                      'Companies House Numbers',
                                       'Industry',
                                       'HQ',
                                       'Is Also Covered',
@@ -130,6 +131,7 @@ RSpec.describe StatementExport do
       data = CSV.parse(csv)
       expect(data[2]).to_not be_nil
       expect(data[2]).to match_array([
+                                       company1.id.to_s,
                                        'company-1',
                                        'false',
                                        statement.id.to_s,
@@ -149,8 +151,7 @@ RSpec.describe StatementExport do
                                        'true',
                                        'admin@somewhere.com',
                                        'contributor@somewhere.com',
-                                       'false',
-                                       company1.id.to_s
+                                       'false'
                                      ])
     end
   end
