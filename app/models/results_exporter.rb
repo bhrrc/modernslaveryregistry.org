@@ -2,7 +2,7 @@ require 'csv'
 
 class ResultsExporter
   # rubocop:disable Metrics/MethodLength
-  def self.export(results, admin)
+  def self.to_csv(results, admin)
     fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
 
     CSV.generate do |csv|
@@ -12,11 +12,11 @@ class ResultsExporter
         company.statements.each do |statement|
           next unless statement.published || admin
 
-          csv << StatementExport.to_csv(statement, fields)
+          csv << StatementExport.export(statement, fields)
 
           # Change the company context when there are additional_companies
           statement.additional_companies_covered_excluding(company).each do |ac|
-            csv << StatementExport.to_csv(statement, fields, context: ac)
+            csv << StatementExport.export(statement, fields, context: ac)
           end
         end
       end

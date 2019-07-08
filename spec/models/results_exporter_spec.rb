@@ -53,10 +53,10 @@ RSpec.describe ResultsExporter do
     statement.additional_companies_covered << company2
   end
 
-  describe '.export' do
+  describe '.to_csv' do
     # it 'returns data for companies without associated companies'
     it 'returns data relevant for exporting in a CSV format' do
-      csv = ResultsExporter.export(Company.all, true)
+      csv = ResultsExporter.to_csv(Company.all, true)
       header, data = CSV.parse(csv)
       expect(header).to match_array([
                                       'Company ID',
@@ -107,7 +107,7 @@ RSpec.describe ResultsExporter do
     end
 
     it 'ommits admin-only information when the extra parameter is false' do
-      csv = ResultsExporter.export(Company.all, false)
+      csv = ResultsExporter.to_csv(Company.all, false)
       header, = CSV.parse(csv)
       expect(header).to match_array([
                                       'Company ID',
@@ -126,7 +126,7 @@ RSpec.describe ResultsExporter do
     end
 
     it 'includes additional companies' do
-      csv = ResultsExporter.export(Company.where(id: company.id), true)
+      csv = ResultsExporter.to_csv(Company.where(id: company.id), true)
       data = CSV.parse(csv)
       expect(data[2]).to_not be_nil
       expect(data[2]).to match_array([

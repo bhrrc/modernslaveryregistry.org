@@ -1,9 +1,7 @@
-require 'csv'
-
 class StatementExport
   # Return an array of values that map to a given hash of fields. Optionally
   #   override the given statement's company with a new one using context.
-  def self.to_csv(statement, fields, context: nil)
+  def self.export(statement, fields, context: nil)
     company = context.nil? ? statement.company : context
 
     fields.map do |name, _|

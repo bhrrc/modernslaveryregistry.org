@@ -40,30 +40,30 @@ RSpec.describe StatementExport do
     statement.additional_companies_covered << company2
   end
 
-  describe '.to_csv' do
+  describe '.export' do
     it 'returns an array of statement values' do
       fields = { company_name: 'Company Name' }
-      data = StatementExport.to_csv(statement, fields)
+      data = StatementExport.export(statement, fields)
       expect(data).to eq([statement.send(:company_name)])
     end
 
     it 'returns the companys country' do
       fields = { country_name: 'HQ' }
-      data = StatementExport.to_csv(statement, fields)
+      data = StatementExport.export(statement, fields)
       expect(data).to eq([statement.send(:country_name)])
     end
 
     context 'when the context is set' do
       it 'returns values specific to the context' do
         fields = { company_name: 'Company Name' }
-        data = StatementExport.to_csv(statement, fields, context: company1)
+        data = StatementExport.export(statement, fields, context: company1)
         expect(data).to eq([company1.name])
       end
 
       context 'and the fields is country_name' do
         it 'returns the associated companys country' do
           fields = { country_name: 'HQ' }
-          data = StatementExport.to_csv(statement, fields, context: company1)
+          data = StatementExport.export(statement, fields, context: company1)
           expect(data).to eq([company1.country_name])
         end
       end
@@ -71,7 +71,7 @@ RSpec.describe StatementExport do
       context 'and the fields is company_id' do
         it 'returns the associated companys id' do
           fields = { company_id: 'Company ID' }
-          data = StatementExport.to_csv(statement, fields, context: company1)
+          data = StatementExport.export(statement, fields, context: company1)
           expect(data).to eq([company1.id])
         end
       end
