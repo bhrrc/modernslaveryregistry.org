@@ -1,103 +1,45 @@
 require 'csv'
 
 class StatementExport
+  # Return an array of values that map to a given hash of fields. Optionally
+  #   override the given statement's company with a new one using context.
   # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
-  def self.to_csv(companies, admin)
-    fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
-    CSV.generate do |csv|
-      csv << fields.map { |_, heading| heading }
-      companies = companies.includes(
-        { statements: :legislations },
-        { statements: :verified_by },
-        :country,
-        :industry
-      )
-      companies.find_each do |company|
-        company.statements.each do |statement|
-          next unless statement.published || admin
+  def self.to_csv(statement, fields, context: nil)
+    company = context.nil? ? statement.company : context
 
-          csv << fields.map do |name, _|
-            if send_company_context?(name)
-              format_for_csv(statement.send(name, company))
-            else
-              format_for_csv(statement.send(name))
-            end
-          end
-
-          csv_for_additional_companies(csv, fields, company, statement)
-        end
-      end
-    end
-  end
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
-
-  def self.format_for_csv(value)
-    if value.respond_to?(:iso8601)
-      value.iso8601
-    elsif value.is_a?(Array)
-      value.join(',')
-    else
-      value
-    end
-  end
-
-  # rubocop:disable Metrics/MethodLength
-  def self.csv_for_additional_companies(csv, fields, company, statement)
-    # A lookup hash to substitute a different message to send to Statement
-    #  in special cases
-    substitute_message_for = {
-      company_id: 'id',
-      country_name: 'country_name',
-      industry_name: 'industry_name'
-    }
-
-    statement.additional_companies_covered_excluding(company).each do |assoc_company|
-      csv << fields.map do |name, _|
-        if send_company_context?(name)
-          format_for_csv(statement.send(name, assoc_company))
-        elsif substitute_message_for[name]
-          value = assoc_company.send(substitute_message_for[name])
-          format_for_csv(value)
-        else
-          format_for_csv(statement.send(name))
-        end
+    fields.map do |name, _|
+      if send_company_context?(name)
+        format_for_csv(statement.send(name, company))
+      elsif %i[country_name industry_name].include? name
+        format_for_csv(company.send(name))
+      elsif name == :company_id
+        format_for_csv(company.send(:id))
+      else
+        format_for_csv(statement.send(name))
       end
     end
   end
   # rubocop:enable Metrics/MethodLength
 
-  def self.send_company_context?(name)
-    return false if Statement.new.method(name).parameters.empty?
+  # Private class methods
+  class << self
+    private
 
-    Statement.new.method(name).parameters[0][1] == :company
+    def format_for_csv(value)
+      if value.respond_to?(:iso8601)
+        value.iso8601
+      elsif value.is_a?(Array)
+        value.join(',')
+      else
+        value
+      end
+    end
+
+    # Determine if a given Statement method requires a company param or not
+    def send_company_context?(name)
+      return false if Statement.new.method(name).parameters.empty?
+
+      Statement.new.method(name).parameters[0][1] == :company
+    end
   end
-
-  BASIC_FIELDS = {
-    company_id: 'Company ID',
-    company_name: 'Company',
-    published_by?: 'Is Publisher',
-    id: 'Statement ID',
-    url: 'URL',
-    company_number: 'Companies House Number',
-    industry_name: 'Industry',
-    country_name: 'HQ',
-    also_covered_and_published_by?: 'Is Also Covered',
-    'uk_modern_slavery_act?' => Legislation::UK_NAME,
-    'california_transparency_in_supply_chains_act?' => Legislation::CALIFORNIA_NAME,
-    period_covered: 'Period Covered'
-  }.freeze
-
-  EXTRA_FIELDS = {
-    approved_by_board: 'Approved by Board',
-    approved_by: 'Approved by',
-    signed_by_director: 'Signed by Director',
-    signed_by: 'Signed by',
-    link_on_front_page: 'Link on Front Page',
-    published: 'Published',
-    verified_by_email: 'Verified by',
-    contributor_email: 'Contributed by',
-    broken_url: 'Broken URL'
-  }.freeze
 end
