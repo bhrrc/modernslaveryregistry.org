@@ -13,7 +13,6 @@ class ResultsExporter
           next unless statement.published || admin
 
           csv << StatementExport.export(statement, fields)
-
           # Change the company context when there are additional_companies
           statement.additional_companies_covered_excluding(company).each do |ac|
             csv << StatementExport.export(statement, fields, context: ac)
