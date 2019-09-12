@@ -39,7 +39,7 @@ Then('the filename should be {string}') do |_string|
   expect(scanned).to include('modernslaveryregistry').and include('csv')
 end
 
-Then("the CSV should contain:") do |expected_data|
+Then('the CSV should contain:') do |expected_data|
   csv = CSV.parse(page.body)
   expected_data.diff!(csv)
 end
