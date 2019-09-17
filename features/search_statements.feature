@@ -44,23 +44,23 @@ Feature: Search statements
   Scenario: Submit statement links appear when a company has no statements
     When Joe visits the explore page
     Then Joe should see the following search results:
-      | name             | country        | industry         | link_text        |
-      | Banana Ltd       | France         | Agriculture      | 1 statement      |
-      | Cucumber Inc     | United States  | Retail           | 0 statements     |
-      | Cucumber Ltd     | United Kingdom | Software         | 1 statement      |
-      | Cuke Labs        | Country unknown | Industry unknown | 1 statement     |
-      | Strawberries Ltd | United Kingdom | Industry unknown | Submit statement |
+      | name             | country         | industry         | link_text        |
+      | Banana Ltd       | France          | Agriculture      | 1 statement      |
+      | Cucumber Inc     | United States   | Retail           | 0 statements     |
+      | Cucumber Ltd     | United Kingdom  | Software         | 1 statement      |
+      | Cuke Labs        | Country unknown | Industry unknown | 1 statement      |
+      | Strawberries Ltd | United Kingdom  | Industry unknown | Submit statement |
 
   Scenario: Filter by legislation
     When Joe selects legislation "Act X"
     Then Joe should see the following search results:
-      | name             | country        | industry         | link_text        |
-      | Banana Ltd       | France         | Agriculture      | 1 statement      |
-      | Cucumber Inc     | United States  | Retail           | 0 statements     |
-      | Cucumber Ltd     | United Kingdom | Software         | 1 statement      |
-      | Cuke Labs        | Country unknown | Industry unknown | 0 statements    |
-      | Strawberries Ltd | United Kingdom | Industry unknown | Submit statement |
+      | name             | country         | industry         | link_text        |
+      | Banana Ltd       | France          | Agriculture      | 1 statement      |
+      | Cucumber Inc     | United States   | Retail           | 0 statements     |
+      | Cucumber Ltd     | United Kingdom  | Software         | 1 statement      |
+      | Cuke Labs        | Country unknown | Industry unknown | 0 statements     |
+      | Strawberries Ltd | United Kingdom  | Industry unknown | Submit statement |
 
   Scenario: Download statements when not logged in as admin
-    When Patricia downloads all statements
+    When Patricia downloads the full CSV
     Then Patricia should see all the published statements
