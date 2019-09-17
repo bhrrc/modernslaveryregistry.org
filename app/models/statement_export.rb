@@ -1,59 +1,45 @@
-require 'csv'
-
 class StatementExport
-  # rubocop:disable Metrics/MethodLength
-  def self.to_csv(companies, admin)
-    fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
-    CSV.generate do |csv|
-      csv << fields.map { |_, heading| heading }
-      companies.includes(
-        { statements: :legislations },
-        { statements: :verified_by },
-        :country,
-        :industry
-      ).find_each do |company|
-        company.statements.each do |statement|
-          next unless statement.published || admin
+  # Return an array of values that map to a given hash of fields. Optionally
+  #   override the given statement's company with a new one using context.
+  def self.export(statement, fields, context: nil)
+    company = context.nil? ? statement.company : context
 
-          csv << fields.map { |name, _| format_for_csv(statement.send(name)) }
-        end
+    fields.map do |name, _|
+      format_for_csv(get_value_for(name, statement, company))
+    end
+  end
+
+  # Private class methods
+  class << self
+    private
+
+    def format_for_csv(value)
+      if value.respond_to?(:iso8601)
+        value.iso8601
+      elsif value.is_a?(Array)
+        value.join(',')
+      else
+        value
+      end
+    end
+
+    # Determine if a given Statement method requires a company param or not
+    def send_company_context?(name)
+      return false if Statement.new.method(name).parameters.empty?
+
+      Statement.new.method(name).parameters[0][1] == :company
+    end
+
+    def get_value_for(name, statement, company)
+      if send_company_context?(name)
+        statement.send(name, company)
+      elsif %i[country_name industry_name].include? name
+        company.send(name)
+      elsif name == :company_id
+        company.send(:id)
+      else
+        statement.send(name)
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength
-
-  def self.format_for_csv(value)
-    if value.respond_to?(:iso8601)
-      value.iso8601
-    elsif value.is_a?(Array)
-      value.join(',')
-    else
-      value
-    end
-  end
-
-  BASIC_FIELDS = {
-    company_name: 'Company',
-    url: 'URL',
-    company_number: 'Company Number',
-    industry_name: 'Industry',
-    country_name: 'HQ',
-    also_covers_companies: 'Also Covers Companies',
-    'uk_modern_slavery_act?' => Legislation::UK_NAME,
-    'california_transparency_in_supply_chains_act?' => Legislation::CALIFORNIA_NAME,
-    period_covered: 'Period Covered'
-  }.freeze
-
-  EXTRA_FIELDS = {
-    approved_by_board: 'Approved by Board',
-    approved_by: 'Approved by',
-    signed_by_director: 'Signed by Director',
-    signed_by: 'Signed by',
-    link_on_front_page: 'Link on Front Page',
-    published: 'Published',
-    verified_by_email: 'Verified by',
-    contributor_email: 'Contributed by',
-    broken_url: 'Broken URL',
-    company_id: 'Company ID'
-  }.freeze
 end

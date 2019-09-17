@@ -1,9 +1,15 @@
+require 'csv'
+
 When('{actor} visits the explore page') do |_actor|
   visit explore_path
 end
 
 When('{actor} searches for {string}') do |actor, query|
   actor.attempts_to_search_for(query)
+end
+
+When('{actor} downloads the CSV for {string}') do |actor, company_name|
+  actor.attempts_to_download_csv_for(company_name)
 end
 
 When('{actor} selects industry {string}') do |actor, industry|
@@ -24,13 +30,27 @@ Then('{actor} should find no company called {string} exists') do |actor, company
   expect(actor.visible_statement_search_results_summary).to eq('No companies found')
 end
 
+Then('a CSV file should be downloaded') do
+  expect(page.response_headers['Content-Type']).to eq('text/csv')
+end
+
+Then('the filename should be {string}') do |_string|
+  scanned = page.response_headers['Content-Disposition'].scan(/\w+/)
+  expect(scanned).to include('modernslaveryregistry').and include('csv')
+end
+
+Then('the CSV should contain:') do |expected_data|
+  csv = CSV.parse(page.body)
+  expected_data.diff!(csv)
+end
+
 Given('a search alias from {string} to {string} exists') do |target, substitution|
   query = "INSERT INTO search_aliases VALUES(DEFAULT, to_tsquery('#{target}'), to_tsquery('#{substitution}'));"
   ActiveRecord::Base.connection.execute(query)
 end
 
 Then('{actor} should see the following search results:') do |actor, table|
-  expect(actor.visible_search_results).to eq(table.hashes)
+  table.diff!(actor.visible_search_results)
 end
 
 module ExploresStatements
@@ -38,6 +58,13 @@ module ExploresStatements
     visit explore_path
     fill_in 'company_name', with: query
     click_button 'Search'
+  end
+
+  def attempts_to_download_csv_for(company_name)
+    visit explore_path
+    fill_in 'company_name', with: company_name
+    click_button 'Search'
+    click_link 'Download search results'
   end
 
   def attempts_to_search_in_admin_for(query)

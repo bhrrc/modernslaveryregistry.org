@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe StatementExport do
   let(:industry) { Industry.create! name: 'Software' }
   let(:country) { Country.create! code: 'GB', name: 'United Kingdom' }
+  let(:country1) { Country.create! code: 'US', name: 'United States' }
   let(:company) { Company.create! name: 'Cucumber Ltd', country: country, industry: industry, company_number: '332211' }
-  let(:company1) { Company.create! name: 'company-1' }
+  let(:company1) { Company.create! name: 'company-1', country: country1 }
   let(:company2) { Company.create! name: 'company-2' }
   let(:user) do
     User.create!(first_name: 'Super',
@@ -35,88 +36,45 @@ RSpec.describe StatementExport do
   end
 
   before do
-    allow(ScreenGrab).to receive(:fetch) do |url|
-      FetchResult.with(
-        url: url,
-        broken_url: false,
-        content_type: 'image/jpeg',
-        content_data: 'image data!'
-      )
-    end
-
-    VCR.use_cassette('cucumber.io') do
-      statement.fetch_snapshot
-      statement.save!
-    end
-
     statement.additional_companies_covered << company1
     statement.additional_companies_covered << company2
   end
 
-  describe 'to_csv' do
-    it 'returns data relevant for exporting in a CSV format' do
-      csv = StatementExport.to_csv(Company.all, true)
-      header, data = CSV.parse(csv)
-      expect(header).to eq([
-                             'Company',
-                             'URL',
-                             'Company Number',
-                             'Industry',
-                             'HQ',
-                             'Also Covers Companies',
-                             Legislation::UK_NAME,
-                             Legislation::CALIFORNIA_NAME,
-                             'Period Covered',
-                             'Approved by Board',
-                             'Approved by',
-                             'Signed by Director',
-                             'Signed by',
-                             'Link on Front Page',
-                             'Published',
-                             'Verified by',
-                             'Contributed by',
-                             'Broken URL',
-                             'Company ID'
-                           ])
-      expect(data).to eq([
-                           'Cucumber Ltd',
-                           'https://cucumber.io/',
-                           '332211',
-                           'Software',
-                           'United Kingdom',
-                           'company-1,company-2',
-                           'true',
-                           'false',
-                           '2018-2019',
-                           'Yes',
-                           'Big Boss',
-                           'false',
-                           'Little Boss',
-                           'true',
-                           'true',
-                           'admin@somewhere.com',
-                           'contributor@somewhere.com',
-                           'false',
-                           statement.company_id.to_s
-                         ])
+  describe '.export' do
+    it 'returns an array of statement values' do
+      fields = { company_name: 'Company Name' }
+      data = StatementExport.export(statement, fields)
+      expect(data).to eq([statement.send(:company_name)])
     end
 
-    it 'ommits admin-only information when the extra parameter is false' do
-      csv = StatementExport.to_csv(Company.all, false)
+    it 'returns the companys country' do
+      fields = { country_name: 'HQ' }
+      data = StatementExport.export(statement, fields)
+      expect(data).to eq([statement.send(:country_name)])
+    end
 
-      header, = CSV.parse(csv)
+    context 'when the context is set' do
+      it 'returns values specific to the context' do
+        fields = { company_name: 'Company Name' }
+        data = StatementExport.export(statement, fields, context: company1)
+        expect(data).to eq([company1.name])
+      end
 
-      expect(header).to eq([
-                             'Company',
-                             'URL',
-                             'Company Number',
-                             'Industry',
-                             'HQ',
-                             'Also Covers Companies',
-                             Legislation::UK_NAME,
-                             Legislation::CALIFORNIA_NAME,
-                             'Period Covered'
-                           ])
+      context 'and the fields is country_name' do
+        it 'returns the associated companys country' do
+          fields = { country_name: 'HQ' }
+          data = StatementExport.export(statement, fields, context: company1)
+          expect(data).to eq([company1.country_name])
+        end
+      end
+
+      context 'and the fields is company_id' do
+        it 'returns the associated companys id' do
+          fields = { company_id: 'Company ID' }
+          data = StatementExport.export(statement, fields, context: company1)
+          expect(data).to eq([company1.id])
+        end
+      end
     end
   end
 end

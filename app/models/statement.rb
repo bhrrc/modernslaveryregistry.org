@@ -154,17 +154,29 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     additional_companies_covered.map(&:name)
   end
 
+  def also_covered?
+    !additional_companies_covered.empty?
+  end
+
+  def also_covered_and_published_by?(company)
+    if self.company == company
+      false
+    else
+      !additional_companies_covered.empty?
+    end
+  end
+
   private
 
   def legislation_requires?(attribute)
     published? && legislations.any? { |legislation| legislation.requires_statement_attribute?(attribute) }
   end
 
-  def company_name
+  def company_name(company = self.company)
     company.name
   end
 
-  def company_number
+  def company_number(company = self.company)
     company.company_number
   end
 
