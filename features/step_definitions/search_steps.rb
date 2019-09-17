@@ -50,7 +50,7 @@ Given('a search alias from {string} to {string} exists') do |target, substitutio
 end
 
 Then('{actor} should see the following search results:') do |actor, table|
-  expect(actor.visible_search_results).to eq(table.hashes)
+  table.diff!(actor.visible_search_results)
 end
 
 module ExploresStatements
