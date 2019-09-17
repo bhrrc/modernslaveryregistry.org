@@ -48,6 +48,6 @@ class ComplianceStats
   private
 
   def percent_for_stat(stat)
-    total.positive? ? ((stat.to_f / total.to_f) * 100).to_i : 0
+    total.positive? ? ((stat / total.to_f) * 100).to_i : 0
   end
 end

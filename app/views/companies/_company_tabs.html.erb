@@ -20,7 +20,7 @@
     <ul class="tags">
       <li class="tag is-dark-navy" data_content="country"><%= @company.country_name %></li>
       <li class="tag is-dark-navy" data_content="industry"><%= @company.industry_name %></li>
-      <li class="tag is-dark-navy" data_content="number"><%= linkable_company_number || 'Company Number Unknown' %>
+      <li class="tag is-dark-navy" data_content="number"><%= linkable_company_number(@company) || 'Company Number Unknown' %>
         <div class="tooltip">
         <span class="c-mark"><p>?</p>
             <span class="tooltiptext">The Company's registration number

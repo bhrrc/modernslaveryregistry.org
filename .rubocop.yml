@@ -1,3 +1,5 @@
+require: rubocop-rails
+
 AllCops:
   Exclude:
     - 'bin/*'
@@ -23,9 +25,6 @@ Metrics/LineLength:
 Metrics/ClassLength:
   Exclude:
     - 'app/models/statement_stats.rb'
-
-Rails:
-  Enabled: true
 
 Metrics/BlockLength:
   Exclude:
