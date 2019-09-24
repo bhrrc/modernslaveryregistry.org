@@ -8,7 +8,7 @@ class ResultsExporter
     CSV.generate do |csv|
       csv << fields.map { |_, heading| heading }
 
-      results.includes(statements: [:additional_companies_covered, :legislations]).find_each do |company|
+      results.includes(statements: [:additional_companies_covered_ordered_by_name, :legislations]).find_each do |company|
         company.statements.each do |statement|
           next unless statement.published || admin
 
