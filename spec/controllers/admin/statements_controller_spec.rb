@@ -23,6 +23,32 @@ RSpec.describe Admin::StatementsController, type: :controller do
       statement = Statement.first
       expect(statement.additional_companies_covered).to include(company2)
     end
+
+    it 'associates a published statement with a user' do
+      post :create, params: {
+        company_id: company1,
+        statement: {
+          url: 'http://example.com/2',
+          published: true
+        }
+      }
+
+      statement = Statement.first
+      expect(statement.verified_by_id).to eq(controller.current_user.id)
+    end
+
+    it 'allows a `contributor_email` parameter to override the current_user\'s email address' do
+      post :create, params: {
+        company_id: company1,
+        statement: {
+          url: 'http://example.com/3',
+          contributor_email: "foo@bar.com"
+        }
+      }
+
+      statement = Statement.first
+      expect(statement.contributor_email).to eq("foo@bar.com")
+    end
   end
 
   describe 'PUT #update' do
