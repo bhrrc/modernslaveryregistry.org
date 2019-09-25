@@ -178,7 +178,6 @@ CREATE TABLE public.companies (
 --
 
 CREATE SEQUENCE public.companies_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -223,7 +222,6 @@ CREATE TABLE public.countries (
 --
 
 CREATE SEQUENCE public.countries_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -258,7 +256,6 @@ CREATE TABLE public.industries (
 --
 
 CREATE SEQUENCE public.industries_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -291,7 +288,6 @@ CREATE TABLE public.legislation_statements (
 --
 
 CREATE SEQUENCE public.legislation_statements_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -326,7 +322,6 @@ CREATE TABLE public.legislations (
 --
 
 CREATE SEQUENCE public.legislations_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -365,7 +360,6 @@ CREATE TABLE public.pages (
 --
 
 CREATE SEQUENCE public.pages_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -436,7 +430,6 @@ CREATE TABLE public.sectors (
 --
 
 CREATE SEQUENCE public.sectors_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -468,7 +461,6 @@ CREATE TABLE public.snapshots (
 --
 
 CREATE SEQUENCE public.snapshots_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -514,7 +506,6 @@ CREATE TABLE public.statements (
 --
 
 CREATE SEQUENCE public.statements_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -562,7 +553,6 @@ CREATE TABLE public.users (
 --
 
 CREATE SEQUENCE public.users_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
