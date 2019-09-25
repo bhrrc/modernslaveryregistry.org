@@ -38,13 +38,13 @@ _Note_: use the email address of the user you created in the previous step. Pass
 
 ```shell
 # On the Vagrant VM
-$ rake user:make_admin["admin+msr@bitzesty.com"]
+$ rake user:make_admin["someone@somewhere.com"]
 ```
 
 Then seed the database:
 
 ```shell
-$ SEED_ADMIN_EMAIL=admin+msr@bitzesty.com no_fetch=true rails db:seed
+$ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
 ```
 
 ---
