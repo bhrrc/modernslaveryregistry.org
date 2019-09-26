@@ -1,0 +1,71 @@
+id,sector_name,sector_code,industry_group_name,industry_group_code,name,industry_code
+1,Energy,10,Energy,1010,Energy Equipment & Services,101010
+2,Energy,10,Energy,1010,"Oil, Gas & Consumable Fuels",101020
+4,Materials,15,Materials,1510,Chemicals,151010
+5,Materials,15,Materials,1510,Construction Materials,151020
+6,Materials,15,Materials,1510,Containers & Packaging,151030
+7,Materials,15,Materials,1510,Metals & Mining,151040
+8,Materials,15,Materials,1510,Paper & Forest Products,151050
+9,Industrials,20,Capital Goods,2010,Aerospace & Defense,201010
+10,Industrials,20,Capital Goods,2010,Building Products,201020
+11,Industrials,20,Capital Goods,2010,Construction & Engineering,201030
+12,Industrials,20,Capital Goods,2010,Electrical Equipment,201040
+13,Industrials,20,Capital Goods,2010,Industrial Conglomerates,201050
+14,Industrials,20,Capital Goods,2010,Machinery,201060
+15,Industrials,20,Capital Goods,2010,Trading Companies & Distributors,201070
+16,Industrials,20,Commercial & Professional Services,2020,Commercial Services & Supplies,202010
+17,Industrials,20,Commercial & Professional Services,2020,Professional Services,202020
+18,Industrials,20,Transportation,2030,Air Freight & Logistics,203010
+19,Industrials,20,Transportation,2030,Airlines,203020
+20,Industrials,20,Transportation,2030,Marine,203030
+21,Industrials,20,Transportation,2030,Road & Rail,203040
+22,Industrials,20,Transportation,2030,Transportation Infrastructure,203050
+23,Consumer Discretionary,25,Automobiles & Components,2510,Auto Components,251010
+24,Consumer Discretionary,25,Automobiles & Components,2510,Automobiles,251020
+25,Consumer Discretionary,25,Consumer Durables & Apparel,2520,Household Durables,252010
+26,Consumer Discretionary,25,Consumer Durables & Apparel,2520,Leisure Products,252020
+27,Consumer Discretionary,25,Consumer Durables & Apparel,2520,"Textiles, Apparel & Luxury Goods",252030
+28,Consumer Discretionary,25,Consumer Services,2530,"Hotels, Restaurants & Leisure",253010
+29,Consumer Discretionary,25,Consumer Services,2530,Diversified Consumer Services,253020
+30,Consumer Discretionary,25,Media,2540,Media,254010
+31,Consumer Discretionary,25,Retailing,2550,Distributors,255010
+32,Consumer Discretionary,25,Retailing,2550,Internet & Direct Marketing Retail,255020
+33,Consumer Discretionary,25,Retailing,2550,Multiline Retail,255030
+34,Consumer Discretionary,25,Retailing,2550,Specialty Retail,255040
+35,Consumer Staples,30,Food & Staples Retailing,3010,Food & Staples Retailing,301010
+36,Consumer Staples,30,"Food, Beverage & Tobacco",3020,Beverages,302010
+37,Consumer Staples,30,"Food, Beverage & Tobacco",3020,Food Products,302020
+38,Consumer Staples,30,"Food, Beverage & Tobacco",3020,Tobacco,302030
+39,Consumer Staples,30,Household & Personal Products,3030,Household Products,303010
+40,Consumer Staples,30,Household & Personal Products,3030,Personal Products,303020
+41,Health Care,35,Health Care Equipment & Services,3510,Health Care Equipment & Supplies,351010
+42,Health Care,35,Health Care Equipment & Services,3510,Health Care Providers & Services,351020
+43,Health Care,35,Health Care Equipment & Services,3510,Health Care Technology,351030
+44,Health Care,35,"Pharmaceuticals, Biotechnology & Life Sciences",3520,Biotechnology,352010
+45,Health Care,35,"Pharmaceuticals, Biotechnology & Life Sciences",3520,Pharmaceuticals,352020
+46,Health Care,35,"Pharmaceuticals, Biotechnology & Life Sciences",3520,Life Sciences Tools & Services,352030
+47,Financials,40,Banks,4010,Banks,401010
+48,Financials,40,Banks,4010,Thrifts & Mortgage Finance,401020
+49,Financials,40,Diversified Financials,4020,Diversified Financial Services,402010
+50,Financials,40,Diversified Financials,4020,Consumer Finance,402020
+51,Financials,40,Diversified Financials,4020,Capital Markets,402030
+52,Financials,40,Diversified Financials,4020,Mortgage Real Estate Investment Trusts (REITs),402040
+53,Financials,40,Insurance,4030,Insurance,403010
+54,Information Technology,45,Software & Services,4510,Internet Software & Services,451010
+55,Information Technology,45,Software & Services,4510,IT Services,451020
+56,Information Technology,45,Software & Services,4510,Software,451030
+57,Information Technology,45,Technology Hardware & Equipment,4520,Communications Equipment,452010
+58,Information Technology,45,Technology Hardware & Equipment,4520,"Technology Hardware, Storage & Peripherals",452020
+59,Information Technology,45,Technology Hardware & Equipment,4520,"Electronic Equipment, Instruments & Components",452030
+60,Information Technology,45,Semiconductors & Semiconductor Equipment,4530,Semiconductors & Semiconductor Equipment,453010
+61,Telecommunication Services,50,Telecommunication Services,5010,Diversified Telecommunication Services,501010
+62,Telecommunication Services,50,Telecommunication Services,5010,Wireless Telecommunication Services,501020
+63,Utilities,55,Utilities,5510,Electric Utilities,551010
+64,Utilities,55,Utilities,5510,Gas Utilities,551020
+65,Utilities,55,Utilities,5510,Multi-Utilities,551030
+66,Utilities,55,Utilities,5510,Water Utilities,551040
+67,Utilities,55,Utilities,5510,Independent Power and Renewable Electricity Producers,551050
+68,Real Estate,60,Real Estate,6010,Equity Real Estate Investment Trusts (REITs),601010
+69,Real Estate,60,Real Estate,6010,Real Estate Management & Development,601020
+70,,,,,Charity/Non-Profit,
+71,,,,,Public Entities,
