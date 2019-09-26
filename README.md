@@ -40,9 +40,16 @@ An administrator account is created during seeding:
 - email: `admin@example.com`
 - password: `password`
 
+There's also a rake task to make any user an admin. Pass the user's email address to the rake task as a string in an array:
+
+```shell
+# On the Vagrant VM
+$ rake user:make_admin["someone@somewhere.com"]
+```
+
 Other tables, like Companies, Statement, Snapshots, etc., have dependencies (like ARStorage, HABTM relationships, etc.) or do not have corresponding Rails models that make seeding difficult and error-prone.
 
-For effective local development, the full data should be imported from a dump of the staging or production databases.
+For effective local development, the full data should be imported from a dump of the staging or production databases. See "Download and import production data", below.
 
 ---
 
