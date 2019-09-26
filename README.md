@@ -16,9 +16,7 @@ $ vagrant ssh
 # On the Vagrant VM
 $ cd /vagrant/
 $ bundle install
-$ bundle exec rake db:create
-$ bin/rails db:environment:set RAILS_ENV=development
-$ bundle exec rake db:structure:load
+$ bundle exec rake db:setup
 
 # Run the tests
 $ bundle exec rake
@@ -29,23 +27,22 @@ $ PORT=9292 foreman start
 
 ### Seeding the database
 
-Before you can seed the database, there must be an admin user in the database.
-Sign up as a normal user with the sign-up form (`/users/sign_up`).
+The database should have been seeded as part of the `rake db:setup` step. It seeds enough of the database to pass specs, allow the app to launch, and includes some "static" tables (that don't change too much), including:
 
-Then use a rake task (`lib/tasks/create_admin_user.rake`) to make that user an admin.
+- CallToActions
+- Countries
+- Industries
+- Legislations
+- Pages
 
-_Note_: use the email address of the user you created in the previous step. Pass it to the rake task as a string in an array.
+An administrator account is created during seeding:
 
-```shell
-# On the Vagrant VM
-$ rake user:make_admin["someone@somewhere.com"]
-```
+- email: `admin@example.com`
+- password: `password`
 
-Then seed the database:
+Other tables, like Companies, Statement, Snapshots, etc., have dependencies (like ARStorage, HABTM relationships, etc.) or do not have corresponding Rails models that make seeding difficult and error-prone.
 
-```shell
-$ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
-```
+For effective local development, the full data should be imported from a dump of the staging or production databases.
 
 ---
 
