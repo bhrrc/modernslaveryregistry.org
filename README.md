@@ -16,9 +16,7 @@ $ vagrant ssh
 # On the Vagrant VM
 $ cd /vagrant/
 $ bundle install
-$ bundle exec rake db:create
-$ bin/rails db:environment:set RAILS_ENV=development
-$ bundle exec rake db:structure:load
+$ bundle exec rake db:setup
 
 # Run the tests
 $ bundle exec rake
@@ -29,22 +27,29 @@ $ PORT=9292 foreman start
 
 ### Seeding the database
 
-Before you can seed the database, there must be an admin user in the database.
-Sign up using the sign-up form (`/signup`). Then use the console to make the user
-an admin:
+The database should have been seeded as part of the `rake db:setup` step. It seeds enough of the database to pass specs, allow the app to launch, and includes some "static" tables (that don't change too much), including:
 
-```ruby
-$ rails console
-> user = User.find_by_email('someone@somewhere.com')
-> user.admin = true
-> user.save
-```
+- CallToActions
+- Countries
+- Industries
+- Legislations
+- Pages
 
-Then seed the database:
+An administrator account is created during seeding:
+
+- email: `admin@example.com`
+- password: `password`
+
+There's also a rake task to make any user an admin. Pass the user's email address to the rake task as a string in an array:
 
 ```shell
-$ SEED_ADMIN_EMAIL=someone@somewhere.com no_fetch=true rails db:seed
+# On the Vagrant VM
+$ rake user:make_admin["someone@somewhere.com"]
 ```
+
+Other tables, like Companies, Statement, Snapshots, etc., have dependencies (like ARStorage, HABTM relationships, etc.) or do not have corresponding Rails models that make seeding difficult and error-prone.
+
+For effective local development, the full data should be imported from a dump of the staging or production databases. See "Download and import production data", below.
 
 ---
 
@@ -86,10 +91,10 @@ Do you wish to continue with CodeCommit? (y/N) (default is n): n
 
 Where:
 
-* `modern-slavery-registry` is the name of the application we have configured in Elastic Beanstalk.
-* `profile="msr"` matches the name of the profile created above.
-* `region="eu-west-2"` identifies the region the app has been deployed in.
-* `keyname="modern-slavery-registry"` specifies the key pair to use when configuring the EC2 instances. Available key pairs can be found in the AWS web console > EC2  > Network & Security > Key Pairs.
+- `modern-slavery-registry` is the name of the application we have configured in Elastic Beanstalk.
+- `profile="msr"` matches the name of the profile created above.
+- `region="eu-west-2"` identifies the region the app has been deployed in.
+- `keyname="modern-slavery-registry"` specifies the key pair to use when configuring the EC2 instances. Available key pairs can be found in the AWS web console > EC2 > Network & Security > Key Pairs.
 
 #### Check that everything is working
 
@@ -276,45 +281,53 @@ $ cd original-statements && find . -name "*.pdf" -type f -print0 | xargs -I{} -0
 
 ### Infrastructure
 
-* AWS Elastic Beanstalk to host Rails app
+- AWS Elastic Beanstalk to host Rails app
 
-* AWS RDS PostgreSQL database
+- AWS RDS PostgreSQL database
 
-* AWS S3 for statement snapshots
+- AWS S3 for statement snapshots
 
-* AWS ElastiCache Redis for Sidekiq
+- AWS ElastiCache Redis for Sidekiq
 
-* AWS Certificate Manager for SSL certificate
+- AWS Certificate Manager for SSL certificate
 
-* Sendgrid for sending emails
+- Sendgrid for sending emails
 
-* Rollbar for catching exceptions
+- Rollbar for catching exceptions
 
 ### Environment variables
 
-* `DATABASE_URL`
+- `DATABASE_URL`
+
   - Manually set using credentials used to create the RDS instance, and using values from the RDS web interface (in the format "postgres://<username>:<password>@<endpoint>/<database-name>")
 
-* `RAILS_MAX_THREADS`
+- `RAILS_MAX_THREADS`
+
   - Manually set to 32 to match the maximum number of threads set in the Elastic Beanstalk Puma config (in /opt/elasticbeanstalk/support/conf/pumaconf.rb)
 
-* `ACTIVE_STORAGE_S3_BUCKET_NAME` and `ACTIVE_STORAGE_S3_BUCKET_REGION`
+- `ACTIVE_STORAGE_S3_BUCKET_NAME` and `ACTIVE_STORAGE_S3_BUCKET_REGION`
+
   - Manually set to the S3 bucket name and region used for storing and serving statement snapshots
 
-* `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+- `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+
   - Manually set to the AWS credentials of an IAM user with access to read/write objects in the S3 bucket above
 
-* `SENDGRID_USERNAME` and `SENDGRID_PASSWORD`
+- `SENDGRID_USERNAME` and `SENDGRID_PASSWORD`
+
   - Manually set to the username and password of our Sendgrid account
 
-* `ROLLBAR_ACCESS_TOKEN`
+- `ROLLBAR_ACCESS_TOKEN`
+
   - Manually set to the value of the `post_server_item` token in the Rollbar web interface
 
-* `REDIS_URL`
+- `REDIS_URL`
+
   - Manually set using the endpoint and port in the ElastiCache web console (in the format "redis://<redis-url>:6379")
 
-* `SECRET_KEY_BASE`
+- `SECRET_KEY_BASE`
+
   - Manually set to the output of running `rails secret`
 
-* `BUNDLE_WITHOUT`, `RACK_ENV`, `RAILS_SKIP_ASSET_COMPILATION` and `RAILS_SKIP_MIGRATIONS`
+- `BUNDLE_WITHOUT`, `RACK_ENV`, `RAILS_SKIP_ASSET_COMPILATION` and `RAILS_SKIP_MIGRATIONS`
   - Set by default in the Elastic Beanstalk Ruby platform

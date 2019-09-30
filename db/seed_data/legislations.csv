@@ -1,0 +1,3 @@
+id,name,icon,created_at,updated_at,requires_statement_attributes,include_in_compliance_stats
+2,California Transparency in Supply Chains Act,us,2017-12-17 18:35:05.203253,2017-12-17 18:35:05.203253,"",f
+1,UK Modern Slavery Act,gb,2017-12-17 18:35:05.199026,2017-12-17 18:35:05.199026,"approved_by_board,signed_by_director,link_on_front_page",t
