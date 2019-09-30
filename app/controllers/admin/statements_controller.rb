@@ -27,6 +27,7 @@ module Admin
 
     def create
       @statement = @company.statements.build(statement_params)
+      @statement.associate_with_user(current_user)
 
       if @statement.save
         redirect_to admin_company_path(@company)
