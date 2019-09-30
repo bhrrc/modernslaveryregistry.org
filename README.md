@@ -25,6 +25,8 @@ $ bundle exec rake
 $ PORT=9292 foreman start
 ```
 
+*** Ensure that the bundler version is in sync between your local env, ci, AWS EB (currently 2.0.2) ***
+
 ### Seeding the database
 
 The database should have been seeded as part of the `rake db:setup` step. It seeds enough of the database to pass specs, allow the app to launch, and includes some "static" tables (that don't change too much), including:

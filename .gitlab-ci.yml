@@ -1,0 +1,87 @@
+image:
+  name: circleci/ruby:2.4-node-browsers
+
+variables:
+  POSTGRES_DB: msd_test
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/$POSTGRES_DB"
+  REDIS_URL: redis://localhost:6379
+
+services:
+  - name: redis:3.2.11
+  - name: postgres:9.6-alpine
+    alias: postgres
+
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  before_script:
+    - sudo apt-get update -qq && sudo apt-get install -y postgresql
+    - dockerize -wait tcp://localhost:5432 -timeout 1m
+    - gem install bundler
+    - bundle install --path vendor/bundler --jobs=4 --retry=3
+    - RAILS_ENV=test bundle exec rake db:structure:load --trace
+  script:
+    - RAILS_ENV=test bundle exec rspec --format RspecJunitFormatter --out rspec.xml --format progress
+  artifacts:
+    reports:
+      junit: rspec.xml
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - vendor/bundler
+
+# FIXME: cannot load such file -- rubocop-rails
+# code_quality:
+#   image: docker:stable
+#   variables:
+#     DOCKER_DRIVER: overlay2
+#   allow_failure: true
+#   services:
+#     - docker:stable-dind
+#   script:
+#     - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+#     - docker run
+#         --env SOURCE_CODE="$PWD"
+#         --volume "$PWD":/code
+#         --volume /var/run/docker.sock:/var/run/docker.sock
+#         "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+#   artifacts:
+#     reports:
+#       codequality: gl-code-quality-report.json
+
+deploy_staging:
+  stage: deploy 
+  image: bitzesty/aws-ebcli
+  script:
+    - eb --version
+    - mkdir -p ~/.ssh
+    - echo -e "$MSR_PEM" > ~/.ssh/modern-slavery-registry.pem
+    - chmod 600 ~/.ssh/modern-slavery-registry.pem
+    - eb init modern-slavery-registry --region="eu-west-2" --keyname="modern-slavery-registry" --platform="ruby-2.4-(puma)"
+    - eb deploy msr-staging -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE"
+  environment:
+    name: staging
+    url: http://msr-staging.eu-west-2.elasticbeanstalk.com/
+  when:
+    manual
+
+deploy_production:
+  stage: deploy 
+  image: bitzesty/aws-ebcli
+  script:
+    - eb --version
+    - mkdir -p ~/.ssh
+    - echo -e "$MSR_PEM" > ~/.ssh/modern-slavery-registry.pem
+    - chmod 600 ~/.ssh/modern-slavery-registry.pem
+    - eb init modern-slavery-registry --region="eu-west-2" --keyname="modern-slavery-registry" --platform="ruby-2.4-(puma)"
+    - eb deploy msr-production-green -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE"
+  environment:  
+    name: production
+    url: https://www.modernslaveryregistry.org/
+  when:
+    manual
+  only:
+  - master
