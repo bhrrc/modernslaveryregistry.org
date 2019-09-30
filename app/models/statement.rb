@@ -15,6 +15,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
                           after_remove: :update_latest_statement_for_compliance_stats_for_other_company
   # rubocop:enable Rails/HasAndBelongsToMany
 
+  has_and_belongs_to_many :additional_companies_covered_ordered_by_name,
+                          -> { order(:name) },
+                          class_name: 'Company'
+
   validates :url, presence: true, url_format: true
   validates :link_on_front_page, boolean: true, if: -> { legislation_requires?(:link_on_front_page) }
   validates :approved_by_board, yes_no_not_explicit: true, if: -> { legislation_requires?(:approved_by_board) }
@@ -78,7 +82,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def additional_companies_covered_excluding(company)
-    additional_companies_covered.order(:name) - [company]
+    additional_companies_covered_ordered_by_name - [company]
   end
 
   def associate_with_user(user)
