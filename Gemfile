@@ -31,6 +31,7 @@ gem 'sidekiq'
 gem 'uglifier', '>= 1.3.0'
 gem 'values'
 gem 'wkhtmltoimage-binary'
+gem 'scout_apm'
 
 group :development, :test do
   gem 'byebug', platform: :mri
