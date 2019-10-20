@@ -28,6 +28,17 @@
     </div>
   </div>
 
+  <% if statement.should_use_override_url? %>
+    <div class="columns">
+      <div class="column is-one-quarter">
+        <span class="label">Override URL</span>
+      </div>
+      <div class="column" data-content="override_url">
+        <%= link_to statement.override_url, statement.override_url, class: 'is-url' %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="columns">
     <div class="column is-one-quarter">
       <span class="label">Period covered</span>

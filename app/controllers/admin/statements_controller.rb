@@ -70,6 +70,7 @@ module Admin
     STATEMENT_ATTRIBUTES = (%i[
       id
       url
+      override_url
       linked_from
       link_on_front_page
       approved_by
