@@ -2,9 +2,22 @@
   <div class="field">
     <%= f.label :url, 'Statement URL', class: 'label' %>
     <p class="control">
-      <%= f.text_field :url, class: 'input', onchange: 'document.getElementById("open_statement_link").href = this.value' %>
+      <%= f.text_field :url, class: 'input', onchange: "handle_override_url_change(this.value)" %>
 
       <%= link_to 'open in new tab', f.object.url, onclick: 'this.href = statement_url.value', id: 'open_statement_link', target: '_blank' %>
+      <a onclick="toggle_override_visibility();" id="toggle-override-field" style="float: right; display: <%= f.object.override_url.blank? ? "block" : "none" %>">add override</a>
+    </p>
+  </div>
+
+  <div class="field" id="override-field" style="display: <%= f.object.override_url.blank? ? "none" : "block" %>;">
+    <%= f.label :url, 'Override URL', class: 'label' %>
+    <p class="control">
+      <%= f.text_field :override_url, class: 'input', onchange: 'handle_override_url_change(this.value)' %>
+
+      <div id="override-controls" style="display: <%= f.object.override_url.blank? ? "none" : "block" %>">
+        <%= link_to 'open in new tab', f.object.override_url, id: 'open_statement_override_url_link', target: '_blank' %>
+        <a onclick="clear_override();" style="float: right">clear</a>
+      </div>
     </p>
   </div>
 
@@ -121,4 +134,26 @@ $('.chosen-select').chosen({
   no_results_text: 'No companies matching',
   width: '100%'
 })
+
+$('#statement_override_url').bind('input', function() { 
+  document.getElementById("override-controls").style.display = $(this).val().length > 0 ? 'initial' : 'none'
+});
+
+function handle_override_url_change(url) {
+  document.getElementById("open_statement_override_url_link").href = url;
+}
+
+function clear_override(event) {
+  document.getElementById("statement_override_url").value = "";
+  document.getElementById("override-controls").style.display = 'none';
+}
+
+function toggle_override_visibility() {
+  let override_field = document.getElementById("override-field");
+  if (override_field.style.display === 'none') {
+    override_field.style.display = 'block';
+  } else {
+    override_field.style.display = 'none';
+  }
+}
 </script>
