@@ -200,12 +200,8 @@ RSpec.describe CompanySearch, type: :model do
           )
         end
 
-        it 'includes the company in the results' do
-          expect(search.results.size).to eq(1)
-        end
-
-        it 'returns 0 for the count of statements' do
-          expect(search.statement_count_for(search.results.first)).to eq(0)
+        it 'excludes the company in the results' do
+          expect(search.results.size).to eq(0)
         end
       end
 

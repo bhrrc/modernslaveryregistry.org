@@ -16,8 +16,8 @@ class IndustryGroupCounts
   private
 
   def counts
-    @results.pluck(:industry_id).each_with_object(Hash.new(0)) do |id, count|
-      count[id] += 1
+    @results.pluck(:industry_id, :name).each_with_object(Hash.new(0)) do |attrs, count|
+      count[attrs.first] += 1
     end
   end
 

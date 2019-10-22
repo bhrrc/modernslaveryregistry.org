@@ -10,6 +10,8 @@ class CompanySearch
     company_scope
       .merge(filter_by_countries)
       .merge(filter_by_industries)
+      .merge(filter_by_legislations)
+      .distinct
   end
 
   def industry_stats
@@ -50,5 +52,11 @@ class CompanySearch
     return Company.all if @industries.blank?
 
     Company.joins(:industry).where(companies: { industry: @industries })
+  end
+
+  def filter_by_legislations
+    return Company.all if @legislations.blank?
+
+    Company.joins(statements: :legislations).where(statements: { legislations: { id: @legislations } })
   end
 end
