@@ -290,4 +290,24 @@ RSpec.describe Statement, type: :model do
       end
     end
   end
+
+  describe '#should_use_override_url?' do
+    context 'when the statement has an `override_url`' do
+      let(:company) { Company.create!(name: 'company') }
+      let(:statement_with_override) { company.statements.create!(url: 'http://example.com', override_url: 'http://example.com/override') }
+  
+      it 'returns `true`' do
+        expect(statement_with_override.should_use_override_url?).to be true
+      end
+    end
+
+    context 'when the statement does not have an `override_url` (e.g., !override_url.blank?)' do
+      let(:company_no_override) { Company.create!(name: 'company-no-override') }
+      let(:statement_no_override) { company_no_override.statements.create!(url: 'http://example.com') }
+
+      it 'returns `false`' do
+        expect(statement_no_override.should_use_override_url?).to be false
+      end
+    end
+  end
 end

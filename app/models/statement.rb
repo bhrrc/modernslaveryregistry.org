@@ -170,6 +170,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def should_use_override_url?
+    !override_url.blank?
+  end
+
   private
 
   def legislation_requires?(attribute)
