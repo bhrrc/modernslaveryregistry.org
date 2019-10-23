@@ -189,6 +189,7 @@ RSpec.describe ResultsExporter do
                                        'false',
                                        statement.id.to_s,
                                        'https://cucumber.io/',
+                                       'https://cucumber.io/',
                                        nil,
                                        'Industry unknown',
                                        'Country unknown',
