@@ -36,7 +36,15 @@
   </div>
 </div>
 
-<% if statement.previewable_snapshot? %>
+<% if statement.should_use_override_url? %>
+  <div class="browser-wrapper_override">
+    <div>View website:</div>
+    <div>
+      <%= link_to(statement.override_url, statement.override_url, class: 'url', target: '_blank') %>
+    </div>
+  </div>
+
+<% elsif statement.previewable_snapshot? %>
   <div class="browser-wrapper">
     <div class="browser-navigation-bar">
       <i class="top-bar"></i>
