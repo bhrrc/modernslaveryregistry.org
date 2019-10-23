@@ -36,21 +36,13 @@
   </div>
 </div>
 
-<% if statement.should_use_override_url? %>
-  <div class="browser-wrapper_override">
-    <div>View website:</div>
-    <div>
-      <%= link_to(statement.override_url, statement.override_url, class: 'url', target: '_blank') %>
-    </div>
-  </div>
-
-<% elsif statement.previewable_snapshot? %>
+<% if statement.previewable_snapshot? %>
   <div class="browser-wrapper">
     <div class="browser-navigation-bar">
       <i class="top-bar"></i>
       <i class="top-bar"></i>
       <i class="top-bar"></i>
-      <%= link_to(statement.url, statement.url, class: 'url') %>
+      <%= link_to(statement.preview_url, statement.preview_url, class: 'url') %>
     </div>
 
     <div class="browser-container">
@@ -68,7 +60,7 @@
       <i class="top-bar"></i>
       <i class="top-bar"></i>
       <i class="top-bar"></i>
-      <%= link_to(statement.url, statement.url, class: 'url', target: '_blank') %>
+      <%= link_to(statement.preview_url, statement.preview_url, class: 'url', target: '_blank') %>
     </div>
 
     <div class="browser-container">
@@ -78,6 +70,6 @@
 <% else %>
 
   <div class="box">
-    <%= link_to('Read statement', statement.url, class: 'button is-primary', target: :_blank) %>
+    <%= link_to('Read statement', statement.preview_url, class: 'button is-primary', target: :_blank) %>
   </div>
 <% end %>
