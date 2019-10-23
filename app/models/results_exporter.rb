@@ -29,6 +29,7 @@ class ResultsExporter
     published_by?: 'Is Publisher',
     id: 'Statement ID',
     url: 'URL',
+    override_url: 'Override URL',
     company_number: 'Companies House Number',
     industry_name: 'Industry',
     country_name: 'HQ',
