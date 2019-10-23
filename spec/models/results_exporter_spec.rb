@@ -18,6 +18,10 @@ RSpec.describe ResultsExporter do
     Legislation.create! name: Legislation::UK_NAME, icon: 'uk'
   end
 
+  let(:us_legislation) do
+    Legislation.create! name: Legislation::CALIFORNIA_NAME, icon: 'us'
+  end
+
   let(:statement) do
     company.statements.create!(url: 'http://cucumber.io/',
                                approved_by: 'Big Boss',
@@ -152,6 +156,43 @@ RSpec.describe ResultsExporter do
                                        'contributor@somewhere.com',
                                        'false'
                                      ])
+    end
+
+    it 'omits legislations that are not included in filter' do
+      company.statements.create!(url: 'http://cucumber.io/',
+                                 approved_by: 'Big Boss',
+                                 approved_by_board: 'Yes',
+                                 signed_by_director: false,
+                                 signed_by: 'Little Boss',
+                                 link_on_front_page: true,
+                                 verified_by: user,
+                                 contributor_email: 'contributor@somewhere.com',
+                                 date_seen: Date.parse('2017-03-22'),
+                                 published: true,
+                                 legislations: [us_legislation],
+                                 first_year_covered: 2018,
+                                 last_year_covered: 2019)
+
+      csv = ResultsExporter.to_csv(Company.where(id: company.id), false, legislations: [uk_legislation.id])
+      data = CSV.parse(csv)
+
+      expect(data.length).to eq(4)
+      expect(data[2]).to_not be_nil
+      expect(data[2]).to match_array([
+                                       company1.id.to_s,
+                                       'company-1',
+                                       'false',
+                                       statement.id.to_s,
+                                       'https://cucumber.io/',
+                                       nil,
+                                       'Industry unknown',
+                                       'Country unknown',
+                                       'true',
+                                       'true',
+                                       'false',
+                                       '2018-2019'
+                                     ])
+
     end
   end
 end

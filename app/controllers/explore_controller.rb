@@ -26,7 +26,7 @@ class ExploreController < ApplicationController
   end
 
   def send_csv
-    send_data ResultsExporter.to_csv(search.results, admin?), filename: csv_filename
+    send_data ResultsExporter.to_csv(search.results, admin?, criteria_params), filename: csv_filename
   end
 
   def criteria_params
