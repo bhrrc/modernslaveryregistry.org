@@ -110,7 +110,7 @@
         </div>
         <div class="control">
           <% if @results.any? %>
-            <%= link_to @download_url, class: 'button is-primary is-expanded' do %>
+            <%= link_to @download_url, class: 'button is-primary is-expanded form-csv-download' do %>
               <span class="icon">
                 <i class="fa fa-download"></i>
               </span>
@@ -135,9 +135,21 @@ var searchInProgress = false
 
 function performSearch(element) {
   var newUrl = buildSearchUrl($(element).closest('form'))
+  var downloadLink = $(".form-csv-download")
 
   if (window.location.href != newUrl) {
+    var downloadUrl = ""
+
     history.replaceState({}, document.title, newUrl)
+
+    if (newUrl.match(/\/explore\?/)) {
+      downloadUrl = newUrl + "&format=csv"
+    } else {
+      downloadUrl = newUrl + "?format=csv"
+    }
+
+    downloadLink.attr("href", downloadUrl)
+
     if (!searchInProgress) {
       searchInProgress = true
       loadSearchResultsForUrl(newUrl)
