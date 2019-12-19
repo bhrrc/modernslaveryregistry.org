@@ -168,10 +168,17 @@
         </div>
         <div class="columns">
           <div class="column is-offset-3">
+            <p class="title is-5" >
+              <span data-content="us_statements">
+                <%= @statement_stats.aus_statements_count %>
+              </span>
+              <%= "statement".pluralize(@statement_stats.aus_statements_count) %>
+            </p>
             <p class="title is-5">
-              <a href="https://www.business-humanrights.org/en/inquiry-into-establishment-of-a-modern-slavery-act-in-australia">
-                Latest news
-              </a>
+              <span data-content="us_companies">
+                <%= @statement_stats.aus_companies_count %>
+              </span>
+              <%= "company".pluralize(@statement_stats.aus_companies_count) %>
             </p>
           </div>
         </div>
