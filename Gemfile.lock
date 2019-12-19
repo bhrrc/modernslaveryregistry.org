@@ -209,7 +209,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (4.0.1)
-    puma (3.12.2)
+    puma (4.3.1)
+      nio4r (~> 2.0)
     pundit (2.1.0)
       activesupport (>= 3.0.0)
     rack (2.0.8)
@@ -392,7 +393,7 @@ DEPENDENCIES
   leaflet-rails
   pg (~> 0.18)
   pry
-  puma (~> 3.12)
+  puma (~> 4.3)
   pundit
   rails (~> 5.2.0)
   rails-controller-testing
