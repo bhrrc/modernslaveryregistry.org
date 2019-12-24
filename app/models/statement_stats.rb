@@ -66,7 +66,7 @@ class StatementStats
   end
 
   def format_result(result)
-    result.nil? ? 0 : result.to_i
+    result.to_i
   end
 
   def calculatable_legislations_exist?

@@ -29,6 +29,10 @@ RSpec.describe StatementStats do
     Legislation.create! name: Legislation::CALIFORNIA_NAME, icon: 'us'
   end
 
+  let! :aus_legislation do
+    Legislation.create! name: Legislation::AUS_NAME, icon: 'aus'
+  end
+
   let! :cucumber do
     Company.create! name: 'Cucumber Ltd', country: gb, industry: software, company_number: '332211'
   end
@@ -111,7 +115,7 @@ RSpec.describe StatementStats do
       date_seen: Date.parse('20 May 2017'),
       published: true,
       contributor_email: 'someone@somewhere.com',
-      legislations: [uk_legislation, us_legislation]
+      legislations: [uk_legislation, us_legislation, aus_legislation]
     )
   end
 
@@ -149,11 +153,19 @@ RSpec.describe StatementStats do
     expect(stats.california_companies_count).to eq(1)
   end
 
+  it 'counts companies with published statements and also covered companies under AUS legislation' do
+    expect(stats.aus_companies_count).to eq(1)
+  end
+
   it 'counts unique also covered companies under UK legislation' do
     expect(stats.uk_also_covered_companies_count).to eq(2)
   end
 
   it 'counts unique also covered companies under California legislation' do
+    expect(stats.california_also_covered_companies_count).to eq(0)
+  end
+
+  it 'counts unique also covered companies under AUS legislation' do
     expect(stats.california_also_covered_companies_count).to eq(0)
   end
 
@@ -163,15 +175,18 @@ RSpec.describe StatementStats do
         { label: 'May 2016',
           statements: 2,
           uk_act: 2,
-          us_act: 0 },
+          us_act: 0,
+          aus_act: 0 },
         { label: 'May 2017',
           statements: 3,
           uk_act: 3,
-          us_act: 1 },
+          us_act: 1,
+          aus_act: 1 },
         { label: 'June 2017',
           statements: 4,
           uk_act: 4,
-          us_act: 1 }
+          us_act: 1,
+          aus_act: 1 }
       ]
     )
   end
