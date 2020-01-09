@@ -76,6 +76,7 @@ RSpec.describe ResultsExporter do
                                       'Is Also Covered',
                                       Legislation::UK_NAME,
                                       Legislation::CALIFORNIA_NAME,
+                                      Legislation::AUS_NAME,
                                       'Period Covered',
                                       'Approved by Board',
                                       'Approved by',
@@ -99,6 +100,7 @@ RSpec.describe ResultsExporter do
                                     'United Kingdom',
                                     'false',
                                     'true',
+                                    'false',
                                     'false',
                                     '2018-2019',
                                     'Yes',
@@ -129,6 +131,7 @@ RSpec.describe ResultsExporter do
                                       'Is Also Covered',
                                       Legislation::UK_NAME,
                                       Legislation::CALIFORNIA_NAME,
+                                      Legislation::AUS_NAME,
                                       'Period Covered'
                                     ])
     end
@@ -149,6 +152,7 @@ RSpec.describe ResultsExporter do
                                        'Country unknown',
                                        'true',
                                        'true',
+                                       'false',
                                        'false',
                                        '2018-2019',
                                        'Yes',
@@ -195,6 +199,7 @@ RSpec.describe ResultsExporter do
                                        'Country unknown',
                                        'true',
                                        'true',
+                                       'false',
                                        'false',
                                        '2018-2019'
                                      ])

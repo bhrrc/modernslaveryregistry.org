@@ -150,6 +150,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     legislations.any? { |legislation| legislation.name == Legislation::CALIFORNIA_NAME }
   end
 
+  def aus_modern_slavery_act?
+    legislations.any? { |legislation| legislation.name == Legislation::AUS_NAME }
+  end
+
   def latest_for?(company)
     self == company.latest_statement
   end

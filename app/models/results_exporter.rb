@@ -41,6 +41,7 @@ class ResultsExporter
     also_covered_and_published_by?: 'Is Also Covered',
     'uk_modern_slavery_act?' => Legislation::UK_NAME,
     'california_transparency_in_supply_chains_act?' => Legislation::CALIFORNIA_NAME,
+    'aus_modern_slavery_act?' => Legislation::AUS_NAME,
     period_covered: 'Period Covered'
   }.freeze
 
