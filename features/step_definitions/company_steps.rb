@@ -3,6 +3,7 @@ Given('the company {string} has been submitted') do |company_name|
     name: company_name,
     country: Country.find_or_create_by!(code: 'GB', name: 'United Kingdom'), company_number: SecureRandom.hex(3)
   )
+  Company.reindex
 end
 
 When('{actor} submits the company {string}') do |actor, company_name|
