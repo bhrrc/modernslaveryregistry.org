@@ -47,7 +47,7 @@ class Company < ApplicationRecord
     try(:industry).try(:name) || 'Industry unknown'
   end
 
-  def self.search(query)
+  def self.search_by_name(query)
     wild = "%#{query}%"
     Company.where(
       'lower(name) like lower(?)',
