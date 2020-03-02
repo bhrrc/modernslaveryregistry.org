@@ -5,6 +5,7 @@ RSpec.describe CompanySearch, type: :model do
 
   before do
     create_search_alias('Limited', 'Ltd')
+    Company.reindex
   end
 
   describe '#results' do
@@ -52,6 +53,7 @@ RSpec.describe CompanySearch, type: :model do
       company.country = country
       company.company_number = '123456'
       company.save
+      Company.reindex
     end
 
     describe '#results' do
@@ -95,6 +97,7 @@ RSpec.describe CompanySearch, type: :model do
     before do
       company.industry = industry
       company.save
+      Company.reindex
     end
 
     describe '#results' do
@@ -165,6 +168,10 @@ RSpec.describe CompanySearch, type: :model do
         )
       end
 
+      before do
+        Company.reindex
+      end
+
       it 'includes the company once in the search results' do
         expect(search.results.size).to eq(1)
       end
@@ -181,6 +188,10 @@ RSpec.describe CompanySearch, type: :model do
             company_name: 'Go Free Range Ltd',
             legislations: [uk_legislation.id]
           )
+        end
+
+        before do
+          Company.reindex
         end
 
         it 'includes the company in the results' do
@@ -225,6 +236,10 @@ RSpec.describe CompanySearch, type: :model do
           )
         end
 
+        before do
+          Company.reindex
+        end
+
         it 'includes the company in the results' do
           expect(search.results.size).to eq(1)
         end
@@ -245,6 +260,10 @@ RSpec.describe CompanySearch, type: :model do
     end
 
     describe '#statement_count_for' do
+      before do
+        Company.reindex
+      end
+
       it 'returns a count of the statements for a company' do
         search = CompanySearch.new(company_name: 'Go Free Range Limited')
         expect(search.statement_count_for(search.results.first)).to eq(1)
@@ -272,6 +291,10 @@ RSpec.describe CompanySearch, type: :model do
     end
 
     describe '#statement_count_for' do
+      before do
+        Company.reindex
+      end
+
       it 'returns a count of the published statements for a company' do
         search = CompanySearch.new(company_name: 'Go Free Range Limited')
         expect(search.statement_count_for(search.results.first)).to eq(1)
@@ -307,37 +330,6 @@ RSpec.describe CompanySearch, type: :model do
       it 'returns a count of the statements that cover this company' do
         search = CompanySearch.new(company_name: 'Go Free Range Limited')
         expect(search.statement_count_for(search.results.first)).to eq(1)
-      end
-    end
-  end
-
-  describe '#industry_stats' do
-    let(:stats) { CompanySearch.new.industry_stats }
-
-    context 'when the company has an industry' do
-      let(:industry) { Industry.create!(name: 'Software') }
-
-      before do
-        company.industry = industry
-        company.save
-      end
-
-      it 'has a group for the industry' do
-        expect(stats.first.group.name).to eq(industry.name)
-      end
-
-      it 'has a count for the industry' do
-        expect(stats.first.count).to eq(1)
-      end
-    end
-
-    context 'when the company has no industry' do
-      it 'has a group for the industry' do
-        expect(stats.first.group.name).to eq('Industry unknown')
-      end
-
-      it 'has a count for the unknown industry' do
-        expect(stats.first.count).to eq(1)
       end
     end
   end
