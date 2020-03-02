@@ -14,4 +14,10 @@ class Country < ApplicationRecord
       ) AS company_count
     SQL
   })
+
+  after_commit :reindex_companies
+
+  def reindex_companies
+    companies.each(&:reindex)
+  end
 end

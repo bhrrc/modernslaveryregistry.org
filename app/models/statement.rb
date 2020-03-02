@@ -50,6 +50,12 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   attr_accessor :should_enqueue_snapshot
 
+  after_commit :reindex_company
+
+  def reindex_company
+    company&.reindex
+  end
+
   def self.search(criteria:)
     StatementSearch.new(criteria)
   end
