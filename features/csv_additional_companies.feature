@@ -18,7 +18,7 @@ Feature: CSV additional companies
     Then the CSV should contain:
       | Company      | URL                          |
       | Cucumber Ltd | https://cucumber.ltd/s/2017  |
-      | Cuke Labs    | https://cucumber.ltd/s/2017  |
       | CukeHub      | https://cucumber.ltd/s/2017  |
+      | Cuke Labs    | https://cucumber.ltd/s/2017  |
 
 #  Scenario: Administrator exports to CSV with additional companies
