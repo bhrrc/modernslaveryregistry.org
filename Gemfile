@@ -32,6 +32,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'values'
 gem 'wkhtmltoimage-binary'
 gem 'scout_apm'
+gem 'searchkick'
 
 group :development, :test do
   gem 'byebug', platform: :mri
