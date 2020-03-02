@@ -1,4 +1,20 @@
 class Company < ApplicationRecord
+  searchkick synonyms: [%w[ltd limited]], callbacks: :async
+  scope :search_import, -> { includes(:country, :industry) }
+
+  def search_data
+    {
+      name: name,
+      related_companies: related_companies,
+      country_id: country_id,
+      country_name: country&.name,
+      industry_id: industry_id,
+      industry_name: industry&.name,
+      statement_ids: all_statements&.map(&:id)&.flatten&.uniq,
+      legislation_ids: all_statements&.map(&:legislation_ids)&.flatten&.uniq
+    }
+  end
+
   has_many :statements,
            -> { Statement.reverse_chronological_order },
            dependent: :destroy,
