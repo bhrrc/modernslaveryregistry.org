@@ -6,7 +6,7 @@ class ExploreController < ApplicationController
       format.html do
         @download_url = build_csv_url
         @search = search
-        @results = search.results.page params[:page]
+        @results = search.results
       end
       format.csv do
         send_csv
