@@ -45,6 +45,13 @@ class ComplianceStats
     percent_for_stat(fully_compliant_count)
   end
 
+  def updated_at
+    @updated_at ||= begin
+      latest_statement = @statements.order(:updated_at).last
+      @statements.last.updated_at if latest_statement
+    end
+  end
+
   private
 
   def percent_for_stat(stat)
