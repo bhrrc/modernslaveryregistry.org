@@ -5,11 +5,16 @@ variables:
   POSTGRES_DB: msd_test
   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/$POSTGRES_DB"
   REDIS_URL: redis://localhost:6379
+  ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+  ELASTICSEARCH_URL: 'http://localhost:9200'
 
 services:
   - name: redis:3.2.11
   - name: postgres:9.6.16-alpine
     alias: postgres
+  - name: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    alias: elasticsearch
+    command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
 
 stages:
   - test
