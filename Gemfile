@@ -16,7 +16,7 @@ gem 'devise'
 gem 'imgkit'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
-gem 'json', '~> 2.0.3'
+gem 'json', '~> 2.3'
 gem 'kaminari'
 gem 'leaflet-rails'
 gem 'pg', '~> 0.18'
@@ -33,6 +33,7 @@ gem 'values'
 gem 'wkhtmltoimage-binary'
 gem 'scout_apm'
 gem 'searchkick'
+gem 'yomu', git: 'https://gitlab.bitzesty.com/open-source/yomu.git'
 
 group :development, :test do
   gem 'byebug', platform: :mri
