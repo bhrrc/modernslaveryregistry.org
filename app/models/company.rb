@@ -11,7 +11,8 @@ class Company < ApplicationRecord
       industry_id: industry_id,
       industry_name: industry&.name,
       statement_ids: all_statements&.map(&:id)&.flatten&.uniq,
-      legislation_ids: all_statements&.map(&:legislation_ids)&.flatten&.uniq
+      legislation_ids: all_statements&.map(&:legislation_ids)&.flatten&.uniq,
+      statements: statements_with_content
     }
   end
 
@@ -38,6 +39,21 @@ class Company < ApplicationRecord
       .where('legislations.name = ?', legislation_name)
       .distinct
   }
+
+  def statements_with_content
+    all_statements.map do |statement|
+      begin
+        {
+          id: statement.id,
+          content: Yomu.read(:text, statement.snapshot.screenshot_or_original.download),
+          first_year_covered: statement.first_year_covered,
+          last_year_covered: statement.last_year_covered,
+        }
+      rescue StandardError
+        nil
+      end
+    end.compact
+  end
 
   def all_statements
     Statement.produced_by_or_associated_with(self).reverse_chronological_order
