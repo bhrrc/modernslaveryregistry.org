@@ -100,6 +100,19 @@
   </div>
 
   <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label">Statement keywords</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <%= text_field_tag :statement_keywords, params[:statement_keywords], class: 'input js-auto-submit' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field is-horizontal">
     <div class="field-label">
       <!-- Left empty for spacing -->
     </div>
