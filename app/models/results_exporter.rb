@@ -54,6 +54,7 @@ class ResultsExporter
     published: 'Published',
     verified_by_email: 'Verified by',
     contributor_email: 'Contributed by',
-    broken_url: 'Broken URL'
+    broken_url: 'Broken URL',
+    home_office_audit: 'Home Office Audit'
   }.freeze
 end
