@@ -166,6 +166,15 @@
 
   <div class="columns">
     <div class="column is-one-quarter">
+      <span class="label">Home Office Audit?</span>
+    </div>
+    <div class="column" data-content="screenshot">
+      <%= yes_no(statement.home_office_audit?) %>
+    </div>
+  </div>
+
+  <div class="columns">
+    <div class="column is-one-quarter">
       <span class="label"></span>
     </div>
     <div class="column">
