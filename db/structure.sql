@@ -498,7 +498,8 @@ CREATE TABLE public.statements (
     first_year_covered integer,
     last_year_covered integer,
     company_id bigint NOT NULL,
-    override_url character varying
+    override_url character varying,
+    home_office_audit boolean DEFAULT false
 );
 
 
@@ -1099,6 +1100,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190225171707'),
 ('20190304105224'),
 ('20190515183222'),
-('20191019141132');
+('20191019141132'),
+('20200319080812');
 
 

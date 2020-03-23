@@ -86,7 +86,8 @@ RSpec.describe ResultsExporter do
                                       'Published',
                                       'Verified by',
                                       'Contributed by',
-                                      'Broken URL'
+                                      'Broken URL',
+                                      'Home Office Audit'
                                     ])
       expect(data).to match_array([
                                     statement.company_id.to_s,
@@ -111,6 +112,7 @@ RSpec.describe ResultsExporter do
                                     'true',
                                     'admin@somewhere.com',
                                     'contributor@somewhere.com',
+                                    'false',
                                     'false'
                                   ])
     end
@@ -163,6 +165,7 @@ RSpec.describe ResultsExporter do
                                        'true',
                                        'admin@somewhere.com',
                                        'contributor@somewhere.com',
+                                       'false',
                                        'false'
                                      ])
     end
