@@ -35,7 +35,8 @@ class ExploreController < ApplicationController
       countries: params[:countries],
       company_name: params[:company_name],
       legislations: params[:legislations],
-      statement_keywords: params[:statement_keywords]
+      statement_keywords: params[:statement_keywords],
+      include_keywords: params[:include_keywords]
     }
   end
 

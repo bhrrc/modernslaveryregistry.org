@@ -1,8 +1,13 @@
 class CompanySearch
-  def initialize(company_name: nil, statement_keywords: nil, industries: [], countries: [], legislations: [])
-    @company_name = company_name
-    @statement_keywords = statement_keywords
+  def initialize(options = {})
+    @company_name = options.fetch(:company_name, nil)
+    @statement_keywords = options.fetch(:statement_keywords, nil)
+    # TODO: include_keywords - default value
+    @include_keywords = options.fetch(:include_keywords, 'yes')
 
+    industries = options.fetch(:industries, nil)
+    countries = options.fetch(:countries, nil)
+    legislations = options.fetch(:legislations, nil)
     @where = []
     @where << { terms: { industry_id: industries } } if industries&.any?
     @where << { terms: { country_id: countries } } if countries&.any?
@@ -183,17 +188,28 @@ class CompanySearch
     }
   end
 
-  def calculate_query
+  def calculate_positive_query
     result = []
     result << company_name_condition if @company_name.present?
-    result << statement_keywords_condition if @statement_keywords.present?
+    result << statement_keywords_condition if @statement_keywords.present? && @include_keywords.presence == 'yes'
+    result
+  end
+
+  def calculate_negative_query
+    result = []
+    result << statement_keywords_condition if @statement_keywords.present? && @include_keywords.presence == 'no'
     result
   end
 
   def results
-    query = calculate_query
-    if query.present? || @where.present?
-      Company.search(body: { query: { bool: { must: query, filter: @where } } })
+    positive_query = calculate_positive_query
+    negative_query = calculate_negative_query
+    if [positive_query, negative_query, @where].any?(&:present?)
+      conditions = { filter: @where }
+      conditions.merge!(must: positive_query) if positive_query.present?
+      conditions.merge!(must_not: negative_query) if negative_query.present?
+
+      Company.search(body: { query: { bool: conditions } })
     else
       Company.search(body: { query: { match_all: {} } })
     end
