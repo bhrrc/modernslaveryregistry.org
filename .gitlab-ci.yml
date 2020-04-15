@@ -60,6 +60,7 @@ snyk:
   script:
     - sudo snyk auth $SNYK_API
     - sudo snyk test --severity-threshold=high
+  when: manual
 
 snyk_full:
   stage: test  
