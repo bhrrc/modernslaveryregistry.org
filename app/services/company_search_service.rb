@@ -1,18 +1,24 @@
-class CompanySearch
-  def initialize(options = {})
-    @company_name = options.fetch(:company_name, nil)
-    @statement_keywords = options.fetch(:statement_keywords, nil)
-    # TODO: include_keywords - default value
-    @include_keywords = options.fetch(:include_keywords, 'yes')
+class CompanySearchService
+  def initialize(form)
+    @form = form
 
-    industries = options.fetch(:industries, nil)
-    countries = options.fetch(:countries, nil)
-    legislations = options.fetch(:legislations, nil)
     @where = []
-    @where << { terms: { industry_id: industries } } if industries&.any?
-    @where << { terms: { country_id: countries } } if countries&.any?
-    @where << { terms: { legislation_ids: legislations } } if legislations&.any?
+    @where << { terms: { industry_id: form.industries } } if form.industries&.any?
+    @where << { terms: { country_id: form.countries } } if form.countries&.any?
+    @where << { terms: { legislation_ids: form.legislations } } if form.legislations&.any?
   end
+
+  def perform
+    if @form.statement_keywords.present?
+      search_by_statement_keywords
+    elsif @form.company_name.present? || @where.present?
+      search_by_company_name_or_filters
+    else
+      search_all
+    end
+  end
+
+  private
 
   def company_name_condition
     {
@@ -24,7 +30,7 @@ class CompanySearch
                 {
                   match: {
                     'name.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 10,
                       operator: 'and',
                       analyzer: 'searchkick_search'
@@ -34,7 +40,7 @@ class CompanySearch
                 {
                   match: {
                     'name.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 10,
                       operator: 'and',
                       analyzer: 'searchkick_search2'
@@ -44,7 +50,7 @@ class CompanySearch
                 {
                   match: {
                     'name.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 1,
                       operator: 'and',
                       analyzer: 'searchkick_search',
@@ -58,7 +64,7 @@ class CompanySearch
                 {
                   match: {
                     'name.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 1,
                       operator: 'and',
                       analyzer: 'searchkick_search2',
@@ -78,7 +84,7 @@ class CompanySearch
                 {
                   match: {
                     'related_companies.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 10,
                       operator: 'and',
                       analyzer: 'searchkick_search'
@@ -88,7 +94,7 @@ class CompanySearch
                 {
                   match: {
                     'related_companies.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 10,
                       operator: 'and',
                       analyzer: 'searchkick_search2'
@@ -98,7 +104,7 @@ class CompanySearch
                 {
                   match: {
                     'related_companies.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 1,
                       operator: 'and',
                       analyzer: 'searchkick_search',
@@ -112,7 +118,7 @@ class CompanySearch
                 {
                   match: {
                     'related_companies.analyzed': {
-                      query: @company_name,
+                      query: @form.company_name,
                       boost: 1,
                       operator: 'and',
                       analyzer: 'searchkick_search2',
@@ -131,14 +137,14 @@ class CompanySearch
     }
   end
 
-  def statement_keywords_condition
+  def statement_keywords_condition(statement_keyword)
     {
       dis_max: {
         queries: [
           {
             match: {
               'statements.content.analyzed': {
-                query: @statement_keywords,
+                query: statement_keyword,
                 boost: 10,
                 operator: 'and',
                 analyzer: 'searchkick_search'
@@ -148,7 +154,7 @@ class CompanySearch
           {
             match: {
               'statements.content.analyzed': {
-                query: @statement_keywords,
+                query: statement_keyword,
                 boost: 10,
                 operator: 'and',
                 analyzer: 'searchkick_search2'
@@ -158,7 +164,7 @@ class CompanySearch
           {
             match: {
               'statements.content.analyzed': {
-                query: @statement_keywords,
+                query: statement_keyword,
                 boost: 1,
                 operator: 'and',
                 analyzer: 'searchkick_search',
@@ -172,7 +178,7 @@ class CompanySearch
           {
             match: {
               'statements.content.analyzed': {
-                query: @statement_keywords,
+                query: statement_keyword,
                 boost: 1,
                 operator: 'and',
                 analyzer: 'searchkick_search2',
@@ -188,36 +194,40 @@ class CompanySearch
     }
   end
 
-  def calculate_positive_query
+  def calculate_positive_query(statement_keyword = nil)
     result = []
-    result << company_name_condition if @company_name.present?
-    result << statement_keywords_condition if @statement_keywords.present? && @include_keywords.presence == 'yes'
+    result << company_name_condition if @form.company_name.present?
+    result << statement_keywords_condition(statement_keyword) if statement_keyword.present? && @form.include_keywords.presence == 'yes'
     result
   end
 
-  def calculate_negative_query
+  def calculate_negative_query(statement_keyword = nil)
     result = []
-    result << statement_keywords_condition if @statement_keywords.present? && @include_keywords.presence == 'no'
+    result << statement_keywords_condition(statement_keyword) if statement_keyword.present? && @form.include_keywords.presence == 'no'
     result
   end
 
-  def results
-    positive_query = calculate_positive_query
-    negative_query = calculate_negative_query
-    if [positive_query, negative_query, @where].any?(&:present?)
+  def search_by_statement_keywords
+    @form.statement_keywords.map do |statement_keyword|
+      positive_query = calculate_positive_query(statement_keyword)
+      negative_query = calculate_negative_query(statement_keyword)
+
       conditions = { filter: @where }
       conditions.merge!(must: positive_query) if positive_query.present?
       conditions.merge!(must_not: negative_query) if negative_query.present?
 
-      Company.search(body: { query: { bool: conditions } })
-    else
-      Company.search(body: { query: { match_all: {} } })
-    end
+      { statement_keyword => Company.search(body: { query: { bool: conditions } }) }
+    end.inject(:merge)
   end
 
-  def statement_count_for(company)
-    return company.published_statements.count if @legislations.blank?
+  def search_by_company_name_or_filters
+    conditions = { filter: @where }
+    conditions.merge!(must: calculate_positive_query)
 
-    company.published_statements.joins(:legislations).where(legislations: { id: @legislations }).count
+    { '*' => Company.search(body: { query: { bool: conditions } }) }
+  end
+
+  def search_all
+    { '*' => Company.search(body: { query: { match_all: {} } }) }
   end
 end

@@ -6,7 +6,7 @@ class ExploreController < ApplicationController
       format.html do
         @download_url = build_csv_url
         @search = search
-        @results = search.results
+        @results = search.companies
       end
       format.csv do
         send_csv
@@ -22,11 +22,12 @@ class ExploreController < ApplicationController
   end
 
   def search
-    CompanySearch.new(criteria_params)
+    form = CompanySearchForm.new(criteria_params)
+    CompanySearchPresenter.new(form)
   end
 
   def send_csv
-    send_data ResultsExporter.to_csv(search.results, admin?, criteria_params), filename: csv_filename
+    send_data ResultsExporter.to_csv(search.companies, admin?, criteria_params), filename: csv_filename
   end
 
   def criteria_params
@@ -36,7 +37,8 @@ class ExploreController < ApplicationController
       company_name: params[:company_name],
       legislations: params[:legislations],
       statement_keywords: params[:statement_keywords],
-      include_keywords: params[:include_keywords]
+      include_keywords: params[:include_keywords],
+      page: params[:page]
     }
   end
 
