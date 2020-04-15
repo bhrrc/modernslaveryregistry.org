@@ -29,15 +29,19 @@ class CompanySearchForm
   attr_reader :company_name, :statement_keywords, :include_keywords, :industries, :countries, :legislations, :page
 
   def initialize(params = {})
-    @company_name = params.fetch(:company_name, nil)
-    @statement_keywords = Array.wrap(params.fetch(:statement_keywords, nil))
+    @company_name = params.fetch(:company_name, nil).presence
+    @statement_keywords = params.fetch(:statement_keywords, nil).presence&.split(',')&.map(&:strip)
     # TODO: include_keywords - default value
-    @include_keywords = (params.fetch(:include_keywords, nil) || INCLUDE_KEYWORDS_VALUE) == INCLUDE_KEYWORDS_VALUE
+    @include_keywords = (params.fetch(:include_keywords, nil).presence || INCLUDE_KEYWORDS_VALUE) == INCLUDE_KEYWORDS_VALUE
 
-    @industries = params.fetch(:industries, nil)
-    @countries = params.fetch(:countries, nil)
-    @legislations = params.fetch(:legislations, nil)
+    @industries = params.fetch(:industries, nil).presence
+    @countries = params.fetch(:countries, nil).presence
+    @legislations = params.fetch(:legislations, nil).presence
 
     @page = params.fetch(:page, nil) || 1
+  end
+
+  def include_keywords?
+    include_keywords
   end
 end

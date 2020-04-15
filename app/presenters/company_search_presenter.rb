@@ -11,17 +11,11 @@ class CompanySearchPresenter
   end
 
   def companies
-    ids = result.map do |_, companies|
-      companies
-    end.inject(:concat).uniq(&:id).map(&:id)
-    puts "!!! #{ids.size}"
-    @companies ||= Company.where(id: ids).page(form.page)
+    result[:companies]
   end
 
   def stats
-    @stats ||= result.map do |keyword, companies|
-      { keyword => companies.length }
-    end.reduce({ '*' => companies.length }, :merge)
+    result[:stats]
   end
 
   def statement_count_for(company)

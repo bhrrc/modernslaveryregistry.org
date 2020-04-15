@@ -9,16 +9,36 @@ class CompanySearchService
   end
 
   def perform
-    if @form.statement_keywords.present?
-      search_by_statement_keywords
-    elsif @form.company_name.present? || @where.present?
-      search_by_company_name_or_filters
+    companies = if [@form.statement_keywords, @form.company_name, @where].any?(&:present?)
+      search_by_conditions
     else
       search_all
     end
+
+    keyword_stats = calculate_keywords_stats(companies.total_count)
+
+    {
+      companies: companies,
+      stats: {
+        keywords: keyword_stats
+      }
+    }
   end
 
   private
+
+  def calculate_keywords_stats(total_count)
+    @form.statement_keywords&.map do |statement_keyword|
+      conditions = calculate_conditions(Array.wrap(statement_keyword))
+      result = Company.search(body: { query: { bool: conditions } }, load: false)
+      {
+        statement_keyword => {
+          'mentioned': @form.include_keywords? ? result.total_count : total_count - result.total_count,
+          'not_mentioned': @form.include_keywords? ? total_count - result.total_count : result.total_count,
+        }
+      }
+    end&.inject(:merge)
+  end
 
   def company_name_condition
     {
@@ -194,40 +214,43 @@ class CompanySearchService
     }
   end
 
-  def calculate_positive_query(statement_keyword = nil)
+  def statement_keywords_conditions(statement_keywords)
+    {
+      bool: {
+        should: statement_keywords.map { |statement_keyword| statement_keywords_condition(statement_keyword) }
+      }
+    }
+  end
+
+  def calculate_positive_query(statement_keywords)
     result = []
     result << company_name_condition if @form.company_name.present?
-    result << statement_keywords_condition(statement_keyword) if statement_keyword.present? && @form.include_keywords.presence == 'yes'
+    result << statement_keywords_conditions(statement_keywords) if statement_keywords.present? && @form.include_keywords?
     result
   end
 
-  def calculate_negative_query(statement_keyword = nil)
+  def calculate_negative_query(statement_keywords)
     result = []
-    result << statement_keywords_condition(statement_keyword) if statement_keyword.present? && @form.include_keywords.presence == 'no'
+    result << statement_keywords_conditions(statement_keywords) if statement_keywords.present? && !@form.include_keywords?
     result
   end
 
-  def search_by_statement_keywords
-    @form.statement_keywords.map do |statement_keyword|
-      positive_query = calculate_positive_query(statement_keyword)
-      negative_query = calculate_negative_query(statement_keyword)
+  def calculate_conditions(statement_keywords)
+    positive_query = calculate_positive_query(statement_keywords)
+    negative_query = calculate_negative_query(statement_keywords)
 
-      conditions = { filter: @where }
-      conditions.merge!(must: positive_query) if positive_query.present?
-      conditions.merge!(must_not: negative_query) if negative_query.present?
-
-      { statement_keyword => Company.search(body: { query: { bool: conditions } }) }
-    end.inject(:merge)
+    conditions = { filter: @where }
+    conditions.merge!(must: positive_query) if positive_query.present?
+    conditions.merge!(must_not: negative_query) if negative_query.present?
+    conditions
   end
 
-  def search_by_company_name_or_filters
-    conditions = { filter: @where }
-    conditions.merge!(must: calculate_positive_query)
-
-    { '*' => Company.search(body: { query: { bool: conditions } }) }
+  def search_by_conditions
+    conditions = calculate_conditions(@form.statement_keywords)
+    Company.search(body: { query: { bool: conditions } }, page: @form.page, per_page: 20)
   end
 
   def search_all
-    { '*' => Company.search(body: { query: { match_all: {} } }) }
+    Company.search(body: { query: { match_all: {} } }, page: @form.page, per_page: 20)
   end
 end
