@@ -1,12 +1,70 @@
 <%= form_tag explore_path, enforce_utf8: false, method: :get, class: 'statements-search-form' do %>
-  <div class="field is-horizontal">
-    <div class="field-label is-normal">
-      <label class="label">Industries</label>
+  <h5>
+    Find a company
+  </h5>
+  
+  <div class="search-row">
+    <div class="search-column">
+      <div class="form-group">
+        <label for="search-name" class="form-label">Company name</label>
+        <%= text_field_tag :company_name, params[:company_name], class: 'form-control form-control--full', id: "search-name", type: "search" %>
+      </div>
     </div>
-    <div class="field-body">
-      <div class="field">
-        <div class="control">
-          <%=
+  </div>
+
+  <p class="or" aria-hidden="true"></p>
+
+  <h5>
+    Search by
+  </h5>
+  
+  <div class="search-row">
+    <div class="search-column">
+      <div class="form-group">
+        <label for="search-keywords" class="form-label">Keyword(s) mentioned in statements</label>
+        <%=
+          select_tag(
+            'keywords[]',
+            grouped_options_for_select(
+              [["Suggested keywords", CompanySearchForm::KEYWORD_VALUES.map(&:humanize)]],
+              params[:keywords]
+            ),
+            {
+              include_blank: true,
+              multiple: true,
+              class: 'keywords-select'
+            }
+          )
+        %>
+      </div>
+    </div>
+    <div class="search-column search-column--double">
+      <fieldset class="form-group">
+        <legend class="form-label form-label--visuallyhidden">Keywords search method</legend>
+
+        <div class="radios radios--inline">
+          <div class="radio">
+            <%= radio_button_tag :keyword_method, :contain, params[:keyword_method] != "not_contain", id: "search-keyword-method-contain" %>
+            <label for="search-keyword-method-contain" class="form-label">
+              Show results mentioning keywords
+            </label>
+          </div>
+          <div class="radio">
+            <%= radio_button_tag :keyword_method, :not_contain, params[:keyword_method] == "not_contain", id: "search-keyword-method-not-contain" %>
+            <label for="search-keyword-method-not-contain" class="form-label">
+              Show results not mentioning keywords
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="search-row">
+    <div class="search-column">
+      <div class="form-group">
+        <label class="form-label" for="search-industries">Industry</label>
+        <%=
           select_tag(
             'industries[]',
             options_from_collection_for_select(
@@ -18,65 +76,18 @@
             {
               include_blank: true,
               multiple: true,
-              class: 'chosen-select js-auto-submit',
-              'data-placeholder': ' '
+              class: 'multiple-select',
+              id: "search-industries",
+              'data-placeholder': 'Select industry',
+              'data-color': "yellow"
             }
           )
-          %>
-        </div>
+        %>
       </div>
     </div>
-  </div>
-
-  <div class="field is-horizontal">
-    <div class="field-label is-normal">
-      <label class="label">Countries</label>
-    </div>
-    <div class="field-body">
-      <div class="field">
-        <div class="control">
-          <%=
-          select_tag(
-            'countries[]',
-            options_from_collection_for_select(
-              Country.with_companies.order(:name),
-              :id,
-              :name,
-              params[:countries]
-            ),
-            {
-              include_blank: true,
-              multiple: true,
-              class: 'chosen-select js-auto-submit',
-              'data-placeholder': ' '
-            }
-          )
-          %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="field is-horizontal">
-    <div class="field-label is-normal">
-      <label class="label">Company</label>
-    </div>
-    <div class="field-body">
-      <div class="field">
-        <div class="control">
-          <%= text_field_tag :company_name, params[:company_name], class: 'input js-auto-submit' %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="field is-horizontal">
-    <div class="field-label is-normal">
-      <label class="label">Legislations</label>
-    </div>
-    <div class="field-body">
-      <div class="field">
-        <div class="control">
+    <div class="search-column">
+      <div class="form-group">
+        <label class="form-label" for="search-legislations">Legislation</label>
           <%=
           select_tag(
             'legislations[]',
@@ -89,116 +100,52 @@
             {
               include_blank: true,
               multiple: true,
-              class: 'chosen-select js-auto-submit',
-              'data-placeholder': ' '
+              class: 'multiple-select',
+              id: "search-legislations",
+              'data-placeholder': 'Select legislation',
+              'data-color': "purple"
             }
           )
-          %>
-        </div>
+        %>
+      </div>
+    </div>
+    <div class="search-column">
+      <div class="form-group">
+        <label class="form-label" for="search-countries">Region/Country</label>
+        <%=
+        select_tag(
+          'countries[]',
+          options_from_collection_for_select(
+            Country.with_companies.order(:name),
+            :id,
+            :name,
+            params[:countries]
+          ),
+          {
+            include_blank: true,
+            multiple: true,
+            class: 'multiple-select',
+            id: "search-countries",
+            'data-placeholder': 'Select region/country',
+              'data-color': "blue"
+          }
+        )
+        %>
       </div>
     </div>
   </div>
 
-  <div class="field is-horizontal">
-    <div class="field-label is-normal">
-      <label class="label">Statement keywords</label>
-    </div>
-    <div class="field-body">
-      <div class="field">
-        <div class="control">
-          <%= text_field_tag :statement_keywords, params[:statement_keywords], class: 'input js-auto-submit' %>
-        </div>
-      </div>
+  <div class="form-group">
+    <div class="checkbox">
+      <%= check_box_tag :only_assessed, true, params[:only_assessed] == "true", id: "search-only-assessed" %>
+      <label for="search-only-assessed">
+        Show only companies with statements assessed and scored by us
+      </label>
     </div>
   </div>
-
-  <div class="field is-horizontal">
-    <div class="field-label">
-      <!-- Left empty for spacing -->
-    </div>
-    <div class="field-body">
-      <div class="field is-grouped">
-        <div class="control">
-          <%= submit_tag 'Search', name: '', enforce_utf8: false, class: "button is-primary search-button" %>
-        </div>
-        <div class="control">
-          <% if @results.any? %>
-            <%= link_to @download_url, class: 'button is-primary is-expanded form-csv-download' do %>
-              <span class="icon">
-                <i class="fa fa-download"></i>
-              </span>
-              <span>Download search results</span>
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
+  
+  <div class="form-actions">
+    <%= submit_tag 'Search', name: '', enforce_utf8: false, class: "button is-primary search-button" %>
+    <%= link_to "Clear", explore_path, class: "button button--link" %>
   </div>
 <% end %>
-
-<script>
-$('.chosen-select').chosen({
-  allow_single_deselect: true,
-  inherit_select_classes: true,
-  no_results_text: 'No results matched',
-  width: '100%'
-})
-
-var searchInProgress = false
-
-function performSearch(element) {
-  var newUrl = buildSearchUrl($(element).closest('form'))
-  var downloadLink = $(".form-csv-download")
-
-  if (window.location.href != newUrl) {
-    var downloadUrl = ""
-
-    history.replaceState({}, document.title, newUrl)
-
-    if (newUrl.match(/\/explore\?/)) {
-      downloadUrl = newUrl + "&format=csv"
-    } else {
-      downloadUrl = newUrl + "?format=csv"
-    }
-
-    downloadLink.attr("href", downloadUrl)
-
-    if (!searchInProgress) {
-      searchInProgress = true
-      loadSearchResultsForUrl(newUrl)
-    }
-  }
-}
-
-function buildSearchUrl(form) {
-  var qs = form.find(':input').filter(function(i) { return $(this).val() != '' }).serialize()
-  return form.attr('action').split('?')[0] + (qs ? '?' + qs : '')
-}
-
-function loadSearchResultsForUrl(url) {
-  var searchResultsSelector = '[data-content="company_search_results"]'
-  var sidebarSelector = '[data-content="statements-search-sidebar"]'
-  $(searchResultsSelector).html('')
-  $(sidebarSelector).html('')
-  return $.get(url)
-    .then(function (html) {
-      $(searchResultsSelector).html(
-        $(html).find(searchResultsSelector).html() || 'No statements found'
-      )
-      $(sidebarSelector).html($(html).find(sidebarSelector).html())
-      if (window.location.href == url) {
-        searchInProgress = false
-      } else {
-        return loadSearchResultsForUrl(window.location.href)
-      }
-    })
-}
-
-$(document).on('change', 'select.js-auto-submit, .js-auto-submit:checkbox', function() {
-  performSearch(this)
-})
-
-$(document).on('keyup', 'input.js-auto-submit', function() {
-  performSearch(this)
-})
-</script>

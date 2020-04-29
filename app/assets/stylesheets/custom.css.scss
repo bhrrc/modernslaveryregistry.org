@@ -53,3 +53,303 @@
   visibility: visible;
   opacity: 1;
 }
+
+.container {
+  width: 1140px;
+  max-width: calc(100% - 40px);
+  margin: 0 auto;
+}
+
+// VARIABLES
+
+$grey: #f7f7f7;
+$darkgrey: #cccccc;
+$teal: #13b3a6;
+$yellow: #ffcd00;
+$lightgreen: #e6f3e8;
+$lightyellow: #fef8dc;
+$lightpurple: #dfdff1;
+$lightblue: #dfeaf1;
+
+// SECTION
+
+.section {
+  padding: 2em 0;
+}
+
+.section--grey {
+  background: $grey;
+}
+
+
+// FORMS
+
+.form-group {
+  border: none;
+  padding: 0;
+
+  & + .form-group {
+    margin-top: 1.5em;
+  }
+
+  .search-row + & {
+    margin-top: 1.5em;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  input[type="password"],
+  textarea {
+    padding: 0.75em;
+    border: 1px solid $darkgrey;
+    border-radius: 2px;
+    background: #fff;
+    color: #333;
+
+    &:focus {
+      outline: 2px solid $yellow;
+      outline-offset: 2px;
+    }
+  }
+
+  .form-control--full {
+    width: 100%;
+    display: block;
+  }
+
+  input[type="search"] {
+
+  }
+}
+
+.form-label {
+  display: block;
+  font-size: 1em;
+  margin: 0 0 0.5em;
+  font-weight: 400;
+}
+
+.form-label--visuallyhidden {
+  opacity: 0;
+}
+
+.search-row {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  & + .search-row {
+    margin-top: 1.5em;
+  }
+}
+
+.search-column {
+  flex: 0 1 auto;
+  width: calc(33.33333% - 15px);
+  vertical-align: bottom;
+  min-width: 350px;
+}
+
+.search-column--double {
+  width: calc(66.66666% - 15px);
+}
+
+.radios {
+
+}
+
+.radios--inline {
+  .radio {
+    display: inline-block;
+    margin-right: 20px;
+
+    & + .radio {
+      margin: 0 20px 0 0;
+    }
+  }
+}
+
+.radio {
+  position: relative;
+  
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  label {
+    padding-left: 30px;
+    position: relative;
+    
+    &:before {
+      width: 20px;
+      height: 20px;
+      border-radius: 100px;
+      border: 1px solid $darkgrey;
+      background: #fff;
+      position: absolute;
+      content: " ";
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+
+    &:after {
+      width: 8px;
+      height: 8px;
+      border-radius: 100px;
+      position: absolute;
+      content: " ";
+      background: transparent;
+      top: 6px;
+      left: 6px;
+      z-index: 100;
+    }
+  }
+
+  input:checked + label {
+    &:before {
+      border-color: $teal;
+    }
+
+    &:after {
+      background: $teal;
+    }
+  }
+
+  input:focus + label:before {
+    outline: 2px solid $yellow;
+    outline-offset: 3px;
+  }
+}
+
+.checkbox {
+  position: relative;
+  
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+
+  label {
+    padding-left: 40px;
+    position: relative;
+    
+    &:before {
+      width: 25px;
+      height: 25px;
+      border-radius: 2px;
+      border: 1px solid $darkgrey;
+      background: #fff;
+      position: absolute;
+      content: " ";
+      top: -4px;
+      left: 0;
+      z-index: 10;
+    }
+
+    &:after {
+      width: 14px;
+      height: 9px;
+      border-left: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      transform-origin: 50% 50%;
+      transform: rotate(-45deg);
+      position: absolute;
+      content: " ";
+      background: transparent;
+      top: 3px;
+      left: 6px;
+      z-index: 100;
+    }
+  }
+
+  input:checked + label {
+    &:before {
+      border-color: $teal;
+    }
+
+    &:after {
+      border-left-color: $teal;
+      border-bottom-color: $teal;
+    }
+  }
+
+  input:focus + label:before {
+    outline: 2px solid $yellow;
+    outline-offset: 3px;
+  }
+}
+
+.form-actions {
+  margin-top: 2em;
+}
+
+.button {
+  font-weight: 500;
+  font-size: 1.111111em;
+  padding: 0.65em 2em;
+  height: auto;
+  line-height: 1
+}
+
+.button--link {
+  background: transparent;
+  color: $teal;
+  border: none;
+  text-decoration: underline;
+  font-weight: 400;
+  
+  &:focus,
+  &:hover {
+    color: darken($teal, 5%);
+    background: transparent;
+    border: none;
+  }
+}
+
+.or {
+  display: block;
+  color: #333;
+  margin: 2em 0;
+  position: relative;
+  height: 0px;
+  
+  &::after {
+    background: $grey;
+    content: "or";
+    display: block;
+    padding-right: 1em;
+    color: #333;
+    z-index: 99;
+    position: absolute;
+    top: -0.75em;
+    left: 0;
+    font-size: 1.25em;
+    font-weight: 400;
+  }
+  
+  &:before {
+    content: " ";
+    width: 100%;
+    height: 2px;
+    background: $darkgrey;
+    display: block;
+  }
+}
+
+h5 {
+  font-weight: 600;
+  margin-bottom: 0.75em;
+  font-size: 1.25em;
+}
+
+.select2-container {
+  width: 100% !important;
+}
