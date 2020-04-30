@@ -3,8 +3,8 @@
 <div class="section section--grey">
   <div class="container">
     <%= render partial: 'search_form' %>
-
-    <% if @results.present? && @results.total_count > 0 %>
+  
+    <% if params[:company_name].present? %>
       <div class="search-results-header">
         <h3>
           Search results
