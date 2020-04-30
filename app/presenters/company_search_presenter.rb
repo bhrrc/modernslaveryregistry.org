@@ -18,6 +18,10 @@ class CompanySearchPresenter
     result[:stats]
   end
 
+  def searching_by_conditions?
+    @service.searching_by_conditions?
+  end
+
   def statement_count_for(company)
     return company.published_statements.count if @form.legislations.blank?
 

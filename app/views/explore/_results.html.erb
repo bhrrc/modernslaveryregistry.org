@@ -1,6 +1,10 @@
 <div class="results-heading">
   <div class="results-heading__title">
-    
+    <% if @search.searching_by_conditions? %>
+      <%= pluralize(@results.total_count, "search result", plural: "search results") %> 
+    <% else %>
+      Showing all <strong><%= @results.total_count %></strong> companies in our database
+    <% end %>
   </div>
 
   <div class="results-heading__download">
@@ -8,7 +12,7 @@
       <span class="icon">
         <i class="fa fa-download"></i>
       </span>
-      <span>Download search results</span>
+      <span><%= @search.searching_by_conditions? ? "Download search results" : "Download data" %></span>
     <% end %>
   </div>
 </div>
@@ -35,4 +39,9 @@
     </div>
   <% end %>
   <%= paginate results %>
+  <% if results.any? %>
+    <div class="pagination-info">
+      <%= results.offset_value + 1 %> - <%= results.offset_value + results.length %> of <%= results.total_count %>
+    </div>
+  <% end %>
 </div>

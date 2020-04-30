@@ -511,3 +511,47 @@ h3 {
     }
   }
 }
+
+.pagination {
+  display: block !important;
+  text-align: left;
+  margin: 1.5em 0 1em;
+
+  .page.current, .page a, .next {
+    display: inline-block;
+    margin-right: 10px;
+    border-radius: 2px;
+    border: 1px solid $darkgrey;
+    height: 2.5em;
+    width: 2.5em;
+    overflow: hidden;
+    text-align: center;
+    line-height: 2.5em;
+    font-weight: 400;
+
+    &:focus,
+    &:hover {
+      background: $teal !important;
+      color: #fff !important;
+    }
+
+    &:focus {
+      outline: 2px solid $yellow !important;
+      outline-offset: 2px !important;
+    }
+
+    &.current {
+      background: $teal !important;
+      color: #fff !important;
+    }
+
+    &.next {
+      text-indent: -9999px;
+      overflow: hidden;
+    }
+  }
+
+  .last, .first, .gap {
+    display: none !important;
+  }
+}

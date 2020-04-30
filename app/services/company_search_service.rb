@@ -9,7 +9,7 @@ class CompanySearchService
   end
 
   def perform
-    companies = if [@form.statement_keywords, @form.company_name, @where].any?(&:present?)
+    companies = if searching_by_conditions?
       search_by_conditions
     else
       search_all
@@ -23,6 +23,10 @@ class CompanySearchService
         keywords: keyword_stats
       }
     }
+  end
+
+  def searching_by_conditions?
+    [@form.statement_keywords, @form.company_name, @where].any?(&:present?)
   end
 
   private
