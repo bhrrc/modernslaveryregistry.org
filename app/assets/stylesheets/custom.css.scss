@@ -145,17 +145,21 @@ $lightblue: #dfeaf1;
 
 .form-label--visuallyhidden {
   opacity: 0;
+  height: 1px;
 }
 
 .search-row {
   display: flex;
   align-items: stretch;
-  justify-content: space-between;
   flex-wrap: wrap;
   margin: 0 -7.5px;
 
+  .search-column {
+    margin-top: 1em;
+  }
+
   & + .search-row {
-    margin-top: 1.5em;
+    margin-top: 0.5em;
   }
 }
 
