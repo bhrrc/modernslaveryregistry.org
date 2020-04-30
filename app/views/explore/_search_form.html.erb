@@ -30,7 +30,6 @@
               params[:keywords]
             ),
             {
-              include_blank: true,
               multiple: true,
               class: 'keywords-select'
             }
@@ -44,14 +43,14 @@
 
         <div class="radios radios--inline">
           <div class="radio">
-            <%= radio_button_tag :keyword_method, :contain, params[:keyword_method] != "not_contain", id: "search-keyword-method-contain" %>
-            <label for="search-keyword-method-contain" class="form-label">
+            <%= radio_button_tag :include_keywords, :yes, params[:include_keywords] != "no", id: "search-include-keywords-yes" %>
+            <label for="search-include-keywords-yes" class="form-label">
               Show results mentioning keywords
             </label>
           </div>
           <div class="radio">
-            <%= radio_button_tag :keyword_method, :not_contain, params[:keyword_method] == "not_contain", id: "search-keyword-method-not-contain" %>
-            <label for="search-keyword-method-not-contain" class="form-label">
+            <%= radio_button_tag :include_keywords, :no, params[:include_keywords] == "no", id: "search-include-keywords-not-no" %>
+            <label for="search-include-keywords-not-no" class="form-label">
               Show results not mentioning keywords
             </label>
           </div>
@@ -74,7 +73,6 @@
               params[:industries]
             ),
             {
-              include_blank: true,
               multiple: true,
               class: 'multiple-select',
               id: "search-industries",
@@ -98,7 +96,6 @@
               params[:legislations]
             ),
             {
-              include_blank: true,
               multiple: true,
               class: 'multiple-select',
               id: "search-legislations",
@@ -122,7 +119,6 @@
             params[:countries]
           ),
           {
-            include_blank: true,
             multiple: true,
             class: 'multiple-select',
             id: "search-countries",
