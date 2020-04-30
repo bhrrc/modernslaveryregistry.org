@@ -1,4 +1,4 @@
-<%= form_tag explore_path, enforce_utf8: false, method: :get, class: 'statements-search-form' do %>
+<%= form_tag explore_path, enforce_utf8: false, method: :get, class: "statements-search-form", "aria-hidden": @results.present? && @results.total_count == 0 ? "false" : "true" do %>
   <h5>
     Find a company
   </h5>

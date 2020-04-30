@@ -1,3 +1,18 @@
+<div class="results-heading">
+  <div class="results-heading__title">
+    
+  </div>
+
+  <div class="results-heading__download">
+    <%= link_to @download_url, class: 'form-csv-download' do %>
+      <span class="icon">
+        <i class="fa fa-download"></i>
+      </span>
+      <span>Download search results</span>
+    <% end %>
+  </div>
+</div>
+
 <div class="explore_companies_results">
   <% results.each do |result| %>
     <div class="columns" data-content="company">

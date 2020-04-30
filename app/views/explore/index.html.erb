@@ -3,31 +3,42 @@
 <div class="section section--grey">
   <div class="container">
     <%= render partial: 'search_form' %>
+
+    <% if @results.present? && @results.total_count > 0 %>
+      <div class="search-results-header">
+        <h3>
+          Search results
+        </h3>
+
+        <h5>
+          Search criteria <%= link_to "Change search criteria", explore_path, class: "change-search-criteria" %>
+        </h5>
+
+        <%= render "search_criteria" %>
+      </div>
+    <% end %>
   </div>
 </div>
 
 <section class="section">
   <div class="container">
-    <div class="columns">
-      <div class="column">
-        <div class="box" data-content="company_search_results">
-          <% if @results.any? %>
-            <%= render partial: 'results', locals: { results: @results, search: @search } %>
-          <% else %>
-            <h2 class="title is-2">No companies found</h2>
-            <p>
-              We couldn't find a company matching your search.
-              If you think the registry is missing a statement for a company,
-              you can help by submitting a link to the statement.
-            </p>
-            <br>
-            <p>
-              <%= link_to 'Submit a statement', new_company_path,
-                class: 'button is-medium is-primary' %>
-            </p>
-          <% end %>
-        </div>
+    <div class="search-results">
+      <div class="search-results__results">
+        <% if @results.any? %>
+          <%= render partial: 'results', locals: { results: @results, search: @search } %>
+        <% else %>
+          <p>Search criteria</p>
+          <%= render "search_criteria" %>
+          <br>
+          <h5>0 search results</h5>
+          <p>
+            Please check your spelling. If you think your spelling is correct, we may not have a statement for the company you are looking for.
+          </p>
+        <% end %>
       </div>
+      <% if @results.any? %>
+        <%= render "sidebar" %>
+      <% end %>
     </div>
   </div>
 </section>

@@ -8,4 +8,11 @@ $(document).ready(function() {
       placeholder: $(this).data("placeholder")
     }).addClass("colored-select2").addClass($(this).data("color"));
   });
+
+  $(document).on("click", ".change-search-criteria", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    $(".statements-search-form").attr("aria-hidden", "false");
+  });
 })

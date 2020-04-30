@@ -84,6 +84,16 @@ $lightblue: #dfeaf1;
 
 // FORMS
 
+.statements-search-form {
+  &[aria-hidden="true"] {
+    display: none;
+  }
+
+  &[aria-hidden="false"] + .search-results-header {
+    display: none;
+  }
+}
+
 .form-group {
   border: none;
   padding: 0;
@@ -355,6 +365,11 @@ h5 {
   font-size: 1.25em;
 }
 
+h3 {
+  font-weight: 600;
+  font-size: 2em;
+  margin-bottom: 0.65em;
+}
 
 // SELECT2
 
@@ -475,5 +490,20 @@ h5 {
 .colored-select2.blue + .select2-container {
   .select2-selection__choice {
     background-color: $lightblue !important;
+  }
+}
+
+.search-results-header {
+  h5 {
+    font-weight: 400;
+
+    a {
+      font-size: 1rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-left: 20px;
+      text-decoration: underline;
+      
+    }
   }
 }
