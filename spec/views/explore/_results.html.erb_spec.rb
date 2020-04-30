@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'explore/_search_form.html.erb', type: :view do
+RSpec.describe 'explore/_results.html.erb', type: :view do
   context 'when there are no results' do
     before do
       assign(:results, [])
