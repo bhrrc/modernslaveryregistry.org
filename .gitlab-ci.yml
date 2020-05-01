@@ -39,9 +39,6 @@ test:
     paths:
       - vendor/bundler
 
-include:
-  - template: Code-Quality.gitlab-ci.yml
-
 deploy_staging:
   stage: staging
   image: bitzesty/aws-ebcli
