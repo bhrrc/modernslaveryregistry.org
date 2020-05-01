@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg15"
+   version="1.1"
+   height="32"
+   width="32">
+  <metadata
+     id="metadata21">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs19" />
+  <g
+     id="g7">
+    <title
+       id="title4">background</title>
+    <rect
+       x="-1"
+       y="-1"
+       width="582"
+       height="402"
+       id="canvas_background"
+       fill="none" />
+  </g>
+  <g
+     transform="matrix(-1,0,0,1,33,0)"
+     id="g13">
+    <title
+       id="title9"
+       stroke="#13b3a6">Layer 1</title>
+    <line
+       style="fill:none;stroke:#13b3a6;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+       class="cls-1"
+       x1="21"
+       x2="12"
+       y1="16"
+       y2="25"
+       id="svg_1" />
+    <line
+       style="fill:none;stroke:#13b3a6;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+       class="cls-1"
+       x1="12"
+       x2="21"
+       y1="7"
+       y2="16"
+       id="svg_2" />
+  </g>
+</svg>

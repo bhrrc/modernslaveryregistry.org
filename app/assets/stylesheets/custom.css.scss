@@ -169,6 +169,9 @@ $lightblue: #dfeaf1;
   vertical-align: bottom;
   min-width: 350px;
   margin: 0 7.5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .search-column--double {
@@ -515,9 +518,9 @@ h3 {
 .pagination {
   display: block !important;
   text-align: left;
-  margin: 1.5em 0 1em;
+  margin: 2em 0 1em;
 
-  .page.current, .page a, .next {
+  .page.current, .page a, .next, .prev {
     display: inline-block;
     margin-right: 10px;
     border-radius: 2px;
@@ -528,11 +531,12 @@ h3 {
     text-align: center;
     line-height: 2.5em;
     font-weight: 400;
+    cursor: pointer;
 
     &:focus,
     &:hover {
-      background: $teal !important;
-      color: #fff !important;
+      border-color: $teal !important;
+      color: $teal !important;
     }
 
     &:focus {
@@ -548,10 +552,214 @@ h3 {
     &.next {
       text-indent: -9999px;
       overflow: hidden;
+      background-image: image-url("chevron-right.svg");
+      background-size: 24px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    &.prev, 
+    &.previous {
+      text-indent: -9999px;
+      overflow: hidden;
+      background-image: image-url("chevron-left.svg");
+      background-size: 24px;
+      background-repeat: no-repeat;
+      background-position: center;
     }
   }
 
   .last, .first, .gap {
     display: none !important;
+  }
+}
+
+.results-heading {
+  margin: 1em 0;
+  font-size: 1.11111em;
+
+  &:after {
+    content: " ";
+    clear: both;
+    display: table;
+    zoom: 1;
+  }
+}
+
+.results-heading__title {
+  float: left;
+  margin-right: 2em;
+  font-size: 1.111111em;
+
+  @media (max-width: 767px) {
+    float: none;
+  }
+}
+
+.results-heading__download {
+  float: right;
+
+  @media (max-width: 767px) {
+    float: none;
+    margin-top: 1em;
+  }
+}
+
+.explore_companies_results {
+  width: 100%;
+  border-collapse: separate;
+  font-size: 1.111111em;
+
+  th,
+  td {
+    padding: 1.25em 1em;
+    font-size: 1em;
+
+    a {
+      font-weight: 400;
+      text-decoration: underline;
+      
+      &:hover,
+      &:focus {
+        color: darken($teal, 5%);
+      }
+
+      &:focus {
+        outline: 2px solid $yellow;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  th {
+    background: $grey;
+    font-weight: 600;
+    border-top: 1px solid $darkgrey;
+    font-size: 1.11111em;
+
+    @media (min-width: 768px) {
+      &:first-child {
+        border-left: 1px solid $darkgrey;
+        border-top-left-radius: 5px;
+      }
+
+      &:last-child {
+        border-right: 1px solid $darkgrey;
+        border-top-right-radius: 5px;
+      }
+    }
+  }
+  
+  @media (min-width: 768px) {
+    tr:nth-child(even) {
+      td:first-child {
+        border-left: 1px solid $darkgrey;
+      }
+      td:last-child {
+        border-right: 1px solid $darkgrey;
+      }
+    }
+    tr:nth-child(odd) {
+      td:first-child {
+        border-left: 1px solid $darkgrey;
+      }
+      td:last-child {
+        border-right: 1px solid $darkgrey;
+      }
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 1px solid $darkgrey;
+
+      &:first-child {
+        border-left: 1px solid $darkgrey;
+        border-bottom-left-radius: 5px;
+      }
+
+      &:last-child {
+        border-right: 1px solid $darkgrey;
+        border-bottom-right-radius: 5px;
+      }
+    }
+  }
+
+  tbody tr:nth-child(even) td {
+    background: $grey;
+  }
+
+
+  @media (max-width: 767px) {
+    table, thead, tbody, th, td, tr { 
+      display: block; 
+    }
+    
+    /* Hide table headers (but not display: none;, for accessibility) */
+    thead tr { 
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    tr { border: 1px solid #ccc; }
+    
+    td { 
+      /* Behave  like a "row" */
+      border: none;
+      border-bottom: 1px solid #eee; 
+      position: relative;
+      padding-left: 50%; 
+    }
+    
+    td:before { 
+      /* Now like a table header */
+      position: absolute;
+      /* Top/left values mimic padding */
+      top: 6px;
+      left: 6px;
+      width: 45%; 
+      padding: 1em; 
+      white-space: nowrap;
+      content: attr(data-heading);
+      font-weight: 600;
+    }
+  }
+}
+
+.pagination-info {
+  margin: 0.5em 0;
+  color: #999;
+}
+
+.search-results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0 -15px;
+}
+
+.search-results__results {
+  flex: 1 1 auto;
+  margin: 0 15px;
+  width: calc(100% - 360px);
+
+  @media (max-width: 991px) {
+    width: 100%;
+    order: 3;
+  }
+}
+
+.search-results__sidebar {
+  flex: 0 0 auto;
+  width: 300px;
+  background: $grey;
+  border-radius: 5px;
+  padding: 1em;
+  align-self: flex-start;
+  margin: 0 15px;
+  
+  @media (max-width: 991px) {
+    flex: 1;
+    max-width: 500px;
+    margin-bottom: 2em;
   }
 }

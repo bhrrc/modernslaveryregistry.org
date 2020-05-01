@@ -1,0 +1,35 @@
+<div class="search-criteria">
+  <% unless params[:company_name].blank? %>
+    <button class="pill pill--blue" data-for="company_name" title="Click to remove company name filter"><%= params[:company_name] %></button>
+  <% end %>
+
+  <% if params[:keywords].any? %>
+    <% params[:keywords].each do |keyword| %>
+      <button class="pill pill--green" data-for="keywords" title="Click to remove <%= keyword %> from keywords filter"><%= keyword.humanize %></button>
+    <% end %>
+  <% end %>
+
+  <% if params[:industries].any? %>
+    <% params[:industries].each do |industry_id| %>
+      <% industry = Industry.find(industry_id) %>
+
+      <button class="pill pill--yellow" data-for="industries" title="Click to remove <%= industry.name %> from industry filter"><%= industry.name %></button>
+    <% end %>
+  <% end %>
+
+  <% if params[:legislations].any? %>
+    <% params[:legislations].each do |legislation_id| %>
+      <% legislation = Legislation.find(legislation_id) %>
+
+      <button class="pill pill--purple" data-for="legislations" title="Click to remove <%= legislation.name %> from legislation filter"><%= legislation.name %></button>
+    <% end %>
+  <% end %>
+
+  <% if params[:countries].any? %>
+    <% params[:countries].each do |country_id| %>
+      <% country = Country.find(country_id) %>
+
+      <button class="pill pill--blue" data-for="countries" title="Click to remove <%= country.name %> from country filter"><%= country.name %></button>
+    <% end %>
+  <% end %>
+</div>
