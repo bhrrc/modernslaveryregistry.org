@@ -417,7 +417,7 @@ DEPENDENCIES
   leaflet-rails
   pg (~> 0.18)
   pry
-  puma (~> 4.3)
+  puma (~> 4.3.3)
   pundit
   rails (~> 5.2.0)
   rails-controller-testing
