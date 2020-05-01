@@ -41,6 +41,7 @@ test:
 
 deploy_staging:
   stage: staging
+  resource_group: aws
   image: bitzesty/aws-ebcli
   script:
     - eb --version
@@ -57,6 +58,7 @@ deploy_staging:
 
 deploy_production:
   stage: production
+  resource_group: aws
   image: bitzesty/aws-ebcli
   script:
     - eb --version
