@@ -172,6 +172,10 @@ $lightblue: #dfeaf1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+
+  .search-row--align-top & {
+    justify-content: flex-start;
+  }
 }
 
 .search-column--double {
