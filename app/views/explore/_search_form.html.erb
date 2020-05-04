@@ -1,4 +1,4 @@
-<%= form_tag explore_path, enforce_utf8: false, method: :get, class: "statements-search-form", "aria-hidden": params[:company_name].present? && @results.any? ? "true" : "false" do %>
+<%= form_tag explore_path, enforce_utf8: false, method: :get, class: "statements-search-form", "aria-hidden": @search.searching_by_conditions? && @results.any? ? "true" : "false" do %>
   <h5>
     Find a company
   </h5>

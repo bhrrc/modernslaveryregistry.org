@@ -9,9 +9,6 @@
 
   <div class="results-heading__download">
     <%= link_to @download_url, class: 'form-csv-download' do %>
-      <span class="icon">
-        <i class="fa fa-download"></i>
-      </span>
       <span><%= @search.searching_by_conditions? ? "Download search results" : "Download data" %></span>
     <% end %>
   </div>

@@ -4,7 +4,7 @@
   <div class="container">
     <%= render partial: 'search_form' %>
   
-    <% if params[:company_name].present? %>
+    <% if @search.searching_by_conditions? %>
       <div class="search-results-header">
         <h3>
           Search results
