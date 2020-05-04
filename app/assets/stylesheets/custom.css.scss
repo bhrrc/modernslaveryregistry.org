@@ -411,6 +411,10 @@ h3 {
   padding: 0.25em 0.5em !important;
 }
 
+.select2-results__option[role="group"] {
+  padding: 0.5em 0 !important;
+}
+
 .select2-results__option .select2-results__option {
   
 }
@@ -425,7 +429,7 @@ h3 {
 }
 
 .select2-results__group {
-
+  padding: 0.25em 0.5em !important;
 }
 
 .select2-results__options.select2-results__options--nested {

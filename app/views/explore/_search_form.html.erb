@@ -24,10 +24,10 @@
         <label for="search-keywords" class="form-label">Keyword(s) mentioned in statements</label>
         <%=
           select_tag(
-            'keywords[]',
+            'statement_keywords[]',
             grouped_options_for_select(
               [["Suggested keywords", CompanySearchForm::KEYWORD_VALUES.map(&:humanize)]],
-              params[:keywords]
+              params[:statement_keywords]
             ),
             {
               multiple: true,

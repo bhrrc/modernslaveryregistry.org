@@ -3,9 +3,9 @@
     <button class="pill pill--blue" data-for="company_name" title="Click to remove company name filter"><%= params[:company_name] %></button>
   <% end %>
 
-  <% if params[:keywords]&.any? %>
-    <% params[:keywords].each do |keyword| %>
-      <button class="pill pill--green" data-for="keywords" data-value="<%= keyword %>" title="Click to remove <%= keyword %> from keywords filter"><%= keyword.humanize %></button>
+  <% if params[:statement_keywords]&.any? %>
+    <% params[:statement_keywords].each do |keyword| %>
+      <button class="pill pill--green" data-for="statement_keywords" data-value="<%= keyword %>" title="Click to remove <%= keyword %> from keywords filter"><%= keyword.humanize %></button>
     <% end %>
   <% end %>
 
