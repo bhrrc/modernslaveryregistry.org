@@ -29,6 +29,12 @@ class CompanySearchService
     [@form.statement_keywords, @form.company_name, @where].any?(&:present?)
   end
 
+  def filtering_only_by_company_name?
+    !@form.company_name.empty? && 
+        (@form.statement_keywords.nil? || @form.statement_keywords.empty?) && 
+        (@where.nil? || @where.empty?)
+  end
+
   private
 
   def calculate_keywords_stats(total_count)

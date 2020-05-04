@@ -4,7 +4,7 @@
   <div class="container">
     <%= render partial: 'search_form' %>
   
-    <% if params[:company_name].present? %>
+    <% if @search.searching_by_conditions? %>
       <div class="search-results-header">
         <h3>
           Search results
@@ -31,9 +31,15 @@
           <%= render "search_criteria" %>
           <br>
           <h5>0 search results</h5>
-          <p>
-            Please check your spelling. If you think your spelling is correct, we may not have a statement for the company you are looking for.
-          </p>
+          <% if @search.filtering_only_by_company_name? %>
+            <p>
+              Please check your spelling. If you think your spelling is correct, we may not have a statement for the company you are looking for.
+            </p>
+          <% else %>
+            <p>
+              Please check your spelling or consider having fewer search criteria.
+            </p>
+          <% end %>
         <% end %>
       </div>
       <% if @results.any? %>

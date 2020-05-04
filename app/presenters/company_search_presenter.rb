@@ -22,6 +22,10 @@ class CompanySearchPresenter
     @service.searching_by_conditions?
   end
 
+  def filtering_only_by_company_name?
+    @service.filtering_only_by_company_name?
+  end
+
   def statement_count_for(company)
     return company.published_statements.count if @form.legislations.blank?
 

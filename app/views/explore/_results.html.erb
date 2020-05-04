@@ -9,39 +9,52 @@
 
   <div class="results-heading__download">
     <%= link_to @download_url, class: 'form-csv-download' do %>
-      <span class="icon">
-        <i class="fa fa-download"></i>
-      </span>
       <span><%= @search.searching_by_conditions? ? "Download search results" : "Download data" %></span>
     <% end %>
   </div>
 </div>
 
-<div class="explore_companies_results">
+<table class="explore_companies_results">
+  <colgroup>
+    <col width="400">
+    <col width="250">
+    <col width="120">
+    <col width="200">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Statements</th>
+      <th>Industry</th>
+      <th>Region/Country</th>
+    </tr>
+  </thead>
+  <tbody>
   <% results.each do |result| %>
-    <div class="columns" data-content="company">
-      <div class="column">
+    <tr>
+      <td data-heading="Company">
         <%= link_to(result.name, company_path(result), {'data-content': 'name'}) %>
-      </div>
-      <div class="column" data-content="country">
-        <%= result.country_name %>
-      </div>
-      <div class="column" data-content="industry">
-        <%= result.industry_name %>
-      </div>
-      <div class="column" data-content="statements">
+      </td>
+      <td data-heading="Statements">
         <% if result.all_statements.empty? %>
-        <%= link_to 'Submit statement', new_company_statement_path(result) %>
+          <%= link_to 'Submit statement', new_company_statement_path(result) %>
         <% else %>
-        <%= link_to pluralize(search.statement_count_for(result), 'statement'), company_path(result)  %>
+          <%= link_to pluralize(search.statement_count_for(result), 'statement'), company_path(result)  %>
         <% end %>
-      </div>
-    </div>
+      </td>
+      <td data-heading="Industry">
+        <%= result.industry_name %>
+      </td>
+      <td data-heading="Region/Country">
+        <%= result.country_name %>
+      </td>
+    </tr>
   <% end %>
-  <%= paginate results %>
-  <% if results.any? %>
-    <div class="pagination-info">
-      <%= results.offset_value + 1 %> - <%= results.offset_value + results.length %> of <%= results.total_count %>
-    </div>
-  <% end %>
-</div>
+  </tbody>
+</table>
+<%= paginate results %>
+<% if results.any? %>
+  <div class="pagination-info">
+    <%= results.offset_value + 1 %> - <%= results.offset_value + results.length %> of <%= results.total_count %>
+  </div>
+<% end %>

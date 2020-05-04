@@ -30,7 +30,7 @@ class CompanySearchForm
 
   def initialize(params = {})
     @company_name = params.fetch(:company_name, nil).presence
-    @statement_keywords = params.fetch(:statement_keywords, nil).presence&.split(',')&.map(&:strip)
+    @statement_keywords = params.fetch(:statement_keywords, nil).presence&.map(&:strip)
     # TODO: include_keywords - default value
     @include_keywords = (params.fetch(:include_keywords, nil).presence || INCLUDE_KEYWORDS_VALUE) == INCLUDE_KEYWORDS_VALUE
 

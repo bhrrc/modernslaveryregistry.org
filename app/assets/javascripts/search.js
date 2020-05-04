@@ -15,4 +15,51 @@ $(document).ready(function() {
 
     $(".statements-search-form").attr("aria-hidden", "false");
   });
+
+  var isRemovingFilterFromCriteria = false;
+
+  $(document).on("click", ".pill", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isRemovingFilterFromCriteria) {
+      return;
+    }
+
+    isRemovingFilterFromCriteria = true;
+
+    var value = $(this).data("value");
+
+    if (value) {
+      var fieldFor = $("select[name*='" + $(this).data("for") + "']");
+
+      var selections = fieldFor.select2("data");
+
+      var index = -1;
+
+      selections.forEach(function(selection, i) {
+        if (selection.text == value) {
+          index = i;
+        }
+      });
+
+      if (index > -1) {
+        selections.splice(index, 1);
+
+        fieldFor.val(selections);
+        fieldFor.trigger("change");
+
+        setTimeout(function() {
+          $(".statements-search-form").submit();
+        }, 1);
+      }
+    } else {
+      var fieldFor = $("[name*='" + $(this).data("for") + "']");
+      fieldFor.val("");
+
+      setTimeout(function() {
+        $(".statements-search-form").submit();
+      }, 1);
+    }
+  });
 })
