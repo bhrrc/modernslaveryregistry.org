@@ -45,7 +45,7 @@ class Company < ApplicationRecord
       begin
         {
           id: statement.id,
-          content: Yomu.read(:text, statement.snapshot.screenshot_or_original.download),
+          content: Henkei.read(:text, statement.snapshot.screenshot_or_original.download),
           first_year_covered: statement.first_year_covered,
           last_year_covered: statement.last_year_covered,
         }

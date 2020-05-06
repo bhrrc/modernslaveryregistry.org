@@ -33,7 +33,7 @@ gem 'values'
 gem 'wkhtmltoimage-binary'
 gem 'scout_apm'
 gem 'searchkick'
-gem 'yomu', git: 'https://gitlab.bitzesty.com/open-source/yomu.git'
+gem 'henkei', git: 'https://github.com/bitzesty/henkei'
 
 group :development, :test do
   gem 'byebug', platform: :mri
