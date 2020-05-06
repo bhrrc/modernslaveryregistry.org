@@ -46,7 +46,11 @@ $(document).ready(function() {
       if (index > -1) {
         selections.splice(index, 1);
 
-        fieldFor.val(selections);
+        var ids = selections.map(function(selection) {
+          return selection.id;
+        });
+
+        fieldFor.val(ids);
         fieldFor.trigger("change");
 
         setTimeout(function() {
