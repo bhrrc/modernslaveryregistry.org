@@ -1,22 +1,114 @@
 <div class="search-results__sidebar">
   <h3>Stats for the companies displayed</h3>
-  <h5>Compliance with minimum requirements</h5>
-  <p>
-    These figures are based on the most recent 7637 statements from all companies publishing under the UK Modern Slavery Act in our register. They were last updated on 17th March 2020.
-  </p>
-  <br>
-  <div class="stats">
-    <dl class="title-like">
-      <dt>
-        Meet all minimum requirements
-      </dt>
-      <dd>
-        1756 (23%)
-      </dd>
-    </dl>
-    <dl>
-      <dt>Have a statement published on the company's website with a link on the homepage</dt>
-      <dv></dv>
-    </dl>
-  </div>
+
+  <% if display_sidebar_below_threshold? %>
+    <h5>Compliance with minimum requirements</h5>
+    <p>
+      For legal reasons, we only show compliance for search results above 5 companies.
+    </p>
+  <% end %>
+
+  <% if display_sidebar_only_modern_slavery? %>
+    <h5>Compliance with minimum requirements</h5>
+    <p>
+      Please note that we only show compliance data for the UK Modern Slavery Act.
+    </p>
+  <% end %>
+
+  <% if display_statement_stats? %>
+    <p>
+      These figures are based on the most recent <%= @compliance_stats.total %> statements from all companies publishing under the <strong>UK Modern Slavery Act</strong> in our register. They were last updated on <strong><%= @compliance_stats.updated_at.strftime("#{@compliance_stats.updated_at.day.ordinalize} %b %Y") %></strong>.
+    </p>
+    <div class="stats">
+      <dl class="title-like">
+        <dt>
+          Meet all minimum requirements
+        </dt>
+        <dd>
+          <%= @compliance_stats.fully_compliant_count %> (<%= @compliance_stats.percent_fully_compliant %>%)
+        </dd>
+      </dl>
+      <dl>
+        <dt>Have a statement published on the company's website with a link on the homepage</dt>
+        <dd><%= @compliance_stats.link_on_front_page_count %> (<%= @compliance_stats.percent_link_on_front_page %>%)</dd>
+      </dl>
+      <dl>
+        <dt>Statements are signed by director or equivalent</dt>
+        <dd><%= @compliance_stats.signed_by_director_count %> (<%= @compliance_stats.percent_signed_by_director %>%)</dd>
+      </dl>
+      <dl>
+        <dt>Explicit approval by the board is included in the statement</dt>
+        <dd><%= @compliance_stats.approved_by_board_count %> (<%= @compliance_stats.percent_approved_by_board %>%)</dd>
+      </dl>
+    </div>
+  <% end %>
+  
+  <% if display_sidebar_keyword_mentions? %>
+    <div class="white-divider"></div>
+
+    <h5>Keyword mentions in statements</h5>
+
+    <p>The inclusion of keywords may suggest a disclosure of risks. While this may be the case, we still recommend reading the actual statement to check the facts.</p>
+
+    <% @search.stats[:keywords].each do |keyword, stat| %>
+    <div class="stats">
+      <dl class="full-length">
+        <dt>
+          <strong>
+            '<span class="purple"><%= keyword %></span>' mentioned in statements
+          </strong>
+        </dt>
+      </dl>
+      <dl>
+        <dt>No of companies that mention</dt>
+        <dd><%= stat[:mentioned] %></dd>
+      </dl>
+      <dl>
+        <dt>No of companies that <strong>don't</strong> mention</dt>
+        <dd><%= stat[:not_mentioned] %></dd>
+      </dl>
+    </div>
+    <% end %>
+  <% end %>
+
+  <% if display_sidebar_risks_industry? %>
+    <div class="white-divider"></div>
+
+    <h5>Risks with the industry</h5>
+    <p>These are risks generally associated with the industry. They are not scoped to the search results.</p>
+
+    <div class="stats">
+      <dl class="full-length">
+        <dt>
+          <strong>
+            Banks
+          </strong>
+        </dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Excessive overtime</dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Poor working conditions</dt>
+      </dl>
+    </div>
+
+    <div class="stats">
+      <dl class="full-length">
+        <dt>
+          <strong>
+            Oil, Gas & Consumable Fuels
+          </strong>
+        </dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Bonded laboure</dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Non-payment of wages</dt>
+      </dl>
+    </div>
+  <% end %>
+
+  
 </div>
