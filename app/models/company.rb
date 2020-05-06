@@ -41,7 +41,7 @@ class Company < ApplicationRecord
   }
 
   def statements_with_content
-    all_statements.map do |statement|
+    published_statements.map do |statement|
       begin
         {
           id: statement.id,
