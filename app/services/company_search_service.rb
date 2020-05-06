@@ -35,6 +35,14 @@ class CompanySearchService
         (@where.nil? || @where.empty?)
   end
 
+  def modern_slavery_act?
+    return false unless @form.legislations.present?
+
+    @msa ||= Legislation.find_by(name: "UK Modern Slavery Act")
+
+    @form.legislations.include?(@msa.id.to_s)
+  end
+
   private
 
   def calculate_keywords_stats(total_count)

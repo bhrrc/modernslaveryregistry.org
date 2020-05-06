@@ -26,6 +26,10 @@ class CompanySearchPresenter
     @service.filtering_only_by_company_name?
   end
 
+  def modern_slavery_act?
+    @service.modern_slavery_act?
+  end
+
   def statement_count_for(company)
     return company.published_statements.count if @form.legislations.blank?
 

@@ -7,6 +7,7 @@ class ExploreController < ApplicationController
         @download_url = build_csv_url
         @search = search
         @results = search.companies
+        @compliance_stats = ComplianceStats.new
       end
       format.csv do
         send_csv
