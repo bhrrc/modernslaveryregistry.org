@@ -141,11 +141,12 @@ a {
   input[type="search"],
   input[type="password"],
   textarea {
-    padding: 0.75em;
+    padding: 0.5em;
     border: 1px solid $darkgrey;
-    border-radius: 2px;
+    border-radius: 4px !important;
     background: #fff;
     color: #333;
+    font-size: 1rem;
 
     &:focus {
       outline: 2px solid $yellow;
@@ -158,7 +159,7 @@ a {
     display: block;
   }
 
-  input[type="search"] {
+  input.search {
     background-image: image-url("search.svg");
     background-size:  24px;
     background-repeat: no-repeat;
@@ -986,4 +987,43 @@ h3 {
   height: 5px;
   background: #fff;
   margin: 1em 0;
+}
+
+p {
+  max-width: 750px;
+}
+
+.submit-statement {
+  background: $grey;
+  padding: 1.5em;
+  max-width: 750px;
+  margin-top: 2.5em;
+  margin-bottom: 2em;
+
+  h5 {
+    margin-bottom: 1em;
+  }
+}
+
+.button--outline {
+  border: 2px solid $teal;
+  color: $teal;
+  background: transparent;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 0.75em 1.5em;
+  transition: all 100ms ease-out;
+
+  &:hover,
+  &:focus {
+    background: $teal;
+    color: #fff;
+    border-color: $teal;
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: 2px solid $yellow;
+    outline-offset: 2px;
+  }
 }

@@ -5,7 +5,7 @@
 
   <% if params[:statement_keywords]&.any? %>
     <% params[:statement_keywords].each do |keyword| %>
-      <button class="pill pill--green" data-for="statement_keywords" data-value="<%= keyword %>" title="Click to remove <%= keyword %> from keywords filter"><%= keyword.humanize %></button>
+      <button class="pill pill--green" data-for="statement_keywords" data-value="<%= keyword %>" title="Click to remove <%= keyword %> from keywords filter"><%= CompanySearchForm::KEYWORD_VALUES.include?(keyword) ? t("explore.statement_keywords.#{keyword}") : keyword %></button>
     <% end %>
   <% end %>
 

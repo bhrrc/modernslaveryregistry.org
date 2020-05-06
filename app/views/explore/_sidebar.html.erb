@@ -1,6 +1,12 @@
 <div class="search-results__sidebar">
   <h3>Stats for the companies displayed</h3>
 
+  <% if display_filtering_by_company_name? %>
+    <p>
+      For legal reasons, we only show compliance statistics for keyword, industry or regional searches.
+    </p>
+  <% end %>
+
   <% if display_sidebar_below_threshold? %>
     <h5>Compliance with minimum requirements</h5>
     <p>
@@ -17,7 +23,7 @@
 
   <% if display_statement_stats? %>
     <p>
-      These figures are based on the most recent <%= @compliance_stats.total %> statements from all companies publishing under the <strong>UK Modern Slavery Act</strong> in our register. They were last updated on <strong><%= @compliance_stats.updated_at.strftime("#{@compliance_stats.updated_at.day.ordinalize} %b %Y") %></strong>.
+      These figures are based on the most recent <%= @compliance_stats.total %> statements from all companies publishing under the <strong>UK Modern Slavery Act</strong> in our register. They were last updated on <strong><%= @compliance_stats.updated_at.strftime("#{@compliance_stats.updated_at.day.ordinalize} %B %Y") %></strong>.
     </p>
     <div class="stats">
       <dl class="title-like">
@@ -29,7 +35,7 @@
         </dd>
       </dl>
       <dl>
-        <dt>Have a statement published on the company's website with a link on the homepage</dt>
+        <dt>Have a statement published on the company's website with a link on the home page</dt>
         <dd><%= @compliance_stats.link_on_front_page_count %> (<%= @compliance_stats.percent_link_on_front_page %>%)</dd>
       </dl>
       <dl>

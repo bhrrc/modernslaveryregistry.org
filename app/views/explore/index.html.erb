@@ -35,6 +35,11 @@
             <p>
               Please check your spelling. If you think your spelling is correct, we may not have a statement for the company you are looking for.
             </p>
+
+            <div class="submit-statement">
+              <h5>Submit the company's latest statement to the Registry.</h5>
+              <%= link_to 'Submit statement', new_company_path, class: 'button button--outline' %>
+            </div>
           <% else %>
             <p>
               Please check your spelling or consider having fewer search criteria.
