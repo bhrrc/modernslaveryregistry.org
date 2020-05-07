@@ -41,11 +41,11 @@ class Company < ApplicationRecord
   }
 
   def statements_with_content
-    published_statements.map do |statement|
+    published_statements.with_content_extracted.map do |statement|
       begin
         {
           id: statement.id,
-          content: Henkei.read(:text, statement.snapshot.screenshot_or_original.download),
+          content: statement.content_text,
           first_year_covered: statement.first_year_covered,
           last_year_covered: statement.last_year_covered,
         }

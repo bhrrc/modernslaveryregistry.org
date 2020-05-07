@@ -39,6 +39,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:link_on_front_page, -> { where(link_on_front_page: true) })
   scope(:signed_by_director, -> { where(signed_by_director: true) })
   scope(:fully_compliant, -> { approved_by_board.link_on_front_page.signed_by_director })
+  scope(:with_content_extracted, -> { where(content_extracted: true) })
 
   scope :produced_by_or_associated_with, lambda { |company|
     left_outer_joins(:additional_companies_covered)
@@ -186,6 +187,11 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def preview_url
     override_url || url
+  end
+
+  def extract_content_from_statement
+    # Don't want to trigger callbacks so that we can seperate indexing and content extraction
+    update_columns(content_text: Henkei.read(:text, snapshot.original.download), content_extracted: true)
   end
 
   private
