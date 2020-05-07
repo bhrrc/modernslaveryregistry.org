@@ -185,11 +185,11 @@ $ eb ssh
 
 ## Using production data in development
 
-NOTE. The version of the PostgreSQL client on the EC2 instances (9.2) doesn't match the version of PostgreSQL on RDS (9.6) so we need to upgrade the client tools before we can create a backup.
+NOTE. The version of the PostgreSQL client on the EC2 instances (9.2) doesn't match the version of PostgreSQL on RDS (11) so we need to upgrade the client tools before we can create a backup.
 
 ### Update PostgreSQL client on EC2 instances
 
-Run `psql --version` on the EC2 instance to print the current version. If it's not 9.6 you need to upgrade it.
+Run `psql --version` on the EC2 instance to print the current version. If it's not 11 you need to upgrade it.
 
 ```shell
 # Search for installed postgresql tools
@@ -201,8 +201,9 @@ postgresql92-9.2.24-2.66.amzn1.x86_64
 # Remove postgresql 9.2
 $ sudo rpm --erase postgresql92-devel postgresql92-libs postgresql92
 
-# Install postgresql 9.6
-$ sudo yum install postgresql96
+# Install postgresql 11
+$ sudo yum install -y https://download.postgresql.org/pub/repos/yum/11/redhat/rhel-6-x86_64/postgresql11-libs-11.4-1PGDG.rhel6.x86_64.rpm
+$ sudo yum install -y https://download.postgresql.org/pub/repos/yum/11/redhat/rhel-6-x86_64/postgresql11-11.4-1PGDG.rhel6.x86_64.rpm
 ```
 
 ### Download and import production data
