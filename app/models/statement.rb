@@ -191,7 +191,9 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def extract_content_from_statement
     # Don't want to trigger callbacks so that we can seperate indexing and content extraction
-    update_columns(content_text: Henkei.read(:text, snapshot.original.download), content_extracted: true)
+    if snapshot?
+      update_columns(content_text: Henkei.read(:text, snapshot.original.download), content_extracted: true)
+    end
   end
 
   private
