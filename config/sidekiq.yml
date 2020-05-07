@@ -1,6 +1,7 @@
 ---
-:concurrency: 3
+:concurrency: 6
 :queues:
-  - default
-  - mailers
+  - [default, 2]
+  - [mailers, 2]
   - searchkick
+  - extract
