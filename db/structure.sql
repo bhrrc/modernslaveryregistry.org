@@ -5,22 +5,9 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
 
 --
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
@@ -38,7 +25,7 @@ COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: active_storage_attachments; Type: TABLE; Schema: public; Owner: -
@@ -498,7 +485,9 @@ CREATE TABLE public.statements (
     last_year_covered integer,
     company_id bigint NOT NULL,
     override_url character varying,
-    home_office_audit boolean DEFAULT false
+    home_office_audit boolean DEFAULT false,
+    content_extracted boolean,
+    content_text text
 );
 
 
@@ -1100,6 +1089,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190304105224'),
 ('20190515183222'),
 ('20191019141132'),
-('20200319080812');
+('20200319080812'),
+('20200507104658');
 
 
