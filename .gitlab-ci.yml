@@ -49,10 +49,10 @@ deploy_staging:
     - echo -e "$MSR_PEM" > ~/.ssh/modern-slavery-registry.pem
     - chmod 600 ~/.ssh/modern-slavery-registry.pem
     - eb init modern-slavery-registry --region="eu-west-2" --keyname="modern-slavery-registry" --platform="ruby-2.4-(puma)"
-    - eb deploy msr-staging -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE" --timeout 20
+    - eb deploy msr-staging-clone -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE" --timeout 20
   environment:
     name: staging
-    url: http://msr-staging.eu-west-2.elasticbeanstalk.com/
+    url: http://msr-staging-clone.eu-west-2.elasticbeanstalk.com/
   when:
     manual
 
