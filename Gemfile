@@ -12,7 +12,7 @@ gem 'rails', '~> 5.2.0'
 gem 'puma', '~> 4.3.3'
 
 # Database
-gem 'pg', '~> 0.18'
+gem 'pg', '~> 1.2.3'
 
 # Assets
 gem 'chosen-rails'
