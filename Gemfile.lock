@@ -279,6 +279,7 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     redis (4.1.3)
+    redis-prescription (1.0.0)
     regexp_parser (1.6.0)
     responders (3.0.0)
       actionpack (>= 5.0)
@@ -352,6 +353,10 @@ GEM
       rack (>= 1.5.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.5, < 5)
+    sidekiq-throttled (0.11.0)
+      concurrent-ruby
+      redis-prescription
+      sidekiq
     sidekiq-undertaker (1.0.1)
       sidekiq (>= 5.2, < 7)
     spring (2.1.0)
@@ -440,6 +445,7 @@ DEPENDENCIES
   searchkick
   selenium-webdriver
   sidekiq (< 6)
+  sidekiq-throttled
   sidekiq-undertaker
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data

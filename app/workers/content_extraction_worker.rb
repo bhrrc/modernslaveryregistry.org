@@ -1,6 +1,13 @@
 class ContentExtractionWorker
   include Sidekiq::Worker
+  include Sidekiq::Throttled::Worker
+
   sidekiq_options retry: 0
+
+  sidekiq_throttle({
+    # Allow maximum 10 concurrent jobs of this class at a time.
+    :concurrency => { :limit => 4 },
+  })
 
   def perform(statement_id)
     statement = Statement.includes(:snapshot).find(statement_id)

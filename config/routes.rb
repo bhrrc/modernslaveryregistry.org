@@ -35,7 +35,9 @@ Rails.application.routes.draw do
   get 'pages/:id', to: 'pages#show', as: :page
 
   require 'sidekiq/web'
+  require "sidekiq/throttled/web"
   authenticate(:user, ->(u) { u.admin? }) do
+    Sidekiq::Throttled::Web.enhance_queues_tab!
     mount Sidekiq::Web => '/sidekiq'
   end
 

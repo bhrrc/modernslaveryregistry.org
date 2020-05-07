@@ -47,6 +47,7 @@ gem 'wkhtmltoimage-binary'
 # Background workers (redis)
 gem 'sidekiq', '< 6'
 gem "sidekiq-undertaker"
+gem "sidekiq-throttled"
 
 # Searching (ES)
 gem 'searchkick'
