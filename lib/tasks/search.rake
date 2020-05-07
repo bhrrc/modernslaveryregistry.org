@@ -6,7 +6,7 @@ namespace :search do
 
   desc 'download all statements and extract their text'
   task extract_statements: :environment do
-    Satement.where(content_extracted: false).find_each do |statement| 
+    Statement.where(content_extracted: false).find_each do |statement| 
       ContentExtractionWorker.perform_later(statement.id)
     end
   end
