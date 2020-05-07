@@ -434,7 +434,7 @@ DEPENDENCIES
   scout_apm
   searchkick
   selenium-webdriver
-  sidekiq
+  sidekiq (< 6)
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
   uglifier (>= 1.3.0)
