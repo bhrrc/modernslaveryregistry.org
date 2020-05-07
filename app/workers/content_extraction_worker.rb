@@ -6,8 +6,7 @@ class ContentExtractionWorker
 
   sidekiq_throttle({
     # Allow maximum 10 concurrent jobs of this class at a time.
-    :concurrency => { :limit => 16 },
-    :ttl => 20.minutes.to_i
+    :concurrency => { :limit => 16 }
   })
 
   def perform(statement_id)
