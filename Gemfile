@@ -31,13 +31,14 @@ gem 'pundit'
 
 # Misc
 gem 'jbuilder', '~> 2.5'
-gem 'json', '~> 2.3'
+gem 'oj'
+gem 'oj_mimic_json'
 gem 'rest-client'
 gem 'kaminari'
 gem 'acts_as_list'
 gem 'values' # https://github.com/tcrayford/Values
 gem 'rails-erd'
-gem 'aws-sdk-s3', require: false
+gem 'aws-sdk-s3', '~> 1', require: false
 
 # PDF generation / Screenshots
 gem 'imgkit'

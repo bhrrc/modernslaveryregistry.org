@@ -220,6 +220,8 @@ GEM
     nio4r (2.5.2)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
+    oj (3.10.6)
+    oj_mimic_json (1.0.1)
     orm_adapter (0.5.0)
     parallel (1.17.0)
     parser (2.7.1.2)
@@ -399,7 +401,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
-  aws-sdk-s3
+  aws-sdk-s3 (~> 1)
   bulma-rails (= 0.5.1)
   byebug
   capybara-email
@@ -414,10 +416,11 @@ DEPENDENCIES
   imgkit
   jbuilder (~> 2.5)
   jquery-rails
-  json (~> 2.3)
   kaminari
   launchy
   leaflet-rails
+  oj
+  oj_mimic_json
   pg (~> 1.2.3)
   pry
   puma (~> 4.3.3)
