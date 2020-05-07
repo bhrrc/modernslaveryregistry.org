@@ -6,34 +6,56 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'acts_as_list'
-gem 'aws-sdk-s3', require: false
-gem 'bulma-rails', '0.5.1'
-gem 'chartjs-ror'
+gem 'rails', '~> 5.2.0'
+
+# Web server
+gem 'puma', '~> 4.3.3'
+
+# Database
+gem 'pg', '~> 0.18'
+
+# Assets
 gem 'chosen-rails'
 gem 'coffee-rails', '~> 4.2'
-gem 'devise'
-gem 'imgkit'
-gem 'jbuilder', '~> 2.5'
+gem 'chartjs-ror'
+gem 'bulma-rails', '0.5.1'
 gem 'jquery-rails'
-gem 'json', '~> 2.3'
-gem 'kaminari'
 gem 'leaflet-rails'
-gem 'pg', '~> 0.18'
-gem 'puma', '~> 4.3.3'
-gem 'pundit'
-gem 'rails', '~> 5.2.0'
-gem 'rails-erd'
-gem 'rest-client'
-gem 'rollbar'
+
 gem 'sass-rails', '~> 5.0'
-gem 'sidekiq', '< 6'
 gem 'uglifier', '>= 1.3.0'
-gem 'values'
+
+# Authentication and authorization
+gem 'devise'
+gem 'pundit'
+
+# Misc
+gem 'jbuilder', '~> 2.5'
+gem 'json', '~> 2.3'
+gem 'rest-client'
+gem 'kaminari'
+gem 'acts_as_list'
+gem 'values' # https://github.com/tcrayford/Values
+gem 'rails-erd'
+gem 'aws-sdk-s3', require: false
+
+# PDF generation / Screenshots
+gem 'imgkit'
 gem 'wkhtmltoimage-binary'
-gem 'scout_apm'
+
+# Background workers (redis)
+gem 'sidekiq', '< 6'
+gem "sidekiq-undertaker"
+
+# Searching (ES)
 gem 'searchkick'
+
+# File text extration (requires Java)
 gem 'henkei', git: 'https://github.com/bitzesty/henkei'
+
+# Server monitoring
+gem 'scout_apm'
+gem 'rollbar'
 
 group :development, :test do
   gem 'byebug', platform: :mri
