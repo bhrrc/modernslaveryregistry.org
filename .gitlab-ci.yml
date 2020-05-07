@@ -10,7 +10,7 @@ variables:
 
 services:
   - name: redis:3.2.11
-  - name: postgres:11-alpine
+  - name: postgres:11
     alias: postgres
   - name: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
     alias: elasticsearch
