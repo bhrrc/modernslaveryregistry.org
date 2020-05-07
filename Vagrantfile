@@ -97,7 +97,7 @@ Vagrant.configure('2') do |config|
     update-locale LANG=en_US.UTF-8
 
     # postgresql and development headers
-    apt-get install -y postgresql-9.6
+    apt-get install -y postgresql-11
     apt-get install -y libpqxx-dev
 
     # Create postgresql user and database
