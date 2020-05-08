@@ -265,10 +265,18 @@ class CompanySearchService
 
   def search_by_conditions
     conditions = calculate_conditions(@form.statement_keywords)
-    Company.search(body: { query: { bool: conditions } }, page: @form.page, per_page: 20)
+    Company.search({body: { query: { bool: conditions }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options))
   end
 
   def search_all
-    Company.search(body: { query: { match_all: {} } }, page: @form.page, per_page: 20)
+    Company.search({body: { query: { match_all: {} }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options))
+  end
+
+  def limit_options
+    if @form.all
+      { limit: Company::MAX_RESULT_WINDOW }
+    else
+      { page: @form.page, per_page: 20 }
+    end
   end
 end
