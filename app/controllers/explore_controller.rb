@@ -23,8 +23,7 @@ class ExploreController < ApplicationController
   end
 
   def search
-    form = CompanySearchForm.new(criteria_params)
-    CompanySearchPresenter.new(form)
+    @search ||= CompanySearchPresenter.new(CompanySearchForm.new(criteria_params))
   end
 
   def send_csv
@@ -39,7 +38,8 @@ class ExploreController < ApplicationController
       legislations: params[:legislations],
       statement_keywords: params[:statement_keywords],
       include_keywords: params[:include_keywords],
-      page: params[:page]
+      page: params[:page],
+      all: params[:format] == 'csv'
     }
   end
 

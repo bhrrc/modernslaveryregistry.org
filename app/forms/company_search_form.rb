@@ -26,7 +26,7 @@ class CompanySearchForm
   INCLUDE_KEYWORDS_VALUE = 'yes'.freeze
   EXCLUDE_KEYWORDS_VALUE = 'no'.freeze
 
-  attr_reader :company_name, :statement_keywords, :include_keywords, :industries, :countries, :legislations, :page
+  attr_reader :company_name, :statement_keywords, :include_keywords, :industries, :countries, :legislations, :page, :all
 
   def initialize(params = {})
     @company_name = params.fetch(:company_name, nil).presence
@@ -39,6 +39,7 @@ class CompanySearchForm
     @legislations = params.fetch(:legislations, nil).presence
 
     @page = params.fetch(:page, nil) || 1
+    @all = params.fetch(:all, nil) || false
   end
 
   def include_keywords?
