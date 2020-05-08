@@ -1,7 +1,7 @@
 namespace :search do
   desc 'reindex Elasticsearch indexes in a background'
   task reindex: :environment do
-    Company.reindex(async: true)
+    Company.reindex
   end
 
   desc 'download all statements and extract their text'
