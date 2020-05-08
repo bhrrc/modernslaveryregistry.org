@@ -1,5 +1,6 @@
 class Company < ApplicationRecord
-  searchkick synonyms: [%w[ltd limited]], callbacks: :async
+  MAX_RESULT_WINDOW = 1_000_000
+  searchkick synonyms: [%w[ltd limited]], callbacks: :async, deep_paging: true
   scope :search_import, -> { includes(:country, :industry) }
 
   def search_data
