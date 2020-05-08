@@ -58,6 +58,7 @@ gem 'henkei', git: 'https://github.com/bitzesty/henkei'
 # Server monitoring
 gem 'scout_apm'
 gem 'rollbar'
+gem 'health_check'
 
 group :development, :test do
   gem 'byebug', platform: :mri
