@@ -1,7 +1,9 @@
 namespace :search do
   desc 'reindex Elasticsearch indexes in a background'
   task reindex: :environment do
+    Rails.logger.info "Starting reindex"
     Company.reindex
+    Rails.logger.info "Completed reindex"
   end
 
   desc 'download all statements and extract their text'
