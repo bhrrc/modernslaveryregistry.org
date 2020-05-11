@@ -3,6 +3,7 @@ class Company < ApplicationRecord
   searchkick synonyms: [%w[ltd limited]], callbacks: :async, deep_paging: true, batch_size: 200
   scope :search_import, -> { includes(:country, :industry) }
 
+  # Modifying this will require a manual reindex
   def search_data
     {
       name: name,
