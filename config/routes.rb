@@ -41,5 +41,6 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  mount HealthCheck::Engine => "/"
   match "*any", via: :all, to: redirect('/404')
 end
