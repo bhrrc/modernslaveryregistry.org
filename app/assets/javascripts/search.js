@@ -32,13 +32,11 @@ $(document).ready(function() {
 
     if (value) {
       var fieldFor = $("select[name*='" + $(this).data("for") + "']");
-
       var selections = fieldFor.select2("data");
-
       var index = -1;
 
       selections.forEach(function(selection, i) {
-        if (selection.text == value) {
+        if (selection.text.toLowerCase() == value.toLowerCase()) {
           index = i;
         }
       });

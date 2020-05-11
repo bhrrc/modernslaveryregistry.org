@@ -19,7 +19,7 @@ module ExploreHelper
   def display_sidebar_keyword_mentions?
     return false if display_sidebar_only_modern_slavery?
 
-    @results.any? && @search.stats[:keywords]
+    @results.total_count > 0 && @search.stats[:keywords]
   end
 
   def display_sidebar_risks_industry?

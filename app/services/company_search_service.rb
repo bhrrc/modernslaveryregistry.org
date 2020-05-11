@@ -36,7 +36,7 @@ class CompanySearchService
   end
 
   def modern_slavery_act?
-    return false unless @form.legislations.present?
+    return false unless @form.legislations.present? && !@form.legislations.empty?
 
     @msa ||= Legislation.find_by(name: "UK Modern Slavery Act")
 
