@@ -41,5 +41,5 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  get 'wp-login.php', to: proc { [404, {}, ['']] }
+  match "*any", via: :all, to: redirect('/404')
 end

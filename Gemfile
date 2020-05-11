@@ -21,7 +21,6 @@ gem 'chartjs-ror'
 gem 'bulma-rails', '0.5.1'
 gem 'jquery-rails'
 gem 'leaflet-rails'
-
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 
@@ -60,6 +59,10 @@ gem 'henkei', git: 'https://github.com/bitzesty/henkei'
 gem 'scout_apm'
 gem 'rollbar'
 gem 'health_check'
+
+# Logging
+gem "lograge"
+gem "logstash-event"
 
 group :development, :test do
   gem 'byebug', platform: :mri
