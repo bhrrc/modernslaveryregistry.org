@@ -41,5 +41,4 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  get 'wp-login.php', to: proc { [404, {}, ['']] }
 end
