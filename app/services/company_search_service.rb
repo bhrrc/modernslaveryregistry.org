@@ -265,11 +265,11 @@ class CompanySearchService
 
   def search_by_conditions
     conditions = calculate_conditions(@form.statement_keywords)
-    Company.search({body: { query: { bool: conditions }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options))
+    Company.search({body: { query: { bool: conditions }, sort: { name: 'asc' }, track_total_hits: true, select: [:id] }}.merge(limit_options))
   end
 
   def search_all
-    Company.search({body: { query: { match_all: {} }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options))
+    Company.search({body: { query: { match_all: {} }, sort: { name: 'asc' }, track_total_hits: true, select: [:id] }}.merge(limit_options))
   end
 
   def limit_options
