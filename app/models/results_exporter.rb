@@ -6,22 +6,22 @@ class ResultsExporter
     fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
     legislation_ids = params[:legislations] && params[:legislations].map(&:to_i)
 
-    CSV.generate do |csv|
-      csv << fields.map { |_, heading| heading }
+    return enum_for(:to_csv) unless block_given?
 
-      results.each do |company|
-        company.statements.each do |statement|
-          next unless statement.published || admin
+    yield CSV.generate_line(fields.map { |_, heading| heading })
 
-          if legislation_ids.present? && statement.legislation_ids.exclude?(*legislation_ids)
-            next
-          end
+    results.each do |company|
+      company.statements.each do |statement|
+        next unless statement.published || admin
 
-          csv << StatementExport.export(statement, fields)
-          # Change the company context when there are additional_companies
-          statement.additional_companies_covered_excluding(company).each do |ac|
-            csv << StatementExport.export(statement, fields, context: ac)
-          end
+        if legislation_ids.present? && statement.legislation_ids.exclude?(*legislation_ids)
+          next
+        end
+
+        yield CSV.generate_line(StatementExport.export(statement, fields))
+        # Change the company context when there are additional_companies
+        statement.additional_companies_covered_excluding(company).each do |ac|
+          yield CSV.generate_line(StatementExport.export(statement, fields, context: ac))
         end
       end
     end

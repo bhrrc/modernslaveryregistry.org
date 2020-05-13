@@ -10,7 +10,13 @@ class ExploreController < ApplicationController
         @compliance_stats = ComplianceStats.new
       end
       format.csv do
-        send_csv
+        headers["X-Accel-Buffering"] = "no"
+        headers["Content-Type"] = "text/csv; charset=utf-8"
+        headers["Content-Disposition"] =
+           %(attachment; filename="#{csv_filename}")
+        headers["Last-Modified"] = Time.zone.now.ctime.to_s
+        headers.delete('Content-Length')
+        self.response_body = ResultsExporter.to_csv(search.companies, admin?, criteria_params)
       end
     end
   end
@@ -24,10 +30,6 @@ class ExploreController < ApplicationController
 
   def search
     @search ||= CompanySearchPresenter.new(CompanySearchForm.new(criteria_params))
-  end
-
-  def send_csv
-    send_data ResultsExporter.to_csv(search.companies, admin?, criteria_params), filename: csv_filename
   end
 
   def criteria_params
