@@ -17,10 +17,10 @@ class ResultsExporter
             next
           end
 
-          csv << StatementExport.export(statement, fields)).to_csv
+          csv << StatementExport.export(statement, fields).to_csv
           # Change the company context when there are additional_companies
           statement.additional_companies_covered_excluding(company).each do |ac|
-            csv << StatementExport.export(statement, fields, context: ac)).to_csv
+            csv << StatementExport.export(statement, fields, context: ac).to_csv
           end
         end
       end
