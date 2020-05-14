@@ -273,10 +273,10 @@ class CompanySearchService
   end
 
   def limit_options
-    if @form.all
-      { limit: Company::MAX_RESULT_WINDOW }
+    if @form.fetch_all_records?
+      { limit: Company::MAX_RESULT_WINDOW, debug: true }
     else
-      { page: @form.page, per_page: 20 }
+      { page: @form.page, per_page: 20, debug: true }
     end
   end
 end

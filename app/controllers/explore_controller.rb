@@ -41,7 +41,7 @@ class ExploreController < ApplicationController
       statement_keywords: params[:statement_keywords],
       include_keywords: params[:include_keywords],
       page: params[:page],
-      all: params[:format] == 'csv'
+      fetch_all_records: params[:format] == 'csv'
     }
   end
 
