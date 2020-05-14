@@ -180,50 +180,20 @@ class CompanySearchService
       dis_max: {
         queries: [
           {
-            match: {
+            match_phrase: {
               'statements.content.analyzed': {
                 query: statement_keyword,
                 boost: 10,
-                operator: 'and',
                 analyzer: 'searchkick_search'
               }
             }
           },
           {
-            match: {
+            match_phrase: {
               'statements.content.analyzed': {
                 query: statement_keyword,
                 boost: 10,
-                operator: 'and',
                 analyzer: 'searchkick_search2'
-              }
-            }
-          },
-          {
-            match: {
-              'statements.content.analyzed': {
-                query: statement_keyword,
-                boost: 1,
-                operator: 'and',
-                analyzer: 'searchkick_search',
-                fuzziness: 1,
-                prefix_length: 0,
-                max_expansions: 3,
-                fuzzy_transpositions: true
-              }
-            }
-          },
-          {
-            match: {
-              'statements.content.analyzed': {
-                query: statement_keyword,
-                boost: 1,
-                operator: 'and',
-                analyzer: 'searchkick_search2',
-                fuzziness: 1,
-                prefix_length: 0,
-                max_expansions: 3,
-                fuzzy_transpositions: true
               }
             }
           }
