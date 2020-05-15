@@ -61,7 +61,7 @@ RSpec.describe ResultsExporter do
   describe '.to_csv' do
     # it 'returns data for companies without associated companies'
     it 'returns data relevant for exporting in a CSV format' do
-      csv = ResultsExporter.to_csv(Company.all, true)
+      csv = enumerator_csv_to_string(ResultsExporter.to_csv(Company.all, true))
       header, data = CSV.parse(csv)
       expect(header).to match_array([
                                       'Company ID',
@@ -118,7 +118,7 @@ RSpec.describe ResultsExporter do
     end
 
     it 'ommits admin-only information when the extra parameter is false' do
-      csv = ResultsExporter.to_csv(Company.all, false)
+      csv = enumerator_csv_to_string(ResultsExporter.to_csv(Company.all, false))
       header, = CSV.parse(csv)
       expect(header).to match_array([
                                       'Company ID',
@@ -139,7 +139,7 @@ RSpec.describe ResultsExporter do
     end
 
     it 'includes additional companies' do
-      csv = ResultsExporter.to_csv(Company.where(id: company.id), true)
+      csv = enumerator_csv_to_string(ResultsExporter.to_csv(Company.where(id: company.id), true))
       data = CSV.parse(csv)
       expect(data[2]).to_not be_nil
       expect(data[2]).to match_array([
@@ -185,7 +185,7 @@ RSpec.describe ResultsExporter do
                                  first_year_covered: 2018,
                                  last_year_covered: 2019)
 
-      csv = ResultsExporter.to_csv(Company.where(id: company.id), false, legislations: [uk_legislation.id])
+      csv = enumerator_csv_to_string(ResultsExporter.to_csv(Company.where(id: company.id), false, legislations: [uk_legislation.id]))
       data = CSV.parse(csv)
 
       expect(data.length).to eq(4)

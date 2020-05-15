@@ -573,7 +573,7 @@ h3 {
   text-align: left;
   margin: 2em 0 1em;
 
-  .page.current, .page a, .next, .prev {
+  .page.current, .page a, .next a, .prev a {
     display: inline-block;
     margin-right: 10px;
     border-radius: 4px;
@@ -601,25 +601,25 @@ h3 {
       background: $teal !important;
       color: #fff !important;
     }
+  }
 
-    &.next {
-      text-indent: -9999px;
-      overflow: hidden;
-      background-image: image-url("chevron-right.svg");
-      background-size: 24px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
+  .next a {
+    text-indent: -9999px;
+    overflow: hidden;
+    background-image: image-url("chevron-right.svg");
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 
-    &.prev, 
-    &.previous {
-      text-indent: -9999px;
-      overflow: hidden;
-      background-image: image-url("chevron-left.svg");
-      background-size: 24px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
+  .prev a, 
+  .previous a {
+    text-indent: -9999px;
+    overflow: hidden;
+    background-image: image-url("chevron-left.svg");
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   .last, .first, .gap {
