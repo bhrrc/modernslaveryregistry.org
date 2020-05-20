@@ -6,16 +6,12 @@ class CompanySearchPresenter
     @service = CompanySearchService.new(form)
   end
 
-  def result
-    @result ||= service.perform
-  end
-
   def companies
-    result[:companies]
+    service.results
   end
 
   def stats
-    result[:stats]
+    service.stats
   end
 
   def searching_by_conditions?

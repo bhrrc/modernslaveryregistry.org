@@ -8,20 +8,17 @@ class CompanySearchService
     @where << { terms: { legislation_ids: form.legislations } } if form.legislations&.any?
   end
 
-  def perform
-    companies = if searching_by_conditions?
+  def results
+    @result ||= if searching_by_conditions?
       search_by_conditions
     else
       search_all
     end
+  end
 
-    keyword_stats = calculate_keywords_stats(companies.total_count)
-
-    {
-      companies: companies,
-      stats: {
-        keywords: keyword_stats
-      }
+  def stats
+    @stats ||=  {
+      keywords: calculate_keywords_stats(results.total_count)
     }
   end
 
@@ -205,31 +202,31 @@ class CompanySearchService
   def statement_keywords_conditions(statement_keywords)
     {
       bool: {
-        should: statement_keywords.map { |statement_keyword| statement_keywords_condition(statement_keyword) }
+        should: statement_keywords.map { |statement_keyword| wrap_statement_condition(statement_keywords_condition(statement_keyword)) }
       }
     }
   end
 
-  def calculate_positive_query(statement_keywords)
-    result = []
-    result << company_name_condition if @form.company_name.present?
-    result << statement_keywords_conditions(statement_keywords) if statement_keywords.present? && @form.include_keywords?
-    result
+  def wrap_statement_condition(condition)
+    if @form.include_keywords?
+      condition
+    else
+      { bool: { must_not: condition } }
+    end
   end
 
-  def calculate_negative_query(statement_keywords)
+  def calculate_query(statement_keywords)
     result = []
-    result << statement_keywords_conditions(statement_keywords) if statement_keywords.present? && !@form.include_keywords?
+    result << company_name_condition if @form.company_name.present?
+    result << statement_keywords_conditions(statement_keywords) if statement_keywords.present?
     result
   end
 
   def calculate_conditions(statement_keywords)
-    positive_query = calculate_positive_query(statement_keywords)
-    negative_query = calculate_negative_query(statement_keywords)
+    query = calculate_query(statement_keywords)
 
     conditions = { filter: @where }
-    conditions.merge!(must: positive_query) if positive_query.present?
-    conditions.merge!(must_not: negative_query) if negative_query.present?
+    conditions.merge!(must: query) if query.present?
     conditions
   end
 
