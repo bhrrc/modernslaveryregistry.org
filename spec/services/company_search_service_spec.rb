@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CompanySearchService, type: :model do
+RSpec.describe CompanySearchService do
   let!(:company) { Company.find_or_create_by name: 'Go Free Range Ltd', related_companies: 'Badgers Inc' }
 
   before do
@@ -10,38 +10,38 @@ RSpec.describe CompanySearchService, type: :model do
 
   describe '#perform' do
     it 'returns a result when the search term matches the company name' do
-      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd')).perform
-      expect(results[:companies].size).to eq(1)
+      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd')).results
+      expect(results.size).to eq(1)
     end
 
     it 'returns a result when the search term matches a related company name' do
-      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Badgers')).perform
-      expect(results[:companies].size).to eq(1)
+      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Badgers')).results
+      expect(results.size).to eq(1)
     end
 
     it 'returns a result when limited is used instead of ltd' do
-      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Limited')).perform
-      expect(results[:companies].size).to eq(1)
+      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Limited')).results
+      expect(results.size).to eq(1)
     end
 
     it 'returns a result when a partial match is used' do
-      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Free Range')).perform
-      expect(results[:companies].size).to eq(1)
+      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Free Range')).results
+      expect(results.size).to eq(1)
     end
 
     it 'returns no results when the search terms do not match' do
-      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Cucumber')).perform
-      expect(results[:companies].size).to eq(0)
+      results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Cucumber')).results
+      expect(results.size).to eq(0)
     end
 
     it 'returns all companies when no company name is provided' do
-      results = CompanySearchService.new(CompanySearchForm.new).perform
-      expect(results[:companies].size).to eq(1)
+      results = CompanySearchService.new(CompanySearchForm.new).results
+      expect(results.size).to eq(1)
     end
 
     it 'returns all companies when a blank company name is provided' do
-      results = CompanySearchService.new(CompanySearchForm.new(company_name: '')).perform
-      expect(results[:companies].size).to eq(1)
+      results = CompanySearchService.new(CompanySearchForm.new(company_name: '')).results
+      expect(results.size).to eq(1)
     end
   end
 
@@ -59,22 +59,22 @@ RSpec.describe CompanySearchService, type: :model do
     describe '#results' do
       context 'when the country is included in the search criteria' do
         it 'includes the company in the results' do
-          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd', countries: [country.id])).perform
-          expect(results[:companies].size).to eq(1)
+          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd', countries: [country.id])).results
+          expect(results.size).to eq(1)
         end
       end
 
       context 'when a different country is included in the search criteria' do
         it 'excludes the company in the results' do
-          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd', countries: [other_country.id])).perform
-          expect(results[:companies].size).to eq(0)
+          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd', countries: [other_country.id])).results
+          expect(results.size).to eq(0)
         end
       end
 
       context 'when no countries are included in the search criteria' do
         it 'includes the company in the results' do
-          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd')).perform
-          expect(results[:companies].size).to eq(1)
+          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd')).results
+          expect(results.size).to eq(1)
         end
       end
 
@@ -83,8 +83,8 @@ RSpec.describe CompanySearchService, type: :model do
           results = CompanySearchService.new(CompanySearchForm.new(
             company_name: 'Go Free Range Ltd',
             countries: [country.id, other_country.id]
-          )).perform
-          expect(results[:companies].size).to eq(1)
+          )).results
+          expect(results.size).to eq(1)
         end
       end
     end
@@ -106,8 +106,8 @@ RSpec.describe CompanySearchService, type: :model do
           results = CompanySearchService.new(CompanySearchForm.new(
             company_name: 'Go Free Range Ltd',
             industries: [industry.id]
-          )).perform
-          expect(results[:companies].size).to eq(1)
+          )).results
+          expect(results.size).to eq(1)
         end
       end
 
@@ -116,15 +116,15 @@ RSpec.describe CompanySearchService, type: :model do
           results = CompanySearchService.new(CompanySearchForm.new(
             company_name: 'Go Free Range Ltd',
             industries: [other_industry.id]
-          )).perform
-          expect(results[:companies].size).to eq(0)
+          )).results
+          expect(results.size).to eq(0)
         end
       end
 
       context 'when no industries are included in the search criteria' do
         it 'includes the company in the results' do
-          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd')).perform
-          expect(results[:companies].size).to eq(1)
+          results = CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd')).results
+          expect(results.size).to eq(1)
         end
       end
 
@@ -133,8 +133,8 @@ RSpec.describe CompanySearchService, type: :model do
           results = CompanySearchService.new(CompanySearchForm.new(
             company_name: 'Go Free Range Ltd',
             industries: [industry.id, other_industry.id]
-          )).perform
-          expect(results[:companies].size).to eq(1)
+          )).results
+          expect(results.size).to eq(1)
         end
       end
     end
@@ -173,7 +173,7 @@ RSpec.describe CompanySearchService, type: :model do
       end
 
       it 'includes the company once in the search results' do
-        expect(search.perform[:companies].size).to eq(1)
+        expect(search.results.size).to eq(1)
       end
 
       # it 'returns 2 for the count of statements' do
@@ -195,7 +195,7 @@ RSpec.describe CompanySearchService, type: :model do
         end
 
         it 'includes the company in the results' do
-          expect(search.perform[:companies].size).to eq(1)
+          expect(search.results.size).to eq(1)
         end
 
         # it 'returns 1 for the count of statements' do
@@ -212,7 +212,7 @@ RSpec.describe CompanySearchService, type: :model do
         end
 
         it 'excludes the company in the results' do
-          expect(search.perform[:companies].size).to eq(0)
+          expect(search.results.size).to eq(0)
         end
       end
 
@@ -220,7 +220,7 @@ RSpec.describe CompanySearchService, type: :model do
         let(:search) { CompanySearchService.new(CompanySearchForm.new(company_name: 'Go Free Range Ltd')) }
 
         it 'includes the company in the results' do
-          expect(search.perform[:companies].size).to eq(1)
+          expect(search.results.size).to eq(1)
         end
 
         # it 'returns 1 for the count of statements' do
@@ -241,7 +241,7 @@ RSpec.describe CompanySearchService, type: :model do
         end
 
         it 'includes the company in the results' do
-          expect(search.perform[:companies].size).to eq(1)
+          expect(search.results.size).to eq(1)
         end
 
         # it 'returns 1 for the count of statements' do
