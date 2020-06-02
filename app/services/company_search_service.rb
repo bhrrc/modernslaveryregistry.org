@@ -18,7 +18,8 @@ class CompanySearchService
 
   def stats
     @stats ||=  {
-      keywords: calculate_keywords_stats(results.total_count)
+      keywords: calculate_keywords_stats,
+      uk_requirements: calculate_uk_requirements_stats
     }
   end
 
@@ -42,14 +43,27 @@ class CompanySearchService
 
   private
 
-  def calculate_keywords_stats(total_count)
+  def calculate_uk_requirements_stats
+    uk_modern_slavery_act_count = results.aggregations.dig('uk_modern_slavery_act', 'uk_modern_slavery_act', 'count')
+    results.aggregations.map do |field, data|
+      field_count = data.dig(field, 'count')
+      {
+        field.to_sym => {
+          count: field_count,
+          percent: (field_count.to_f / uk_modern_slavery_act_count * 100).round
+        }
+      }
+    end&.inject(:merge)
+  end
+
+  def calculate_keywords_stats
     @form.statement_keywords&.map do |statement_keyword|
       conditions = calculate_conditions(Array.wrap(statement_keyword))
       result = Company.search(body: { query: { bool: conditions } }, load: false)
       {
         statement_keyword => {
-          'mentioned': @form.include_keywords? ? result.total_count : total_count - result.total_count,
-          'not_mentioned': @form.include_keywords? ? total_count - result.total_count : result.total_count,
+          'mentioned': @form.include_keywords? ? result.total_count : results.total_count - result.total_count,
+          'not_mentioned': @form.include_keywords? ? results.total_count - result.total_count : result.total_count,
         }
       }
     end&.inject(:merge)
@@ -215,6 +229,29 @@ class CompanySearchService
     end
   end
 
+  AGGS_FIELDS = %i[uk_modern_slavery_act link_on_front_page signed_by_director approved_by_board fully_compliant].freeze
+
+  def aggregate_query(field)
+    {
+      filter: {
+        term: {
+          field => true
+        }
+      },
+      aggs: {
+        field => {
+          stats: {
+            field: field.to_s
+          }
+        }
+      }
+    }
+  end
+
+  def aggregations
+    AGGS_FIELDS.map { |field| { field => aggregate_query(field) } }&.inject(:merge)
+  end
+
   def calculate_query(statement_keywords)
     result = []
     result << company_name_condition if @form.company_name.present?
@@ -232,11 +269,11 @@ class CompanySearchService
 
   def search_by_conditions
     conditions = calculate_conditions(@form.statement_keywords)
-    Company.search({body: { "_source": false, query: { bool: conditions }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options))
+    Company.search({body: { "_source": false, query: { bool: conditions }, sort: { name: 'asc' }, aggs: aggregations, track_total_hits: true }}.merge(limit_options))
   end
 
   def search_all
-    Company.search({body: { "_source": false, query: { match_all: {} }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options))
+    Company.search({body: { "_source": false, query: { match_all: {} }, sort: { name: 'asc' }, aggs: aggregations, track_total_hits: true }}.merge(limit_options))
   end
 
   def limit_options
