@@ -1,5 +1,12 @@
 <div class="search-results__sidebar">
-  <h3>Stats for the companies displayed</h3>
+  <h3>Stats for your search</h3>
+
+  <p>
+    <%= link_to numbers_explained_page, class: "arrow-right-link" do %>
+      Learn how we arrive at our numbers
+      <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"/></svg>
+    <% end %>
+  </p>
 
   <% if display_filtering_by_company_name? %>
     <p>
@@ -8,43 +15,63 @@
   <% end %>
 
   <% if display_sidebar_below_threshold? %>
-    <h5>Compliance with minimum requirements</h5>
+    <div class="white-divider"></div>
+    <h5>Statements that comply with the UK Modern Slavery Act minimum requirements</h5>
     <p>
       For legal reasons, we only show compliance for search results above 5 companies.
     </p>
   <% end %>
 
   <% if display_sidebar_only_modern_slavery? %>
-    <h5>Compliance with minimum requirements</h5>
+    <div class="white-divider"></div>
+    <h5>Statements that comply with the UK Modern Slavery Act minimum requirements</h5>
     <p>
       Please note that we only show compliance data for the UK Modern Slavery Act.
     </p>
   <% end %>
 
   <% if display_statement_stats? %>
-    <p>
-      These figures are based on the most recent <%= @compliance_stats.total %> statements from all companies publishing under the <strong>UK Modern Slavery Act</strong> in our register. They were last updated on <strong><%= @compliance_stats.updated_at.strftime("#{@compliance_stats.updated_at.day.ordinalize} %B %Y") %></strong>.
-    </p>
+    <div class="white-divider"></div>
+    <h5>Statements that comply with the UK Modern Slavery Act minimum requirements</h5>
+    
     <div class="stats">
-      <dl class="title-like">
+      <dl>
         <dt>
-          Meet all minimum requirements
+          Number of statements in your search results that are published under the UK Modern Slavery Act
         </dt>
         <dd>
-          <%= @compliance_stats.fully_compliant_count %> (<%= @compliance_stats.percent_fully_compliant %>%)
+          <span class="value"><%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %></span>
         </dd>
       </dl>
       <dl>
-        <dt>Have a statement published on the company's website with a link on the home page</dt>
-        <dd><%= @compliance_stats.link_on_front_page_count %> (<%= @compliance_stats.percent_link_on_front_page %>%)</dd>
+        <dt>
+          Meet <strong>all</strong> minimum requirements
+        </dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:fully_compliant][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:fully_compliant][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
       </dl>
       <dl>
-        <dt>Statements are signed by director or equivalent</dt>
-        <dd><%= @compliance_stats.signed_by_director_count %> (<%= @compliance_stats.percent_signed_by_director %>%)</dd>
+        <dt>Are linked from the companies website <strong>homepage</strong></dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:link_on_front_page][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:link_on_front_page][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
       </dl>
       <dl>
-        <dt>Explicit approval by the board is included in the statement</dt>
-        <dd><%= @compliance_stats.approved_by_board_count %> (<%= @compliance_stats.percent_approved_by_board %>%)</dd>
+        <dt>Are <strong>signed</strong> by director or equivalent</dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:signed_by_director][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:signed_by_director][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Includes explicit <strong>approval</strong> by the board</dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:approved_by_board][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:approved_by_board][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
       </dl>
     </div>
   <% end %>
