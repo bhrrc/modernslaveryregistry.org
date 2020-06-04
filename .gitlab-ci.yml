@@ -53,6 +53,24 @@ test:
 #     reports:
 #       codequality: gl-code-quality-report.json
 
+snyk:
+  stage: test
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test --severity-threshold=high
+  when: manual
+
+snyk_full:
+  stage: test  
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test
+  when: manual
+
 deploy_staging:
   stage: staging
   image: bitzesty/aws-ebcli
