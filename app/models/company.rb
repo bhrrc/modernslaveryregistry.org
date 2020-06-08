@@ -12,11 +12,6 @@ class Company < ApplicationRecord
       country_name: country&.name,
       industry_id: industry_id,
       industry_name: industry&.name,
-      uk_modern_slavery_act: latest_published_statement&.uk_modern_slavery_act?,
-      link_on_front_page: latest_published_statement&.link_on_front_page?,
-      signed_by_director: latest_published_statement&.signed_by_director?,
-      approved_by_board: latest_published_statement&.approved_by_board == 'Yes',
-      fully_compliant: latest_published_statement&.fully_compliant?,
       statement_ids: all_statements&.map(&:id)&.flatten&.uniq,
       legislation_ids: all_statements&.map(&:legislation_ids)&.flatten&.uniq,
       statements: statements_with_content

@@ -3,6 +3,7 @@ namespace :search do
   task reindex: :environment do
     Rails.logger.info "Starting reindex"
     Company.reindex
+    Statement.reindex
     Rails.logger.info "Completed reindex"
   end
 

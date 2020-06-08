@@ -44,13 +44,21 @@ class CompanySearchService
   private
 
   def calculate_uk_requirements_stats
-    uk_modern_slavery_act_count = results.aggregations.dig('uk_modern_slavery_act', 'uk_modern_slavery_act', 'count')
-    results.aggregations.map do |field, data|
+    company_ids = if searching_by_conditions?
+      search_by_conditions(true)
+    else
+      search_all(true)
+    end&.map(&:id)
+
+    statements = Statement.search({body: { "_source": false, query: { bool: { filter: { terms: { company_ids: company_ids } } } }, aggs: aggregations, track_total_hits: true }, limit: Company::MAX_RESULT_WINDOW})
+
+    uk_modern_slavery_act_count = statements.aggregations.dig('uk_modern_slavery_act', 'uk_modern_slavery_act', 'count')
+    statements.aggregations.map do |field, data|
       field_count = data.dig(field, 'count')
       {
         field.to_sym => {
           count: field_count,
-          percent: (field_count.to_f / uk_modern_slavery_act_count * 100).round
+          percent: (field_count.to_f / uk_modern_slavery_act_count.to_f * 100).to_i
         }
       }
     end&.inject(:merge)
@@ -267,17 +275,17 @@ class CompanySearchService
     conditions
   end
 
-  def search_by_conditions
+  def search_by_conditions(force_all_records = false)
     conditions = calculate_conditions(@form.statement_keywords)
-    Company.search({body: { "_source": false, query: { bool: conditions }, sort: { name: 'asc' }, aggs: aggregations, track_total_hits: true }}.merge(limit_options))
+    Company.search({body: { "_source": false, query: { bool: conditions }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options(force_all_records)))
   end
 
-  def search_all
-    Company.search({body: { "_source": false, query: { match_all: {} }, sort: { name: 'asc' }, aggs: aggregations, track_total_hits: true }}.merge(limit_options))
+  def search_all(force_all_records = false)
+    Company.search({body: { "_source": false, query: { match_all: {} }, sort: { name: 'asc' }, track_total_hits: true }}.merge(limit_options(force_all_records)))
   end
 
-  def limit_options
-    if @form.fetch_all_records?
+  def limit_options(force_all_records)
+    if @form.fetch_all_records? || force_all_records
       { limit: Company::MAX_RESULT_WINDOW }
     else
       { page: @form.page, per_page: 20 }
