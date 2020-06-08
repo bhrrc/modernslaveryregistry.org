@@ -131,15 +131,6 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="checkbox">
-      <%= check_box_tag :only_assessed, true, params[:only_assessed] == "true", id: "search-only-assessed" %>
-      <label for="search-only-assessed">
-        Only show results with statement content assessments.
-      </label>
-    </div>
-  </div>
-  
   <div class="form-actions">
     <%= submit_tag 'Search', name: '', enforce_utf8: false, class: "button is-primary search-button" %>
     <%= link_to "Clear", explore_path, class: "button button--link" %>
