@@ -39,6 +39,43 @@ test:
     paths:
       - vendor/bundler
 
+# FIXME: cannot load such file -- rubocop-rails
+# code_quality:
+#   image: docker:stable
+#   variables:
+#     DOCKER_DRIVER: overlay2
+#   allow_failure: true
+#   services:
+#     - docker:stable-dind
+#   script:
+#     - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+#     - docker run
+#         --env SOURCE_CODE="$PWD"
+#         --volume "$PWD":/code
+#         --volume /var/run/docker.sock:/var/run/docker.sock
+#         "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+#   artifacts:
+#     reports:
+#       codequality: gl-code-quality-report.json
+
+snyk:
+  stage: test
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test --severity-threshold=high
+  when: manual
+
+snyk_full:
+  stage: test  
+  before_script:
+    - sudo npm install -g snyk
+  script:
+    - sudo snyk auth $SNYK_API
+    - sudo snyk test
+  when: manual
+
 deploy_staging:
   stage: staging
   resource_group: aws
