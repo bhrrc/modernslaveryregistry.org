@@ -14,4 +14,10 @@ class Legislation < ApplicationRecord
   def requires_statement_attribute?(attribute)
     requires_statement_attributes.split(',').map(&:strip).include?(attribute.to_s)
   end
+
+  after_commit :reindex_companies
+
+  def reindex_companies
+    statements.each { |statement| statement&.company&.reindex }
+  end
 end

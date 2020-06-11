@@ -1,23 +1,60 @@
-<div class="explore_companies_results">
-  <% results.each do |result| %>
-    <div class="columns" data-content="company">
-      <div class="column">
-        <%= link_to(result.name, company_path(result), {'data-content': 'name'}) %>
-      </div>
-      <div class="column" data-content="country">
-        <%= result.country_name %>
-      </div>
-      <div class="column" data-content="industry">
-        <%= result.industry_name %>
-      </div>
-      <div class="column" data-content="statements">
-        <% if result.all_statements.empty? %>
-        <%= link_to 'Submit statement', new_company_statement_path(result) %>
-        <% else %>
-        <%= link_to pluralize(search.statement_count_for(result), 'statement'), company_path(result)  %>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
-  <%= paginate results %>
+<div class="results-heading">
+  <div class="results-heading__title">
+    <% if @search.searching_by_conditions? %>
+      <%= pluralize(@results.total_count, "search result", plural: "search results") %> 
+    <% else %>
+      Showing all <strong><%= @results.total_count %></strong> companies in our database
+    <% end %>
+  </div>
+
+  <div class="results-heading__download">
+    <%= link_to @download_url, class: 'form-csv-download' do %>
+      <span><%= @search.searching_by_conditions? ? "Download search results" : "Download data" %></span>
+    <% end %>
+  </div>
 </div>
+
+<table class="explore_companies_results">
+  <colgroup>
+    <col width="400">
+    <col width="250">
+    <col width="120">
+    <col width="200">
+  </colgroup>
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Statements</th>
+      <th>Industry</th>
+      <th>Region/Country</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% results.each do |result| %>
+    <tr>
+      <td data-heading="Company">
+        <%= link_to(result.name, company_path(result), {'data-content': 'name'}) %>
+      </td>
+      <td data-heading="Statements">
+        <% if result.all_statements.empty? %>
+          <%= link_to 'Submit statement', new_company_statement_path(result) %>
+        <% else %>
+          <%= link_to pluralize(search.statement_count_for(result), 'statement'), company_path(result)  %>
+        <% end %>
+      </td>
+      <td data-heading="Industry">
+        <%= result.industry_name %>
+      </td>
+      <td data-heading="Region/Country">
+        <%= result.country_name %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<%= paginate results %>
+<% if results.any? %>
+  <div class="pagination-info">
+    <%= results.offset_value + 1 %> - <%= results.offset_value + results.length %> of <%= results.total_count %>
+  </div>
+<% end %>

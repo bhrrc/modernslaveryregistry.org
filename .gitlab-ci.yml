@@ -5,11 +5,16 @@ variables:
   POSTGRES_DB: msd_test
   DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/$POSTGRES_DB"
   REDIS_URL: redis://localhost:6379
+  ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+  ELASTICSEARCH_URL: 'http://localhost:9200'
 
 services:
   - name: redis:3.2.11
-  - name: postgres:9.6.16-alpine
+  - name: circleci/postgres:11.1-alpine-ram
     alias: postgres
+  - name: docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+    alias: elasticsearch
+    command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
 
 stages:
   - test
@@ -73,6 +78,7 @@ snyk_full:
 
 deploy_staging:
   stage: staging
+  resource_group: aws
   image: bitzesty/aws-ebcli
   script:
     - eb --version
@@ -80,15 +86,16 @@ deploy_staging:
     - echo -e "$MSR_PEM" > ~/.ssh/modern-slavery-registry.pem
     - chmod 600 ~/.ssh/modern-slavery-registry.pem
     - eb init modern-slavery-registry --region="eu-west-2" --keyname="modern-slavery-registry" --platform="ruby-2.4-(puma)"
-    - eb deploy msr-staging -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE"
+    - eb deploy msr-staging-clone -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE" --timeout 35
   environment:
     name: staging
-    url: http://msr-staging.eu-west-2.elasticbeanstalk.com/
+    url: http://msr-staging-clone.eu-west-2.elasticbeanstalk.com/
   when:
     manual
 
 deploy_production:
   stage: production
+  resource_group: aws
   image: bitzesty/aws-ebcli
   script:
     - eb --version
@@ -96,7 +103,7 @@ deploy_production:
     - echo -e "$MSR_PEM" > ~/.ssh/modern-slavery-registry.pem
     - chmod 600 ~/.ssh/modern-slavery-registry.pem
     - eb init modern-slavery-registry --region="eu-west-2" --keyname="modern-slavery-registry" --platform="ruby-2.4-(puma)"
-    - eb deploy msr-production-green -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE"
+    - eb deploy msr-production-green -l "$CI_COMMIT_SHORT_SHA" -m "$CI_COMMIT_TITLE" --timeout 35
   environment:  
     name: production
     url: https://www.modernslaveryregistry.org/

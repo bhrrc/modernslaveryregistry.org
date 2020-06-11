@@ -1,4 +1,23 @@
 class Company < ApplicationRecord
+  MAX_RESULT_WINDOW = 1_000_000
+  searchkick synonyms: [%w[ltd limited]], callbacks: :async, deep_paging: true, batch_size: 200
+  scope :search_import, -> { includes(:country, :industry) }
+
+  # Modifying this will require a manual reindex
+  def search_data
+    {
+      name: name&.squish,
+      related_companies: related_companies&.squish,
+      country_id: country_id,
+      country_name: country&.name,
+      industry_id: industry_id,
+      industry_name: industry&.name,
+      statement_ids: all_statements&.map(&:id)&.flatten&.uniq,
+      legislation_ids: all_statements&.map(&:legislation_ids)&.flatten&.uniq,
+      statements: statements_with_content
+    }
+  end
+
   has_many :statements,
            -> { Statement.reverse_chronological_order },
            dependent: :destroy,
@@ -22,6 +41,21 @@ class Company < ApplicationRecord
       .where('legislations.name = ?', legislation_name)
       .distinct
   }
+
+  def statements_with_content
+    published_statements.with_content_extracted.map do |statement|
+      begin
+        {
+          id: statement.id,
+          content: statement.content_text,
+          first_year_covered: statement.first_year_covered,
+          last_year_covered: statement.last_year_covered,
+        }
+      rescue StandardError
+        nil
+      end
+    end.compact
+  end
 
   def all_statements
     Statement.produced_by_or_associated_with(self).reverse_chronological_order
@@ -47,7 +81,7 @@ class Company < ApplicationRecord
     try(:industry).try(:name) || 'Industry unknown'
   end
 
-  def self.search(query)
+  def self.search_by_name(query)
     wild = "%#{query}%"
     Company.where(
       'lower(name) like lower(?)',

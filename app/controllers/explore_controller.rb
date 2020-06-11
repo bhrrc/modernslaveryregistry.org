@@ -6,10 +6,17 @@ class ExploreController < ApplicationController
       format.html do
         @download_url = build_csv_url
         @search = search
-        @results = search.results.page params[:page]
+        @results = search.companies
+        @compliance_stats = ComplianceStats.new
       end
       format.csv do
-        send_csv
+        headers["X-Accel-Buffering"] = "no"
+        headers["Content-Type"] = "text/csv; charset=utf-8"
+        headers["Content-Disposition"] =
+           %(attachment; filename="#{csv_filename}")
+        headers["Last-Modified"] = Time.zone.now.ctime.to_s
+        headers.delete('Content-Length')
+        self.response_body = ResultsExporter.to_csv(search.companies, admin?, criteria_params)
       end
     end
   end
@@ -22,11 +29,7 @@ class ExploreController < ApplicationController
   end
 
   def search
-    CompanySearch.new(criteria_params)
-  end
-
-  def send_csv
-    send_data ResultsExporter.to_csv(search.results, admin?, criteria_params), filename: csv_filename
+    @search ||= CompanySearchPresenter.new(CompanySearchForm.new(criteria_params))
   end
 
   def criteria_params
@@ -34,7 +37,11 @@ class ExploreController < ApplicationController
       industries: params[:industries],
       countries: params[:countries],
       company_name: params[:company_name],
-      legislations: params[:legislations]
+      legislations: params[:legislations],
+      statement_keywords: params[:statement_keywords],
+      include_keywords: params[:include_keywords],
+      page: params[:page],
+      fetch_all_records: params[:format] == 'csv'
     }
   end
 

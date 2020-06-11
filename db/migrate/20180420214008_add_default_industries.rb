@@ -554,7 +554,7 @@ class AddDefaultIndustries < ActiveRecord::Migration[5.0]
         "industry_code": 601020
       }
     ].each do |row|
-      Industry.create!(row)
+    # Industry.create!(row)
     end
   end
 end

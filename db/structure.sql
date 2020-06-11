@@ -10,20 +10,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -178,6 +164,7 @@ CREATE TABLE public.companies (
 --
 
 CREATE SEQUENCE public.companies_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -222,6 +209,7 @@ CREATE TABLE public.countries (
 --
 
 CREATE SEQUENCE public.countries_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -256,6 +244,7 @@ CREATE TABLE public.industries (
 --
 
 CREATE SEQUENCE public.industries_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -288,6 +277,7 @@ CREATE TABLE public.legislation_statements (
 --
 
 CREATE SEQUENCE public.legislation_statements_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -322,6 +312,7 @@ CREATE TABLE public.legislations (
 --
 
 CREATE SEQUENCE public.legislations_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -360,6 +351,7 @@ CREATE TABLE public.pages (
 --
 
 CREATE SEQUENCE public.pages_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -430,6 +422,7 @@ CREATE TABLE public.sectors (
 --
 
 CREATE SEQUENCE public.sectors_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -461,6 +454,7 @@ CREATE TABLE public.snapshots (
 --
 
 CREATE SEQUENCE public.snapshots_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -499,7 +493,9 @@ CREATE TABLE public.statements (
     last_year_covered integer,
     company_id bigint NOT NULL,
     override_url character varying,
-    home_office_audit boolean DEFAULT false
+    home_office_audit boolean DEFAULT false,
+    content_extracted boolean,
+    content_text text
 );
 
 
@@ -508,6 +504,7 @@ CREATE TABLE public.statements (
 --
 
 CREATE SEQUENCE public.statements_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -555,6 +552,7 @@ CREATE TABLE public.users (
 --
 
 CREATE SEQUENCE public.users_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1101,6 +1099,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190304105224'),
 ('20190515183222'),
 ('20191019141132'),
-('20200319080812');
+('20200319080812'),
+('20200507104658');
 
 

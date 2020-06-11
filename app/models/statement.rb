@@ -1,6 +1,19 @@
 require 'uri'
 
 class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  searchkick callbacks: :async, deep_paging: true, batch_size: 200
+
+  def search_data
+    {
+      company_ids: Company.where(latest_statement_for_compliance_stats_id: id).map(&:id),
+      uk_modern_slavery_act: uk_modern_slavery_act?,
+      link_on_front_page: link_on_front_page?,
+      signed_by_director: signed_by_director?,
+      approved_by_board: approved_by_board == 'Yes',
+      fully_compliant: fully_compliant?
+    }
+  end
+
   # Why optional: true
   # https://stackoverflow.com/questions/35942464/trouble-with-accepts-nested-attributes-for-in-rails-5-0-0-beta3-api-option/36254714#36254714
   belongs_to :company, optional: true
@@ -39,6 +52,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
   scope(:link_on_front_page, -> { where(link_on_front_page: true) })
   scope(:signed_by_director, -> { where(signed_by_director: true) })
   scope(:fully_compliant, -> { approved_by_board.link_on_front_page.signed_by_director })
+  scope(:with_content_extracted, -> { where(content_extracted: true) })
 
   scope :produced_by_or_associated_with, lambda { |company|
     left_outer_joins(:additional_companies_covered)
@@ -50,8 +64,10 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   attr_accessor :should_enqueue_snapshot
 
-  def self.search(criteria:)
-    StatementSearch.new(criteria)
+  after_commit :reindex_company
+
+  def reindex_company
+    company&.reindex
   end
 
   def self.url_exists?(url)
@@ -180,6 +196,17 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def preview_url
     override_url || url
+  end
+
+  def extract_content_from_statement
+    # Don't want to trigger callbacks so that we can seperate indexing and content extraction
+    if snapshot
+      update_columns(content_text: Henkei.read(:text, snapshot.original.download), content_extracted: true)
+
+      # reindex associated companies
+      company.reindex
+      additional_companies_covered.reindex
+    end
   end
 
   private

@@ -16,6 +16,12 @@ class Industry < ApplicationRecord
     SQL
   })
 
+  after_commit :reindex_companies
+
+  def reindex_companies
+    companies.each(&:reindex)
+  end
+
   def deep_name
     "#{sector_name} > #{industry_group_name} > #{name}"
   end

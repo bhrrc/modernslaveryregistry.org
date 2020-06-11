@@ -26,7 +26,7 @@ Feature: Search statements
   Scenario: Search by related company name
     Given Joe is logged in
     When Joe searches for "cuke"
-    Then Joe should only see "Cucumber Ltd, Cuke Labs" in the search results
+    Then Joe should only see "Cuke Labs, Cucumber Ltd" in the search results
 
   Scenario: Search for company with no published statements
     Given Joe is logged in
@@ -45,10 +45,10 @@ Feature: Search statements
     When Joe visits the explore page
     Then Joe should see the following search results:
       | name             | country         | industry         | link_text        |
-      | Banana Ltd       | France          | Agriculture      | 1 statement      |
-      | Cucumber Inc     | United States   | Retail           | 0 statements     |
       | Cucumber Ltd     | United Kingdom  | Software         | 1 statement      |
       | Cuke Labs        | Country unknown | Industry unknown | 1 statement      |
+      | Banana Ltd       | France          | Agriculture      | 1 statement      |
+      | Cucumber Inc     | United States   | Retail           | 0 statements     |
       | Strawberries Ltd | United Kingdom  | Industry unknown | Submit statement |
 
   Scenario: Filter by legislation

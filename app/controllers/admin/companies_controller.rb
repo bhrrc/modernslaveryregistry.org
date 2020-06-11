@@ -1,7 +1,7 @@
 module Admin
   class CompaniesController < AdminController
     def index
-      @companies = Company.search(params[:query]).order('updated_at desc').page(params[:page])
+      @companies = Company.search_by_name(params[:query]).order('updated_at desc').page(params[:page])
     end
 
     def new

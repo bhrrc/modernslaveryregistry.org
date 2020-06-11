@@ -1,6 +1,7 @@
 ---
-:concurrency: 3
+:concurrency: <%= ENV.fetch('SIDEKIQ_CONCURRENCY') { 3 } %>
 :queues:
-  - default
-  - mailers
- 
+  - [default, 2]
+  - [mailers, 2]
+  - searchkick
+  - extract

@@ -1,0 +1,147 @@
+<div class="search-results__sidebar">
+  <h3>Stats for your search</h3>
+
+  <p>
+    <%= link_to numbers_explained_page, class: "arrow-right-link" do %>
+      Learn how we arrive at our numbers
+      <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"/></svg>
+    <% end %>
+  </p>
+
+  <% if display_filtering_by_company_name? %>
+    <p>
+      For legal reasons, we only show compliance statistics for keyword, industry or regional searches.
+    </p>
+  <% end %>
+
+  <% if display_sidebar_below_threshold? %>
+    <div class="white-divider"></div>
+    <h5>Statements that comply with the UK Modern Slavery Act minimum requirements</h5>
+    <p>
+      For legal reasons, we only show compliance for search results above 5 companies.
+    </p>
+  <% end %>
+
+  <% if display_sidebar_only_modern_slavery? %>
+    <div class="white-divider"></div>
+    <h5>Statements that comply with the UK Modern Slavery Act minimum requirements</h5>
+    <p>
+      Please note that we only show compliance data for the UK Modern Slavery Act.
+    </p>
+  <% end %>
+
+  <% if display_statement_stats? %>
+    <div class="white-divider"></div>
+    <h5>Statements that comply with the UK Modern Slavery Act minimum requirements</h5>
+    
+    <div class="stats">
+      <dl>
+        <dt>
+          Number of statements in your search results that are published under the UK Modern Slavery Act
+        </dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %></span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>
+          Meet <strong>all</strong> minimum requirements
+        </dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:fully_compliant][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:fully_compliant][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Are linked from the companies website <strong>homepage</strong></dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:link_on_front_page][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:link_on_front_page][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Are <strong>signed</strong> by director or equivalent</dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:signed_by_director][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:signed_by_director][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Includes explicit <strong>approval</strong> by the board</dt>
+        <dd>
+          <span class="value"><%= @search.stats[:uk_requirements][:approved_by_board][:percent] %>%</span>
+          <span class="details">(<%= @search.stats[:uk_requirements][:approved_by_board][:count] %> out of <%= @search.stats[:uk_requirements][:uk_modern_slavery_act][:count] %>)</span>
+        </dd>
+      </dl>
+    </div>
+  <% end %>
+  
+  <% if display_sidebar_keyword_mentions? %>
+    <div class="white-divider"></div>
+
+    <h5>Keyword mentions in statements</h5>
+
+    <p>The inclusion of keywords may suggest a disclosure of risks. While this may be the case, we still recommend reading the actual statement to check the facts.</p>
+
+    <% @search.stats[:keywords].each do |keyword, stat| %>
+    <div class="stats">
+      <dl class="full-length">
+        <dt>
+          <strong>
+            '<span class="purple"><%= keyword %></span>' mentioned in statements
+          </strong>
+        </dt>
+      </dl>
+      <dl>
+        <dt>No of companies that mention</dt>
+        <dd><%= stat[:mentioned] %></dd>
+      </dl>
+      <dl>
+        <dt>No of companies that <strong>don't</strong> mention</dt>
+        <dd><%= stat[:not_mentioned] %></dd>
+      </dl>
+    </div>
+    <% end %>
+  <% end %>
+
+  <% if display_sidebar_risks_industry? %>
+    <div class="white-divider"></div>
+
+    <h5>Risks with the industry</h5>
+    <p>These are risks generally associated with the industry. They are not scoped to the search results.</p>
+
+    <div class="stats">
+      <dl class="full-length">
+        <dt>
+          <strong>
+            Banks
+          </strong>
+        </dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Excessive overtime</dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Poor working conditions</dt>
+      </dl>
+    </div>
+
+    <div class="stats">
+      <dl class="full-length">
+        <dt>
+          <strong>
+            Oil, Gas & Consumable Fuels
+          </strong>
+        </dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Bonded laboure</dt>
+      </dl>
+      <dl class="full-length">
+        <dt>Non-payment of wages</dt>
+      </dl>
+    </div>
+  <% end %>
+
+  
+</div>

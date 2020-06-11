@@ -6,10 +6,10 @@ class ResultsExporter
     fields = BASIC_FIELDS.merge(admin ? EXTRA_FIELDS : {})
     legislation_ids = params[:legislations] && params[:legislations].map(&:to_i)
 
-    CSV.generate do |csv|
-      csv << fields.map { |_, heading| heading }
+    Enumerator.new do |csv|
+      csv << fields.map { |_, heading| heading }.to_csv
 
-      results.includes(statements: [:additional_companies_covered_ordered_by_name, :legislations]).find_each do |company|
+      results.each do |company|
         company.statements.each do |statement|
           next unless statement.published || admin
 
@@ -17,10 +17,10 @@ class ResultsExporter
             next
           end
 
-          csv << StatementExport.export(statement, fields)
+          csv << StatementExport.export(statement, fields).to_csv
           # Change the company context when there are additional_companies
           statement.additional_companies_covered_excluding(company).each do |ac|
-            csv << StatementExport.export(statement, fields, context: ac)
+            csv << StatementExport.export(statement, fields, context: ac).to_csv
           end
         end
       end

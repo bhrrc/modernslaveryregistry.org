@@ -34,3 +34,6 @@ latest.dump
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 .idea/
+
+.env
+docker-compose.yml

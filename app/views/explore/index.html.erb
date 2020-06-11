@@ -1,58 +1,55 @@
 <% title 'Explore' %>
 
+<div class="section section--grey">
+  <div class="container">
+    <%= render partial: 'search_form' %>
+  
+    <% if @search.searching_by_conditions? %>
+      <div class="search-results-header">
+        <h3>
+          Search results
+        </h3>
+
+        <h5>
+          Search criteria <%= link_to "Change search criteria", explore_path, class: "change-search-criteria" %>
+        </h5>
+
+        <%= render "search_criteria" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
 <section class="section">
   <div class="container">
-    <div class="columns">
-      <div class="column">
-        <div class="box">
-          <%= render partial: 'search_form' %>
-        </div>
-        <div class="box" data-content="company_search_results">
-          <% if @results.any? %>
-            <%= render partial: 'results', locals: { results: @results, search: @search } %>
-          <% else %>
-            <h2 class="title is-2">No companies found</h2>
+    <div class="search-results">
+      <div class="search-results__results">
+        <% if @results.any? %>
+          <%= render partial: 'results', locals: { results: @results, search: @search } %>
+        <% else %>
+          <p>Search criteria</p>
+          <%= render "search_criteria" %>
+          <br>
+          <h5>0 search results</h5>
+          <% if @search.filtering_only_by_company_name? %>
             <p>
-              We couldn't find a company matching your search.
-              If you think the registry is missing a statement for a company,
-              you can help by submitting a link to the statement.
+              Please check your spelling. If you think your spelling is correct, we may not have a statement for the company you are looking for.
             </p>
-            <br>
+
+            <div class="submit-statement">
+              <h5>Submit the company's latest statement to the Registry.</h5>
+              <%= link_to 'Submit statement', new_company_path, class: 'button button--outline' %>
+            </div>
+          <% else %>
             <p>
-              <%= link_to 'Submit a statement', new_company_path,
-                class: 'button is-medium is-primary' %>
+              Please check your spelling or consider having fewer search criteria.
             </p>
           <% end %>
-        </div>
+        <% end %>
       </div>
-      <div class="column is-narrow">
-        <div style="width: 450px;">
-          <div class="box" style="width: 450px">
-            <div id="world-map"></div>
-            <div data-content="statements-search-sidebar">
-              <div style="padding: 5px; padding-top: 10px; padding-bottom: 0">
-                <strong><%= pluralize @results.total_count, 'company' %></strong>
-                <% if @results.any? %>
-                  <%= link_to 'Download CSV', @download_url, class: 'is-pulled-right' %>
-                <% end %>
-              </div>
-              <% stats = @search.industry_stats %>
-              <% if stats.any? %>
-                <table id="industry-stats">
-                  <tbody data-content="industry_stats">
-                    <% stats.each do |group_count| %>
-                      <tr>
-                        <td data-content="industry" style="padding: 5px"><%= group_count.group.name %></td>
-                        <td data-content="count" style="padding: 5px; text-align: right"><%= group_count.count %></td>
-                      </tr>
-                    <% end %>
-                  </tbody>
-                </table>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
+      <% if @results.any? %>
+        <%= render "sidebar" %>
+      <% end %>
     </div>
   </div>
 </section>
