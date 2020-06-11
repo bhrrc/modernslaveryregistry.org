@@ -34,7 +34,7 @@ gem 'oj'
 gem 'oj_mimic_json'
 gem 'typhoeus'
 gem 'rest-client'
-gem 'kaminari'
+gem 'kaminari', '~> 1.2.1'
 gem 'acts_as_list'
 gem 'values' # https://github.com/tcrayford/Values
 gem 'rails-erd'
