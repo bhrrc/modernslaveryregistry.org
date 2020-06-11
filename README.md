@@ -143,6 +143,18 @@ $ eb terminate $MSR_OLD_ENVIRONMENT
 
 ---
 
+### Elasticsearch Reindexing
+
+The reindexing process is divided into two stages:
+
+* Common search data reindexing:
+
+`bindle exec rake search:reindex`
+
+* Statements content reindexing to enable search by keywords:
+
+`bundle exec rake search:extract_statements`
+
 ## Debugging production problems
 
 ### View EC2 instance health
