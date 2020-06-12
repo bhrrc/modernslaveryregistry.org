@@ -149,7 +149,7 @@ The reindexing process is divided into two stages:
 
 * Common search data reindexing:
 
-`bindle exec rake search:reindex`
+`bundle exec rake search:reindex`
 
 * Statements content reindexing to enable search by keywords:
 
