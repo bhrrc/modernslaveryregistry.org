@@ -204,8 +204,8 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
       update_columns(content_text: Henkei.read(:text, snapshot.original.download), content_extracted: true)
 
       # reindex associated companies
-      company.reindex
-      additional_companies_covered.reindex
+      # company.reindex
+      # additional_companies_covered.reindex
     end
   end
 
