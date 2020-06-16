@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/bitzesty/henkei
-  revision: b8017d8366d6bd652d292569be8151fd849bacc6
+  revision: bca2e1c31e99e1d973f2d5162c23359e91a94964
   specs:
     henkei (1.23.1)
       json (>= 1.8, < 3)
