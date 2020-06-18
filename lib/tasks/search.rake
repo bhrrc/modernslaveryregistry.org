@@ -18,8 +18,10 @@ namespace :search do
 
   desc 'truncate statement contents'
   task truncate_statements: :environment do
-    Statement.find_each do |statement| 
-      statement.update_columns(content_text: statement.content_text.truncate(32000, separator: ' '))
+    Statement.where(content_extracted: true).find_each do |statement|
+      if statement.content_text.present?
+        statement.update_columns(content_text: statement.content_text.truncate(32000, separator: ' '))
+      end
     end
   end
 end
