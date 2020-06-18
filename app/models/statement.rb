@@ -202,7 +202,7 @@ class Statement < ApplicationRecord # rubocop:disable Metrics/ClassLength
     # Don't want to trigger callbacks so that we can seperate indexing and content extraction
     if snapshot
       extracted_text = Henkei.read(:text, snapshot.original.download)
-      update_columns(content_text: extracted_text.truncate(32000, separator: ' '), content_extracted: true)
+      update_columns(content_text: extracted_text.truncate(30000, separator: ' '), content_extracted: true)
 
       # reindex associated companies
       company.reindex
