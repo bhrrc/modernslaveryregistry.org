@@ -18,6 +18,7 @@ common: &defaults
   # - Default: none
   # - Valid Options: true, false
   monitor: true
+  ignore: ['/health_check']
   
 
 production:
