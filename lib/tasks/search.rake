@@ -2,8 +2,10 @@ namespace :search do
   desc 'reindex Elasticsearch indexes in a background'
   task reindex: :environment do
     Rails.logger.info "Starting reindex"
-    Company.reindex
-    Statement.reindex
+    Company.reindex(async: {wait: true})
+    Company.search_index.refresh
+    Statement.reindex(async: {wait: true})
+    Statement.search_index.refresh
     Rails.logger.info "Completed reindex"
   end
 
