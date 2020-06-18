@@ -13,4 +13,11 @@ namespace :search do
       ContentExtractionWorker.perform_async(statement.id)
     end
   end
+
+  desc 'truncate statement contents'
+  task truncate_statements: :environment do
+    Statement.find_each do |statement| 
+      statement.update_column(content_text: statement.content_text.truncate(32000, separator: ' '))
+    end
+  end
 end
