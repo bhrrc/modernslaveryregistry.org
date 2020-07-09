@@ -58,7 +58,7 @@ class CompanySearchService
       {
         field.to_sym => {
           count: field_count,
-          percent: (field_count.to_f / uk_modern_slavery_act_count.to_f * 100).to_i
+          percent: nan_to_zero((field_count.to_f / uk_modern_slavery_act_count.to_f * 100)).to_i
         }
       }
     end&.inject(:merge)
@@ -290,5 +290,9 @@ class CompanySearchService
     else
       { page: @form.page, per_page: 20 }
     end
+  end
+
+  def nan_to_zero(nan)
+    { Float::NAN => 0, BigDecimal::NAN => 0 }.fetch(nan, nan)
   end
 end
