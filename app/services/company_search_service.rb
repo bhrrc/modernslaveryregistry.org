@@ -293,6 +293,6 @@ class CompanySearchService
   end
 
   def nan_to_zero(nan)
-    { Float::NAN => 0, BigDecimal::NAN => 0 }.fetch(nan, nan)
+    ((nan.is_a?(Float) || nan.is_a?(BigDecimal)) && nan.nan?) ? 0 : nan
   end
 end
