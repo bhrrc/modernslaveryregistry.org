@@ -34,9 +34,9 @@ class CompanySearchForm
     # TODO: include_keywords - default value
     @include_keywords = (params.fetch(:include_keywords, nil).presence || INCLUDE_KEYWORDS_VALUE) == INCLUDE_KEYWORDS_VALUE
 
-    @industries = params.fetch(:industries, nil).presence
-    @countries = params.fetch(:countries, nil).presence
-    @legislations = params.fetch(:legislations, nil).presence
+    @industries = cleanup_ids(params.fetch(:industries, [])).presence
+    @countries = cleanup_ids(params.fetch(:countries, [])).presence
+    @legislations = cleanup_ids(params.fetch(:legislations, [])).presence
 
     @page = params.fetch(:page, nil) || 1
     @fetch_all_records = params.fetch(:fetch_all_records, nil) || false
@@ -48,5 +48,12 @@ class CompanySearchForm
 
   def fetch_all_records?
     fetch_all_records
+  end
+
+  private
+
+  def cleanup_ids(ids)
+    ids ||= []
+    ids.map { |id| id.to_s.gsub(/\D+/, '').presence }.compact.map(&:to_i)
   end
 end
