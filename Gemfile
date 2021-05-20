@@ -9,7 +9,7 @@ end
 gem 'rails', '~> 5.2.4.3'
 
 # Web server
-gem 'puma', '~> 4.3.3'
+gem 'puma', '~> 4.3.8'
 
 # Database
 gem 'pg', '~> 1.2.3'
